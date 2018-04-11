@@ -82,6 +82,7 @@ using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Security;
 using System.Text;
 using System.Text.RegularExpressions;
 using Wiesend.DataTypes.Formatters;
@@ -164,6 +165,21 @@ namespace Wiesend.DataTypes
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class StringExtensions
     {
+        /// <summary>
+        /// Converts String to SecureString
+        /// </summary>
+        /// <param name="str">String</param>
+        /// <returns>String as SecureString</returns>
+        public static SecureString ToSecureString(this string str)
+        {
+            SecureString secureStr = new SecureString();
+            if (str.Length > 0)
+            {
+                foreach (var c in str.ToCharArray()) secureStr.AppendChar(c);
+            }
+            return secureStr;
+        }
+
         /// <summary>
         /// Does an AppendFormat and then an AppendLine on the StringBuilder
         /// </summary>

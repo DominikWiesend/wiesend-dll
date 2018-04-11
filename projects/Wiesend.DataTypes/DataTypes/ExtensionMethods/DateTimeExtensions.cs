@@ -149,6 +149,19 @@ namespace Wiesend.DataTypes
     public static class DateTimeExtensions
     {
         /// <summary>
+        /// Shows if the Year is a Leap-Year
+        /// </summary>
+        /// <param name="DateTime">Year to check</param>
+        /// <returns>Is a Leap-Year (bool)</returns>
+        public static bool IsLeapYear(this DateTime DateTime)
+        {
+            int year = DateTime.Year;
+            if ((year % 4 == 0 && !(year % 100 == 0)) || year % 400 == 0)
+                return true;
+            return false;
+        }
+
+        /// <summary>
         /// Adds the number of weeks to the date
         /// </summary>
         /// <param name="Date">Date input</param>
