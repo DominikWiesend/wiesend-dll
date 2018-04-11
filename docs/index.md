@@ -28,4 +28,4 @@ Wiesend's Dynamic Link Library is a collection of reusable code that I've writte
 <br />
 <br />
 ## Documentation section
-Totoaly empty
+Totally empty
