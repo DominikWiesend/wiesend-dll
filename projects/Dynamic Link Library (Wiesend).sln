@@ -25,6 +25,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wiesend.Web", "Wiesend.Web\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wiesend.Workflow", "Wiesend.Workflow\Wiesend.Workflow.csproj", "{0270FEA0-B788-4D2B-AE0D-830F289CD8EA}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wiesend.Logging (NLog)", "Wiesend.Logging (NLog)\Wiesend.Logging (NLog).csproj", "{5F7FC02F-4228-4F7D-81A4-2648FE0A18B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -75,6 +77,10 @@ Global
 		{0270FEA0-B788-4D2B-AE0D-830F289CD8EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0270FEA0-B788-4D2B-AE0D-830F289CD8EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0270FEA0-B788-4D2B-AE0D-830F289CD8EA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5F7FC02F-4228-4F7D-81A4-2648FE0A18B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5F7FC02F-4228-4F7D-81A4-2648FE0A18B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5F7FC02F-4228-4F7D-81A4-2648FE0A18B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5F7FC02F-4228-4F7D-81A4-2648FE0A18B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
