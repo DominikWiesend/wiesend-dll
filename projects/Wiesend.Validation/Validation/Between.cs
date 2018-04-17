@@ -161,6 +161,9 @@ namespace Wiesend.Validation
          }
      }
 #else
+    /// <summary>
+    /// Between attribute
+    /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
     public class BetweenAttribute : ValidationAttribute, IClientModelValidator
     {

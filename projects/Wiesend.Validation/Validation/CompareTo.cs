@@ -197,6 +197,9 @@ namespace Wiesend.Validation
         }
     }
 #else
+    /// <summary>
+    /// CompareTo attribute
+    /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
     public class CompareToAttribute : ValidationAttribute, IClientModelValidator
     {

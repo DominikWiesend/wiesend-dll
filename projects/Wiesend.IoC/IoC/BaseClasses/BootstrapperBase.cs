@@ -127,6 +127,7 @@ namespace Wiesend.IoC.BaseClasses
         {
             if (Assemblies == null || Assemblies.Length == 0)
                 return;
+
             foreach (Assembly Assembly in Assemblies)
             {
                 if (!this.Assemblies.Contains(Assembly))

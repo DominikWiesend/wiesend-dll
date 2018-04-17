@@ -178,6 +178,9 @@ namespace Wiesend.Validation
         }
     }
 #else
+    /// <summary>
+    /// Is attribute
+    /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
     [CLSCompliant(true)]
     public class IsAttribute : ValidationAttribute, IClientModelValidator
