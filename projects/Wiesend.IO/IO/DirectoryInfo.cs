@@ -315,12 +315,8 @@ namespace Wiesend.IO
         public IEnumerable<IDirectory> EnumerateDirectories(string SearchPattern = "*", SearchOption Options = SearchOption.TopDirectoryOnly)
         {
             if (InternalDirectory != null)
-            {
                 foreach (IDirectory Directory in InternalDirectory.EnumerateDirectories(SearchPattern, Options))
-                {
                     yield return new DirectoryInfo(Directory);
-                }
-            }
         }
 
         /// <summary>
@@ -332,9 +328,7 @@ namespace Wiesend.IO
         public IEnumerable<IDirectory> EnumerateDirectories(Predicate<IDirectory> Predicate, SearchOption Options = SearchOption.TopDirectoryOnly)
         {
             if (InternalDirectory != null)
-            {
                 return InternalDirectory.EnumerateDirectories("*", Options).Where(x => Predicate(x)).Select(x => new DirectoryInfo(x));
-            }
             return new List<IDirectory>();
         }
 
@@ -347,12 +341,8 @@ namespace Wiesend.IO
         public IEnumerable<IFile> EnumerateFiles(string SearchPattern = "*", SearchOption Options = SearchOption.TopDirectoryOnly)
         {
             if (InternalDirectory != null)
-            {
                 foreach (IFile File in InternalDirectory.EnumerateFiles(SearchPattern, Options))
-                {
                     yield return new FileInfo(File);
-                }
-            }
         }
 
         /// <summary>
@@ -364,9 +354,7 @@ namespace Wiesend.IO
         public IEnumerable<IFile> EnumerateFiles(Predicate<IFile> Predicate, SearchOption Options = SearchOption.TopDirectoryOnly)
         {
             if (InternalDirectory != null)
-            {
                 return InternalDirectory.EnumerateFiles("*", Options).Where(x => Predicate(x)).Select(x => new FileInfo(x));
-            }
             return new List<IFile>();
         }
 
@@ -397,6 +385,7 @@ namespace Wiesend.IO
         /// Enumerates the files in the directory
         /// </summary>
         /// <returns>The files in the directory</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
         public IEnumerator<IFile> GetEnumerator()
         {
             foreach (FileInfo File in EnumerateFiles())
@@ -438,6 +427,7 @@ namespace Wiesend.IO
         /// Enumerates the files and directories in the directory
         /// </summary>
         /// <returns>The files and directories</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             foreach (FileInfo File in EnumerateFiles())

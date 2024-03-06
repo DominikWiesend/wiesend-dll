@@ -90,6 +90,7 @@ namespace Wiesend.ORM.Manager.Mapper.Interfaces
     /// <typeparam name="ClassType">Class type</typeparam>
     /// <typeparam name="DataType">Data type</typeparam>
     /// <typeparam name="ReturnType">Return type</typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public interface IProperty<ClassType, DataType, ReturnType> : IFluentInterface
         where ClassType : class
         where ReturnType : IProperty<ClassType, DataType, ReturnType>
@@ -166,6 +167,7 @@ namespace Wiesend.ORM.Manager.Mapper.Interfaces
     /// </summary>
     /// <typeparam name="ClassType">Class type</typeparam>
     /// <typeparam name="DataType"></typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public interface IProperty<ClassType, DataType> : IProperty<ClassType>
         where ClassType : class
     {
@@ -189,6 +191,7 @@ namespace Wiesend.ORM.Manager.Mapper.Interfaces
     /// Property interface
     /// </summary>
     /// <typeparam name="ClassType">Class type</typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public interface IProperty<ClassType> : IProperty
         where ClassType : class
     {
@@ -200,6 +203,7 @@ namespace Wiesend.ORM.Manager.Mapper.Interfaces
         /// <param name="ObjectsSeen">Objects that have been visited thus far</param>
         /// <returns>Batch object with the appropriate commands</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         IBatch CascadeDelete(ClassType Object, ISourceInfo Source, IList<object> ObjectsSeen);
 
         /// <summary>
@@ -210,6 +214,7 @@ namespace Wiesend.ORM.Manager.Mapper.Interfaces
         /// <param name="ObjectsSeen">Objects that have been visited thus far</param>
         /// <returns>Batch object with the appropriate commands</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         IBatch CascadeJoinsDelete(ClassType Object, ISourceInfo Source, IList<object> ObjectsSeen);
 
         /// <summary>
@@ -220,6 +225,7 @@ namespace Wiesend.ORM.Manager.Mapper.Interfaces
         /// <param name="ObjectsSeen">Objects that have been visited thus far</param>
         /// <returns>Batch object with the appropriate commands</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         IBatch CascadeJoinsSave(ClassType Object, ISourceInfo Source, IList<object> ObjectsSeen);
 
         /// <summary>
@@ -230,6 +236,7 @@ namespace Wiesend.ORM.Manager.Mapper.Interfaces
         /// <param name="ObjectsSeen">Objects that have been visited thus far</param>
         /// <returns>Batch object with the appropriate commands</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         IBatch CascadeSave(ClassType Object, ISourceInfo Source, IList<object> ObjectsSeen);
 
         /// <summary>
@@ -238,6 +245,7 @@ namespace Wiesend.ORM.Manager.Mapper.Interfaces
         /// <param name="Object">Object to get the value from</param>
         /// <returns>The value of the property</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         object GetValue(ClassType Object);
 
         /// <summary>
@@ -248,6 +256,7 @@ namespace Wiesend.ORM.Manager.Mapper.Interfaces
         /// <param name="ObjectsSeen">Objects that have been visited thus far</param>
         /// <returns>Batch object with the appropriate commands</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         IBatch JoinsDelete(ClassType Object, ISourceInfo Source, IList<object> ObjectsSeen);
 
         /// <summary>
@@ -258,6 +267,7 @@ namespace Wiesend.ORM.Manager.Mapper.Interfaces
         /// <param name="ObjectsSeen">Objects that have been visited thus far</param>
         /// <returns>Batch object with the appropriate commands</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         IBatch JoinsSave(ClassType Object, ISourceInfo Source, IList<object> ObjectsSeen);
     }
 
@@ -353,6 +363,7 @@ namespace Wiesend.ORM.Manager.Mapper.Interfaces
         /// <param name="Object">Object to get the parameter from</param>
         /// <returns>The parameter version of the property</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         object GetParameter(object Object);
 
         /// <summary>
@@ -361,6 +372,7 @@ namespace Wiesend.ORM.Manager.Mapper.Interfaces
         /// <param name="Object">Object to get the parameter from</param>
         /// <returns>The parameter version of the property</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         object GetParameter(Dynamo Object);
 
         /// <summary>
@@ -369,6 +381,7 @@ namespace Wiesend.ORM.Manager.Mapper.Interfaces
         /// <param name="Object">Object to get the value from</param>
         /// <returns>The value of the property</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         object GetValue(object Object);
 
         /// <summary>
@@ -377,6 +390,7 @@ namespace Wiesend.ORM.Manager.Mapper.Interfaces
         /// <param name="Object">Object to get the value from</param>
         /// <returns>The value of the property</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         object GetValue(Dynamo Object);
 
         /// <summary>

@@ -72,15 +72,12 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-using System.Diagnostics.Contracts;
-using Wiesend.IO.FileSystem.Interfaces.Contracts;
-
 namespace Wiesend.IO.FileSystem.Interfaces
 {
     /// <summary>
     /// Interface for the file system
     /// </summary>
-    [ContractClass(typeof(IFileSystemContract))]
+    //[ContractClass(typeof(IFileSystemContract))]
     public interface IFileSystem
     {
         /// <summary>

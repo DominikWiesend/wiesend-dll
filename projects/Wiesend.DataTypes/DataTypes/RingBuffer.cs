@@ -75,7 +75,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Threading;
 using Wiesend.DataTypes.Comparison;
 
@@ -85,6 +85,7 @@ namespace Wiesend.DataTypes
     /// Implements a ring buffer
     /// </summary>
     /// <typeparam name="T">Type of the data it holds</typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "<Pending>")]
     public class RingBuffer<T> : ICollection<T>, ICollection
     {
         private object Root;
@@ -104,7 +105,7 @@ namespace Wiesend.DataTypes
         /// <param name="AllowOverflow">Is overflow allowed (defaults to false)</param>
         public RingBuffer(int MaxCapacity, bool AllowOverflow = false)
         {
-            Contract.Requires<ArgumentException>(MaxCapacity > 0, "Max capacity must be above 0");
+            if (!(MaxCapacity > 0)) throw new ArgumentException("Max capacity must be above 0", nameof(MaxCapacity));
             Count = 0;
             IsReadOnly = false;
             this.AllowOverflow = AllowOverflow;
@@ -194,9 +195,10 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Value">Value to convert</param>
         /// <returns>The value as a string</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public static implicit operator string(RingBuffer<T> Value)
         {
-            Contract.Requires<ArgumentNullException>(Value != null, "Value");
+            if (Value == null) throw new ArgumentNullException(nameof(Value));
             return Value.ToString();
         }
 
@@ -221,9 +223,9 @@ namespace Wiesend.DataTypes
         /// Adds a number of items to the buffer
         /// </summary>
         /// <param name="Items">Items to add</param>
-        public virtual void Add(IEnumerable<T> Items)
+        public virtual void Add([NotNull] IEnumerable<T> Items)
         {
-            Contract.Requires<ArgumentNullException>(Items != null, "Items");
+            if (Items == null) throw new ArgumentNullException(nameof(Items));
             Items.ForEach(x => Add(x));
         }
 
@@ -233,10 +235,10 @@ namespace Wiesend.DataTypes
         /// <param name="buffer">Items to add</param>
         /// <param name="count">Number of items to add</param>
         /// <param name="offset">Offset to start at</param>
-        public virtual void Add(T[] buffer, int offset, int count)
+        public virtual void Add([NotNull] T[] buffer, int offset, int count)
         {
-            Contract.Requires<ArgumentNullException>(buffer != null, "buffer");
-            Contract.Requires<ArgumentOutOfRangeException>(count <= buffer.Length - offset, "buffer");
+            if (buffer == null) throw new ArgumentNullException(nameof(buffer));
+            if (!(count <= buffer.Length - offset)) throw new ArgumentOutOfRangeException(nameof(count), $"Contract assertion not met: {nameof(count)} <= {nameof(buffer.Length)} - {nameof(offset)}");
             for (int x = offset; x < offset + count; ++x)
                 Add(buffer[x]);
         }
@@ -250,7 +252,7 @@ namespace Wiesend.DataTypes
             WritePosition = 0;
             Count = 0;
             for (int x = 0; x < MaxCapacity; ++x)
-                Buffer[x] = default(T);
+                Buffer[x] = default;
         }
 
         /// <summary>
@@ -345,9 +347,9 @@ namespace Wiesend.DataTypes
         public virtual T Remove()
         {
             if (Count == 0)
-                return default(T);
+                return default;
             T ReturnValue = Buffer[ReadPosition];
-            Buffer[ReadPosition] = default(T);
+            Buffer[ReadPosition] = default;
             ++ReadPosition;
             ReadPosition %= MaxCapacity;
             --Count;
@@ -382,7 +384,7 @@ namespace Wiesend.DataTypes
             {
                 if (Comparer.Equals(Buffer[y], item))
                 {
-                    Buffer[y] = default(T);
+                    Buffer[y] = default;
                     return true;
                 }
                 ++y;
@@ -399,10 +401,10 @@ namespace Wiesend.DataTypes
         /// <param name="offset">Offset to start at</param>
         /// <param name="count">Number of items to read</param>
         /// <returns>The number of items that were read</returns>
-        public virtual int Remove(T[] array, int offset, int count)
+        public virtual int Remove([NotNull] T[] array, int offset, int count)
         {
-            Contract.Requires<ArgumentException>(array != null, "array");
-            Contract.Requires<ArgumentOutOfRangeException>(Count <= array.Length - offset, "array");
+            if (array == null) throw new ArgumentNullException(nameof(array));
+            if (!(Count <= array.Length - offset)) throw new ArgumentOutOfRangeException(nameof(count), $"Contract assertion not met: {nameof(count)} <= {nameof(array.Length)} - {nameof(offset)}");
             if (Count == 0)
                 return 0;
             int y = ReadPosition;

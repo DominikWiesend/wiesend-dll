@@ -72,9 +72,9 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Security.Cryptography;
 using Wiesend.IO.Encryption.Interfaces;
 
@@ -119,20 +119,19 @@ namespace Wiesend.IO.Encryption.BaseClasses
         /// <param name="Data">Data to hash</param>
         /// <param name="Algorithm">Algorithm to use</param>
         /// <returns>The hashed version of the data</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public byte[] Hash(byte[] Data, string Algorithm)
         {
             if (Data == null)
                 return null;
-            using (HashAlgorithm Hasher = GetAlgorithm(Algorithm))
+            using HashAlgorithm Hasher = GetAlgorithm(Algorithm);
+            byte[] HashedArray = new byte[0];
+            if (Hasher != null)
             {
-                byte[] HashedArray = new byte[0];
-                if (Hasher != null)
-                {
-                    HashedArray = Hasher.ComputeHash(Data);
-                    Hasher.Clear();
-                }
-                return HashedArray;
+                HashedArray = Hasher.ComputeHash(Data);
+                Hasher.Clear();
             }
+            return HashedArray;
         }
 
         /// <summary>
@@ -140,10 +139,11 @@ namespace Wiesend.IO.Encryption.BaseClasses
         /// </summary>
         /// <param name="Algorithm">Algorithm</param>
         /// <returns>The hash algorithm</returns>
-        protected HashAlgorithm GetAlgorithm(string Algorithm)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        protected HashAlgorithm GetAlgorithm([NotNull] string Algorithm)
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(Algorithm), "Algorithm");
-            Contract.Requires<NullReferenceException>(ImplementedAlgorithms != null, "ImplementedAlgorithms");
+            if (string.IsNullOrEmpty(Algorithm)) throw new ArgumentNullException(nameof(Algorithm));
+            if (ImplementedAlgorithms == null) throw new NullReferenceException("ImplementedAlgorithms");
             return ImplementedAlgorithms[Algorithm.ToUpperInvariant()]();
         }
     }

@@ -104,6 +104,7 @@ namespace Wiesend.ORM
         /// <typeparam name="ObjectType">Object type</typeparam>
         /// <param name="Parameters">Parameters</param>
         /// <returns>The list of objects requested</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public static IEnumerable<ObjectType> All<ObjectType>(params IParameter[] Parameters)
             where ObjectType : class,new()
         {
@@ -118,6 +119,7 @@ namespace Wiesend.ORM
         /// <param name="ConnectionString">Connection string</param>
         /// <param name="Type">Command type</param>
         /// <returns>The list of objects requested</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
         public static IEnumerable<dynamic> All(string Command, CommandType Type, string ConnectionString, params object[] Parameters)
         {
             var TempParameters = Parameters as IParameter[];
@@ -138,6 +140,7 @@ namespace Wiesend.ORM
         /// <param name="ConnectionString">Connection string</param>
         /// <param name="Type">Command type</param>
         /// <returns>The list of objects requested</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public static IEnumerable<ObjectType> All<ObjectType>(string Command, CommandType Type, string ConnectionString, params object[] Parameters)
             where ObjectType : class,new()
         {
@@ -151,6 +154,7 @@ namespace Wiesend.ORM
         /// <typeparam name="ObjectType">Object type</typeparam>
         /// <param name="Parameters">Parameters</param>
         /// <returns>An object requested</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public static ObjectType Any<ObjectType>(params IParameter[] Parameters)
             where ObjectType : class,new()
         {
@@ -164,6 +168,7 @@ namespace Wiesend.ORM
         /// <typeparam name="IDType">ID type</typeparam>
         /// <param name="ID">ID of the object to load</param>
         /// <returns>An object requested</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public static ObjectType Any<ObjectType, IDType>(IDType ID)
             where ObjectType : class,new()
             where IDType : IComparable
@@ -193,6 +198,7 @@ namespace Wiesend.ORM
         /// <param name="ConnectionString">Connection string</param>
         /// <param name="Type">Command type</param>
         /// <returns>The list of objects requested</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public static ObjectType Any<ObjectType>(string Command, CommandType Type, string ConnectionString, params object[] Parameters)
             where ObjectType : class,new()
         {
@@ -207,14 +213,11 @@ namespace Wiesend.ORM
         /// connection string)
         /// </param>
         /// <returns>An appropriate batch object</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         public static IBatch Batch(string ConnectionString)
         {
-            var Source = SourceManager.GetSource(ConnectionString);
-            if (Source == null)
-                throw new NullReferenceException("Source not found");
-            var Batch = QueryManager.Batch(Source);
-            if (Batch == null)
-                throw new NullReferenceException("Batch could not be created");
+            var Source = SourceManager.GetSource(ConnectionString) ?? throw new NullReferenceException("Source not found");
+            var Batch = QueryManager.Batch(Source) ?? throw new NullReferenceException("Batch could not be created");
             return Batch;
         }
 
@@ -223,6 +226,8 @@ namespace Wiesend.ORM
         /// </summary>
         /// <typeparam name="ObjectType">Object type</typeparam>
         /// <param name="Object">Object to delete</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         public static void Delete<ObjectType>(ObjectType Object)
             where ObjectType : class,new()
         {
@@ -236,6 +241,7 @@ namespace Wiesend.ORM
         /// <param name="PageSize">Page size</param>
         /// <param name="Parameters">Parameters</param>
         /// <returns>The number of pages</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public static int PageCount<ObjectType>(int PageSize = 25, params IParameter[] Parameters)
             where ObjectType : class,new()
         {
@@ -251,6 +257,7 @@ namespace Wiesend.ORM
         /// <param name="OrderBy">The order by portion of the query</param>
         /// <param name="Parameters">Parameters</param>
         /// <returns>The objects specified</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public static IEnumerable<ObjectType> Paged<ObjectType>(int PageSize = 25, int CurrentPage = 0, string OrderBy = "", params IParameter[] Parameters)
             where ObjectType : class,new()
         {
@@ -263,6 +270,8 @@ namespace Wiesend.ORM
         /// <typeparam name="ObjectType">Object type</typeparam>
         /// <typeparam name="PrimaryKeyType">Primary key type</typeparam>
         /// <param name="Object">Object</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         public static void Save<ObjectType, PrimaryKeyType>(ObjectType Object)
             where ObjectType : class,new()
         {

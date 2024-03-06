@@ -72,7 +72,6 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-#if NETFULL
 using System.Collections.Generic;
 using Wiesend.DataTypes.Caching.Interfaces;
 using Wiesend.DataTypes.Patterns.BaseClasses;
@@ -136,8 +135,7 @@ namespace Wiesend.DataTypes.Caching.BaseClasses
         {
             get
             {
-                object Value = null;
-                TryGetValue(key, out Value);
+                TryGetValue(key, out object Value);
                 return Value;
             }
             set
@@ -268,4 +266,3 @@ namespace Wiesend.DataTypes.Caching.BaseClasses
         public abstract bool TryGetValue(string key, out object value);
     }
 }
-#endif

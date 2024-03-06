@@ -87,6 +87,7 @@ namespace Wiesend.ORM.BaseClasses
     /// </summary>
     /// <typeparam name="ClassType">Class type</typeparam>
     /// <typeparam name="DatabaseType">Database type</typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public abstract class MappingBaseClass<ClassType, DatabaseType> : IMapping, IMapping<ClassType>
         where DatabaseType : IDatabase
         where ClassType : class
@@ -231,9 +232,11 @@ namespace Wiesend.ORM.BaseClasses
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
         public override bool Equals(object obj)
         {
-            var Object2 = obj as MappingBaseClass<ClassType, DatabaseType>;
+            MappingBaseClass<ClassType, DatabaseType> Object2 = obj as MappingBaseClass<ClassType, DatabaseType>;
             if ((object)Object2 == null)
                 return false;
             return string.Equals(TableName, Object2.TableName, StringComparison.Ordinal)
@@ -504,14 +507,8 @@ namespace Wiesend.ORM.BaseClasses
                          .SetupCommands(this);
 
             foreach (IProperty Property in Properties)
-            {
-                if (Property is IMultiMapping
-                    || Property is ISingleMapping
-                    || Property is IMap)
-                {
+                if (Property is IMultiMapping || Property is ISingleMapping || Property is IMap)
                     Property.Setup(Source, MappingProvider, QueryProvider);
-                }
-            }
         }
 
         /// <summary>

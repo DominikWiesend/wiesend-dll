@@ -86,6 +86,7 @@ namespace Wiesend.DataTypes.DataMapper.Interfaces
     /// </summary>
     /// <typeparam name="Left">Left type</typeparam>
     /// <typeparam name="Right">Right type</typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public interface IMapping<Left, Right> : IMapping
     {
     }

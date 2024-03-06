@@ -74,7 +74,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Globalization;
 using System.Linq;
 using Wiesend.DataTypes;
@@ -129,6 +129,9 @@ namespace Wiesend.ORM.Manager
         /// <typeparam name="ObjectType">Type of the object</typeparam>
         /// <param name="Parameters">Parameters used in the where clause</param>
         /// <returns>All items that match the criteria</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public IEnumerable<ObjectType> All<ObjectType>(params IParameter[] Parameters)
             where ObjectType : class
         {
@@ -162,6 +165,8 @@ namespace Wiesend.ORM.Manager
         /// <typeparam name="ObjectType">Type of the object</typeparam>
         /// <param name="Parameters">Parameters used in the where clause</param>
         /// <returns>A single object matching the criteria</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public ObjectType Any<ObjectType>(params IParameter[] Parameters)
             where ObjectType : class
         {
@@ -193,6 +198,7 @@ namespace Wiesend.ORM.Manager
         /// <typeparam name="IDType">ID type for the object</typeparam>
         /// <param name="ID">ID of the object to load</param>
         /// <returns>A single object matching the ID</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public ObjectType Any<ObjectType, IDType>(IDType ID)
             where ObjectType : class
             where IDType : IComparable
@@ -200,9 +206,7 @@ namespace Wiesend.ORM.Manager
             Dynamo ReturnValue = null;
             string KeyName = typeof(ObjectType).GetName() + "_Any_" + ID.ToString();
             if (Cache.ContainsKey(KeyName))
-            {
                 return GetCached<ObjectType>(ref ReturnValue, KeyName);
-            }
             var StringID = ID.ToString();
             foreach (ISourceInfo Source in SourceProvider.Where(x => x.Readable).OrderBy(x => x.Order))
             {
@@ -228,6 +232,8 @@ namespace Wiesend.ORM.Manager
         /// </summary>
         /// <typeparam name="ObjectType">Object type</typeparam>
         /// <param name="Object">Object to delete</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         public void Delete<ObjectType>(ObjectType Object)
             where ObjectType : class
         {
@@ -254,6 +260,9 @@ namespace Wiesend.ORM.Manager
         /// <param name="Object">Object</param>
         /// <param name="PropertyName">Property name</param>
         /// <returns>The appropriate property value</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         public IList<DataType> LoadProperties<ObjectType, DataType>(ObjectType Object, string PropertyName)
             where ObjectType : class
             where DataType : class
@@ -285,7 +294,7 @@ namespace Wiesend.ORM.Manager
                 IMapping Mapping = MapperProvider[typeof(DataType), Source];
                 if (Mapping != null)
                 {
-                    IProperty ObjectProperty = ObjectMapping == null ? null : ObjectMapping.Properties.FirstOrDefault(x => x.Name == PropertyName);
+                    IProperty ObjectProperty = ObjectMapping?.Properties.FirstOrDefault(x => x.Name == PropertyName);
                     if (ObjectProperty == null)
                     {
                         var IDProperty = Mapping.IDProperties.FirstOrDefault();
@@ -299,13 +308,10 @@ namespace Wiesend.ORM.Manager
                                 ++Counter;
                             }
                         }
+                        
                         if (Parameter != null)
-                        {
                             foreach (Dynamo Item in QueryProvider.Generate<DataType>(Source, Mapping, MapperProvider.GetStructure(Mapping.DatabaseConfigType)).All(Parameter).Execute()[0])
-                            {
                                 CopyOrAdd(ReturnValue, IDProperty, Item);
-                            }
-                        }
                     }
                 }
             }
@@ -320,6 +326,8 @@ namespace Wiesend.ORM.Manager
         /// <param name="Object">Object</param>
         /// <param name="PropertyName">Property name</param>
         /// <returns>The appropriate property value</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         public DataType LoadProperty<ObjectType, DataType>(ObjectType Object, string PropertyName)
             where ObjectType : class
             where DataType : class
@@ -334,6 +342,8 @@ namespace Wiesend.ORM.Manager
         /// <param name="Parameters">Parameters to search by</param>
         /// <typeparam name="ObjectType">Object type to get the page count of</typeparam>
         /// <returns>The number of pages that the table contains for the specified page size</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public int PageCount<ObjectType>(int PageSize = 25, params IParameter[] Parameters)
             where ObjectType : class
         {
@@ -374,6 +384,9 @@ namespace Wiesend.ORM.Manager
         /// <param name="OrderBy">The order by portion of the query</param>
         /// <param name="Parameters">Parameters used in the where clause</param>
         /// <returns>A paged list of items that match the criteria</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public IEnumerable<ObjectType> Paged<ObjectType>(int PageSize = 25, int CurrentPage = 0, string OrderBy = "", params IParameter[] Parameters)
             where ObjectType : class
         {
@@ -382,9 +395,7 @@ namespace Wiesend.ORM.Manager
             Parameters.ForEach(x => { KeyName = x.AddParameter(KeyName); });
             var ReturnValue = new System.Collections.Generic.List<Dynamo>();
             if (Cache.ContainsKey(KeyName))
-            {
                 return GetListCached<ObjectType>(ref ReturnValue, KeyName);
-            }
             foreach (ISourceInfo Source in SourceProvider.Where(x => x.Readable).OrderBy(x => x.Order))
             {
                 IMapping Mapping = MapperProvider[typeof(ObjectType), Source];
@@ -412,6 +423,8 @@ namespace Wiesend.ORM.Manager
         /// <typeparam name="ObjectType">Object type</typeparam>
         /// <typeparam name="PrimaryKeyType">Primary key type</typeparam>
         /// <param name="Object">Object to save</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         public void Save<ObjectType, PrimaryKeyType>(ObjectType Object)
             where ObjectType : class
         {
@@ -436,33 +449,35 @@ namespace Wiesend.ORM.Manager
             }
         }
 
-        private static void CascadeDelete<ObjectType>(ObjectType Object, ISourceInfo Source, IMapping Mapping, IBatch TempBatch, List<object> ObjectsSeen)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
+        private static void CascadeDelete<ObjectType>(ObjectType Object, ISourceInfo Source, [NotNull] IMapping Mapping, IBatch TempBatch, List<object> ObjectsSeen)
             where ObjectType : class
         {
-            Contract.Requires<ArgumentNullException>(Mapping != null, "Mapping");
-            Contract.Requires<ArgumentNullException>(Mapping.Properties != null, "Mapping.Properties");
+            if (Mapping == null) throw new ArgumentNullException(nameof(Mapping));
+            if (!(Mapping.Properties != null)) throw new ArgumentNullException("Mapping.Properties");
             foreach (IProperty<ObjectType> Property in Mapping.Properties.Where(x => x.Cascade))
-            {
                 TempBatch.AddCommand(Property.CascadeDelete(Object, Source, ObjectsSeen.ToList()));
-            }
         }
 
-        private static void CascadeSave<ObjectType>(ObjectType Object, ISourceInfo Source, IMapping Mapping, IBatch TempBatch, List<object> ObjectsSeen)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
+        private static void CascadeSave<ObjectType>(ObjectType Object, ISourceInfo Source, [NotNull] IMapping Mapping, IBatch TempBatch, List<object> ObjectsSeen)
             where ObjectType : class
         {
-            Contract.Requires<ArgumentNullException>(Mapping != null, "Mapping");
-            Contract.Requires<ArgumentNullException>(Mapping.Properties != null, "Mapping.Properties");
+            if (Mapping == null) throw new ArgumentNullException(nameof(Mapping));
+            if (!(Mapping.Properties != null)) throw new ArgumentNullException("Mapping.Properties");
             var ORMObject = Object as IORMObject;
             foreach (IProperty<ObjectType> Property in Mapping.Properties.Where(x => x.Cascade))
-            {
                 if (ORMObject == null || ORMObject.PropertiesChanged0.Contains(Property.Name))
                     TempBatch.AddCommand(Property.CascadeSave(Object, Source, ObjectsSeen.ToList()));
-            }
         }
 
-        private static void CopyOrAdd(List<Dynamo> ReturnValue, IProperty IDProperty, Dynamo Item)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
+        private static void CopyOrAdd(List<Dynamo> ReturnValue, [NotNull] IProperty IDProperty, Dynamo Item)
         {
-            Contract.Requires<ArgumentNullException>(IDProperty != null);
+            if (IDProperty == null) throw new ArgumentNullException(nameof(IDProperty), $"Contract assertion not met: {nameof(IDProperty)} != null");
             if (Item == null)
                 return;
             if (ReturnValue == null)
@@ -485,50 +500,44 @@ namespace Wiesend.ORM.Manager
             return ReturnValue;
         }
 
-        private static void JoinsDelete<ObjectType>(ObjectType Object, ISourceInfo Source, IMapping Mapping, IBatch TempBatch, List<object> ObjectsSeen)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
+        private static void JoinsDelete<ObjectType>(ObjectType Object, ISourceInfo Source, [NotNull] IMapping Mapping, IBatch TempBatch, List<object> ObjectsSeen)
             where ObjectType : class
         {
-            Contract.Requires<ArgumentNullException>(Mapping != null, "Mapping");
-            Contract.Requires<ArgumentNullException>(Mapping.Properties != null, "Mapping.Properties");
+            if (Mapping == null) throw new ArgumentNullException(nameof(Mapping));
+            if (!(Mapping.Properties != null)) throw new ArgumentNullException("Mapping.Properties");
             var ORMObject = Object as IORMObject;
             foreach (IProperty<ObjectType> Property in Mapping.Properties)
             {
                 if (ORMObject == null || ORMObject.PropertiesChanged0.Contains(Property.Name))
                 {
-                    if (!Property.Cascade &&
-                        (Property is IMultiMapping
-                            || Property is ISingleMapping))
-                    {
+                    if (!Property.Cascade && (Property is IMultiMapping || Property is ISingleMapping))
                         TempBatch.AddCommand(Property.JoinsDelete(Object, Source, ObjectsSeen.ToList()));
-                    }
                     else if (Property.Cascade)
-                    {
                         TempBatch.AddCommand(Property.CascadeJoinsDelete(Object, Source, ObjectsSeen.ToList()));
-                    }
                 }
             }
         }
 
-        private static void JoinsSave<ObjectType>(ObjectType Object, ISourceInfo Source, IMapping Mapping, IBatch TempBatch, List<object> ObjectsSeen)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
+        private static void JoinsSave<ObjectType>(ObjectType Object, ISourceInfo Source, [NotNull] IMapping Mapping, IBatch TempBatch, List<object> ObjectsSeen)
             where ObjectType : class
         {
-            Contract.Requires<ArgumentNullException>(Mapping != null, "Mapping");
-            Contract.Requires<ArgumentNullException>(Mapping.Properties != null, "Mapping.Properties");
+            if (Mapping == null) throw new ArgumentNullException(nameof(Mapping));
+            if (!(Mapping.Properties != null)) throw new ArgumentNullException("Mapping.Properties");
             var ORMObject = Object as IORMObject;
             foreach (IProperty<ObjectType> Property in Mapping.Properties)
             {
                 if (ORMObject == null || ORMObject.PropertiesChanged0.Contains(Property.Name))
                 {
-                    if (!Property.Cascade &&
-                        (Property is IMultiMapping
-                            || Property is ISingleMapping))
-                    {
+                    if (!Property.Cascade && (Property is IMultiMapping || Property is ISingleMapping))
                         TempBatch.AddCommand(Property.JoinsSave(Object, Source, ObjectsSeen.ToList()));
-                    }
                     else if (Property.Cascade)
-                    {
                         TempBatch.AddCommand(Property.CascadeJoinsSave(Object, Source, ObjectsSeen.ToList()));
-                    }
                 }
             }
         }
@@ -536,10 +545,11 @@ namespace Wiesend.ORM.Manager
         private ObjectType ConvertValue<ObjectType>(Dynamo ReturnValue) where ObjectType : class
         {
             if (ReturnValue == null)
-                return default(ObjectType);
+                return default;
             return ReturnValue.To<ObjectType>().Chain(x => { ((IORMObject)x).Session0 = this; });
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
         private IEnumerable<ObjectType> ConvertValues<ObjectType>(List<Dynamo> ReturnValue) where ObjectType : class
         {
             if (ReturnValue == null)
@@ -549,14 +559,14 @@ namespace Wiesend.ORM.Manager
 
         private ObjectType GetCached<ObjectType>(ref Dynamo ReturnValue, string KeyName) where ObjectType : class
         {
-            Contract.Requires(this.Cache != null);
+            if (!(this.Cache != null)) throw new ArgumentNullException("Cache", $"Contract assertion not met: this.{nameof(Cache)} != null");
             ReturnValue = (Dynamo)Cache[KeyName];
             return ConvertValue<ObjectType>(ReturnValue);
         }
 
         private IEnumerable<ObjectType> GetListCached<ObjectType>(ref List<Dynamo> ReturnValue, string KeyName) where ObjectType : class
         {
-            Contract.Requires(this.Cache != null);
+            if (!(this.Cache != null)) throw new ArgumentNullException("Cache", $"Contract assertion not met: this.{nameof(Cache)} != null");
             ReturnValue = (List<Dynamo>)Cache[KeyName];
             return ConvertValues<ObjectType>(ReturnValue);
         }

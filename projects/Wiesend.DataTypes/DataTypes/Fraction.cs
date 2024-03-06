@@ -73,7 +73,6 @@
 #endregion of Licenses [MIT Licenses]
 
 using System;
-using System.Diagnostics.Contracts;
 using System.Globalization;
 
 namespace Wiesend.DataTypes
@@ -139,7 +138,7 @@ namespace Wiesend.DataTypes
         /// <param name="Denominator">Denominator</param>
         public Fraction(float Numerator, float Denominator)
         {
-            Contract.Requires<ArgumentException>(Denominator != Int32.MinValue);
+            if (!(Denominator != Int32.MinValue)) throw new ArgumentException($"Contract assertion not met: {nameof(Denominator)} != Int32.MinValue", nameof(Denominator));
             while (Numerator != System.Math.Round(Numerator, MidpointRounding.AwayFromZero)
                 || Denominator != System.Math.Round(Denominator, MidpointRounding.AwayFromZero))
             {
@@ -168,9 +167,10 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Fraction">Fraction</param>
         /// <returns>The fraction as a decimal</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public static implicit operator decimal(Fraction Fraction)
         {
-            Contract.Requires<ArgumentNullException>(Fraction != null, "Fraction");
+            if (Fraction == null) throw new ArgumentNullException(nameof(Fraction));
             return ((decimal)Fraction.Numerator / (decimal)Fraction.Denominator);
         }
 
@@ -179,9 +179,10 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Fraction">Fraction</param>
         /// <returns>The fraction as a double</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public static implicit operator double(Fraction Fraction)
         {
-            Contract.Requires<ArgumentNullException>(Fraction != null, "Fraction");
+            if (Fraction == null) throw new ArgumentNullException(nameof(Fraction));
             return ((double)Fraction.Numerator / (double)Fraction.Denominator);
         }
 
@@ -190,9 +191,10 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Fraction">Fraction</param>
         /// <returns>The fraction as a float</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public static implicit operator float(Fraction Fraction)
         {
-            Contract.Requires<ArgumentNullException>(Fraction != null, "Fraction");
+            if (Fraction == null) throw new ArgumentNullException(nameof(Fraction));
             return ((float)Fraction.Numerator / (float)Fraction.Denominator);
         }
 
@@ -252,9 +254,10 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Fraction">Fraction</param>
         /// <returns>The fraction as a string</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public static implicit operator string(Fraction Fraction)
         {
-            Contract.Requires<ArgumentNullException>(Fraction != null, "Fraction");
+            if (Fraction == null) throw new ArgumentNullException(nameof(Fraction));
             return Fraction.ToString();
         }
 
@@ -266,8 +269,8 @@ namespace Wiesend.DataTypes
         /// <returns>The subtracted fraction</returns>
         public static Fraction operator -(Fraction First, Fraction Second)
         {
-            Contract.Requires<ArgumentNullException>(First != null, "First");
-            Contract.Requires<ArgumentNullException>(Second != null, "Second");
+            if (First == null) throw new ArgumentNullException(nameof(First));
+            if (Second == null) throw new ArgumentNullException(nameof(Second));
             var Value1 = new Fraction(First.Numerator * (int)Second.Denominator, First.Denominator * Second.Denominator);
             var Value2 = new Fraction(Second.Numerator * (int)First.Denominator, Second.Denominator * First.Denominator);
             var Result = new Fraction(Value1.Numerator - Value2.Numerator, Value1.Denominator);
@@ -282,7 +285,7 @@ namespace Wiesend.DataTypes
         /// <returns>The negated fraction</returns>
         public static Fraction operator -(Fraction First)
         {
-            Contract.Requires<ArgumentNullException>(First != null, "First");
+            if (First == null) throw new ArgumentNullException(nameof(First));
             return new Fraction(-First.Numerator, First.Denominator);
         }
 
@@ -327,8 +330,8 @@ namespace Wiesend.DataTypes
         /// <returns>The resulting fraction</returns>
         public static Fraction operator *(Fraction First, Fraction Second)
         {
-            Contract.Requires<ArgumentNullException>(First != null, "First");
-            Contract.Requires<ArgumentNullException>(Second != null, "Second");
+            if (First == null) throw new ArgumentNullException(nameof(First));
+            if (Second == null) throw new ArgumentNullException(nameof(Second));
             var Result = new Fraction(First.Numerator * Second.Numerator, First.Denominator * Second.Denominator);
             Result.Reduce();
             return Result;
@@ -342,8 +345,8 @@ namespace Wiesend.DataTypes
         /// <returns>The divided fraction</returns>
         public static Fraction operator /(Fraction First, Fraction Second)
         {
-            Contract.Requires<ArgumentNullException>(First != null, "First");
-            Contract.Requires<ArgumentNullException>(Second != null, "Second");
+            if (First == null) throw new ArgumentNullException(nameof(First));
+            if (Second == null) throw new ArgumentNullException(nameof(Second));
             return First * Second.Inverse();
         }
 
@@ -355,8 +358,8 @@ namespace Wiesend.DataTypes
         /// <returns>The added fraction</returns>
         public static Fraction operator +(Fraction First, Fraction Second)
         {
-            Contract.Requires<ArgumentNullException>(First != null, "First");
-            Contract.Requires<ArgumentNullException>(Second != null, "Second");
+            if (First == null) throw new ArgumentNullException(nameof(First));
+            if (Second == null) throw new ArgumentNullException(nameof(Second));
             var Value1 = new Fraction(First.Numerator * (int)Second.Denominator, First.Denominator * Second.Denominator);
             var Value2 = new Fraction(Second.Numerator * (int)First.Denominator, Second.Denominator * First.Denominator);
             var Result = new Fraction(Value1.Numerator + Value2.Numerator, Value1.Denominator);
@@ -402,9 +405,10 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="obj">object to check</param>
         /// <returns>True if they are, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
         public override bool Equals(object obj)
         {
-            var Other = obj as Fraction;
+            Fraction Other = obj as Fraction;
             if (((object)Other) == null)
                 return false;
             decimal Value1 = this;
@@ -436,8 +440,8 @@ namespace Wiesend.DataTypes
         /// </summary>
         public void Reduce()
         {
-            Contract.Requires<ArgumentOutOfRangeException>(Numerator != Int32.MinValue, "Numerator can't equal Int32.MinValue");
-            Contract.Requires<ArgumentOutOfRangeException>(Denominator != Int32.MinValue, "Denominator can't equal Int32.MinValue");
+            if (!(Numerator != Int32.MinValue)) throw new ArgumentOutOfRangeException(nameof(Numerator), "Numerator can't equal Int32.MinValue");
+            if (!(Denominator != Int32.MinValue)) throw new ArgumentOutOfRangeException(nameof(Denominator), "Denominator can't equal Int32.MinValue");
             var GCD = Numerator.GreatestCommonDenominator(Denominator);
             if (GCD != 0)
             {

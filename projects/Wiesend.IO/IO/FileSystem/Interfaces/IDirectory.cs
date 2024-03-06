@@ -74,17 +74,15 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.IO;
 using Wiesend.IO.Enums;
-using Wiesend.IO.FileSystem.Interfaces.Contracts;
 
 namespace Wiesend.IO.FileSystem.Interfaces
 {
     /// <summary>
     /// Represents a directory
     /// </summary>
-    [ContractClass(typeof(IDirectoryContract))]
+    //[ContractClass(typeof(IDirectoryContract))]
     public interface IDirectory : IComparable<IDirectory>, IEnumerable<IFile>, IComparable, IEquatable<IDirectory>, ICloneable
     {
         /// <summary>

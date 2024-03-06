@@ -88,6 +88,7 @@ namespace Wiesend.IO.FileSystem.BaseClasses
     /// Data type internally to hold true directory info
     /// </typeparam>
     /// <typeparam name="DirectoryType">Directory type</typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public abstract class DirectoryBase<InternalDirectoryType, DirectoryType> : IDirectory
         where DirectoryType : DirectoryBase<InternalDirectoryType, DirectoryType>, new()
     {
@@ -221,6 +222,7 @@ namespace Wiesend.IO.FileSystem.BaseClasses
         /// <param name="Directory1">Directory 1</param>
         /// <param name="Directory2">Directory 2</param>
         /// <returns>True if they are, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
         public static bool operator ==(DirectoryBase<InternalDirectoryType, DirectoryType> Directory1, IDirectory Directory2)
         {
             if ((object)Directory1 == null && (object)Directory2 == null)
@@ -260,6 +262,7 @@ namespace Wiesend.IO.FileSystem.BaseClasses
         /// Clones the directory object
         /// </summary>
         /// <returns>The cloned object</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         public object Clone()
         {
             var Temp = new DirectoryType();
@@ -289,9 +292,10 @@ namespace Wiesend.IO.FileSystem.BaseClasses
         /// </summary>
         /// <param name="obj">Object to compare it to</param>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
         public int CompareTo(object obj)
         {
-            var Temp = obj as IDirectory;
+            IDirectory Temp = obj as IDirectory;
             if (Temp == null)
                 return 1;
             return CompareTo(Temp);

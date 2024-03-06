@@ -95,7 +95,8 @@ namespace Wiesend.ORM
         /// if the parameter exists (and isn't null or empty), it returns the parameter's value.
         /// Otherwise the default value is returned.
         /// </returns>
-        public static DataType GetParameter<DataType>(this IDataRecord Reader, string ID, DataType Default = default(DataType))
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static DataType GetParameter<DataType>(this IDataRecord Reader, string ID, DataType Default = default)
         {
             if (Reader == null)
                 return Default;
@@ -117,7 +118,8 @@ namespace Wiesend.ORM
         /// if the parameter exists (and isn't null or empty), it returns the parameter's value.
         /// Otherwise the default value is returned.
         /// </returns>
-        public static DataType GetParameter<DataType>(this IDataRecord Reader, int Position, DataType Default = default(DataType))
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static DataType GetParameter<DataType>(this IDataRecord Reader, int Position, DataType Default = default)
         {
             if (Reader == null)
                 return Default;

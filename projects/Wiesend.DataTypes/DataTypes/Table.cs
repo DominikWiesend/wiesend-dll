@@ -76,7 +76,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Linq;
 
 namespace Wiesend.DataTypes
@@ -92,9 +92,9 @@ namespace Wiesend.DataTypes
         /// <param name="ColumnNames">Column names</param>
         /// <param name="ColumnValues">Column values</param>
         /// <param name="ColumnNameHash">Column name hash</param>
-        public Row(Hashtable ColumnNameHash, string[] ColumnNames, params object[] ColumnValues)
+        public Row(Hashtable ColumnNameHash, string[] ColumnNames, [NotNull] params object[] ColumnValues)
         {
-            Contract.Requires<ArgumentNullException>(ColumnValues != null, "ColumnValues");
+            if (ColumnValues == null) throw new ArgumentNullException(nameof(ColumnValues));
             this.ColumnNameHash = ColumnNameHash;
             this.ColumnNames = ColumnNames;
             this.ColumnValues = (object[])ColumnValues.Clone();
@@ -120,13 +120,15 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="ColumnName">Column name to search for</param>
         /// <returns>The value specified</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public object this[string ColumnName]
         {
             get
             {
-                Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(ColumnName), "ColumnName");
-                Contract.Requires<NullReferenceException>(ColumnNameHash != null, "ColumnNameHash");
-                Contract.Requires<NullReferenceException>(ColumnValues != null, "ColumnValues");
+                if (string.IsNullOrEmpty(ColumnName)) throw new ArgumentNullException(nameof(ColumnName));
+                if (ColumnNameHash == null) throw new NullReferenceException($"Contract assertion not met: {nameof(ColumnNameHash)} != null");
+                if (ColumnValues == null) throw new NullReferenceException($"Contract assertion not met: {nameof(ColumnValues)} != null");
                 var Column = (int)ColumnNameHash[ColumnName];//.PositionOf(ColumnName);
                 if (Column <= -1)
                     throw new ArgumentOutOfRangeException(ColumnName + " is not present in the row");
@@ -139,12 +141,14 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Column">Column number</param>
         /// <returns>The value specified</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public object this[int Column]
         {
             get
             {
-                Contract.Requires<ArgumentOutOfRangeException>(Column >= 0, "Column");
-                Contract.Requires<NullReferenceException>(ColumnValues != null, "ColumnValues");
+                if (!(Column >= 0)) throw new ArgumentOutOfRangeException(nameof(Column), $"Contract assertion not met: {nameof(Column)} >= 0");
+                if (ColumnValues == null) throw new NullReferenceException($"Contract assertion not met: {nameof(ColumnValues)} != null");
                 if (ColumnValues.Length <= Column)
                     return null;
                 return ColumnValues[Column];
@@ -161,9 +165,9 @@ namespace Wiesend.DataTypes
         /// Constructor
         /// </summary>
         /// <param name="ColumnNames">Column names</param>
-        public Table(params string[] ColumnNames)
+        public Table([NotNull] params string[] ColumnNames)
         {
-            Contract.Requires<ArgumentNullException>(ColumnNames != null, "ColumnNames");
+            if (ColumnNames == null) throw new ArgumentNullException(nameof(ColumnNames));
             this.ColumnNames = (string[])ColumnNames.Clone();
             this.Rows = new List<Row>();
             this.ColumnNameHash = new Hashtable();
@@ -179,10 +183,10 @@ namespace Wiesend.DataTypes
         /// Constructor
         /// </summary>
         /// <param name="Reader">Data reader to get the data from</param>
-        public Table(IDataReader Reader)
+        public Table([NotNull] IDataReader Reader)
         {
-            Contract.Requires<ArgumentNullException>(Reader != null, "Reader");
-            Contract.Requires<ArgumentOutOfRangeException>(Reader.FieldCount >= 0, "Reader.FieldCount needs to have at least 0 fields");
+            if (Reader == null) throw new ArgumentNullException(nameof(Reader));
+            if (!(Reader.FieldCount >= 0)) throw new ArgumentOutOfRangeException(nameof(Reader), "Reader.FieldCount needs to have at least 0 fields");
             this.ColumnNames = new string[Reader.FieldCount];
             for (int x = 0; x < Reader.FieldCount; ++x)
             {
@@ -227,11 +231,13 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="RowNumber">Row number</param>
         /// <returns>The row specified</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public Row this[int RowNumber]
         {
             get
             {
-                Contract.Requires<NullReferenceException>(Rows != null, "Rows");
+                if (Rows == null) throw new NullReferenceException($"Contract assertion not met: {nameof(Rows)} != null");
                 return Rows.Count > RowNumber ? Rows.ElementAt(RowNumber) : null;
             }
         }
@@ -241,10 +247,11 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Objects">Objects to create the row from</param>
         /// <returns>This</returns>
-        public virtual Table AddRow(params object[] Objects)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        public virtual Table AddRow([NotNull] params object[] Objects)
         {
-            Contract.Requires<ArgumentNullException>(Objects != null, "Objects");
-            Contract.Requires<ArgumentNullException>(Rows != null, "Rows");
+            if (Objects == null) throw new ArgumentNullException(nameof(Objects));
+            if (Rows == null) throw new NullReferenceException($"Contract assertion not met: {nameof(Rows)} != null");
             this.Rows.Add(new Row(ColumnNameHash, ColumnNames, Objects));
             return this;
         }

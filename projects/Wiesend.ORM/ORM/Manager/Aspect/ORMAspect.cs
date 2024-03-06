@@ -75,7 +75,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -259,11 +259,11 @@ public event PropertyChangedEventHandler PropertyChanged
             return Builder.ToString();
         }
 
-        private static string SetupIEnumerableProperty(string ReturnValueName, IProperty Property)
+        private static string SetupIEnumerableProperty(string ReturnValueName, [NotNull] IProperty Property)
         {
-            Contract.Requires<ArgumentNullException>(Property != null, "Property");
-            Contract.Requires<ArgumentNullException>(Property.Mapping != null, "Property.Mapping");
-            Contract.Requires<ArgumentNullException>(Property.Mapping.ObjectType != null, "Property.Mapping.ObjectType");
+            if (Property == null) throw new ArgumentNullException(nameof(Property));
+            if (!(Property.Mapping != null)) throw new ArgumentNullException(nameof(Property));
+            if (!(Property.Mapping.ObjectType != null)) throw new ArgumentNullException(nameof(Property));
             var Builder = new StringBuilder();
             Builder.AppendLineFormat("if(!{0}&&Session0!=null)", Property.DerivedFieldName + "Loaded")
                 .AppendLine("{")
@@ -282,11 +282,11 @@ public event PropertyChangedEventHandler PropertyChanged
             return Builder.ToString();
         }
 
-        private static string SetupListProperty(string ReturnValueName, IProperty Property)
+        private static string SetupListProperty(string ReturnValueName, [NotNull] IProperty Property)
         {
-            Contract.Requires<ArgumentNullException>(Property != null, "Property");
-            Contract.Requires<ArgumentNullException>(Property.Mapping != null, "Property.Mapping");
-            Contract.Requires<ArgumentNullException>(Property.Mapping.ObjectType != null, "Property.Mapping.ObjectType");
+            if (Property == null) throw new ArgumentNullException(nameof(Property));
+            if (!(Property.Mapping != null)) throw new ArgumentNullException(nameof(Property));
+            if (!(Property.Mapping.ObjectType != null)) throw new ArgumentNullException(nameof(Property));
             var Builder = new StringBuilder();
             Builder.AppendLineFormat("if(!{0}&&Session0!=null)", Property.DerivedFieldName + "Loaded")
                 .AppendLine("{")
@@ -304,11 +304,11 @@ public event PropertyChangedEventHandler PropertyChanged
             return Builder.ToString();
         }
 
-        private static string SetupSingleProperty(string ReturnValueName, IProperty Property)
+        private static string SetupSingleProperty(string ReturnValueName, [NotNull] IProperty Property)
         {
-            Contract.Requires<ArgumentNullException>(Property != null, "Property");
-            Contract.Requires<ArgumentNullException>(Property.Mapping != null, "Property.Mapping");
-            Contract.Requires<ArgumentNullException>(Property.Mapping.ObjectType != null, "Property.Mapping.ObjectType");
+            if (Property == null) throw new ArgumentNullException(nameof(Property));
+            if (!(Property.Mapping != null)) throw new ArgumentNullException(nameof(Property));
+            if (!(Property.Mapping.ObjectType != null)) throw new ArgumentNullException(nameof(Property));
             var Builder = new StringBuilder();
             Builder.AppendLineFormat("if(!{0}&&Session0!=null)", Property.DerivedFieldName + "Loaded")
                 .AppendLine("{")

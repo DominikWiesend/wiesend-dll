@@ -84,7 +84,7 @@ namespace Wiesend.Validation
     /// <summary>
     /// Does not contain attribute
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1019:DefineAccessorsForAttributeArguments"), AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
     public class DoesNotContainAttribute : ValidationAttribute
     {
         /// <summary>
@@ -119,12 +119,13 @@ namespace Wiesend.Validation
         /// <param name="value">Value to check</param>
         /// <param name="validationContext">Validation context</param>
         /// <returns>The validation result</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             if (value == null)
                 return ValidationResult.Success;
-            var Comparer = new GenericEqualityComparer<IComparable>();
-            var ValueList = value as IEnumerable;
+            GenericEqualityComparer<IComparable> Comparer = new GenericEqualityComparer<IComparable>();
+            IEnumerable ValueList = value as IEnumerable;
             IComparable ValueTemp = 0;
             foreach (IComparable Item in ValueList)
             {
@@ -132,10 +133,8 @@ namespace Wiesend.Validation
                 break;
             }
             foreach (IComparable Item in ValueList)
-            {
                 if (Comparer.Equals(Item, ValueTemp))
                     return new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
-            }
             return ValidationResult.Success;
         }
     }

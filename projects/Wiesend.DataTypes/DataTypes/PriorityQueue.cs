@@ -73,7 +73,6 @@
 #endregion of Licenses [MIT Licenses]
 
 using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -83,6 +82,8 @@ namespace Wiesend.DataTypes
     /// Helper class that implements a priority queue
     /// </summary>
     /// <typeparam name="T">The type of the values placed in the queue</typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "<Pending>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1711:Identifiers should not have incorrect suffix", Justification = "<Pending>")]
     public class PriorityQueue<T> : IDictionary<int, ICollection<T>>
     {
         /// <summary>
@@ -181,6 +182,7 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Key">Key value</param>
         /// <param name="Value">The values to add</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "<Pending>")]
         public virtual void Add(int Key, ICollection<T> Value)
         {
             if (Key > HighestKey)
@@ -279,7 +281,7 @@ namespace Wiesend.DataTypes
         {
             if (Items.ContainsKey(HighestKey))
                 return Items[HighestKey].FirstOrDefault();
-            return default(T);
+            return default;
         }
 
         /// <summary>
@@ -288,7 +290,7 @@ namespace Wiesend.DataTypes
         /// <returns>The next item in the queue</returns>
         public virtual T Pop()
         {
-            T ReturnValue = default(T);
+            T ReturnValue = default;
             if (Items.ContainsKey(HighestKey) && Items[HighestKey].Count > 0)
             {
                 ReturnValue = Items[HighestKey].FirstOrDefault();
@@ -361,6 +363,8 @@ namespace Wiesend.DataTypes
         /// <param name="Key">Key value</param>
         /// <param name="Value">The values getting</param>
         /// <returns>True if it was able to get the value, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "<Pending>")]
         public virtual bool TryGetValue(int Key, out ICollection<T> Value)
         {
             Value = new List<T>();

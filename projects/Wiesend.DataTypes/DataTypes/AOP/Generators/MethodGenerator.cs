@@ -74,7 +74,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Reflection;
 using System.Text;
 using Wiesend.DataTypes.AOP.Generators.BaseClasses;
@@ -92,10 +92,9 @@ namespace Wiesend.DataTypes.AOP.Generators
         /// Initializes a new instance of the <see cref="MethodGenerator"/> class.
         /// </summary>
         /// <param name="methodInfo">The method information.</param>
-        public MethodGenerator(MethodInfo methodInfo)
+        public MethodGenerator([NotNull] MethodInfo methodInfo)
         {
-            Contract.Requires(methodInfo != null);
-            MethodInfo = methodInfo;
+            MethodInfo = methodInfo ?? throw new ArgumentNullException(nameof(methodInfo), $"Contract assertion not met: {nameof(methodInfo)} != null");
             DeclaringType = MethodInfo.DeclaringType;
         }
 
@@ -117,6 +116,8 @@ namespace Wiesend.DataTypes.AOP.Generators
         /// <param name="assembliesUsing">The assemblies using.</param>
         /// <param name="aspects">The aspects.</param>
         /// <returns>The generated string of the method</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0054:Use compound assignment", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0031:Use null propagation", Justification = "<Pending>")]
         public string Generate(List<Assembly> assembliesUsing, IEnumerable<IAspect> aspects)
         {
             aspects = aspects ?? new List<IAspect>();
@@ -137,6 +138,7 @@ namespace Wiesend.DataTypes.AOP.Generators
         /// Returns a <see cref="System.String"/> that represents this instance.
         /// </summary>
         /// <returns>A <see cref="System.String"/> that represents this instance.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "<Pending>")]
         public override string ToString()
         {
             return string.Format(@"{4} {5} {0} {1} {2}({3})",

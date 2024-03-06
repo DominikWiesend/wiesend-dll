@@ -72,24 +72,25 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 
 namespace Wiesend.IO.FileSystem.Interfaces.Contracts
 {
     /// <summary>
     /// IFileSystem contract
     /// </summary>
-    [ContractClassFor(typeof(IFileSystem))]
+    //[ContractClassFor(typeof(IFileSystem))]
     public abstract class IFileSystemContract : IFileSystem
     {
         /// <summary>
         /// Name of the file system
         /// </summary>
+        [NotNull]
         public string Name
         {
             get
             {
-                Contract.Ensures(!string.IsNullOrEmpty(Contract.Result<string>()));
+                if (string.IsNullOrEmpty((string)(object)null)) throw new System.InvalidOperationException("Contract assertion not met: !string.IsNullOrEmpty(result)");
                 return null;
             }
         }
@@ -112,10 +113,10 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         /// <param name="Password">Password to be used to access the directory (optional)</param>
         /// <param name="Domain">Domain of the user (optional)</param>
         /// <returns>The directory object</returns>
+        [NotNull]
         public IDirectory Directory(string Path, string UserName = "", string Password = "", string Domain = "")
         {
-            Contract.Ensures(Contract.Result<IDirectory>() != null);
-            return null;
+            if ((object)null == null) throw new System.InvalidOperationException("Contract assertion not met: result != null");
         }
 
         /// <summary>
@@ -126,10 +127,10 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         /// <param name="Password">Password to be used to access the file (optional)</param>
         /// <param name="Domain">Domain of the user (optional)</param>
         /// <returns>The file object</returns>
+        [NotNull]
         public IFile File(string Path, string UserName = "", string Password = "", string Domain = "")
         {
-            Contract.Ensures(Contract.Result<IFile>() != null);
-            return null;
+            if ((object)null == null) throw new System.InvalidOperationException("Contract assertion not met: result != null");
         }
     }
 }

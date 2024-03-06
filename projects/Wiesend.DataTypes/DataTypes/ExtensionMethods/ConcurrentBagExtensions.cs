@@ -76,7 +76,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Wiesend.DataTypes.Comparison;
@@ -96,9 +96,9 @@ namespace Wiesend.DataTypes
         /// <param name="Collection">Collection</param>
         /// <param name="Items">Items to add</param>
         /// <returns>The collection with the added items</returns>
-        public static ConcurrentBag<T> Add<T>(this ConcurrentBag<T> Collection, IEnumerable<T> Items)
+        public static ConcurrentBag<T> Add<T>([NotNull] this ConcurrentBag<T> Collection, IEnumerable<T> Items)
         {
-            Contract.Requires<ArgumentNullException>(Collection != null, "Collection");
+            if (Collection == null) throw new ArgumentNullException(nameof(Collection));
             if (Items == null)
                 return Collection;
             Parallel.ForEach(Items, x => Collection.Add(x));
@@ -112,9 +112,9 @@ namespace Wiesend.DataTypes
         /// <param name="Collection">Collection</param>
         /// <param name="Items">Items to add</param>
         /// <returns>The collection with the added items</returns>
-        public static ConcurrentBag<T> Add<T>(this ConcurrentBag<T> Collection, params T[] Items)
+        public static ConcurrentBag<T> Add<T>([NotNull] this ConcurrentBag<T> Collection, params T[] Items)
         {
-            Contract.Requires<ArgumentNullException>(Collection != null, "Collection");
+            if (Collection == null) throw new ArgumentNullException(nameof(Collection));
             if (Items == null)
                 return Collection;
             Parallel.ForEach(Items, x => Collection.Add(x));
@@ -128,9 +128,9 @@ namespace Wiesend.DataTypes
         /// <param name="Collection">Collection to add to</param>
         /// <param name="Item">Item to add to the collection</param>
         /// <returns>The original item</returns>
-        public static T AddAndReturn<T>(this ConcurrentBag<T> Collection, T Item)
+        public static T AddAndReturn<T>([NotNull] this ConcurrentBag<T> Collection, T Item)
         {
-            Contract.Requires<ArgumentNullException>(Collection != null, "Collection");
+            if (Collection == null) throw new ArgumentNullException(nameof(Collection));
             Collection.Add(Item);
             return Item;
         }
@@ -145,10 +145,10 @@ namespace Wiesend.DataTypes
         /// Predicate that an item needs to satisfy in order to be added
         /// </param>
         /// <returns>True if any are added, false otherwise</returns>
-        public static bool AddIf<T>(this ConcurrentBag<T> Collection, Predicate<T> Predicate, params T[] Items)
+        public static bool AddIf<T>([NotNull] this ConcurrentBag<T> Collection, [NotNull] Predicate<T> Predicate, params T[] Items)
         {
-            Contract.Requires<ArgumentNullException>(Collection != null, "Collection");
-            Contract.Requires<ArgumentNullException>(Predicate != null, "Predicate");
+            if (Collection == null) throw new ArgumentNullException(nameof(Collection));
+            if (Predicate == null) throw new ArgumentNullException(nameof(Predicate));
             if (Items == null)
                 return true;
             return Items.ForEachParallel(Item =>
@@ -172,10 +172,10 @@ namespace Wiesend.DataTypes
         /// Predicate that an item needs to satisfy in order to be added
         /// </param>
         /// <returns>True if it is added, false otherwise</returns>
-        public static bool AddIf<T>(this ConcurrentBag<T> Collection, Predicate<T> Predicate, IEnumerable<T> Items)
+        public static bool AddIf<T>([NotNull] this ConcurrentBag<T> Collection, [NotNull] Predicate<T> Predicate, IEnumerable<T> Items)
         {
-            Contract.Requires<ArgumentNullException>(Collection != null, "Collection");
-            Contract.Requires<ArgumentNullException>(Predicate != null, "Predicate");
+            if (Collection == null) throw new ArgumentNullException(nameof(Collection));
+            if (Predicate == null) throw new ArgumentNullException(nameof(Predicate));
             if (Items == null)
                 return true;
             return Collection.AddIf(Predicate, Items.ToArray());
@@ -188,9 +188,9 @@ namespace Wiesend.DataTypes
         /// <param name="Collection">Collection to add to</param>
         /// <param name="Items">Items to add to the collection</param>
         /// <returns>True if it is added, false otherwise</returns>
-        public static bool AddIfUnique<T>(this ConcurrentBag<T> Collection, params T[] Items)
+        public static bool AddIfUnique<T>([NotNull] this ConcurrentBag<T> Collection, params T[] Items)
         {
-            Contract.Requires<ArgumentNullException>(Collection != null, "Collection");
+            if (Collection == null) throw new ArgumentNullException(nameof(Collection));
             if (Items == null)
                 return true;
             return Collection.AddIf(x => !Collection.Contains(x), Items);
@@ -207,10 +207,10 @@ namespace Wiesend.DataTypes
         /// false otherwise
         /// </param>
         /// <returns>True if it is added, false otherwise</returns>
-        public static bool AddIfUnique<T>(this ConcurrentBag<T> Collection, Func<T, T, bool> Predicate, params T[] Items)
+        public static bool AddIfUnique<T>([NotNull] this ConcurrentBag<T> Collection, [NotNull] Func<T, T, bool> Predicate, params T[] Items)
         {
-            Contract.Requires<ArgumentNullException>(Collection != null, "Collection");
-            Contract.Requires<ArgumentNullException>(Predicate != null, "Predicate");
+            if (Collection == null) throw new ArgumentNullException(nameof(Collection));
+            if (Predicate == null) throw new ArgumentNullException(nameof(Predicate));
             if (Items == null)
                 return true;
             return Collection.AddIf(x => !Collection.Any(y => Predicate(x, y)), Items);
@@ -223,9 +223,9 @@ namespace Wiesend.DataTypes
         /// <param name="Collection">Collection to add to</param>
         /// <param name="Items">Items to add to the collection</param>
         /// <returns>True if it is added, false otherwise</returns>
-        public static bool AddIfUnique<T>(this ConcurrentBag<T> Collection, IEnumerable<T> Items)
+        public static bool AddIfUnique<T>([NotNull] this ConcurrentBag<T> Collection, IEnumerable<T> Items)
         {
-            Contract.Requires<ArgumentNullException>(Collection != null, "Collection");
+            if (Collection == null) throw new ArgumentNullException(nameof(Collection));
             if (Items == null)
                 return true;
             return Collection.AddIf(x => !Collection.Contains(x), Items);
@@ -242,10 +242,10 @@ namespace Wiesend.DataTypes
         /// false otherwise
         /// </param>
         /// <returns>True if it is added, false otherwise</returns>
-        public static bool AddIfUnique<T>(this ConcurrentBag<T> Collection, Func<T, T, bool> Predicate, IEnumerable<T> Items)
+        public static bool AddIfUnique<T>([NotNull] this ConcurrentBag<T> Collection, [NotNull] Func<T, T, bool> Predicate, IEnumerable<T> Items)
         {
-            Contract.Requires<ArgumentNullException>(Collection != null, "Collection");
-            Contract.Requires<ArgumentNullException>(Predicate != null, "Predicate");
+            if (Collection == null) throw new ArgumentNullException(nameof(Collection));
+            if (Predicate == null) throw new ArgumentNullException(nameof(Predicate));
             if (Items == null)
                 return true;
             return Collection.AddIf(x => !Collection.Any(y => Predicate(x, y)), Items);
@@ -261,9 +261,9 @@ namespace Wiesend.DataTypes
         /// <returns>
         /// True if the item is present, false otherwise
         /// </returns>
-        public static bool Contains<T>(this ConcurrentBag<T> Collection, T Item, IEqualityComparer<T> Comparer = null)
+        public static bool Contains<T>([NotNull] this ConcurrentBag<T> Collection, T Item, IEqualityComparer<T> Comparer = null)
         {
-            Contract.Requires<ArgumentNullException>(Collection != null, "Collection");
+            if (Collection == null) throw new ArgumentNullException(nameof(Collection));
             Comparer = Comparer.Check(new GenericEqualityComparer<T>());
             foreach (T TempValue in Collection)
             {
@@ -279,9 +279,9 @@ namespace Wiesend.DataTypes
         /// <typeparam name="T">The type of the items in the collection</typeparam>
         /// <param name="Collection">Collection to remove items from</param>
         /// <param name="Predicate">Predicate used to determine what items to remove</param>
-        public static ConcurrentBag<T> Remove<T>(this ConcurrentBag<T> Collection, Func<T, bool> Predicate)
+        public static ConcurrentBag<T> Remove<T>([NotNull] this ConcurrentBag<T> Collection, Func<T, bool> Predicate)
         {
-            Contract.Requires<ArgumentNullException>(Collection != null, "Collection");
+            if (Collection == null) throw new ArgumentNullException(nameof(Collection));
             return new ConcurrentBag<T>(Collection.Where(x => !Predicate(x)));
         }
 
@@ -292,9 +292,9 @@ namespace Wiesend.DataTypes
         /// <param name="Collection">Collection</param>
         /// <param name="Items">Items to remove</param>
         /// <returns>The collection with the items removed</returns>
-        public static ConcurrentBag<T> Remove<T>(this ConcurrentBag<T> Collection, IEnumerable<T> Items)
+        public static ConcurrentBag<T> Remove<T>([NotNull] this ConcurrentBag<T> Collection, IEnumerable<T> Items)
         {
-            Contract.Requires<ArgumentNullException>(Collection != null, "Collection");
+            if (Collection == null) throw new ArgumentNullException(nameof(Collection));
             if (Items == null)
                 return Collection;
             return new ConcurrentBag<T>(Collection.Where(x => !Items.Contains(x)));

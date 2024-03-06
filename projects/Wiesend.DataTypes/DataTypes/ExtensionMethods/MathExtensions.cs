@@ -75,7 +75,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
 using System.Linq;
 
 namespace Wiesend.DataTypes
@@ -123,7 +122,7 @@ namespace Wiesend.DataTypes
         /// <returns>The absolute value</returns>
         public static int Absolute(this int Value)
         {
-            Contract.Requires<ArgumentOutOfRangeException>(Value != Int32.MinValue, "Value can not be Int32.MinValue");
+            if (Value == Int32.MinValue) throw new ArgumentOutOfRangeException(nameof(Value), "Value can not be Int32.MinValue");
             return System.Math.Abs(Value);
         }
 
@@ -134,7 +133,7 @@ namespace Wiesend.DataTypes
         /// <returns>The absolute value</returns>
         public static long Absolute(this long Value)
         {
-            Contract.Requires<ArgumentException>(Value != -9223372036854775808);
+            if (Value == -9223372036854775808) throw new ArgumentException($"Contract assertion not met: {nameof(Value)} != -9223372036854775808", nameof(Value));
             return System.Math.Abs(Value);
         }
 
@@ -145,7 +144,7 @@ namespace Wiesend.DataTypes
         /// <returns>The absolute value</returns>
         public static short Absolute(this short Value)
         {
-            Contract.Requires<ArgumentException>(Value != -32768);
+            if (Value == -32768) throw new ArgumentException($"Contract assertion not met: {nameof(Value)} != -32768", nameof(Value));
             return System.Math.Abs(Value);
         }
 
@@ -164,6 +163,7 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Input">Input value (N!)</param>
         /// <returns>The factorial specified</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0054:Use compound assignment", Justification = "<Pending>")]
         public static int Factorial(this int Input)
         {
             int Value1 = 1;
@@ -180,8 +180,8 @@ namespace Wiesend.DataTypes
         /// <returns>The greatest common denominator if one exists</returns>
         public static int GreatestCommonDenominator(this int Value1, int Value2)
         {
-            Contract.Requires<ArgumentOutOfRangeException>(Value1 != Int32.MinValue, "Value1 can not be Int32.MinValue");
-            Contract.Requires<ArgumentOutOfRangeException>(Value2 != Int32.MinValue, "Value2 can not be Int32.MinValue");
+            if (Value1 == Int32.MinValue) throw new ArgumentOutOfRangeException(nameof(Value1), "Value1 can not be Int32.MinValue");
+            if (Value2 == Int32.MinValue) throw new ArgumentOutOfRangeException(nameof(Value2), "Value2 can not be Int32.MinValue");
             Value1 = Value1.Absolute();
             Value2 = Value2.Absolute();
             while (Value1 != 0 && Value2 != 0)
@@ -203,8 +203,8 @@ namespace Wiesend.DataTypes
         [CLSCompliant(false)]
         public static int GreatestCommonDenominator(this int Value1, uint Value2)
         {
-            Contract.Requires<ArgumentOutOfRangeException>(Value1 != Int32.MinValue, "Value1 can not be Int32.MinValue");
-            Contract.Requires<ArgumentException>(Value2 != 2147483648);
+            if (Value1 == Int32.MinValue) throw new ArgumentOutOfRangeException(nameof(Value1), "Value1 can not be Int32.MinValue");
+            if (Value2 == 2147483648) throw new ArgumentException($"Contract assertion not met: {nameof(Value2)} != 2147483648", nameof(Value2));
             return Value1.GreatestCommonDenominator((int)Value2);
         }
 
@@ -217,8 +217,8 @@ namespace Wiesend.DataTypes
         [CLSCompliant(false)]
         public static int GreatestCommonDenominator(this uint Value1, uint Value2)
         {
-            Contract.Requires<ArgumentException>(Value1 != 2147483648);
-            Contract.Requires<ArgumentException>(Value2 != 2147483648);
+            if (Value1 == 2147483648) throw new ArgumentException($"Contract assertion not met: {nameof(Value1)} != 2147483648", nameof(Value1));
+            if (Value2 == 2147483648) throw new ArgumentException($"Contract assertion not met: {nameof(Value2)} != 2147483648", nameof(Value2));
             return ((int)Value1).GreatestCommonDenominator((int)Value2);
         }
 
@@ -262,12 +262,14 @@ namespace Wiesend.DataTypes
         /// <returns>
         /// The median value
         /// </returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0054:Use compound assignment", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1827:Do not use Count() or LongCount() when Any() can be used", Justification = "<Pending>")]
         public static T Median<T>(this IEnumerable<T> Values, Func<T, T> OrderBy = null)
         {
             if (Values == null)
-                return default(T);
+                return default;
             if (Values.Count() == 0)
-                return default(T);
+                return default;
             OrderBy = OrderBy ?? (x => x);
             Values = Values.OrderBy(OrderBy);
             return Values.ElementAt((Values.Count() / 2));
@@ -281,17 +283,18 @@ namespace Wiesend.DataTypes
         /// <returns>
         /// The mode value
         /// </returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1827:Do not use Count() or LongCount() when Any() can be used", Justification = "<Pending>")]
         public static T Mode<T>(this IEnumerable<T> Values)
         {
             if (Values == null)
-                return default(T);
+                return default;
             if (Values.Count() == 0)
-                return default(T);
+                return default;
             var Items = new Bag<T>();
             foreach (T Value in Values)
                 Items.Add(Value);
             int MaxValue = 0;
-            T MaxIndex = default(T);
+            T MaxIndex = default;
             foreach (T Key in Items)
             {
                 if (Items[Key] > MaxValue)
@@ -334,8 +337,8 @@ namespace Wiesend.DataTypes
         /// <returns></returns>
         public static double Round(this double Value, int Digits = 2, MidpointRounding Rounding = MidpointRounding.AwayFromZero)
         {
-            Contract.Requires<ArgumentException>(Digits >= 0);
-            Contract.Requires<ArgumentException>(Digits <= 15);
+            if (!(Digits >= 0)) throw new ArgumentException($"Contract assertion not met: {nameof(Digits)} >= 0", nameof(Digits));
+            if (!(Digits <= 15)) throw new ArgumentException($"Contract assertion not met: {nameof(Digits)} <= 15", nameof(Digits));
             return System.Math.Round(Value, Digits, Rounding);
         }
 
@@ -624,6 +627,7 @@ namespace Wiesend.DataTypes
         /// <returns>
         /// The variance
         /// </returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1827:Do not use Count() or LongCount() when Any() can be used", Justification = "<Pending>")]
         public static double Variance<T>(this IEnumerable<T> Values, Func<T, decimal> Selector)
         {
             if (Values == null || Values.Count() == 0)

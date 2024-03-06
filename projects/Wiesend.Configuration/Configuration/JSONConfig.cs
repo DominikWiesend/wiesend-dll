@@ -83,6 +83,8 @@ namespace Wiesend.Configuration
     /// </summary>
     /// <typeparam name="ClassType">Class type</typeparam>
     [Serializable]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2229:Implement serialization constructors", Justification = "<Pending>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public abstract class JSONConfig<ClassType> : Config<ClassType>
         where ClassType : JSONConfig<ClassType>, new()
     {

@@ -77,6 +77,7 @@ namespace Wiesend.Validation
     /// <summary>
     /// IsValid types
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
     public enum IsValid
     {
         /// <summary>

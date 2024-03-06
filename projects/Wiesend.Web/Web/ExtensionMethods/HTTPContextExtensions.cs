@@ -76,7 +76,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Text;
 using System.Web;
 using Wiesend.DataTypes;
@@ -118,9 +118,9 @@ namespace Wiesend.Web
         /// <param name="Page">Page in which to dump</param>
         /// <param name="HTMLOutput">Should html output be used?</param>
         /// <returns>A string containing the application state information</returns>
-        public static string DumpApplicationState(this System.Web.UI.Page Page, bool HTMLOutput = false)
+        public static string DumpApplicationState([NotNull] this System.Web.UI.Page Page, bool HTMLOutput = false)
         {
-            Contract.Requires<ArgumentNullException>(Page != null, "Page");
+            if (Page == null) throw new ArgumentNullException(nameof(Page), "Page");
             return Page.Application.DumpApplicationState(HTMLOutput);
         }
 
@@ -152,9 +152,9 @@ namespace Wiesend.Web
         /// <param name="Page">Page in which to dump</param>
         /// <param name="HTMLOutput">Should HTML output be used</param>
         /// <returns>A string containing the cache information</returns>
-        public static string DumpCache(this System.Web.UI.Page Page, bool HTMLOutput = false)
+        public static string DumpCache([NotNull] this System.Web.UI.Page Page, bool HTMLOutput = false)
         {
-            Contract.Requires<ArgumentNullException>(Page != null, "Page");
+            if (Page == null) throw new ArgumentNullException(nameof(Page), "Page");
             return Page.Cache.DumpCache(HTMLOutput);
         }
 
@@ -186,9 +186,9 @@ namespace Wiesend.Web
         /// <param name="Page">Page in which to dump</param>
         /// <param name="HTMLOutput">Should html output be used</param>
         /// <returns>A string containing the cookie information</returns>
-        public static string DumpCookies(this System.Web.UI.Page Page, bool HTMLOutput = false)
+        public static string DumpCookies([NotNull] this System.Web.UI.Page Page, bool HTMLOutput = false)
         {
-            Contract.Requires<ArgumentNullException>(Page != null, "Page");
+            if (Page == null) throw new ArgumentNullException(nameof(Page), "Page");
             return Page.Request.Cookies.DumpCookies(HTMLOutput);
         }
 
@@ -198,9 +198,9 @@ namespace Wiesend.Web
         /// <param name="Input">Cookies</param>
         /// <param name="HTMLOutput">Should html output be used</param>
         /// <returns>A string containing the cookie information</returns>
-        public static string DumpCookies(this HttpCookieCollection Input, bool HTMLOutput = false)
+        public static string DumpCookies([NotNull] this HttpCookieCollection Input, bool HTMLOutput = false)
         {
-            Contract.Requires<ArgumentNullException>(Input != null, "Input");
+            if (Input == null) throw new ArgumentNullException(nameof(Input), "Input");
             var String = new StringBuilder();
             String.Append(HTMLOutput ? "<table><thead><tr><th>Name</th><th>Sub Name</th><th>Value</th></tr></thead><tbody>" : "Name\t\tSub Name\t\tValue\r\n");
             foreach (string Key in Input.Keys)
@@ -249,9 +249,9 @@ namespace Wiesend.Web
         /// <param name="Page">Page to dump the information about</param>
         /// <param name="HTMLOutput">Should HTML output be used</param>
         /// <returns>a string containing the information</returns>
-        public static string DumpRequestVariable(this System.Web.UI.Page Page, bool HTMLOutput = false)
+        public static string DumpRequestVariable([NotNull] this System.Web.UI.Page Page, bool HTMLOutput = false)
         {
-            Contract.Requires<ArgumentNullException>(Page != null, "Page");
+            if (Page == null) throw new ArgumentNullException(nameof(Page), "Page");
             return Page.Request.ToString(HTMLOutput);
         }
 
@@ -274,9 +274,9 @@ namespace Wiesend.Web
         /// <param name="Page">Page to dump the information about</param>
         /// <param name="HTMLOutput">Should HTML output be used</param>
         /// <returns>a string containing the information</returns>
-        public static string DumpResponseVariable(this System.Web.UI.Page Page, bool HTMLOutput = false)
+        public static string DumpResponseVariable([NotNull] this System.Web.UI.Page Page, bool HTMLOutput = false)
         {
-            Contract.Requires<ArgumentNullException>(Page != null, "Page");
+            if (Page == null) throw new ArgumentNullException(nameof(Page), "Page");
             return Page.Response.DumpResponseVariable(HTMLOutput);
         }
 
@@ -308,9 +308,9 @@ namespace Wiesend.Web
         /// <param name="Page">page to get server variables from</param>
         /// <param name="HTMLOutput">Should HTML output be used</param>
         /// <returns>A string containing an HTML formatted list of the server variables</returns>
-        public static string DumpServerVars(this System.Web.UI.Page Page, bool HTMLOutput = false)
+        public static string DumpServerVars([NotNull] this System.Web.UI.Page Page, bool HTMLOutput = false)
         {
-            Contract.Requires<ArgumentNullException>(Page != null, "Page");
+            if (Page == null) throw new ArgumentNullException(nameof(Page), "Page");
             return Page.Request.DumpServerVars(HTMLOutput);
         }
 
@@ -320,9 +320,9 @@ namespace Wiesend.Web
         /// <param name="Page">Page in which to dump</param>
         /// <param name="HTMLOutput">Should HTML output be used</param>
         /// <returns>A string containing the session information</returns>
-        public static string DumpSession(this System.Web.UI.Page Page, bool HTMLOutput = false)
+        public static string DumpSession([NotNull] this System.Web.UI.Page Page, bool HTMLOutput = false)
         {
-            Contract.Requires<ArgumentNullException>(Page != null, "Page");
+            if (Page == null) throw new ArgumentNullException(nameof(Page), "Page");
             return Page.Session.DumpSession(HTMLOutput);
         }
 

@@ -75,7 +75,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -270,6 +270,7 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
             return Exists("SELECT * FROM sys.views WHERE name=@0", View, Source);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
         private static IEnumerable<string> BuildCommands(ISource DesiredStructure, ISource CurrentStructure)
         {
             var Commands = new List<string>();
@@ -308,11 +309,11 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
             return Commands;
         }
 
-        private static IEnumerable<string> GetAlterFunctionCommand(Function Function, Function CurrentFunction)
+        private static IEnumerable<string> GetAlterFunctionCommand([NotNull] Function Function, [NotNull] Function CurrentFunction)
         {
-            Contract.Requires<ArgumentNullException>(Function != null, "Function");
-            Contract.Requires<ArgumentNullException>(CurrentFunction != null, "CurrentFunction");
-            Contract.Requires<ArgumentException>(Function.Definition == CurrentFunction.Definition || !string.IsNullOrEmpty(Function.Definition));
+            if (Function == null) throw new ArgumentNullException(nameof(Function));
+            if (CurrentFunction == null) throw new ArgumentNullException(nameof(CurrentFunction));
+            if (!(Function.Definition == CurrentFunction.Definition || !string.IsNullOrEmpty(Function.Definition))) throw new ArgumentException($"Contract assertion not met: {nameof(Function)}.Definition == Current{nameof(Function)}.Definition || !string.IsNullOrEmpty({nameof(Function)}.Definition)", nameof(Function));
             var ReturnValue = new List<string>();
             if (Function.Definition != CurrentFunction.Definition)
             {
@@ -324,11 +325,11 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
             return ReturnValue;
         }
 
-        private static IEnumerable<string> GetAlterStoredProcedure(StoredProcedure StoredProcedure, StoredProcedure CurrentStoredProcedure)
+        private static IEnumerable<string> GetAlterStoredProcedure([NotNull] StoredProcedure StoredProcedure, [NotNull] StoredProcedure CurrentStoredProcedure)
         {
-            Contract.Requires<ArgumentNullException>(StoredProcedure != null, "StoredProcedure");
-            Contract.Requires<ArgumentNullException>(CurrentStoredProcedure != null, "CurrentStoredProcedure");
-            Contract.Requires<ArgumentException>(StoredProcedure.Definition == CurrentStoredProcedure.Definition || !string.IsNullOrEmpty(StoredProcedure.Definition));
+            if (StoredProcedure == null) throw new ArgumentNullException(nameof(StoredProcedure));
+            if (CurrentStoredProcedure == null) throw new ArgumentNullException(nameof(CurrentStoredProcedure));
+            if (!(StoredProcedure.Definition == CurrentStoredProcedure.Definition || !string.IsNullOrEmpty(StoredProcedure.Definition))) throw new ArgumentException($"Contract assertion not met: {nameof(StoredProcedure)}.Definition == Current{nameof(StoredProcedure)}.Definition || !string.IsNullOrEmpty({nameof(StoredProcedure)}.Definition)", nameof(StoredProcedure));
             var ReturnValue = new List<string>();
             if (StoredProcedure.Definition != CurrentStoredProcedure.Definition)
             {
@@ -340,10 +341,11 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
             return ReturnValue;
         }
 
-        private static IEnumerable<string> GetAlterTableCommand(Table Table, ITable CurrentTable)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "<Pending>")]
+        private static IEnumerable<string> GetAlterTableCommand([NotNull] Table Table, ITable CurrentTable)
         {
-            Contract.Requires<ArgumentNullException>(Table != null, "Table");
-            Contract.Requires<ArgumentNullException>(Table.Columns != null, "Table.Columns");
+            if (Table == null) throw new ArgumentNullException(nameof(Table));
+            if (!(Table.Columns != null)) throw new ArgumentNullException("Table.Columns");
             var ReturnValue = new List<string>();
             foreach (IColumn Column in Table.Columns)
             {
@@ -417,10 +419,12 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
             return ReturnValue;
         }
 
-        private static IEnumerable<string> GetAlterTriggerCommand(Table Table, ITable CurrentTable)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
+        private static IEnumerable<string> GetAlterTriggerCommand([NotNull] Table Table, ITable CurrentTable)
         {
-            Contract.Requires<ArgumentNullException>(Table != null, "Table");
-            Contract.Requires<ArgumentNullException>(Table.Triggers != null, "Table.Triggers");
+            if (Table == null) throw new ArgumentNullException(nameof(Table));
+            if (!(Table.Triggers != null)) throw new ArgumentNullException("Table.Triggers");
             var ReturnValue = new List<string>();
             foreach (Trigger Trigger in Table.Triggers)
             {
@@ -428,7 +432,7 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
                 {
                     string Definition1 = Trigger.Definition;
                     var Definition2 = Trigger2.Definition.Replace("Command0", "");
-                    if (Trigger.Name == Trigger2.Name && string.Equals(Definition1, Definition2, StringComparison.InvariantCultureIgnoreCase))
+                    if (Trigger.Name == Trigger2.Name && string.Equals(Definition1, Definition2, StringComparison.OrdinalIgnoreCase))
                     {
                         ReturnValue.Add(string.Format(CultureInfo.CurrentCulture,
                             "EXEC dbo.sp_executesql @statement = N'DROP TRIGGER {0}'",
@@ -442,11 +446,11 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
             return ReturnValue;
         }
 
-        private static IEnumerable<string> GetAlterViewCommand(View View, View CurrentView)
+        private static IEnumerable<string> GetAlterViewCommand([NotNull] View View, [NotNull] View CurrentView)
         {
-            Contract.Requires<ArgumentNullException>(View != null, "View");
-            Contract.Requires<ArgumentNullException>(CurrentView != null, "CurrentView");
-            Contract.Requires<ArgumentException>(View.Definition == CurrentView.Definition || !string.IsNullOrEmpty(View.Definition));
+            if (View == null) throw new ArgumentNullException(nameof(View));
+            if (CurrentView == null) throw new ArgumentNullException(nameof(CurrentView));
+            if (!(View.Definition == CurrentView.Definition || !string.IsNullOrEmpty(View.Definition))) throw new ArgumentException($"Contract assertion not met: {nameof(View)}.Definition == Current{nameof(View)}.Definition || !string.IsNullOrEmpty({nameof(View)}.Definition)", nameof(View));
             var ReturnValue = new List<string>();
             if (View.Definition != CurrentView.Definition)
             {
@@ -458,10 +462,11 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
             return ReturnValue;
         }
 
-        private static IEnumerable<string> GetForeignKeyCommand(Table Table, ITable CurrentTable)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "<Pending>")]
+        private static IEnumerable<string> GetForeignKeyCommand([NotNull] Table Table, ITable CurrentTable)
         {
-            Contract.Requires<ArgumentNullException>(Table != null, "Table");
-            Contract.Requires<ArgumentNullException>(Table.Columns != null, "Table.Columns");
+            if (Table == null) throw new ArgumentNullException(nameof(Table));
+            if (!(Table.Columns != null)) throw new ArgumentNullException("Table.Columns");
             var ReturnValue = new List<string>();
             foreach (IColumn Column in Table.Columns)
             {
@@ -491,10 +496,11 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
             return ReturnValue;
         }
 
-        private static IEnumerable<string> GetForeignKeyCommand(Table Table)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "<Pending>")]
+        private static IEnumerable<string> GetForeignKeyCommand([NotNull] Table Table)
         {
-            Contract.Requires<ArgumentNullException>(Table != null, "Table");
-            Contract.Requires<ArgumentNullException>(Table.Columns != null, "Table.Columns");
+            if (Table == null) throw new ArgumentNullException(nameof(Table));
+            if (!(Table.Columns != null)) throw new ArgumentNullException("Table.Columns");
             var ReturnValue = new List<string>();
             foreach (IColumn Column in Table.Columns)
             {
@@ -522,33 +528,36 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
             return ReturnValue;
         }
 
-        private static IEnumerable<string> GetFunctionCommand(Function Function)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "<Pending>")]
+        private static IEnumerable<string> GetFunctionCommand([NotNull] Function Function)
         {
-            Contract.Requires<ArgumentNullException>(Function != null, "Function");
-            Contract.Requires<ArgumentNullException>(Function.Definition != null, "Function.Definition");
+            if (Function == null) throw new ArgumentNullException(nameof(Function));
+            if (!(Function.Definition != null)) throw new ArgumentNullException("Function.Definition");
             var Definition = Regex.Replace(Function.Definition, "-- (.*)", "");
             return new string[] { Definition.Replace("\n", " ").Replace("\r", " ") };
         }
 
-        private static IEnumerable<string> GetStoredProcedure(StoredProcedure StoredProcedure)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "<Pending>")]
+        private static IEnumerable<string> GetStoredProcedure([NotNull] StoredProcedure StoredProcedure)
         {
-            Contract.Requires<ArgumentNullException>(StoredProcedure != null, "StoredProcedure");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(StoredProcedure.Definition), "StoredProcedure.Definition");
+            if (StoredProcedure == null) throw new ArgumentNullException(nameof(StoredProcedure));
+            if (string.IsNullOrEmpty(StoredProcedure.Definition)) throw new ArgumentNullException("StoredProcedure.Definition");
             var Definition = Regex.Replace(StoredProcedure.Definition, "-- (.*)", "");
             return new string[] { Definition.Replace("\n", " ").Replace("\r", " ") };
         }
 
-        private static IEnumerable<string> GetTableCommand(Table Table)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "<Pending>")]
+        private static IEnumerable<string> GetTableCommand([NotNull] Table Table)
         {
-            Contract.Requires<ArgumentNullException>(Table != null, "Table");
-            Contract.Requires<ArgumentNullException>(Table.Columns != null, "Table.Columns");
+            if (Table == null) throw new ArgumentNullException(nameof(Table));
+            if (!(Table.Columns != null)) throw new ArgumentNullException("Table.Columns");
             var ReturnValue = new List<string>();
             var Builder = new StringBuilder();
-            Builder.Append("EXEC dbo.sp_executesql @statement = N'CREATE TABLE ").Append(Table.Name).Append("(");
+            Builder.Append("EXEC dbo.sp_executesql @statement = N'CREATE TABLE ").Append(Table.Name).Append('(');
             string Splitter = "";
             foreach (IColumn Column in Table.Columns)
             {
-                Builder.Append(Splitter).Append(Column.Name).Append(" ").Append(Column.DataType.To(SqlDbType.Int).ToString());
+                Builder.Append(Splitter).Append(Column.Name).Append(' ').Append(Column.DataType.To(SqlDbType.Int).ToString());
                 if (Column.DataType == SqlDbType.VarChar.To(DbType.Int32)
                         || Column.DataType == SqlDbType.NVarChar.To(DbType.Int32)
                         || Column.DataType == SqlDbType.Binary.To(DbType.Int32))
@@ -560,7 +569,7 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
                 else if (Column.DataType == SqlDbType.Decimal.To(DbType.Int32))
                 {
                     var Precision = (Column.Length * 2).Clamp(38, 18);
-                    Builder.Append("(").Append(Precision).Append(",").Append(Column.Length.Clamp(38, 0)).Append(")");
+                    Builder.Append('(').Append(Precision).Append(',').Append(Column.Length.Clamp(38, 0)).Append(')');
                 }
                 if (!Column.Nullable)
                 {
@@ -612,10 +621,11 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
             return ReturnValue;
         }
 
-        private static IEnumerable<string> GetTriggerCommand(Table Table)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
+        private static IEnumerable<string> GetTriggerCommand([NotNull] Table Table)
         {
-            Contract.Requires<ArgumentNullException>(Table != null, "Table");
-            Contract.Requires<ArgumentNullException>(Table.Triggers != null, "Table.Triggers");
+            if (Table == null) throw new ArgumentNullException(nameof(Table));
+            if (!(Table.Triggers != null)) throw new ArgumentNullException(nameof(Table));
             var ReturnValue = new List<string>();
             foreach (Trigger Trigger in Table.Triggers)
             {
@@ -625,19 +635,19 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
             return ReturnValue;
         }
 
-        private static IEnumerable<string> GetViewCommand(View View)
+        private static IEnumerable<string> GetViewCommand([NotNull] View View)
         {
-            Contract.Requires<ArgumentNullException>(View != null, "View");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(View.Definition), "View.Definition");
+            if (View == null) throw new ArgumentNullException(nameof(View));
+            if (string.IsNullOrEmpty(View.Definition)) throw new ArgumentNullException(nameof(View));
             var Definition = Regex.Replace(View.Definition, "-- (.*)", "");
             return new string[] { Definition.Replace("\n", " ").Replace("\r", " ") };
         }
 
-        private static ITable SetupAuditTables(ITable Table)
+        private static ITable SetupAuditTables([NotNull] ITable Table)
         {
-            Contract.Requires<ArgumentNullException>(Table != null, "Table");
+            if (Table == null) throw new ArgumentNullException(nameof(Table));
             var AuditTable = new Schema.Default.Database.Table(Table.Name + "Audit", Table.Source);
-            string IDName = Table.Columns.Any(x => string.Equals(x.Name, "ID", StringComparison.InvariantCultureIgnoreCase)) ? "AuditID" : "ID";
+            string IDName = Table.Columns.Any(x => string.Equals(x.Name, "ID", StringComparison.OrdinalIgnoreCase)) ? "AuditID" : "ID";
             AuditTable.AddColumn(IDName, DbType.Int32, 0, false, true, true, true, false, "", "", 0);
             AuditTable.AddColumn("AuditType", SqlDbType.NVarChar.To(DbType.Int32), 1, false, false, false, false, false, "", "", "");
             foreach (IColumn Column in Table.Columns)
@@ -645,11 +655,11 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
             return AuditTable;
         }
 
-        private static void SetupAuditTables(IDatabase Key, Schema.Default.Database.Database TempDatabase)
+        private static void SetupAuditTables([NotNull] IDatabase Key, [NotNull] Schema.Default.Database.Database TempDatabase)
         {
-            Contract.Requires<ArgumentNullException>(Key != null, "Key");
-            Contract.Requires<ArgumentNullException>(TempDatabase != null, "TempDatabase");
-            Contract.Requires<ArgumentNullException>(TempDatabase.Tables != null, "TempDatabase.Tables");
+            if (Key == null) throw new ArgumentNullException(nameof(Key));
+            if (TempDatabase == null) throw new ArgumentNullException(nameof(TempDatabase));
+            if (!(TempDatabase.Tables != null)) throw new ArgumentNullException(nameof(TempDatabase));
             if (!Key.Audit)
                 return;
             var TempTables = new List<ITable>();
@@ -662,15 +672,16 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
             TempDatabase.Tables.Add(TempTables);
         }
 
-        private static void SetupDeleteTrigger(ITable Table)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1830:Prefer strongly-typed Append and Insert method overloads on StringBuilder", Justification = "<Pending>")]
+        private static void SetupDeleteTrigger([NotNull] ITable Table)
         {
-            Contract.Requires<ArgumentNullException>(Table != null, "Table");
-            Contract.Requires<ArgumentNullException>(Table.Columns != null, "Table.Columns");
+            if (Table == null) throw new ArgumentNullException(nameof(Table));
+            if (!(Table.Columns != null)) throw new ArgumentNullException(nameof(Table));
             var Columns = new StringBuilder();
             var Builder = new StringBuilder();
             Builder.Append("CREATE TRIGGER dbo.").Append(Table.Name).Append("_Audit_D ON dbo.")
                 .Append(Table.Name).Append(" FOR DELETE AS IF @@rowcount=0 RETURN")
-                .Append(" INSERT INTO dbo.").Append(Table.Name).Append("Audit").Append("(");
+                .Append(" INSERT INTO dbo.").Append(Table.Name).Append("Audit").Append('(');
             string Splitter = "";
             foreach (IColumn Column in Table.Columns)
             {
@@ -684,17 +695,18 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
             Table.AddTrigger(Table.Name + "_Audit_D", Builder.ToString(), TriggerType.Delete);
         }
 
-        private static void SetupInsertUpdateTrigger(ITable Table)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1830:Prefer strongly-typed Append and Insert method overloads on StringBuilder", Justification = "<Pending>")]
+        private static void SetupInsertUpdateTrigger([NotNull] ITable Table)
         {
-            Contract.Requires<ArgumentNullException>(Table != null, "Table");
-            Contract.Requires<ArgumentNullException>(Table.Columns != null, "Table.Columns");
+            if (Table == null) throw new ArgumentNullException(nameof(Table));
+            if (!(Table.Columns != null)) throw new ArgumentNullException(nameof(Table));
             var Columns = new StringBuilder();
             var Builder = new StringBuilder();
             Builder.Append("CREATE TRIGGER dbo.").Append(Table.Name).Append("_Audit_IU ON dbo.")
                 .Append(Table.Name).Append(" FOR INSERT,UPDATE AS IF @@rowcount=0 RETURN declare @AuditType")
                 .Append(" char(1) declare @DeletedCount int SELECT @DeletedCount=count(*) FROM DELETED IF @DeletedCount=0")
                 .Append(" BEGIN SET @AuditType='I' END ELSE BEGIN SET @AuditType='U' END")
-                .Append(" INSERT INTO dbo.").Append(Table.Name).Append("Audit").Append("(");
+                .Append(" INSERT INTO dbo.").Append(Table.Name).Append("Audit").Append('(');
             string Splitter = "";
             foreach (IColumn Column in Table.Columns)
             {
@@ -708,9 +720,10 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
             Table.AddTrigger(Table.Name + "_Audit_IU", Builder.ToString(), TriggerType.Insert);
         }
 
-        private static void SetupJoiningTables(ListMapping<IDatabase, IMapping> Mappings, IDatabase Key, Schema.Default.Database.Database TempDatabase)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        private static void SetupJoiningTables([NotNull] ListMapping<IDatabase, IMapping> Mappings, IDatabase Key, Schema.Default.Database.Database TempDatabase)
         {
-            Contract.Requires<NullReferenceException>(Mappings != null, "Mappings");
+            if (Mappings == null) throw new NullReferenceException(nameof(Mappings));
             foreach (IMapping Mapping in Mappings[Key].OrderBy(x => x.Order))
             {
                 foreach (IProperty Property in Mapping.Properties)
@@ -744,10 +757,10 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
             }
         }
 
-        private static void SetupJoiningTablesEnumerable(ListMapping<IDatabase, IMapping> Mappings, IMapping Mapping, IProperty Property, IDatabase Key, Schema.Default.Database.Database TempDatabase)
+        private static void SetupJoiningTablesEnumerable(ListMapping<IDatabase, IMapping> Mappings, IMapping Mapping, IProperty Property, IDatabase Key, [NotNull] Schema.Default.Database.Database TempDatabase)
         {
-            Contract.Requires<ArgumentNullException>(TempDatabase != null, "TempDatabase");
-            Contract.Requires<ArgumentNullException>(TempDatabase.Tables != null, "TempDatabase.Tables");
+            if (TempDatabase == null) throw new ArgumentNullException(nameof(TempDatabase));
+            if (!(TempDatabase.Tables != null)) throw new ArgumentNullException(nameof(TempDatabase));
             if (TempDatabase.Tables.FirstOrDefault(x => x.Name == Property.TableName) != null)
                 return;
             var MapMapping = Mappings[Key].FirstOrDefault(x => x.ObjectType == Property.Type);
@@ -821,11 +834,11 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
             }
         }
 
-        private static void SetupProperties(ITable Table, IMapping Mapping)
+        private static void SetupProperties([NotNull] ITable Table, [NotNull] IMapping Mapping)
         {
-            Contract.Requires<ArgumentNullException>(Mapping != null, "Mapping");
-            Contract.Requires<ArgumentNullException>(Table != null, "Table");
-            Contract.Requires<ArgumentNullException>(Mapping.IDProperties != null, "Mapping.IDProperties");
+            if (Mapping == null) throw new ArgumentNullException(nameof(Mapping));
+            if (Table == null) throw new ArgumentNullException(nameof(Table));
+            if (!(Mapping.IDProperties != null)) throw new ArgumentNullException(nameof(Mapping));
             Mapping.IDProperties
                    .ForEach(x =>
             {
@@ -859,9 +872,10 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
                    });
         }
 
-        private static void SetupTables(ListMapping<IDatabase, IMapping> Mappings, IDatabase Key, Database TempDatabase, Graph<IMapping> Structure)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        private static void SetupTables([NotNull] ListMapping<IDatabase, IMapping> Mappings, IDatabase Key, Database TempDatabase, Graph<IMapping> Structure)
         {
-            Contract.Requires<NullReferenceException>(Mappings != null, "Mappings");
+            if (Mappings == null) throw new NullReferenceException(nameof(Mappings));
             foreach (IMapping Mapping in Mappings[Key].OrderBy(x => x.Order))
             {
                 TempDatabase.AddTable(Mapping.TableName);
@@ -885,10 +899,12 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
             }
         }
 
-        private bool Exists(string Command, string Value, ISourceInfo Source)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1829:Use Length/Count property instead of Count() when available", Justification = "<Pending>")]
+        private bool Exists(string Command, string Value, [NotNull] ISourceInfo Source)
         {
-            Contract.Requires<ArgumentNullException>(Source != null, "Source");
-            Contract.Requires<NullReferenceException>(Provider != null, "Provider");
+            if (Source == null) throw new ArgumentNullException(nameof(Source));
+            if (Provider == null) throw new NullReferenceException("Provider");
             return Provider.Batch(Source)
                            .AddCommand(null, null, Command, CommandType.Text, Value)
                            .Execute()[0]

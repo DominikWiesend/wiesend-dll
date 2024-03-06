@@ -121,6 +121,7 @@ namespace Wiesend.Random.StringGenerators
         /// </summary>
         /// <param name="Rand">Random number generator that it can use</param>
         /// <returns>A randomly generated object of the specified type</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("GeneratedRegex", "SYSLIB1045:Convert to 'GeneratedRegexAttribute'.", Justification = "<Pending>")]
         public string Next(System.Random Rand)
         {
             if (Length < 1)

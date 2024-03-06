@@ -107,12 +107,12 @@ namespace Wiesend.DataTypes.DataMapper.BaseClasses
         /// <typeparam name="Left">Left type</typeparam>
         /// <typeparam name="Right">Right type</typeparam>
         /// <returns>A mapping object for the two types specified</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public ITypeMapping<Left, Right> Map<Left, Right>()
         {
             var Key = new Tuple<Type, Type>(typeof(Left), typeof(Right));
             Mappings.AddOrUpdate(Key, x => CreateTypeMapping<Left, Right>(), (x, y) => y);
-            ITypeMapping ReturnValue = null;
-            Mappings.TryGetValue(Key, out ReturnValue);
+            Mappings.TryGetValue(Key, out ITypeMapping ReturnValue);
             return (ITypeMapping<Left, Right>)ReturnValue;
         }
 
@@ -126,8 +126,7 @@ namespace Wiesend.DataTypes.DataMapper.BaseClasses
         {
             var Key = new Tuple<Type, Type>(Left, Right);
             Mappings.AddOrUpdate(Key, x => CreateTypeMapping(x.Item1, x.Item2), (x, y) => y);
-            ITypeMapping ReturnValue = null;
-            Mappings.TryGetValue(Key, out ReturnValue);
+            Mappings.TryGetValue(Key, out ITypeMapping ReturnValue);
             return ReturnValue;
         }
 
@@ -146,6 +145,7 @@ namespace Wiesend.DataTypes.DataMapper.BaseClasses
         /// <typeparam name="Left">Left type</typeparam>
         /// <typeparam name="Right">Right type</typeparam>
         /// <returns>A mapping object for the two types specified</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         protected abstract ITypeMapping<Left, Right> CreateTypeMapping<Left, Right>();
 
         /// <summary>

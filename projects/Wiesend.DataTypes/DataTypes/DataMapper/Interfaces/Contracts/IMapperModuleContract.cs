@@ -72,24 +72,25 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
-using System.Diagnostics.Contracts;
 
 namespace Wiesend.DataTypes.DataMapper.Interfaces.Contracts
 {
     /// <summary>
     /// IMapperModule contract class
     /// </summary>
-    [ContractClassFor(typeof(IMapperModule))]
+    //[ContractClassFor(typeof(IMapperModule))]
     internal abstract class IMapperModuleContract : IMapperModule
     {
         /// <summary>
         /// Called when mapping various classes to one another
         /// </summary>
         /// <param name="Manager">Mapping manager class</param>
-        public void Map(Manager Manager)
+        public void Map([NotNull] Manager Manager)
         {
-            Contract.Requires<ArgumentNullException>(Manager != null);
+            if (Manager == null) 
+                throw new ArgumentNullException(nameof(Manager), $"Contract assertion not met: {nameof(Manager)} != null");
         }
     }
 }

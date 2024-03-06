@@ -72,10 +72,10 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
@@ -187,10 +187,10 @@ namespace Wiesend.DataTypes.AI
         /// </summary>
         /// <param name="Items">List of items</param>
         /// <returns>The probability that the tokens are from set A</returns>
-        public virtual double CalculateProbabilityOfTokens(IEnumerable<T> Items)
+        public virtual double CalculateProbabilityOfTokens([NotNull] IEnumerable<T> Items)
         {
-            Contract.Requires<ArgumentNullException>(Items != null, "Items");
-            Contract.Requires<InvalidOperationException>(Probabilities != null, "Probabilities has not been initialized");
+            if (Items == null) throw new ArgumentNullException(nameof(Items));
+            if (Probabilities == null) throw new InvalidOperationException("Probabilities has not been initialized");
             var SortedProbabilities = new SortedList<string, double>();
             int x = 0;
             foreach (T Item in Items)
@@ -223,10 +223,10 @@ namespace Wiesend.DataTypes.AI
         /// </summary>
         /// <param name="SetATokens">Set A</param>
         /// <param name="SetBTokens">Set B</param>
-        public virtual void LoadTokens(IEnumerable<T> SetATokens, IEnumerable<T> SetBTokens)
+        public virtual void LoadTokens([NotNull] IEnumerable<T> SetATokens, [NotNull] IEnumerable<T> SetBTokens)
         {
-            Contract.Requires<ArgumentNullException>(SetATokens != null, "SetATokens");
-            Contract.Requires<ArgumentNullException>(SetBTokens != null, "SetBTokens");
+            if (SetATokens == null) throw new ArgumentNullException(nameof(SetATokens));
+            if (SetBTokens == null) throw new ArgumentNullException(nameof(SetBTokens));
             SetA = SetA.Check(() => new Bag<T>());
             SetB = SetB.Check(() => new Bag<T>());
             SetA.Add(SetATokens);
@@ -253,7 +253,8 @@ namespace Wiesend.DataTypes.AI
         /// <returns>The probability that the token is from set A</returns>
         protected virtual double CalculateProbabilityOfToken(T Item)
         {
-            Contract.Requires<ArgumentNullException>(SetA != null && SetB != null, "Probabilities have not been initialized");
+            if (SetA == null) throw new ArgumentNullException(nameof(SetA), "Probabilities have not been initialized");
+            if (SetB == null) throw new ArgumentNullException(nameof(SetB), "Probabilities have not been initialized");
             double Probability = 0;
             int ACount = SetA.Contains(Item) ? SetA[Item] * ATokenWeight : 0;
             int BCount = SetB.Contains(Item) ? SetB[Item] * BTokenWeight : 0;

@@ -73,15 +73,10 @@
 #endregion of Licenses [MIT Licenses]
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
-using System.Diagnostics.Contracts;
 using System.DirectoryServices;
-using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Wiesend.DataTypes;
 using Wiesend.ORM.Manager.QueryProvider.Interfaces;
 using Wiesend.ORM.Manager.SourceProvider.Interfaces;
@@ -184,6 +179,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.LDAP
         /// <returns>
         /// This
         /// </returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
         public IBatch AddCommand(IBatch Batch)
         {
             var TempValue = Batch as LDAPBatch;
@@ -199,6 +195,9 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.LDAP
         /// <returns>
         /// The results of the batched commands
         /// </returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1829:Use Length/Count property instead of Count() when available", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         public IList<IList<dynamic>> Execute()
         {
             var ReturnValue = new List<IList<dynamic>>();
@@ -215,28 +214,24 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.LDAP
                     foreach (Command Command in Commands)
                     {
                         Searcher.Filter = Command.SQLCommand;
-                        using (SearchResultCollection Results = Searcher.FindAll())
+                        using SearchResultCollection Results = Searcher.FindAll();
+                        var ReturnValues = new List<dynamic>();
+                        foreach (SearchResult Result in Results)
                         {
-                            var ReturnValues = new List<dynamic>();
-                            foreach (SearchResult Result in Results)
+                            var TempValue = new Dynamo();
+                            foreach (PropertyValueCollection Property in Result.GetDirectoryEntry().Properties)
                             {
-                                var TempValue = new Dynamo();
-                                foreach (PropertyValueCollection Property in Result.GetDirectoryEntry().Properties)
-                                {
-                                    TempValue[Property.PropertyName] = Property.Value;
-                                    ReturnValues.Add(TempValue);
-                                }
+                                TempValue[Property.PropertyName] = Property.Value;
+                                ReturnValues.Add(TempValue);
                             }
-                            ReturnValue.Add(ReturnValues);
                         }
+                        ReturnValue.Add(ReturnValues);
                     }
                 }
                 Entry.Close();
             }
             for (int x = 0; x < Commands.Count(); ++x)
-            {
                 Commands[x].Finalize(ReturnValue[x]);
-            }
             return ReturnValue;
         }
 

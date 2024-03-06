@@ -74,7 +74,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Drawing;
 
 namespace Wiesend.Media.Procedural
@@ -95,31 +95,29 @@ namespace Wiesend.Media.Procedural
         /// <param name="MaxLength">Maximum length of the cracks</param>
         /// <param name="Seed">Random seed</param>
         /// <returns>An image containing "cracks"</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         public static SwiftBitmap Generate(int Width, int Height, int NumberOfCracks, int Iterations,
             int MaxChange, int MaxLength, int Seed)
         {
-            Contract.Requires<ArgumentException>(NumberOfCracks >= 0, "Number of cracks should be greater than 0");
-            Contract.Requires<ArgumentException>(Width >= 0, "Width must be greater than or equal to 0");
-            Contract.Requires<ArgumentException>(Height >= 0, "Height must be greater than or equal to 0");
+            if (!(NumberOfCracks >= 0)) throw new ArgumentException("Number of cracks should be greater than 0", nameof(NumberOfCracks));
+            if (!(Width >= 0)) throw new ArgumentException("Width must be greater than or equal to 0", nameof(Width));
+            if (!(Height >= 0)) throw new ArgumentException("Height must be greater than or equal to 0", nameof(Height));
             var ReturnValue = new SwiftBitmap(Width, Height);
             var Lines = GenerateLines(Width, Height, NumberOfCracks, Iterations, MaxChange, MaxLength, Seed);
             using (Graphics ReturnGraphic = Graphics.FromImage(ReturnValue.InternalBitmap))
             {
                 foreach (Line Line in Lines)
-                {
                     foreach (Line SubLine in Line.SubLines)
-                    {
                         ReturnGraphic.DrawLine(Pens.White, SubLine.X1, SubLine.Y1, SubLine.X2, SubLine.Y2);
-                    }
-                }
             }
             return ReturnValue;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0028:Simplify collection initialization", Justification = "<Pending>")]
         private static List<Line> GenerateLines(int Width, int Height, int NumberOfCracks, int Iterations, int MaxChange, int MaxLength, int Seed)
         {
-            Contract.Requires<ArgumentException>(NumberOfCracks >= 0 && Width >= 0);
+            if (!(NumberOfCracks >= 0 && Width >= 0)) throw new ArgumentException($"Contract assertion not met: {nameof(NumberOfCracks)} >= 0 && Width >= 0", nameof(NumberOfCracks));
             var Lines = new List<Line>();
             var Generator = new System.Random(Seed);
             for (int x = 0; x < NumberOfCracks; ++x)
@@ -142,13 +140,9 @@ namespace Wiesend.Media.Procedural
                     int XBreak = Generator.Next(LineUsing.X1, LineUsing.X2) + Generator.Next(-MaxChange, MaxChange);
                     int YBreak = 0;
                     if (LineUsing.Y1 > LineUsing.Y2)
-                    {
                         YBreak = Generator.Next(LineUsing.Y2, LineUsing.Y1) + Generator.Next(-MaxChange, MaxChange);
-                    }
                     else
-                    {
                         YBreak = Generator.Next(LineUsing.Y1, LineUsing.Y2) + Generator.Next(-MaxChange, MaxChange);
-                    }
                     var LineA = new Line(LineUsing.X1, XBreak, LineUsing.Y1, YBreak);
                     var LineB = new Line(XBreak, LineUsing.X2, YBreak, LineUsing.Y2);
                     TempLineList.Remove(LineUsing);
@@ -161,8 +155,10 @@ namespace Wiesend.Media.Procedural
         }
     }
 
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1852:Seal internal types", Justification = "<Pending>")]
     internal class Line
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public List<Line> SubLines = new List<Line>();
 
         public int X1;
@@ -177,6 +173,7 @@ namespace Wiesend.Media.Procedural
         {
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0180:Use tuple to swap values", Justification = "<Pending>")]
         public Line(int X1, int X2, int Y1, int Y2)
         {
             if (X1 > X2)

@@ -76,7 +76,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Text;
 using System.Threading;
 
@@ -94,9 +94,9 @@ namespace Wiesend.DataTypes
         /// <param name="Process">Process to get information about</param>
         /// <param name="HTMLFormat">Should this be HTML formatted?</param>
         /// <returns>An HTML formatted string</returns>
-        public static string GetInformation(this Process Process, bool HTMLFormat = true)
+        public static string GetInformation([NotNull] this Process Process, bool HTMLFormat = true)
         {
-            Contract.Requires<ArgumentNullException>(Process != null, "Process");
+            if (Process == null) throw new ArgumentNullException(nameof(Process));
             var Builder = new StringBuilder();
             return Builder.Append(HTMLFormat ? "<strong>" : "")
                    .Append(Process.ProcessName)
@@ -127,9 +127,9 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Process">Process that should be killed</param>
         /// <param name="TimeToKill">Amount of time (in ms) until the process is killed.</param>
-        public static void KillProcessAsync(this Process Process, int TimeToKill = 0)
+        public static void KillProcessAsync([NotNull] this Process Process, int TimeToKill = 0)
         {
-            Contract.Requires<ArgumentNullException>(Process != null, "Process");
+            if (Process == null) throw new ArgumentNullException(nameof(Process));
             ThreadPool.QueueUserWorkItem(delegate { KillProcessAsyncHelper(Process, TimeToKill); });
         }
 
@@ -138,9 +138,9 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Processes">Processes that should be killed</param>
         /// <param name="TimeToKill">Amount of time (in ms) until the processes are killed.</param>
-        public static void KillProcessAsync(this IEnumerable<Process> Processes, int TimeToKill = 0)
+        public static void KillProcessAsync([NotNull] this IEnumerable<Process> Processes, int TimeToKill = 0)
         {
-            Contract.Requires<ArgumentNullException>(Processes != null, "Processes");
+            if (Processes == null) throw new ArgumentNullException(nameof(Processes));
             Processes.ForEach(x => ThreadPool.QueueUserWorkItem(delegate { KillProcessAsyncHelper(x, TimeToKill); }));
         }
 
@@ -149,9 +149,9 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Process">Process to kill</param>
         /// <param name="TimeToKill">Amount of time until the process is killed</param>
-        private static void KillProcessAsyncHelper(Process Process, int TimeToKill)
+        private static void KillProcessAsyncHelper([NotNull] Process Process, int TimeToKill)
         {
-            Contract.Requires<ArgumentNullException>(Process != null, "Process");
+            if (Process == null) throw new ArgumentNullException(nameof(Process));
             if (TimeToKill > 0)
                 Thread.Sleep(TimeToKill);
             Process.Kill();

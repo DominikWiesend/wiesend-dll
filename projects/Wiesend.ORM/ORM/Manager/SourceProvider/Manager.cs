@@ -72,11 +72,11 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using Wiesend.DataTypes;
 using Wiesend.ORM.Interfaces;
@@ -93,16 +93,13 @@ namespace Wiesend.ORM.Manager.SourceProvider
         /// Constructor
         /// </summary>
         /// <param name="Sources">The sources.</param>
-        public Manager(IEnumerable<IDatabase> Sources)
+        public Manager([NotNull] IEnumerable<IDatabase> Sources)
         {
-            Contract.Requires<ArgumentNullException>(Sources != null, "Sources");
-            this.Sources = Sources.OrderBy(x => x.Order)
-                             .ToDictionary(x => x.Name, x => (ISourceInfo)new SourceInfo("", x.Name, "", "", x.Writable, x.Readable, x));
+            if (Sources == null) throw new ArgumentNullException(nameof(Sources));
+            this.Sources = Sources.OrderBy(x => x.Order).ToDictionary(x => x.Name, x => (ISourceInfo)new SourceInfo("", x.Name, "", "", x.Writable, x.Readable, x));
             foreach (ConnectionStringSettings ConnectionString in ConfigurationManager.ConnectionStrings)
-            {
                 if (!this.Sources.ContainsKey(ConnectionString.Name))
                     this.Sources.Add(ConnectionString.Name, new SourceInfo(ConnectionString.ConnectionString, ConnectionString.Name, "", "", true, true));
-            }
         }
 
         /// <summary>

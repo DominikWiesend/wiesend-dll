@@ -74,7 +74,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Linq;
 using Wiesend.DataTypes.DataMapper.Interfaces;
 
@@ -90,10 +90,11 @@ namespace Wiesend.DataTypes.DataMapper
         /// </summary>
         /// <param name="DataMappers">The data mappers.</param>
         /// <param name="MapperModules">The mapper modules.</param>
-        public Manager(IEnumerable<IDataMapper> DataMappers, IEnumerable<IMapperModule> MapperModules)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
+        public Manager([NotNull] IEnumerable<IDataMapper> DataMappers, [NotNull] IEnumerable<IMapperModule> MapperModules)
         {
-            Contract.Requires<ArgumentNullException>(DataMappers != null, "DataMappers");
-            Contract.Requires<ArgumentNullException>(MapperModules != null, "MapperModules");
+            if (DataMappers == null) throw new ArgumentNullException(nameof(DataMappers));
+            if (MapperModules == null) throw new ArgumentNullException(nameof(MapperModules));
             DataMapper = DataMappers.FirstOrDefault(x => !x.GetType().Namespace.StartsWith("WIESEND", StringComparison.OrdinalIgnoreCase));
             if (DataMapper == null)
                 DataMapper = DataMappers.FirstOrDefault(x => x.GetType().Namespace.StartsWith("WIESEND", StringComparison.OrdinalIgnoreCase));
@@ -111,6 +112,7 @@ namespace Wiesend.DataTypes.DataMapper
         /// <typeparam name="Left">Left type</typeparam>
         /// <typeparam name="Right">Right type</typeparam>
         /// <returns>A mapping object for the two types specified</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public ITypeMapping<Left, Right> Map<Left, Right>()
         {
             return DataMapper.Map<Left, Right>();

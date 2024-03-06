@@ -74,7 +74,7 @@
 
 using System;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Linq;
 
 namespace Wiesend.DataTypes
@@ -104,6 +104,7 @@ namespace Wiesend.DataTypes
         /// <param name="Array">Array to clear</param>
         /// <typeparam name="ArrayType">Array type</typeparam>
         /// <returns>The final array</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public static ArrayType[] Clear<ArrayType>(this ArrayType[] Array)
         {
             return (ArrayType[])((Array)Array).Clear();
@@ -116,11 +117,12 @@ namespace Wiesend.DataTypes
         /// <param name="Array1">Array 1</param>
         /// <param name="Additions">Arrays to concat onto the first item</param>
         /// <returns>A new array containing both arrays' values</returns>
-        public static ArrayType[] Concat<ArrayType>(this ArrayType[] Array1, params ArrayType[][] Additions)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static ArrayType[] Concat<ArrayType>([NotNull] this ArrayType[] Array1, [NotNull] params ArrayType[][] Additions)
         {
-            Contract.Requires<ArgumentNullException>(Array1 != null, "Array1");
-            Contract.Requires<ArgumentNullException>(Additions != null, "Additions");
-            Contract.Requires<ArgumentNullException>(Contract.ForAll(Additions, x => x != null), "Additions");
+            if (Array1 == null) throw new ArgumentNullException(nameof(Array1));
+            if (Additions == null) throw new ArgumentNullException(nameof(Additions));
+            Additions.ThrowIfAny(x => x == null, new ArgumentNullException(nameof(Additions)));
             ArrayType[] Result = new ArrayType[Array1.Length + Additions.Sum(x => x.Length)];
             int Offset = Array1.Length;
             Array.Copy(Array1, 0, Result, 0, Array1.Length);

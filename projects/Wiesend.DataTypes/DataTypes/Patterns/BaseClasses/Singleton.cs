@@ -83,8 +83,10 @@ namespace Wiesend.DataTypes.Patterns.BaseClasses
     /// <typeparam name="T">The class type</typeparam>
     public class Singleton<T> where T : class
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1805:Do not initialize unnecessarily", Justification = "<Pending>")]
         private static T _Instance = null;
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
         private static object Temp = 1;
 
         /// <summary>
@@ -97,6 +99,8 @@ namespace Wiesend.DataTypes.Patterns.BaseClasses
         /// <summary>
         /// Gets the instance of the singleton
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1000:Do not declare static members on generic types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public static T Instance
         {
             get

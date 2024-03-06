@@ -77,6 +77,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using Wiesend.DataTypes;
 using Wiesend.IO.FileFormats.BaseClasses;
 
 namespace Wiesend.IO.FileFormats
@@ -141,9 +142,9 @@ namespace Wiesend.IO.FileFormats
         public virtual bool DeleteFromINI(string Section, string Key)
         {
             bool ReturnValue = false;
-            if (FileContents.ContainsKey(Section) && FileContents[Section].ContainsKey(Key))
+            if (FileContents.ContainsKey(Section) && FileContents.GetValue(Section).ContainsKey(Key))
             {
-                ReturnValue = FileContents[Section].Remove(Key);
+                ReturnValue = FileContents.GetValue(Section).Remove(Key);
                 Save(_FileName);
             }
             return ReturnValue;
@@ -157,8 +158,8 @@ namespace Wiesend.IO.FileFormats
         /// <param name="DefaultValue">Default value if it does not exist</param>
         public virtual string ReadFromINI(string Section, string Key, string DefaultValue = "")
         {
-            if (FileContents.Keys.Contains(Section) && FileContents[Section].Keys.Contains(Key))
-                return FileContents[Section][Key];
+            if (FileContents.ContainsKey(Section) && FileContents.GetValue(Section).ContainsKey(Key))
+                return FileContents.GetValue(Section).GetValue(Key);
             return DefaultValue;
         }
 
@@ -210,21 +211,16 @@ namespace Wiesend.IO.FileFormats
         /// <param name="Value">Value</param>
         public virtual void WriteToINI(string Section, string Key, string Value)
         {
-            if (FileContents.Keys.Contains(Section))
+            if (FileContents.ContainsKey(Section))
             {
-                if (FileContents[Section].Keys.Contains(Key))
-                {
-                    FileContents[Section][Key] = Value;
-                }
+                if (FileContents.GetValue(Section).ContainsKey(Key))
+                    FileContents.GetValue(Section).SetValue(Key, Value);
                 else
-                {
-                    FileContents[Section].Add(Key, Value);
-                }
+                    FileContents.GetValue(Section).Add(Key, Value);
             }
             else
             {
-                var TempDictionary = new Dictionary<string, string>();
-                TempDictionary.Add(Key, Value);
+                var TempDictionary = new Dictionary<string, string> { { Key, Value } };
                 FileContents.Add(Section, TempDictionary);
             }
             Save(_FileName);

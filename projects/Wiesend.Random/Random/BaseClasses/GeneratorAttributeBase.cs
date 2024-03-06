@@ -81,6 +81,7 @@ namespace Wiesend.Random.BaseClasses
     /// Attribute base class for generators
     /// </summary>
     [AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "<Pending>")]
     public abstract class GeneratorAttributeBase : System.Attribute, IGenerator
     {
         /// <summary>

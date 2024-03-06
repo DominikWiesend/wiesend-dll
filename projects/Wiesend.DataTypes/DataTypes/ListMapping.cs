@@ -86,6 +86,7 @@ namespace Wiesend.DataTypes
     /// <typeparam name="T1">Key value</typeparam>
     /// <typeparam name="T2">Type that the list should contain</typeparam>
     [Serializable]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "<Pending>")]
     public class ListMapping<T1, T2> : IDictionary<T1, IEnumerable<T2>>
     {
         /// <summary>
@@ -177,6 +178,7 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Key">Key value</param>
         /// <param name="Value">The values to add</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "<Pending>")]
         public virtual void Add(T1 Key, IEnumerable<T2> Value)
         {
             Items.AddOrUpdate(Key,
@@ -273,6 +275,7 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="key">Key to use</param>
         /// <returns>True if the key is found, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
         public virtual bool Remove(T1 key)
         {
             var Value = new ConcurrentBag<T2>();
@@ -300,6 +303,7 @@ namespace Wiesend.DataTypes
         /// <param name="Key">Key to remove</param>
         /// <param name="Value">Value to remove</param>
         /// <returns>True if it is removed, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1827:Do not use Count() or LongCount() when Any() can be used", Justification = "<Pending>")]
         public virtual bool Remove(T1 Key, T2 Value)
         {
             if (!Contains(Key, Value))
@@ -346,6 +350,7 @@ namespace Wiesend.DataTypes
         /// <param name="Key">Key value</param>
         /// <param name="Value">The values getting</param>
         /// <returns>True if it was able to get the value, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "<Pending>")]
         public virtual bool TryGetValue(T1 Key, out IEnumerable<T2> Value)
         {
             Value = new List<T2>();

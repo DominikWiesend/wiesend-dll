@@ -75,7 +75,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Globalization;
 using System.Linq;
 using Wiesend.DataTypes;
@@ -135,6 +135,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
         /// </summary>
         /// <param name="Parameters">Parameters</param>
         /// <returns>Batch with the appropriate commands</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public IBatch All(params IParameter[] Parameters)
         {
             if (Mapping == null)
@@ -156,6 +157,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
         /// <param name="Parameters">Parameters</param>
         /// <param name="Limit">Max number of items to return</param>
         /// <returns>Batch with the appropriate commands</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public IBatch All(int Limit, params IParameter[] Parameters)
         {
             if (Limit < 1)
@@ -180,6 +182,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
         /// </summary>
         /// <param name="Parameters">Parameters</param>
         /// <returns>Batch with the appropriate commands</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public IBatch Any(params IParameter[] Parameters)
         {
             if (Mapping == null)
@@ -267,6 +270,8 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
         /// <param name="Object">Object</param>
         /// <typeparam name="P">Property type</typeparam>
         /// <returns>The batch with the appropriate commands</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2251:Use 'string.Equals'", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public IBatch JoinsDelete<P>(IProperty<T, P> Property, T Object)
         {
             var ReturnValue = QueryProvider.Batch(Source);
@@ -307,6 +312,9 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
         /// <typeparam name="P">Property type</typeparam>
         /// <typeparam name="ItemType">Item type</typeparam>
         /// <returns>The batch with the appropriate commands</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2251:Use 'string.Equals'", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
         public IBatch JoinsSave<P, ItemType>(IProperty<T, P> Property, T Object)
         {
             var ReturnValue = QueryProvider.Batch(Source);
@@ -324,13 +332,13 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
                 var ForeignID = ForeignMapping.IDProperties.FirstOrDefault().GetValue(Item);
                 string Parameters = "";
                 object[] Values = new object[2];
-                if (string.Compare(Mapping.TableName, ForeignMapping.TableName, StringComparison.InvariantCulture) == 0)
+                if (string.Compare(Mapping.TableName, ForeignMapping.TableName, StringComparison.Ordinal) == 0)
                 {
                     Parameters = Mapping.TableName + Mapping.IDProperties.FirstOrDefault().FieldName + "," + ForeignMapping.TableName + ForeignMapping.IDProperties.FirstOrDefault().FieldName + "2";
                     Values[1] = CurrentID;
                     Values[0] = ForeignID;
                 }
-                else if (string.Compare(Mapping.TableName, ForeignMapping.TableName, StringComparison.InvariantCulture) <= 0)
+                else if (string.Compare(Mapping.TableName, ForeignMapping.TableName, StringComparison.Ordinal) <= 0)
                 {
                     Parameters = Mapping.TableName + Mapping.IDProperties.FirstOrDefault().FieldName + "," + ForeignMapping.TableName + ForeignMapping.IDProperties.FirstOrDefault().FieldName;
                     Values[0] = CurrentID;
@@ -360,13 +368,13 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
                     var ForeignID = ForeignMapping.IDProperties.FirstOrDefault().GetValue(Item);
                     string Parameters = "";
                     object[] Values = new object[2];
-                    if (string.Compare(Mapping.TableName, ForeignMapping.TableName, StringComparison.InvariantCulture) < 0)
+                    if (string.Compare(Mapping.TableName, ForeignMapping.TableName, StringComparison.Ordinal) < 0)
                     {
                         Parameters = Mapping.TableName + Mapping.IDProperties.FirstOrDefault().FieldName + "," + ForeignMapping.TableName + ForeignMapping.IDProperties.FirstOrDefault().FieldName;
                         Values[0] = CurrentID;
                         Values[1] = ForeignID;
                     }
-                    else if (string.Compare(Mapping.TableName, ForeignMapping.TableName, StringComparison.InvariantCulture) == 0)
+                    else if (string.Compare(Mapping.TableName, ForeignMapping.TableName, StringComparison.Ordinal) == 0)
                     {
                         Parameters = Mapping.TableName + Mapping.IDProperties.FirstOrDefault().FieldName + "," + ForeignMapping.TableName + ForeignMapping.IDProperties.FirstOrDefault().FieldName + "2";
                         Values[0] = CurrentID;
@@ -395,6 +403,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
         /// <param name="Object">Object to get the property for</param>
         /// <param name="Property">Property to get</param>
         /// <returns>Batch with the appropriate commands</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public IBatch LoadProperty<P>(T Object, IProperty Property)
         {
             return QueryProvider.Batch(Source)
@@ -464,6 +473,8 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
         /// </summary>
         /// <typeparam name="PrimaryKeyType">Primary key type</typeparam>
         /// <param name="Object">Object to save</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
         public IBatch Save<PrimaryKeyType>(T Object)
         {
             var TempBatch = QueryProvider.Batch(Source);
@@ -472,19 +483,14 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
 
             var Comparer = new GenericEqualityComparer<PrimaryKeyType>();
             IParameter Param1 = null;
-            if (Comparer.Equals(IDValue, default(PrimaryKeyType)))
-            {
+            if (Comparer.Equals(IDValue, default))
                 return TempBatch.AddCommand(Insert(Object));
-            }
+
             if (IDProperty.AutoIncrement)
-            {
                 return TempBatch.AddCommand(Update(Object));
-            }
             Param1 = typeof(PrimaryKeyType).Is(typeof(string)) ? (IParameter)new StringEqualParameter(IDValue.ToString(), IDProperty.FieldName, IDValue.ToString().Length, IDProperty.FieldName, Source.ParameterPrefix) : (IParameter)new EqualParameter<PrimaryKeyType>(IDValue, IDProperty.FieldName, IDProperty.FieldName, Source.ParameterPrefix);
             if (Any(Param1).Execute()[0].Count == 0)
-            {
                 return TempBatch.AddCommand(Insert(Object));
-            }
             return TempBatch.AddCommand(Update(Object));
         }
 
@@ -507,6 +513,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
         /// </summary>
         /// <typeparam name="D">Data type</typeparam>
         /// <param name="Property">Map property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public void SetupLoadCommands<D>(Mapper.Default.Map<T, D> Property) where D : class
         {
             if (string.IsNullOrEmpty(Property.LoadCommand))
@@ -530,6 +537,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
         /// </summary>
         /// <typeparam name="D">Data type</typeparam>
         /// <param name="Property">IEnumerableManyToOne property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public void SetupLoadCommands<D>(Mapper.Default.IEnumerableManyToOne<T, D> Property)
             where D : class
         {
@@ -554,6 +562,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
         /// </summary>
         /// <typeparam name="D">Data type</typeparam>
         /// <param name="Property">ListManyToOne property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public void SetupLoadCommands<D>(Mapper.Default.ListManyToOne<T, D> Property)
                     where D : class
         {
@@ -578,6 +587,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
         /// </summary>
         /// <typeparam name="D">Data type</typeparam>
         /// <param name="Property">ListManyToMany property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public void SetupLoadCommands<D>(Mapper.Default.ListManyToMany<T, D> Property)
             where D : class
         {
@@ -602,6 +612,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
         /// </summary>
         /// <typeparam name="D">Data type</typeparam>
         /// <param name="Property">ManyToOne property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public void SetupLoadCommands<D>(Mapper.Default.ManyToOne<T, D> Property)
             where D : class
         {
@@ -626,6 +637,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
         /// </summary>
         /// <typeparam name="D">Data type</typeparam>
         /// <param name="Property">ManyToMany property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public void SetupLoadCommands<D>(Mapper.Default.ManyToMany<T, D> Property)
             where D : class
         {
@@ -650,6 +662,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
         /// </summary>
         /// <typeparam name="D">Data type</typeparam>
         /// <param name="Property">Map property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public void SetupLoadCommands<D>(Mapper.Default.IListManyToMany<T, D> Property)
             where D : class
         {
@@ -674,6 +687,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
         /// </summary>
         /// <typeparam name="D">Data type</typeparam>
         /// <param name="Property">Map property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public void SetupLoadCommands<D>(Mapper.Default.IListManyToOne<T, D> Property) where D : class
         {
             if (string.IsNullOrEmpty(Property.LoadCommand))
@@ -697,6 +711,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
         /// </summary>
         /// <typeparam name="D">Data type</typeparam>
         /// <param name="Property">Map property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public void SetupLoadCommands<D>(Mapper.Default.ICollectionManyToMany<T, D> Property)
             where D : class
         {
@@ -721,6 +736,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
         /// </summary>
         /// <typeparam name="D">Data type</typeparam>
         /// <param name="Property">Map property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public void SetupLoadCommands<D>(Mapper.Default.ICollectionManyToOne<T, D> Property)
             where D : class
         {
@@ -795,20 +811,22 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
             return ResultList;
         }
 
-        private static string GetColumns(IMapping Mapping)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "<Pending>")]
+        private static string GetColumns([NotNull] IMapping Mapping)
         {
-            Contract.Requires<ArgumentNullException>(Mapping != null, "Mapping");
-            Contract.Requires<ArgumentNullException>(Mapping.Properties != null, "Mapping.Properties");
-            Contract.Requires<ArgumentNullException>(Mapping.IDProperties != null, "Mapping.IDProperties");
+            if (Mapping == null) throw new ArgumentNullException(nameof(Mapping));
+            if (!(Mapping.Properties != null)) throw new ArgumentNullException("Mapping.Properties");
+            if (!(Mapping.IDProperties != null)) throw new ArgumentNullException("Mapping.IDProperties");
             return Mapping.Properties
                           .Where(x => (x as IReference) != null)
                           .Concat(Mapping.IDProperties)
                           .ToString(x => x.TableName + "." + x.FieldName + " AS [" + x.Name + "]");
         }
 
-        private static void SetupAllSelect(IMapping<T> Mapping, IEnumerable<IMapping> ParentMappings)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
+        private static void SetupAllSelect([NotNull] IMapping<T> Mapping, IEnumerable<IMapping> ParentMappings)
         {
-            Contract.Requires<ArgumentNullException>(Mapping != null, "Mapping");
+            if (Mapping == null) throw new ArgumentNullException(nameof(Mapping));
             if (!string.IsNullOrEmpty(Mapping.SelectAllCommand))
                 return;
             Mapping.SetSelectAllCommand(string.Format(CultureInfo.InvariantCulture,
@@ -818,9 +836,10 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
                 CommandType.Text);
         }
 
-        private static void SetupAnySelect(IMapping<T> Mapping, IEnumerable<IMapping> ParentMappings)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
+        private static void SetupAnySelect([NotNull] IMapping<T> Mapping, IEnumerable<IMapping> ParentMappings)
         {
-            Contract.Requires<ArgumentNullException>(Mapping != null, "Mapping");
+            if (Mapping == null) throw new ArgumentNullException(nameof(Mapping));
             if (!string.IsNullOrEmpty(Mapping.SelectAnyCommand))
                 return;
             Mapping.SetSelectAnyCommand(string.Format(CultureInfo.InvariantCulture,
@@ -830,9 +849,10 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
                 CommandType.Text);
         }
 
-        private static void SetupDelete(IMapping<T> Mapping, IEnumerable<IMapping> ParentMappings)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
+        private static void SetupDelete([NotNull] IMapping<T> Mapping, IEnumerable<IMapping> ParentMappings)
         {
-            Contract.Requires<ArgumentNullException>(Mapping != null, "Mapping");
+            if (Mapping == null) throw new ArgumentNullException(nameof(Mapping));
             if (!string.IsNullOrEmpty(Mapping.DeleteCommand))
                 return;
             string IDProperties = "";
@@ -851,9 +871,10 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
                 CommandType.Text);
         }
 
-        private static void SetupInsert(IMapping Mapping, IEnumerable<IMapping> ParentMappings)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
+        private static void SetupInsert([NotNull] IMapping Mapping, IEnumerable<IMapping> ParentMappings)
         {
-            Contract.Requires<ArgumentNullException>(Mapping != null, "Mapping");
+            if (Mapping == null) throw new ArgumentNullException(nameof(Mapping));
             if (!string.IsNullOrEmpty(Mapping.InsertCommand))
                 return;
 
@@ -890,9 +911,10 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
                 CommandType.Text);
         }
 
-        private static void SetupUpdate(IMapping<T> Mapping, IEnumerable<IMapping> ParentMappings)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
+        private static void SetupUpdate([NotNull] IMapping<T> Mapping, IEnumerable<IMapping> ParentMappings)
         {
-            Contract.Requires<ArgumentNullException>(Mapping != null, "Mapping");
+            if (Mapping == null) throw new ArgumentNullException(nameof(Mapping));
             if (!string.IsNullOrEmpty(Mapping.UpdateCommand))
                 return;
             string ParameterList = "";

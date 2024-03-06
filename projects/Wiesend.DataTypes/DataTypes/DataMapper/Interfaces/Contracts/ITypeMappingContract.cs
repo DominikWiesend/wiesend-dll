@@ -72,8 +72,8 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
-using System.Diagnostics.Contracts;
 using System.Linq.Expressions;
 
 namespace Wiesend.DataTypes.DataMapper.Interfaces.Contracts
@@ -81,17 +81,18 @@ namespace Wiesend.DataTypes.DataMapper.Interfaces.Contracts
     /// <summary>
     /// ITypeMapping contract class
     /// </summary>
-    [ContractClassFor(typeof(ITypeMapping))]
+    //[ContractClassFor(typeof(ITypeMapping))]
     internal abstract class ITypeMappingContract : ITypeMapping
     {
         /// <summary>
         /// Automatically maps properties that are named the same thing
         /// </summary>
         /// <returns></returns>
+        [NotNull]
         public ITypeMapping AutoMap()
         {
-            Contract.Ensures(Contract.Result<ITypeMapping>() != null);
-            return null;
+            if ((object)null == null) 
+                throw new InvalidOperationException($"Contract assertion not met: $result != null");
         }
 
         /// <summary>
@@ -99,10 +100,10 @@ namespace Wiesend.DataTypes.DataMapper.Interfaces.Contracts
         /// </summary>
         /// <param name="Source">Source object</param>
         /// <param name="Destination">Destination object</param>
-        public void Copy(object Source, object Destination)
+        public void Copy([NotNull] object Source, [NotNull] object Destination)
         {
-            Contract.Requires<ArgumentNullException>(Source != null);
-            Contract.Requires<ArgumentNullException>(Destination != null);
+            if (Source == null) throw new ArgumentNullException(nameof(Source), $"Contract assertion not met: {nameof(Source)} != null");
+            if (Destination == null) throw new ArgumentNullException(nameof(Destination), $"Contract assertion not met: {nameof(Destination)} != null");
         }
     }
 
@@ -111,31 +112,35 @@ namespace Wiesend.DataTypes.DataMapper.Interfaces.Contracts
     /// </summary>
     /// <typeparam name="Left">The type of the left.</typeparam>
     /// <typeparam name="Right">The type of the right.</typeparam>
-    [ContractClassFor(typeof(ITypeMapping<,>))]
+    //[ContractClassFor(typeof(ITypeMapping<,>))]
     internal abstract class ITypeMappingContract<Left, Right> : ITypeMapping<Left, Right>
     {
+        [NotNull]
         public ITypeMapping<Left, Right> AddMapping(Expression<Func<Left, object>> LeftExpression, Expression<Func<Right, object>> RightExpression)
         {
-            Contract.Ensures(Contract.Result<ITypeMapping<Left, Right>>() != null);
-            return null;
+            if ((object)null == null) 
+                throw new InvalidOperationException($"Contract assertion not met: $result != null");
         }
 
+        [NotNull]
         public ITypeMapping<Left, Right> AddMapping(Func<Left, object> LeftGet, Action<Left, object> LeftSet, Expression<Func<Right, object>> RightExpression)
         {
-            Contract.Ensures(Contract.Result<ITypeMapping<Left, Right>>() != null);
-            return null;
+            if ((object)null == null) 
+                throw new InvalidOperationException($"Contract assertion not met: $result != null");
         }
 
+        [NotNull]
         public ITypeMapping<Left, Right> AddMapping(Expression<Func<Left, object>> LeftExpression, Func<Right, object> RightGet, Action<Right, object> RightSet)
         {
-            Contract.Ensures(Contract.Result<ITypeMapping<Left, Right>>() != null);
-            return null;
+            if ((object)null == null) 
+                throw new InvalidOperationException($"Contract assertion not met: $result != null");
         }
 
+        [NotNull]
         public ITypeMapping<Left, Right> AddMapping(Func<Left, object> LeftGet, Action<Left, object> LeftSet, Func<Right, object> RightGet, Action<Right, object> RightSet)
         {
-            Contract.Ensures(Contract.Result<ITypeMapping<Left, Right>>() != null);
-            return null;
+            if ((object)null == null) 
+                throw new InvalidOperationException($"Contract assertion not met: $result != null");
         }
 
         public void Copy(Left Source, Right Destination)

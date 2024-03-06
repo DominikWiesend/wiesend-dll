@@ -72,8 +72,8 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Reflection;
 using Wiesend.DataTypes.AOP.Generators.BaseClasses;
 
@@ -89,10 +89,9 @@ namespace Wiesend.DataTypes.AOP.Generators
         /// Initializes a new instance of the <see cref="ParameterGenerator"/> class.
         /// </summary>
         /// <param name="parameter">The parameter.</param>
-        public ParameterGenerator(ParameterInfo parameter)
+        public ParameterGenerator([NotNull] ParameterInfo parameter)
         {
-            Contract.Requires(parameter != null);
-            Parameter = parameter;
+            Parameter = parameter ?? throw new System.ArgumentNullException(nameof(parameter), $"Contract assertion not met: {nameof(parameter)} != null");
         }
 
         /// <summary>
@@ -108,10 +107,7 @@ namespace Wiesend.DataTypes.AOP.Generators
         /// <returns>The string version of the parameter</returns>
         public string Generate(List<Assembly> assembliesUsing)
         {
-            if (assembliesUsing != null)
-            {
-                assembliesUsing.AddIfUnique(GetAssemblies(Parameter.ParameterType));
-            }
+            assembliesUsing?.AddIfUnique(GetAssemblies(Parameter.ParameterType));
             return ToString();
         }
 

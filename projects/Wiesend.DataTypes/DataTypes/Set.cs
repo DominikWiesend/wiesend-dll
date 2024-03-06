@@ -74,7 +74,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Text;
 
 namespace Wiesend.DataTypes
@@ -99,7 +99,7 @@ namespace Wiesend.DataTypes
         public Set(int InitialSize)
             : base(InitialSize)
         {
-            Contract.Requires<ArgumentOutOfRangeException>(InitialSize >= 0, "InitialSize should be larger than or equal to 0");
+            if (!(InitialSize >= 0)) throw new ArgumentOutOfRangeException(nameof(InitialSize), "InitialSize should be larger than or equal to 0");
         }
 
         /// <summary>
@@ -108,6 +108,7 @@ namespace Wiesend.DataTypes
         /// <param name="Set1">Set 1</param>
         /// <param name="Set2">Set 2</param>
         /// <returns>The intersection of the two sets</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1000:Do not declare static members on generic types", Justification = "<Pending>")]
         public static Set<T> GetIntersection(Set<T> Set1, Set<T> Set2)
         {
             if (Set1 == null || Set2 == null || !Set1.Intersect(Set2))
@@ -132,9 +133,8 @@ namespace Wiesend.DataTypes
         /// <returns>The resulting set</returns>
         public static Set<T> operator -(Set<T> Set1, Set<T> Set2)
         {
-            Contract.Requires<ArgumentNullException>(Set1 != null, "Set1");
-            Contract.Requires<ArgumentNullException>(Set2 != null, "Set2");
-
+            if (Set1 == null) throw new ArgumentNullException(nameof(Set1));
+            if (Set2 == null) throw new ArgumentNullException(nameof(Set2));
             var ReturnValue = new Set<T>();
             for (int x = 0; x < Set1.Count; ++x)
                 if (!Set2.Contains(Set1[x]))
@@ -161,9 +161,8 @@ namespace Wiesend.DataTypes
         /// <returns>The joined sets</returns>
         public static Set<T> operator +(Set<T> Set1, Set<T> Set2)
         {
-            Contract.Requires<ArgumentNullException>(Set1 != null, "Set1");
-            Contract.Requires<ArgumentNullException>(Set2 != null, "Set2");
-
+            if (Set1 == null) throw new ArgumentNullException(nameof(Set1));
+            if (Set2 == null) throw new ArgumentNullException(nameof(Set2));
             var ReturnValue = new Set<T>();
             for (int x = 0; x < Set1.Count; ++x)
                 ReturnValue.Add(Set1[x]);
@@ -192,9 +191,9 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Set">Set to check against</param>
         /// <returns>True if it is, false otherwise</returns>
-        public virtual bool Contains(Set<T> Set)
+        public virtual bool Contains([NotNull] Set<T> Set)
         {
-            Contract.Requires<ArgumentNullException>(Set != null, "Set");
+            if (Set == null) throw new ArgumentNullException(nameof(Set));
             return Set.IsSubset(this);
         }
 

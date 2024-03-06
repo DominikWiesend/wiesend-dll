@@ -72,8 +72,6 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-#if NETFULL
-using System;
 using Wiesend.DataTypes.Caching.Interfaces;
 using Wiesend.IoC.Interfaces;
 
@@ -103,4 +101,3 @@ namespace Wiesend.DataTypes.Caching.Module
         }
     }
 }
-#endif

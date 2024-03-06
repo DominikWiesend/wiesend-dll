@@ -83,6 +83,7 @@ namespace Wiesend.DataTypes.DataMapper.Default
     /// <summary>
     /// Type mapping default class
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public class TypeMapping<Left, Right> : TypeMappingBase<Left, Right>
     {
         /// <summary>
@@ -145,9 +146,7 @@ namespace Wiesend.DataTypes.DataMapper.Default
         public override void Copy(Left Source, Right Destination)
         {
             foreach (Mapping<Left, Right> Mapping in Mappings.OfType<Mapping<Left, Right>>())
-            {
                 Mapping.Copy(Source, Destination);
-            }
         }
 
         /// <summary>
@@ -158,9 +157,7 @@ namespace Wiesend.DataTypes.DataMapper.Default
         public override void Copy(Right Source, Left Destination)
         {
             foreach (Mapping<Left, Right> Mapping in Mappings.OfType<Mapping<Left, Right>>())
-            {
                 Mapping.Copy(Source, Destination);
-            }
         }
 
         /// <summary>
@@ -172,9 +169,7 @@ namespace Wiesend.DataTypes.DataMapper.Default
         public override void CopyLeftToRight(Left Source, Right Destination)
         {
             foreach (Mapping<Left, Right> Mapping in Mappings.OfType<Mapping<Left, Right>>())
-            {
                 Mapping.CopyLeftToRight(Source, Destination);
-            }
         }
 
         /// <summary>
@@ -186,9 +181,7 @@ namespace Wiesend.DataTypes.DataMapper.Default
         public override void CopyRightToLeft(Right Source, Left Destination)
         {
             foreach (Mapping<Left, Right> Mapping in Mappings.OfType<Mapping<Left, Right>>())
-            {
                 Mapping.CopyRightToLeft(Source, Destination);
-            }
         }
     }
 }

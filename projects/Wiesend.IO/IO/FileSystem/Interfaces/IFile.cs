@@ -73,17 +73,15 @@
 #endregion of Licenses [MIT Licenses]
 
 using System;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Text;
-using Wiesend.IO.FileSystem.Interfaces.Contracts;
 
 namespace Wiesend.IO.FileSystem.Interfaces
 {
     /// <summary>
     /// Represents an individual file
     /// </summary>
-    [ContractClass(typeof(IFileContract))]
+    //[ContractClass(typeof(IFileContract))]
     public interface IFile : IComparable<IFile>, IComparable, IEquatable<IFile>, ICloneable
     {
         /// <summary>

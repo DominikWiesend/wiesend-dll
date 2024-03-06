@@ -72,9 +72,9 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
 using System.Text;
 using Wiesend.DataTypes;
 using Wiesend.IO.Compression;
@@ -121,9 +121,9 @@ namespace Wiesend.IO
         /// <param name="EncodingUsing">Encoding that the data uses (defaults to UTF8)</param>
         /// <param name="CompressionType">The compression type used</param>
         /// <returns>The data Compressed</returns>
-        public static string Compress(this string Data, Encoding EncodingUsing = null, CompressionType CompressionType = CompressionType.Deflate)
+        public static string Compress([NotNull] this string Data, Encoding EncodingUsing = null, CompressionType CompressionType = CompressionType.Deflate)
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(Data), "Data");
+            if (string.IsNullOrEmpty(Data)) throw new ArgumentNullException(nameof(Data));
             return Data.ToByteArray(EncodingUsing).Compress(CompressionType).ToString(Base64FormattingOptions.None);
         }
 
@@ -133,9 +133,9 @@ namespace Wiesend.IO
         /// <param name="Data">Data to compress</param>
         /// <param name="CompressionType">Compression type</param>
         /// <returns>The compressed data</returns>
-        public static byte[] Compress(this byte[] Data, string CompressionType)
+        public static byte[] Compress(this byte[] Data, [NotNull] string CompressionType)
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(CompressionType), "CompressionType");
+            if (string.IsNullOrEmpty(CompressionType)) throw new ArgumentNullException(nameof(CompressionType));
             return IoC.Manager.Bootstrapper.Resolve<Manager>().Compress(Data, CompressionType.ToString());
         }
 
@@ -146,10 +146,10 @@ namespace Wiesend.IO
         /// <param name="EncodingUsing">Encoding that the data uses (defaults to UTF8)</param>
         /// <param name="CompressionType">The compression type used</param>
         /// <returns>The data Compressed</returns>
-        public static string Compress(this string Data, Encoding EncodingUsing, string CompressionType)
+        public static string Compress([NotNull] this string Data, Encoding EncodingUsing, [NotNull] string CompressionType)
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(Data), "Data");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(CompressionType), "CompressionType");
+            if (string.IsNullOrEmpty(Data)) throw new ArgumentNullException(nameof(Data));
+            if (string.IsNullOrEmpty(CompressionType)) throw new ArgumentNullException(nameof(CompressionType));
             return Data.ToByteArray(EncodingUsing).Compress(CompressionType).ToString(Base64FormattingOptions.None);
         }
 
@@ -171,9 +171,9 @@ namespace Wiesend.IO
         /// <param name="EncodingUsing">Encoding that the result should use (defaults to UTF8)</param>
         /// <param name="CompressionType">The compression type used</param>
         /// <returns>The data decompressed</returns>
-        public static string Decompress(this string Data, Encoding EncodingUsing = null, CompressionType CompressionType = CompressionType.Deflate)
+        public static string Decompress([NotNull] this string Data, Encoding EncodingUsing = null, CompressionType CompressionType = CompressionType.Deflate)
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(Data), "Data");
+            if (string.IsNullOrEmpty(Data)) throw new ArgumentNullException(nameof(Data));
             return Data.FromBase64().Decompress(CompressionType).ToString(EncodingUsing);
         }
 
@@ -183,9 +183,9 @@ namespace Wiesend.IO
         /// <param name="Data">Data to decompress</param>
         /// <param name="CompressionType">The compression type used</param>
         /// <returns>The data decompressed</returns>
-        public static byte[] Decompress(this byte[] Data, string CompressionType)
+        public static byte[] Decompress(this byte[] Data, [NotNull] string CompressionType)
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(CompressionType), "CompressionType");
+            if (string.IsNullOrEmpty(CompressionType)) throw new ArgumentNullException(nameof(CompressionType));
             return IoC.Manager.Bootstrapper.Resolve<Manager>().Decompress(Data, CompressionType.ToString());
         }
 
@@ -196,10 +196,10 @@ namespace Wiesend.IO
         /// <param name="EncodingUsing">Encoding that the result should use (defaults to UTF8)</param>
         /// <param name="CompressionType">The compression type used</param>
         /// <returns>The data decompressed</returns>
-        public static string Decompress(this string Data, Encoding EncodingUsing, string CompressionType)
+        public static string Decompress([NotNull] this string Data, Encoding EncodingUsing, [NotNull] string CompressionType)
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(Data), "Data");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(CompressionType), "CompressionType");
+            if (string.IsNullOrEmpty(Data)) throw new ArgumentNullException(nameof(Data));
+            if (string.IsNullOrEmpty(CompressionType)) throw new ArgumentNullException(nameof(CompressionType));
             return Data.FromBase64().Decompress(CompressionType).ToString(EncodingUsing);
         }
     }

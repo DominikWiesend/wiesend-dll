@@ -75,7 +75,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Linq;
 using Wiesend.DataTypes;
 using Wiesend.ORM.Manager.QueryProvider.Interfaces;
@@ -94,6 +94,7 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer.Builders
         /// </summary>
         /// <param name="values">The values.</param>
         /// <param name="database">The database.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1827:Do not use Count() or LongCount() when Any() can be used", Justification = "<Pending>")]
         public void FillDatabase(IEnumerable<dynamic> values, Database database)
         {
             if (database == null)

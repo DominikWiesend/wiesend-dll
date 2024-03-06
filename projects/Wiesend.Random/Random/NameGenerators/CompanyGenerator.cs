@@ -82,6 +82,7 @@ namespace Wiesend.Random.NameGenerators
     /// </summary>
     public class CompanyGenerator : GeneratorAttributeBase, IGenerator<string>
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
         private string[] CompanyNames = { "Ankh-Sto Associates", "Conglom-O","Cyberdyne Systems Corporation","Globex Corporation","LexCorp",
                                             "Stark Industries","Sto Plains Holdings","Tri-Optimum Corporation","Umbrella Corporation",
                                             "Wayne Enterprises","Acme Corp","Weyland-Yutani","ZiffCorp","Grand Trunk Semaphore Company",

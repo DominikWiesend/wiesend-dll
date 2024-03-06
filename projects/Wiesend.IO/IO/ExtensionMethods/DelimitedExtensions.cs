@@ -72,12 +72,12 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Diagnostics.Contracts;
 using Wiesend.DataTypes;
 
 namespace Wiesend.IO
@@ -106,9 +106,9 @@ namespace Wiesend.IO
         /// <param name="List">The list to convert</param>
         /// <param name="Delimiter">Delimiter to use</param>
         /// <returns>The delimited file containing the list</returns>
-        public static FileFormats.Delimited.Delimited ToDelimitedFile(this IEnumerable List, string Delimiter = "\t")
+        public static FileFormats.Delimited.Delimited ToDelimitedFile([NotNull] this IEnumerable List, string Delimiter = "\t")
         {
-            Contract.Requires<ArgumentNullException>(List != null, "List");
+            if (List == null) throw new ArgumentNullException(nameof(List));
             return List.To().ToDelimitedFile(Delimiter);
         }
 

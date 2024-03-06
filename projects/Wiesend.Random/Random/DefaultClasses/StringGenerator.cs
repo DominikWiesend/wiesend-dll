@@ -139,6 +139,7 @@ namespace Wiesend.Random.DefaultClasses
         /// A randomly generated string of a specified length, containing only a set of characters,
         /// and at max a specified number of non alpha numeric characters.
         /// </returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("GeneratedRegex", "SYSLIB1045:Convert to 'GeneratedRegexAttribute'.", Justification = "<Pending>")]
         protected virtual string NextString(System.Random Rand, int Length, string AllowedCharacters = ".", int NumberOfNonAlphaNumericsAllowed = int.MaxValue)
         {
             if (Length < 1)

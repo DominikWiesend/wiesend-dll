@@ -74,7 +74,7 @@
 
 using System;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Globalization;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -120,10 +120,10 @@ namespace Wiesend.Web
         /// <param name="Request">Request object</param>
         /// <returns>True if it is, false otherwise</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
-        public static bool IsMobile(this HttpRequestBase Request)
+        public static bool IsMobile([NotNull] this HttpRequestBase Request)
         {
-            Contract.Requires<ArgumentNullException>(Request != null, "Request");
-            Contract.Requires<ArgumentNullException>(Request.Browser != null, "Browser");
+            if (Request == null) throw new ArgumentNullException(nameof(Request), "Request");
+            if (!(Request.Browser != null)) throw new ArgumentNullException(nameof(Request), "Browser");
             if (Request.Browser.IsMobileDevice
                 || !string.IsNullOrEmpty(Request.ServerVariables["HTTP_X_WAP_PROFILE"])
                 || (!string.IsNullOrEmpty(Request.ServerVariables["HTTP_ACCEPT"])
@@ -143,10 +143,10 @@ namespace Wiesend.Web
         /// <param name="Request">Request object</param>
         /// <returns>True if it is, false otherwise</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
-        public static bool IsMobile(this HttpRequest Request)
+        public static bool IsMobile([NotNull] this HttpRequest Request)
         {
-            Contract.Requires<ArgumentNullException>(Request != null, "Request");
-            Contract.Requires<ArgumentNullException>(Request.Browser != null, "Browser");
+            if (Request == null) throw new ArgumentNullException(nameof(Request), "Request");
+            if (!(Request.Browser != null)) throw new ArgumentNullException(nameof(Request), "Browser");
             if (Request.Browser.IsMobileDevice
                 || !string.IsNullOrEmpty(Request.ServerVariables["HTTP_X_WAP_PROFILE"])
                 || (!string.IsNullOrEmpty(Request.ServerVariables["HTTP_ACCEPT"])
@@ -165,9 +165,9 @@ namespace Wiesend.Web
         /// </summary>
         /// <param name="Request">Request</param>
         /// <returns>The IPAddress object if it exists, null otherwise</returns>
-        public static IPAddress UserIPAddress(this HttpRequestBase Request)
+        public static IPAddress UserIPAddress([NotNull] this HttpRequestBase Request)
         {
-            Contract.Requires<ArgumentNullException>(Request != null, "Request");
+            if (Request == null) throw new ArgumentNullException(nameof(Request), "Request");
             IPAddress Address = null;
             if (!IPAddress.TryParse(Request.UserHostAddress, out Address))
                 Address = null;
@@ -179,9 +179,9 @@ namespace Wiesend.Web
         /// </summary>
         /// <param name="Request">Request</param>
         /// <returns>The IPAddress object if it exists, null otherwise</returns>
-        public static IPAddress UserIPAddress(this HttpRequest Request)
+        public static IPAddress UserIPAddress([NotNull] this HttpRequest Request)
         {
-            Contract.Requires<ArgumentNullException>(Request != null, "Request");
+            if (Request == null) throw new ArgumentNullException(nameof(Request), "Request");
             IPAddress Address = null;
             if (!IPAddress.TryParse(Request.UserHostAddress, out Address))
                 Address = null;

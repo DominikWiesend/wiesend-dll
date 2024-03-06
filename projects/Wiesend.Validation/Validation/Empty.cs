@@ -110,11 +110,12 @@ namespace Wiesend.Validation
         /// <param name="value">Value to check</param>
         /// <param name="validationContext">Validation context</param>
         /// <returns>The validation result</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             if (value == null)
                 return ValidationResult.Success;
-            var ValueList = value as IEnumerable;
+            IEnumerable ValueList = value as IEnumerable;
             return ValueList != null && ValueList.GetEnumerator().MoveNext() ? new ValidationResult(FormatErrorMessage(validationContext.DisplayName)) : ValidationResult.Success;
         }
     }

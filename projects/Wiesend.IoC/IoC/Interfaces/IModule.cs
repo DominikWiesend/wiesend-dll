@@ -72,15 +72,12 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-using System.Diagnostics.Contracts;
-using Wiesend.IoC.Interfaces.Contracts;
-
 namespace Wiesend.IoC.Interfaces
 {
     /// <summary>
     /// IoC module base class
     /// </summary>
-    [ContractClass(typeof(IModuleContract))]
+    //[ContractClass(typeof(IModuleContract))]
     public interface IModule
     {
         /// <summary>

@@ -74,7 +74,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using Wiesend.DataTypes;
 using Wiesend.DataTypes.Patterns.BaseClasses;
 using Wiesend.IO;
@@ -147,9 +147,9 @@ namespace Wiesend.Workflow.Manager
         /// </summary>
         /// <param name="Name">The name.</param>
         /// <returns>The workflow that is created</returns>
-        public IWorkflow<T> CreateWorkflow<T>(string Name)
+        public IWorkflow<T> CreateWorkflow<T>([NotNull] string Name)
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(Name), "Name");
+            if (string.IsNullOrEmpty(Name)) throw new ArgumentNullException(nameof(Name), "Name");
             if (Exists(Name))
                 return (IWorkflow<T>)Workflows[Name];
             var ReturnValue = new Workflow<T>(Name);

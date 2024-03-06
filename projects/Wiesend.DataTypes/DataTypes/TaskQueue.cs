@@ -74,7 +74,7 @@
 
 using System;
 using System.Collections.Concurrent;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -86,6 +86,9 @@ namespace Wiesend.DataTypes
     /// ongoing basis, think producer/consumer situations)
     /// </summary>
     /// <typeparam name="T">Object type to process</typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1063:Implement IDisposable Correctly", Justification = "<Pending>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1010:Generic interface should also be implemented", Justification = "<Pending>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1711:Identifiers should not have incorrect suffix", Justification = "<Pending>")]
     public class TaskQueue<T> : BlockingCollection<T>, IDisposable
     {
         /// <summary>
@@ -101,7 +104,7 @@ namespace Wiesend.DataTypes
         public TaskQueue(int Capacity, Action<T> ProcessItem, Action<Exception> HandleError = null)
             : base(new ConcurrentQueue<T>())
         {
-            Contract.Requires<ArgumentException>(Capacity > 0, "Capacity must be greater than 0");
+            if (!(Capacity > 0)) throw new ArgumentException("Capacity must be greater than 0", nameof(Capacity));
             this.ProcessItem = ProcessItem;
             this.HandleError = HandleError.Check(x => { });
             this.CancellationToken = new CancellationTokenSource();
@@ -166,7 +169,7 @@ namespace Wiesend.DataTypes
         /// <param name="Item">Item to process</param>
         public void Enqueue(T Item)
         {
-            Contract.Requires<InvalidOperationException>(!IsCompleted && !IsCanceled, "TaskQueue has been stopped");
+            if (!(!IsCompleted && !IsCanceled)) throw new InvalidOperationException("TaskQueue has been stopped");
             Add(Item);
         }
 
@@ -198,10 +201,11 @@ namespace Wiesend.DataTypes
         /// <summary>
         /// Processes the queue
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         private void Process()
         {
-            Contract.Requires<NullReferenceException>(CancellationToken != null, "CancellationToken");
-            Contract.Requires<NullReferenceException>(ProcessItem != null, "ProcessItem");
+            if (CancellationToken == null) throw new NullReferenceException($"Contract assertion not met: {nameof(CancellationToken)} != null");
+            if (ProcessItem == null) throw new NullReferenceException($"Contract assertion not met: {nameof(ProcessItem)} != null");
             while (true)
             {
                 try

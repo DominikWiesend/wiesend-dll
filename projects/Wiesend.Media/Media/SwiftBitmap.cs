@@ -75,7 +75,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
@@ -96,10 +96,11 @@ namespace Wiesend.Media
         /// Initializes a new instance of the <see cref="SwiftBitmap"/> class.
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
-        public SwiftBitmap(string fileName)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
+        public SwiftBitmap([NotNull] string fileName)
             : this(new Bitmap(fileName))
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(fileName));
+            if (string.IsNullOrEmpty(fileName)) throw new ArgumentNullException(nameof(fileName), $"Contract assertion not met: !string.IsNullOrEmpty({nameof(fileName)})");
         }
 
         /// <summary>
@@ -107,6 +108,7 @@ namespace Wiesend.Media
         /// </summary>
         /// <param name="width">The width.</param>
         /// <param name="height">The height.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         public SwiftBitmap(int width, int height)
             : this(new Bitmap(width, height))
         {
@@ -116,29 +118,33 @@ namespace Wiesend.Media
         /// Initializes a new instance of the <see cref="SwiftBitmap"/> class.
         /// </summary>
         /// <param name="stream">The stream.</param>
-        public SwiftBitmap(Stream stream)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
+        public SwiftBitmap([NotNull] Stream stream)
             : this(new Bitmap(stream))
         {
-            Contract.Requires<ArgumentNullException>(stream != null);
+            if (stream == null) throw new ArgumentNullException(nameof(stream), $"Contract assertion not met: {nameof(stream)} != null");
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SwiftBitmap"/> class.
         /// </summary>
         /// <param name="image">The image.</param>
-        public SwiftBitmap(Image image)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
+        public SwiftBitmap([NotNull] Image image)
             : this(new Bitmap(image))
         {
-            Contract.Requires<ArgumentNullException>(image != null);
+            if (image == null) throw new ArgumentNullException(nameof(image), $"Contract assertion not met: {nameof(image)} != null");
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SwiftBitmap"/> class.
         /// </summary>
         /// <param name="bitmap">The bitmap.</param>
-        public SwiftBitmap(Bitmap bitmap)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0016:Use 'throw' expression", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
+        public SwiftBitmap([NotNull] Bitmap bitmap)
         {
-            Contract.Requires<ArgumentNullException>(bitmap != null);
+            if (bitmap == null) throw new ArgumentNullException(nameof(bitmap), $"Contract assertion not met: {nameof(bitmap)} != null");
             InternalBitmap = bitmap;
             Height = InternalBitmap.Height;
             Width = InternalBitmap.Width;
@@ -154,11 +160,14 @@ namespace Wiesend.Media
         /// Gets a palette listing in HTML string format
         /// </summary>
         /// <value>A list containing HTML color values (ex: #041845)</value>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         public IEnumerable<string> HTMLPalette
         {
             get
             {
-                Contract.Requires<NullReferenceException>(InternalBitmap != null);
+                if (InternalBitmap == null) throw new NullReferenceException($"Contract assertion not met: {nameof(InternalBitmap)} != null");
                 if (htmlPalette_ != null)
                     return htmlPalette_;
                 if (InternalBitmap.Palette != null && InternalBitmap.Palette.Entries.Length > 0)
@@ -221,10 +230,10 @@ namespace Wiesend.Media
         /// <param name="Image1">The first image.</param>
         /// <param name="Image2">The second image</param>
         /// <returns>The result of the operator.</returns>
-        public static SwiftBitmap operator &(SwiftBitmap Image1, SwiftBitmap Image2)
+        public static SwiftBitmap operator &([NotNull] SwiftBitmap Image1, [NotNull] SwiftBitmap Image2)
         {
-            Contract.Requires<ArgumentNullException>(Image1 != null, "Image1");
-            Contract.Requires<ArgumentNullException>(Image2 != null, "Image2");
+            if (Image1 == null) throw new ArgumentNullException(nameof(Image1));
+            if (Image2 == null) throw new ArgumentNullException(nameof(Image2));
             Image1.Lock();
             Image2.Lock();
             var Result = new SwiftBitmap(Image1.Width, Image1.Height);
@@ -252,10 +261,10 @@ namespace Wiesend.Media
         /// <param name="Image1">The first image.</param>
         /// <param name="Image2">The second image</param>
         /// <returns>The result of the operator.</returns>
-        public static SwiftBitmap operator ^(SwiftBitmap Image1, SwiftBitmap Image2)
+        public static SwiftBitmap operator ^([NotNull] SwiftBitmap Image1, [NotNull] SwiftBitmap Image2)
         {
-            Contract.Requires<ArgumentNullException>(Image1 != null, "Image1");
-            Contract.Requires<ArgumentNullException>(Image2 != null, "Image2");
+            if (Image1 == null) throw new ArgumentNullException(nameof(Image1));
+            if (Image2 == null) throw new ArgumentNullException(nameof(Image2));
             Image1.Lock();
             Image2.Lock();
             var Result = new SwiftBitmap(Image1.Width, Image1.Height);
@@ -283,10 +292,10 @@ namespace Wiesend.Media
         /// <param name="Image1">The first image.</param>
         /// <param name="Image2">The second image</param>
         /// <returns>The result of the operator.</returns>
-        public static SwiftBitmap operator |(SwiftBitmap Image1, SwiftBitmap Image2)
+        public static SwiftBitmap operator |([NotNull] SwiftBitmap Image1, [NotNull] SwiftBitmap Image2)
         {
-            Contract.Requires<ArgumentNullException>(Image1 != null, "Image1");
-            Contract.Requires<ArgumentNullException>(Image2 != null, "Image2");
+            if (Image1 == null) throw new ArgumentNullException(nameof(Image1));
+            if (Image2 == null) throw new ArgumentNullException(nameof(Image2));
             Image1.Lock();
             Image2.Lock();
             var Result = new SwiftBitmap(Image1.Width, Image1.Height);
@@ -313,22 +322,23 @@ namespace Wiesend.Media
         /// </summary>
         /// <param name="matrix">The matrix.</param>
         /// <returns>This</returns>
-        public SwiftBitmap ApplyColorMatrix(System.Drawing.Imaging.ColorMatrix matrix)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
+        public SwiftBitmap ApplyColorMatrix([NotNull] System.Drawing.Imaging.ColorMatrix matrix)
         {
-            Contract.Requires<ArgumentNullException>(matrix != null);
-            Contract.Requires<NullReferenceException>(InternalBitmap != null);
+            if (matrix == null) throw new ArgumentNullException(nameof(matrix), $"Contract assertion not met: {nameof(matrix)} != null");
+            if (InternalBitmap == null) throw new NullReferenceException($"Contract assertion not met: {nameof(InternalBitmap)} != null");
             Unlock();
             using (Graphics NewGraphics = Graphics.FromImage(InternalBitmap))
             {
-                using (ImageAttributes Attributes = new ImageAttributes())
-                {
-                    Attributes.SetColorMatrix(matrix);
-                    NewGraphics.DrawImage(InternalBitmap,
-                        new System.Drawing.Rectangle(0, 0, Width, Height),
-                        0, 0, Width, Height,
-                        GraphicsUnit.Pixel,
-                        Attributes);
-                }
+                using ImageAttributes Attributes = new ImageAttributes();
+                Attributes.SetColorMatrix(matrix);
+                NewGraphics.DrawImage(InternalBitmap,
+                    new System.Drawing.Rectangle(0, 0, Width, Height),
+                    0, 0, Width, Height,
+                    GraphicsUnit.Pixel,
+                    Attributes);
             }
             return this;
         }
@@ -338,10 +348,12 @@ namespace Wiesend.Media
         /// </summary>
         /// <param name="matrix">The matrix.</param>
         /// <returns>This</returns>
-        public SwiftBitmap ApplyColorMatrix(float[][] matrix)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
+        public SwiftBitmap ApplyColorMatrix([NotNull] float[][] matrix)
         {
-            Contract.Requires<ArgumentNullException>(matrix != null);
-            Contract.Requires<NullReferenceException>(InternalBitmap != null);
+            if (matrix == null) throw new ArgumentNullException(nameof(matrix), $"Contract assertion not met: {nameof(matrix)} != null");
+            if (InternalBitmap == null) throw new NullReferenceException($"Contract assertion not met: {nameof(InternalBitmap)} != null");
             return ApplyColorMatrix(new System.Drawing.Imaging.ColorMatrix(matrix));
         }
 
@@ -352,74 +364,75 @@ namespace Wiesend.Media
         /// <param name="absolute">if set to <c>true</c> then the absolute value is used</param>
         /// <param name="offset">The offset to use for each pixel</param>
         /// <returns>Returns the image with the filter applied</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public SwiftBitmap ApplyConvolutionFilter(int[][] filter, bool absolute = false, int offset = 0)
         {
-            Contract.Requires<NullReferenceException>(InternalBitmap != null);
-            using (SwiftBitmap Result = new SwiftBitmap(Width, Height))
+            if (InternalBitmap == null) throw new NullReferenceException($"Contract assertion not met: {nameof(InternalBitmap)} != null");
+            using SwiftBitmap Result = new SwiftBitmap(Width, Height);
+            Lock();
+            Result.Lock();
+            Parallel.For(0, Width, x =>
             {
-                Lock();
-                Result.Lock();
-                Parallel.For(0, Width, x =>
+                for (int y = 0; y < Height; ++y)
                 {
-                    for (int y = 0; y < Height; ++y)
+                    int RValue = 0;
+                    int GValue = 0;
+                    int BValue = 0;
+                    int Weight = 0;
+                    int XCurrent = -filter[0].Length / 2;
+                    for (int x2 = 0; x2 < filter[0].Length; ++x2)
                     {
-                        int RValue = 0;
-                        int GValue = 0;
-                        int BValue = 0;
-                        int Weight = 0;
-                        int XCurrent = -filter[0].Length / 2;
-                        for (int x2 = 0; x2 < filter[0].Length; ++x2)
+                        if (XCurrent + x < Width && XCurrent + x >= 0)
                         {
-                            if (XCurrent + x < Width && XCurrent + x >= 0)
+                            int YCurrent = -filter.Length / 2;
+                            for (int y2 = 0; y2 < filter.Length; ++y2)
                             {
-                                int YCurrent = -filter.Length / 2;
-                                for (int y2 = 0; y2 < filter.Length; ++y2)
+                                if (YCurrent + y < Height && YCurrent + y >= 0)
                                 {
-                                    if (YCurrent + y < Height && YCurrent + y >= 0)
-                                    {
-                                        var Pixel = GetPixel(XCurrent + x, YCurrent + y);
-                                        RValue += filter[x2][y2] * Pixel.R;
-                                        GValue += filter[x2][y2] * Pixel.G;
-                                        BValue += filter[x2][y2] * Pixel.B;
-                                        Weight += filter[x2][y2];
-                                    }
-                                    ++YCurrent;
+                                    var Pixel = GetPixel(XCurrent + x, YCurrent + y);
+                                    RValue += filter[x2][y2] * Pixel.R;
+                                    GValue += filter[x2][y2] * Pixel.G;
+                                    BValue += filter[x2][y2] * Pixel.B;
+                                    Weight += filter[x2][y2];
                                 }
+                                ++YCurrent;
                             }
-                            ++XCurrent;
                         }
-                        var MeanPixel = GetPixel(x, y);
-                        if (Weight == 0)
-                            Weight = 1;
-                        if (Weight > 0)
-                        {
-                            if (absolute)
-                            {
-                                RValue = System.Math.Abs(RValue);
-                                GValue = System.Math.Abs(GValue);
-                                BValue = System.Math.Abs(BValue);
-                            }
-                            RValue = (RValue / Weight) + offset;
-                            RValue = RValue.Clamp(255, 0);
-                            GValue = (GValue / Weight) + offset;
-                            GValue = GValue.Clamp(255, 0);
-                            BValue = (BValue / Weight) + offset;
-                            BValue = BValue.Clamp(255, 0);
-                            MeanPixel = Color.FromArgb(RValue, GValue, BValue);
-                        }
-                        Result.SetPixel(x, y, MeanPixel);
+                        ++XCurrent;
                     }
-                });
-                Unlock();
-                Result.Unlock();
-                return Copy(Result);
-            }
+                    var MeanPixel = GetPixel(x, y);
+                    if (Weight == 0)
+                        Weight = 1;
+                    if (Weight > 0)
+                    {
+                        if (absolute)
+                        {
+                            RValue = System.Math.Abs(RValue);
+                            GValue = System.Math.Abs(GValue);
+                            BValue = System.Math.Abs(BValue);
+                        }
+                        RValue = (RValue / Weight) + offset;
+                        RValue = RValue.Clamp(255, 0);
+                        GValue = (GValue / Weight) + offset;
+                        GValue = GValue.Clamp(255, 0);
+                        BValue = (BValue / Weight) + offset;
+                        BValue = BValue.Clamp(255, 0);
+                        MeanPixel = Color.FromArgb(RValue, GValue, BValue);
+                    }
+                    Result.SetPixel(x, y, MeanPixel);
+                }
+            });
+            Unlock();
+            Result.Unlock();
+            return Copy(Result);
         }
 
         /// <summary>
         /// Creates a new object that is a copy of the current instance.
         /// </summary>
         /// <returns>A new object that is a copy of this instance.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         public object Clone()
         {
             Unlock();
@@ -431,9 +444,11 @@ namespace Wiesend.Media
         /// </summary>
         /// <param name="SwiftBitmap">The SwiftBitmap to copy from.</param>
         /// <returns>This</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         public unsafe SwiftBitmap Copy(SwiftBitmap SwiftBitmap)
         {
-            Contract.Requires<NullReferenceException>(InternalBitmap != null);
+            if (InternalBitmap == null) throw new NullReferenceException($"Contract assertion not met: {nameof(InternalBitmap)} != null");
             if (SwiftBitmap == null)
                 return this;
             Unlock();
@@ -450,9 +465,12 @@ namespace Wiesend.Media
         /// <param name="VAlignment">The v alignment.</param>
         /// <param name="HAlignment">The h alignment.</param>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         public SwiftBitmap Crop(int Width, int Height, Align VAlignment, Align HAlignment)
         {
-            Contract.Requires<NullReferenceException>(InternalBitmap != null);
+            if (InternalBitmap == null) throw new NullReferenceException($"Contract assertion not met: {nameof(InternalBitmap)} != null");
             Unlock();
             var TempRectangle = new System.Drawing.Rectangle();
             TempRectangle.Height = Height;
@@ -477,11 +495,13 @@ namespace Wiesend.Media
         /// <param name="pen">The pen to use.</param>
         /// <param name="path">The path to draw</param>
         /// <returns>This</returns>
-        public SwiftBitmap DrawPath(Pen pen, GraphicsPath path)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
+        public SwiftBitmap DrawPath([NotNull] Pen pen, [NotNull] GraphicsPath path)
         {
-            Contract.Requires<ArgumentNullException>(pen != null);
-            Contract.Requires<ArgumentNullException>(path != null);
-            Contract.Requires<NullReferenceException>(InternalBitmap != null);
+            if (pen == null) throw new ArgumentNullException(nameof(pen), $"Contract assertion not met: {nameof(pen)} != null");
+            if (path == null) throw new ArgumentNullException(nameof(path), $"Contract assertion not met: {nameof(path)} != null");
+            if (InternalBitmap == null) throw new NullReferenceException($"Contract assertion not met: {nameof(InternalBitmap)} != null");
             Unlock();
             using (Graphics NewGraphics = Graphics.FromImage(InternalBitmap))
             {
@@ -498,12 +518,13 @@ namespace Wiesend.Media
         /// <param name="BrushUsing">The brush to use.</param>
         /// <param name="BoxToDrawWithin">The box to draw within.</param>
         /// <returns>This</returns>
-        public SwiftBitmap DrawText(string TextToDraw,
-            Font FontToUse, Brush BrushUsing, RectangleF BoxToDrawWithin)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
+        public SwiftBitmap DrawText(string TextToDraw, [NotNull] Font FontToUse, [NotNull] Brush BrushUsing, RectangleF BoxToDrawWithin)
         {
-            Contract.Requires<ArgumentNullException>(FontToUse != null, "FontToUse");
-            Contract.Requires<ArgumentNullException>(BrushUsing != null, "BrushUsing");
-            Contract.Requires<NullReferenceException>(InternalBitmap != null);
+            if (FontToUse == null) throw new ArgumentNullException(nameof(FontToUse));
+            if (BrushUsing == null) throw new ArgumentNullException(nameof(BrushUsing));
+            if (InternalBitmap == null) throw new NullReferenceException($"Contract assertion not met: {nameof(InternalBitmap)} != null");
             Unlock();
             using (Graphics TempGraphics = Graphics.FromImage(InternalBitmap))
             {
@@ -517,9 +538,10 @@ namespace Wiesend.Media
         /// </summary>
         /// <param name="color">The color.</param>
         /// <returns>This</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         public SwiftBitmap Fill(Color color)
         {
-            Contract.Requires<NullReferenceException>(Data != null);
+            if (Data == null) throw new NullReferenceException($"Contract assertion not met: {nameof(Data)} != null");
             SetPixels(0, 0, (Width * Height).Times(x => color).ToArray());
             return this;
         }
@@ -530,9 +552,11 @@ namespace Wiesend.Media
         /// <param name="x">The x position</param>
         /// <param name="y">The y position</param>
         /// <returns>This</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         public unsafe Color GetPixel(int x, int y)
         {
-            Contract.Requires<NullReferenceException>(Data != null);
+            if (Data == null) throw new NullReferenceException($"Contract assertion not met: {nameof(Data)} != null");
             byte* TempPointer = DataPointer + (y * Data.Stride) + (x * PixelSize);
             return (PixelSize == 3) ?
                 Color.FromArgb(TempPointer[2], TempPointer[1], TempPointer[0]) :
@@ -544,9 +568,10 @@ namespace Wiesend.Media
         /// </summary>
         /// <param name="position">The position in the image</param>
         /// <returns>This</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         public unsafe Color GetPixel(int position)
         {
-            Contract.Requires<NullReferenceException>(Data != null);
+            if (Data == null) throw new NullReferenceException($"Contract assertion not met: {nameof(Data)} != null");
             byte* TempPointer = DataPointer + (position * PixelSize);
             return (PixelSize == 3) ?
                 Color.FromArgb(TempPointer[2], TempPointer[1], TempPointer[0]) :
@@ -557,9 +582,11 @@ namespace Wiesend.Media
         /// Locks this instance.
         /// </summary>
         /// <returns>This</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         public unsafe SwiftBitmap Lock()
         {
-            Contract.Requires<NullReferenceException>(InternalBitmap != null);
+            if (InternalBitmap == null) throw new NullReferenceException($"Contract assertion not met: {nameof(InternalBitmap)} != null");
             if (Data != null)
                 return this;
             Data = InternalBitmap.LockBits(new Rectangle(0, 0, InternalBitmap.Width, InternalBitmap.Height),
@@ -577,9 +604,11 @@ namespace Wiesend.Media
         /// <param name="Height">New height for the final image</param>
         /// <param name="Quality">Quality of the resizing</param>
         /// <returns>This</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         public SwiftBitmap Resize(int Width, int Height, Quality Quality = Quality.Low)
         {
-            Contract.Requires<NullReferenceException>(InternalBitmap != null);
+            if (InternalBitmap == null) throw new NullReferenceException($"Contract assertion not met: {nameof(InternalBitmap)} != null");
             Unlock();
             var TempBitmap = new Bitmap(Width, Height);
             using (Graphics NewGraphics = Graphics.FromImage(TempBitmap))
@@ -610,9 +639,11 @@ namespace Wiesend.Media
         /// </summary>
         /// <param name="flipType">Type of flip/rotation to do</param>
         /// <returns>This</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         public SwiftBitmap Rotate(RotateFlipType flipType)
         {
-            Contract.Requires<NullReferenceException>(InternalBitmap != null);
+            if (InternalBitmap == null) throw new NullReferenceException($"Contract assertion not met: {nameof(InternalBitmap)} != null");
             Unlock();
             InternalBitmap.RotateFlip(flipType);
             return this;
@@ -623,9 +654,11 @@ namespace Wiesend.Media
         /// </summary>
         /// <param name="DegreesToRotate">Degrees to rotate the image</param>
         /// <returns>This</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         public SwiftBitmap Rotate(float DegreesToRotate)
         {
-            Contract.Requires<NullReferenceException>(InternalBitmap != null);
+            if (InternalBitmap == null) throw new NullReferenceException($"Contract assertion not met: {nameof(InternalBitmap)} != null");
             Unlock();
             var TempBitmap = new Bitmap(Width, Height);
             using (Graphics NewGraphics = Graphics.FromImage(TempBitmap))
@@ -648,10 +681,12 @@ namespace Wiesend.Media
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         /// <returns>This</returns>
-        public SwiftBitmap Save(string fileName)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
+        public SwiftBitmap Save([NotNull] string fileName)
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(fileName));
-            Contract.Requires<NullReferenceException>(InternalBitmap != null);
+            if (string.IsNullOrEmpty(fileName)) throw new ArgumentNullException(nameof(fileName), $"Contract assertion not met: !string.IsNullOrEmpty({nameof(fileName)})");
+            if (InternalBitmap == null) throw new NullReferenceException($"Contract assertion not met: {nameof(InternalBitmap)} != null");
             Unlock();
             InternalBitmap.Save(fileName, GetImageFormat(fileName));
             return this;
@@ -664,9 +699,11 @@ namespace Wiesend.Media
         /// <param name="y">The y position</param>
         /// <param name="pixelColor">Color of the pixel.</param>
         /// <returns>This</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         public unsafe SwiftBitmap SetPixel(int x, int y, Color pixelColor)
         {
-            Contract.Requires<NullReferenceException>(Data != null, "Data");
+            if (Data == null) throw new NullReferenceException("Data");
             byte* TempPointer = DataPointer + (y * Data.Stride) + (x * PixelSize);
             if (PixelSize == 3)
             {
@@ -689,9 +726,11 @@ namespace Wiesend.Media
         /// <param name="y">The beginning y coordinate</param>
         /// <param name="pixels">The pixels to set</param>
         /// <returns>This</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         public unsafe SwiftBitmap SetPixels(int x, int y, Color[] pixels)
         {
-            Contract.Requires<NullReferenceException>(Data != null, "Data");
+            if (Data == null) throw new NullReferenceException("Data");
             if (pixels == null)
                 return this;
             byte* TempPointer = DataPointer + (y * Data.Stride) + (x * PixelSize);
@@ -720,24 +759,27 @@ namespace Wiesend.Media
         /// </summary>
         /// <param name="desiredFormat">Desired SwiftBitmap format (defaults to Jpeg)</param>
         /// <returns>The SwiftBitmap in base64 string format</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public string ToString(ImageFormat desiredFormat)
         {
-            Contract.Requires<NullReferenceException>(InternalBitmap != null);
+            if (InternalBitmap == null) throw new NullReferenceException($"Contract assertion not met: {nameof(InternalBitmap)} != null");
             desiredFormat = desiredFormat.Check(ImageFormat.Jpeg);
-            using (MemoryStream Stream = new MemoryStream())
-            {
-                InternalBitmap.Save(Stream, desiredFormat);
-                return Stream.ToArray().ToString(Base64FormattingOptions.None);
-            }
+            using MemoryStream Stream = new MemoryStream();
+            InternalBitmap.Save(Stream, desiredFormat);
+            return Stream.ToArray().ToString(Base64FormattingOptions.None);
         }
 
         /// <summary>
         /// Unlocks this SwiftBitmap
         /// </summary>
         /// <returns>This</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         public unsafe SwiftBitmap Unlock()
         {
-            Contract.Requires<NullReferenceException>(InternalBitmap != null);
+            if (InternalBitmap == null) throw new NullReferenceException($"Contract assertion not met: {nameof(InternalBitmap)} != null");
             if (Data == null)
                 return this;
             InternalBitmap.UnlockBits(Data);
@@ -752,6 +794,7 @@ namespace Wiesend.Media
         /// <param name="Managed">
         /// If true, managed and unmanaged objects should be disposed. Otherwise unmanaged objects only.
         /// </param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         protected override void Dispose(bool Managed)
         {
             if (Data != null)
@@ -770,6 +813,7 @@ namespace Wiesend.Media
         /// </summary>
         /// <param name="fileName">Name of the file.</param>
         /// <returns>The image format</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         private static ImageFormat GetImageFormat(string fileName)
         {
             if (string.IsNullOrEmpty(fileName))
@@ -791,9 +835,11 @@ namespace Wiesend.Media
         /// Gets the size of the pixel.
         /// </summary>
         /// <returns>The size of the pixel in bytes</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         private int GetPixelSize()
         {
-            Contract.Requires<NullReferenceException>(Data != null);
+            if (Data == null) throw new NullReferenceException($"Contract assertion not met: {nameof(Data)} != null");
             if (Data.PixelFormat == PixelFormat.Format24bppRgb)
                 return 3;
             else if (Data.PixelFormat == PixelFormat.Format32bppArgb

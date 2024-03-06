@@ -74,7 +74,7 @@
 
 using System;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.IO;
 using System.Text;
 
@@ -94,9 +94,9 @@ namespace Wiesend.DataTypes
         /// Encoding that the string should be in (defaults to UTF8)
         /// </param>
         /// <returns>A string containing the content of the stream</returns>
-        public static string ReadAll(this Stream Input, Encoding EncodingUsing = null)
+        public static string ReadAll([NotNull] this Stream Input, Encoding EncodingUsing = null)
         {
-            Contract.Requires<ArgumentNullException>(Input != null, "Input");
+            if (Input == null) throw new ArgumentNullException(nameof(Input));
             return Input.ReadAllBinary().ToString(EncodingUsing);
         }
 
@@ -105,9 +105,11 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Input">Input stream</param>
         /// <returns>A byte array</returns>
-        public static byte[] ReadAllBinary(this Stream Input)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
+        public static byte[] ReadAllBinary([NotNull] this Stream Input)
         {
-            Contract.Requires<ArgumentNullException>(Input != null, "Input");
+            if (Input == null) throw new ArgumentNullException(nameof(Input));
             var TempInput = Input as MemoryStream;
             if (TempInput != null)
                 return TempInput.ToArray();

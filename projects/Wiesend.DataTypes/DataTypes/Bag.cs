@@ -83,6 +83,7 @@ namespace Wiesend.DataTypes
     /// Used to count the number of times something is added to the list
     /// </summary>
     /// <typeparam name="T">Type of data within the bag</typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "<Pending>")]
     public class Bag<T> : ICollection<T>
     {
         /// <summary>
@@ -177,10 +178,10 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="item">Item to remove</param>
         /// <returns>True if it is removed, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
         public virtual bool Remove(T item)
         {
-            int Value = 0;
-            return Items.TryRemove(item, out Value);
+            return Items.TryRemove(item, out int Value);
         }
 
         /// <summary>

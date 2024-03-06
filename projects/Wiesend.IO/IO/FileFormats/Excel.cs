@@ -72,12 +72,10 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-#if NETFULL
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.OleDb;
-using System.Diagnostics.Contracts;
 using System.Globalization;
 using Wiesend.DataTypes;
 using Wiesend.IO.FileFormats.BaseClasses;
@@ -119,12 +117,14 @@ namespace Wiesend.IO.FileFormats
         /// <param name="Value">Row to get</param>
         /// <param name="Name">Column name to look for</param>
         /// <returns>The value</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         public string this[int Value, string Name]
         {
             get
             {
-                Contract.Requires<ArgumentException>(Value >= 0, "Value must be greater than or equal to 0");
-                Contract.Requires<NullReferenceException>(ColumnNames != null, "ColumnNames");
+                if (!(Value >= 0)) throw new ArgumentNullException(nameof(Value), "Value must be greater than or equal to 0");
+                if (ColumnNames == null) throw new NullReferenceException("ColumnNames");
                 return Records[Value][ColumnNames.IndexOf(Name)];
             }
         }
@@ -175,31 +175,28 @@ namespace Wiesend.IO.FileFormats
         /// </summary>
         /// <param name="FilePath">File path</param>
         /// <param name="Sheet">Sheet to parse</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA2100:Review SQL queries for security vulnerabilities", Justification = "<Pending>")]
         protected void Parse(string FilePath, string Sheet)
         {
             var ConnectionString = string.Format(CultureInfo.CurrentCulture, "Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=\"Excel 12.0;HDR=YES;IMEX=1;\"", FilePath);
             var Command = string.Format(CultureInfo.CurrentCulture, "select * from [{0}$]", Sheet);
-            using (var Adapter = new OleDbDataAdapter(Command, ConnectionString))
+            using var Adapter = new OleDbDataAdapter(Command, ConnectionString);
+            using var ds = new DataSet();
+            ds.Locale = CultureInfo.CurrentCulture;
+            Adapter.Fill(ds, "something");
+            int y = 0;
+            foreach (DataColumn Column in ds.Tables["something"].Columns)
+                ColumnNames.Add(Column.ColumnName);
+            foreach (DataRow Row in ds.Tables["something"].Rows)
             {
-                using (var ds = new DataSet())
+                Records.Add(new List<string>());
+                for (int x = 0; x < Row.ItemArray.Length; ++x)
                 {
-                    ds.Locale = CultureInfo.CurrentCulture;
-                    Adapter.Fill(ds, "something");
-                    int y = 0;
-                    foreach (DataColumn Column in ds.Tables["something"].Columns)
-                        ColumnNames.Add(Column.ColumnName);
-                    foreach (DataRow Row in ds.Tables["something"].Rows)
-                    {
-                        Records.Add(new List<string>());
-                        for (int x = 0; x < Row.ItemArray.Length; ++x)
-                        {
-                            Records[y].Add(Row.ItemArray[x].ToString());
-                        }
-                        ++y;
-                    }
+                    Records[y].Add(Row.ItemArray[x].ToString());
                 }
+                ++y;
             }
         }
     }
 }
-#endif

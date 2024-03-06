@@ -75,7 +75,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Linq;
 
 namespace Wiesend.DataTypes
@@ -92,10 +92,11 @@ namespace Wiesend.DataTypes
         /// <typeparam name="T">Object type in the list</typeparam>
         /// <param name="Input">Input list</param>
         /// <returns>The list of permutations</returns>
-        public static ListMapping<int, T> Permute<T>(this IEnumerable<T> Input)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0180:Use tuple to swap values", Justification = "<Pending>")]
+        public static ListMapping<int, T> Permute<T>([NotNull] this IEnumerable<T> Input)
         {
-            Contract.Requires<ArgumentNullException>(Input != null, "Input");
-            var Current = new System.Collections.Generic.List<T>();
+            if (Input == null) throw new ArgumentNullException(nameof(Input));
+            var Current = new List<T>();
             Current.AddRange(Input);
             var ReturnValue = new ListMapping<int, T>();
             var Max = (Input.Count() - 1).Factorial();

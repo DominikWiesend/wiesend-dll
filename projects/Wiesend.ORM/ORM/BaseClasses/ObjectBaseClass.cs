@@ -90,6 +90,8 @@ namespace Wiesend.ORM
     /// </summary>
     /// <typeparam name="IDType">ID type</typeparam>
     /// <typeparam name="ObjectType">Object type (must be the child object type)</typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1036:Override methods on comparable types", Justification = "<Pending>")]
     public abstract class ObjectBaseClass<ObjectType, IDType> : IComparable, IComparable<ObjectType>, IObject<IDType>
         where ObjectType : ObjectBaseClass<ObjectType, IDType>, new()
         where IDType : IComparable
@@ -157,6 +159,7 @@ namespace Wiesend.ORM
         /// <summary>
         /// Called prior to an object is loading
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2211:Non-constant fields should not be visible", Justification = "<Pending>")]
         public static EventHandler<LoadingEventArgs> Loading;
 
         /// <summary>
@@ -164,6 +167,7 @@ namespace Wiesend.ORM
         /// </summary>
         /// <param name="Params">Parameters used to specify what to load</param>
         /// <returns>All items that fit the specified query</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1000:Do not declare static members on generic types", Justification = "<Pending>")]
         public static IEnumerable<ObjectType> All(params IParameter[] Params)
         {
             IEnumerable<ObjectType> instance = new List<ObjectType>();
@@ -188,6 +192,7 @@ namespace Wiesend.ORM
         /// <param name="ConnectionString">Connection string name</param>
         /// <param name="Params">Parameters used to specify what to load</param>
         /// <returns>The specified items</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1000:Do not declare static members on generic types", Justification = "<Pending>")]
         public static IEnumerable<ObjectType> All(string Command, CommandType Type, string ConnectionString, params object[] Params)
         {
             IEnumerable<ObjectType> instance = new List<ObjectType>();
@@ -209,6 +214,7 @@ namespace Wiesend.ORM
         /// </summary>
         /// <param name="Params">Parameters used to specify what to load</param>
         /// <returns>The specified item</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1000:Do not declare static members on generic types", Justification = "<Pending>")]
         public static ObjectType Any(params IParameter[] Params)
         {
             var instance = new ObjectType();
@@ -218,8 +224,7 @@ namespace Wiesend.ORM
             if (!E.Stop)
             {
                 instance = QueryProvider.Any<ObjectType>(Params);
-                if (instance != null)
-                    instance.OnLoaded(new LoadedEventArgs());
+                instance?.OnLoaded(new LoadedEventArgs());
             }
             return instance;
         }
@@ -232,6 +237,7 @@ namespace Wiesend.ORM
         /// <param name="ConnectionString">Connection string name</param>
         /// <param name="Params">Parameters used to specify what to load</param>
         /// <returns>The specified item</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1000:Do not declare static members on generic types", Justification = "<Pending>")]
         public static ObjectType Any(string Command, CommandType Type, string ConnectionString, params object[] Params)
         {
             var instance = new ObjectType();
@@ -241,8 +247,7 @@ namespace Wiesend.ORM
             if (!E.Stop)
             {
                 instance = QueryProvider.Any<ObjectType>(Command, Type, ConnectionString, Params);
-                if (instance != null)
-                    instance.OnLoaded(new LoadedEventArgs());
+                instance?.OnLoaded(new LoadedEventArgs());
             }
             return instance;
         }
@@ -264,6 +269,7 @@ namespace Wiesend.ORM
         /// <param name="first">First item</param>
         /// <param name="second">Second item</param>
         /// <returns>True if the first item is less than the second, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
         public static bool operator <(ObjectBaseClass<ObjectType, IDType> first, ObjectBaseClass<ObjectType, IDType> second)
         {
             if (ReferenceEquals(first, second))
@@ -279,6 +285,7 @@ namespace Wiesend.ORM
         /// <param name="first">First item</param>
         /// <param name="second">Second item</param>
         /// <returns>true if the first and second item are the same, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
         public static bool operator ==(ObjectBaseClass<ObjectType, IDType> first, ObjectBaseClass<ObjectType, IDType> second)
         {
             if (ReferenceEquals(first, second))
@@ -296,6 +303,7 @@ namespace Wiesend.ORM
         /// <param name="first">First item</param>
         /// <param name="second">Second item</param>
         /// <returns>True if the first item is greater than the second, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
         public static bool operator >(ObjectBaseClass<ObjectType, IDType> first, ObjectBaseClass<ObjectType, IDType> second)
         {
             if (ReferenceEquals(first, second))
@@ -311,6 +319,7 @@ namespace Wiesend.ORM
         /// <param name="PageSize">Page size</param>
         /// <param name="Params">Parameters used to specify what to load</param>
         /// <returns>All items that fit the specified query</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1000:Do not declare static members on generic types", Justification = "<Pending>")]
         public static int PageCount(int PageSize = 25, params IParameter[] Params)
         {
             return QueryProvider.PageCount<ObjectType>(PageSize, Params);
@@ -324,6 +333,7 @@ namespace Wiesend.ORM
         /// <param name="OrderBy">The order by portion of the query</param>
         /// <param name="Params">Parameters used to specify what to load</param>
         /// <returns>All items that fit the specified query</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1000:Do not declare static members on generic types", Justification = "<Pending>")]
         public static IEnumerable<ObjectType> Paged(int PageSize = 25, int CurrentPage = 0, string OrderBy = "", params IParameter[] Params)
         {
             IEnumerable<ObjectType> instance = new List<ObjectType>();
@@ -333,9 +343,7 @@ namespace Wiesend.ORM
             {
                 instance = QueryProvider.Paged<ObjectType>(PageSize, CurrentPage, OrderBy, Params);
                 foreach (ObjectType Item in instance)
-                {
                     Item.OnLoaded(new LoadedEventArgs());
-                }
             }
             return instance;
         }
@@ -344,6 +352,7 @@ namespace Wiesend.ORM
         /// Saves a list of objects
         /// </summary>
         /// <param name="Objects">List of objects</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1000:Do not declare static members on generic types", Justification = "<Pending>")]
         public static void Save(IEnumerable<ObjectType> Objects)
         {
             if (Objects == null)

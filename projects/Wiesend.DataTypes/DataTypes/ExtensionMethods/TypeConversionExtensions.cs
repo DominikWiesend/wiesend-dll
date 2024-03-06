@@ -76,7 +76,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Linq;
 using Wiesend.DataTypes.Conversion;
 using Wiesend.DataTypes.DataMapper.Interfaces;
@@ -108,10 +108,10 @@ namespace Wiesend.DataTypes
         /// <param name="LeftType">Left type</param>
         /// <param name="RightType">Right type</param>
         /// <returns>The type mapping</returns>
-        public static ITypeMapping MapTo(this Type LeftType, Type RightType)
+        public static ITypeMapping MapTo([NotNull] this Type LeftType, [NotNull] Type RightType)
         {
-            Contract.Requires<ArgumentNullException>(LeftType != null);
-            Contract.Requires<ArgumentNullException>(RightType != null);
+            if (LeftType == null) throw new ArgumentNullException(nameof(LeftType), $"Contract assertion not met: {nameof(LeftType)} != null");
+            if (RightType == null) throw new ArgumentNullException(nameof(RightType), $"Contract assertion not met: {nameof(RightType)} != null");
             var TempManager = IoC.Manager.Bootstrapper.Resolve<DataTypes.DataMapper.Manager>();
             if (TempManager == null)
                 return null;
@@ -125,6 +125,9 @@ namespace Wiesend.DataTypes
         /// <typeparam name="Right">Right type</typeparam>
         /// <param name="Object">Object to set up mapping for</param>
         /// <returns>The type mapping</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         public static ITypeMapping<Left, Right> MapTo<Left, Right>(this Left Object)
         {
             var TempManager = IoC.Manager.Bootstrapper.Resolve<DataTypes.DataMapper.Manager>();
@@ -140,6 +143,8 @@ namespace Wiesend.DataTypes
         /// <typeparam name="Right">Right type</typeparam>
         /// <param name="ObjectType">Object type to set up mapping for</param>
         /// <returns>The type mapping</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public static ITypeMapping<Left, Right> MapTo<Left, Right>(this Type ObjectType)
         {
             var TempManager = IoC.Manager.Bootstrapper.Resolve<DataTypes.DataMapper.Manager>();
@@ -155,6 +160,7 @@ namespace Wiesend.DataTypes
         /// <param name="Data">DataTable to convert</param>
         /// <param name="Creator">Function used to create each object</param>
         /// <returns>The DataTable converted to a list of objects</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public static List<T> To<T>(this DataTable Data, Func<T> Creator)
             where T : class,new()
         {
@@ -170,8 +176,7 @@ namespace Wiesend.DataTypes
                 for (int y = 0; y < Data.Columns.Count; ++y)
                 {
                     var Property = Properties.FirstOrDefault(z => z.Name == Data.Columns[y].ColumnName);
-                    if (Property != null)
-                        Property.SetValue(RowObject, Data.Rows[x][Data.Columns[y]].To(Property.PropertyType, null), new object[] { });
+                    Property?.SetValue(RowObject, Data.Rows[x][Data.Columns[y]].To(Property.PropertyType, null), new object[] { });
                 }
                 Results.Add(RowObject);
             }
@@ -191,7 +196,9 @@ namespace Wiesend.DataTypes
         /// The object converted to the other type or the default value if there is an error or
         /// can't be converted
         /// </returns>
-        public static R To<T, R>(this T Object, R DefaultValue = default(R))
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        public static R To<T, R>(this T Object, R DefaultValue = default)
         {
             return Manager.To(Object, DefaultValue);
         }
@@ -209,6 +216,7 @@ namespace Wiesend.DataTypes
         /// The object converted to the other type or the default value if there is an error or
         /// can't be converted
         /// </returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         public static object To<T>(this T Object, Type ResultType, object DefaultValue = null)
         {
             return Manager.To(Object, ResultType, DefaultValue);

@@ -72,29 +72,30 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Reflection;
-using Wiesend.IoC.Interfaces.Contracts;
 
 namespace Wiesend.IoC.Interfaces.Contracts
 {
     /// <summary>
     /// IBootstrapper contract class
     /// </summary>
-    [ContractClassFor(typeof(IBootstrapper))]
+    //[ContractClassFor(typeof(IBootstrapper))]
     internal abstract class IBootstrapperContract : IBootstrapper
     {
         /// <summary>
         /// Name of the bootstrapper
         /// </summary>
+        [NotNull]
         public string Name
         {
             get
             {
-                Contract.Ensures(!string.IsNullOrEmpty(Contract.Result<string>()));
-                return "";
+                var result = "";
+                if (string.IsNullOrEmpty(result)) throw new System.InvalidOperationException($"Contract assertion not met: !string.IsNullOrEmpty($result)");
+                return result;
             }
         }
 
@@ -102,9 +103,9 @@ namespace Wiesend.IoC.Interfaces.Contracts
         /// Adds the assembly.
         /// </summary>
         /// <param name="Assemblies">The assemblies.</param>
-        public void AddAssembly(params Assembly[] Assemblies)
+        public void AddAssembly([NotNull] params Assembly[] Assemblies)
         {
-            Contract.Requires<ArgumentNullException>(Assemblies != null);
+            if (Assemblies == null) throw new ArgumentNullException(nameof(Assemblies), $"Contract assertion not met: {nameof(Assemblies)} != null");
         }
 
         /// <summary>
@@ -120,9 +121,9 @@ namespace Wiesend.IoC.Interfaces.Contracts
         /// <typeparam name="T">Object type</typeparam>
         /// <param name="Object">Object to register</param>
         /// <param name="Name">Name associated with the object</param>
-        public void Register<T>(T Object, string Name = "") where T : class
+        public void Register<T>(T Object, [NotNull] string Name = "") where T : class
         {
-            Contract.Requires<ArgumentNullException>(Name != null);
+            if (Name == null) throw new ArgumentNullException(nameof(Name), $"Contract assertion not met: {nameof(Name)} != null");
         }
 
         /// <summary>
@@ -130,9 +131,9 @@ namespace Wiesend.IoC.Interfaces.Contracts
         /// </summary>
         /// <typeparam name="T">Object type to register</typeparam>
         /// <param name="Name">Name associated with the object</param>
-        public void Register<T>(string Name = "") where T : class, new()
+        public void Register<T>([NotNull] string Name = "") where T : class, new()
         {
-            Contract.Requires<ArgumentNullException>(Name != null);
+            if (Name == null) throw new ArgumentNullException(nameof(Name), $"Contract assertion not met: {nameof(Name)} != null");
         }
 
         /// <summary>
@@ -141,11 +142,11 @@ namespace Wiesend.IoC.Interfaces.Contracts
         /// <typeparam name="T1">Base class/interface type</typeparam>
         /// <typeparam name="T2">Child class type</typeparam>
         /// <param name="Name">Name associated with the object</param>
-        public void Register<T1, T2>(string Name = "")
+        public void Register<T1, T2>([NotNull] string Name = "")
             where T1 : class
             where T2 : class, T1
         {
-            Contract.Requires<ArgumentNullException>(Name != null);
+            if (Name == null) throw new ArgumentNullException(nameof(Name), $"Contract assertion not met: {nameof(Name)} != null");
         }
 
         /// <summary>
@@ -154,9 +155,9 @@ namespace Wiesend.IoC.Interfaces.Contracts
         /// <typeparam name="T">Type that the function returns</typeparam>
         /// <param name="Function">Function to register with the type</param>
         /// <param name="Name">Name associated with the object</param>
-        public void Register<T>(Func<T> Function, string Name = "") where T : class
+        public void Register<T>([NotNull] Func<T> Function, string Name = "") where T : class
         {
-            Contract.Requires<ArgumentNullException>(Function != null);
+            if (Function == null) throw new ArgumentNullException(nameof(Function), $"Contract assertion not met: {nameof(Function)} != null");
         }
 
         /// <summary>
@@ -175,9 +176,9 @@ namespace Wiesend.IoC.Interfaces.Contracts
         /// <returns>
         /// An object of the specified type
         /// </returns>
-        public T Resolve<T>(T DefaultObject = default(T)) where T : class
+        public T Resolve<T>(T DefaultObject = default) where T : class
         {
-            return default(T);
+            return default;
         }
 
         /// <summary>
@@ -189,10 +190,10 @@ namespace Wiesend.IoC.Interfaces.Contracts
         /// <returns>
         /// An object of the specified type
         /// </returns>
-        public T Resolve<T>(string Name, T DefaultObject = default(T)) where T : class
+        public T Resolve<T>([NotNull] string Name, T DefaultObject = default) where T : class
         {
-            Contract.Requires<ArgumentNullException>(Name != null);
-            return default(T);
+            if (Name == null) throw new ArgumentNullException(nameof(Name), $"Contract assertion not met: {nameof(Name)} != null");
+            return default;
         }
 
         /// <summary>
@@ -203,10 +204,10 @@ namespace Wiesend.IoC.Interfaces.Contracts
         /// <returns>
         /// An object of the specified type
         /// </returns>
-        public object Resolve(Type ObjectType, object DefaultObject = null)
+        public object Resolve([NotNull] Type ObjectType, object DefaultObject = null)
         {
-            Contract.Requires<ArgumentNullException>(ObjectType != null);
-            return default(object);
+            if (ObjectType == null) throw new ArgumentNullException(nameof(ObjectType), $"Contract assertion not met: {nameof(ObjectType)} != null");
+            return default;
         }
 
         /// <summary>
@@ -218,11 +219,11 @@ namespace Wiesend.IoC.Interfaces.Contracts
         /// <returns>
         /// An object of the specified type
         /// </returns>
-        public object Resolve(Type ObjectType, string Name, object DefaultObject = null)
+        public object Resolve([NotNull] Type ObjectType, [NotNull] string Name, object DefaultObject = null)
         {
-            Contract.Requires<ArgumentNullException>(ObjectType != null);
-            Contract.Requires<ArgumentNullException>(Name != null);
-            return default(object);
+            if (ObjectType == null) throw new ArgumentNullException(nameof(ObjectType), $"Contract assertion not met: {nameof(ObjectType)} != null");
+            if (Name == null) throw new ArgumentNullException(nameof(Name), $"Contract assertion not met: {nameof(Name)} != null");
+            return default;
         }
 
         /// <summary>
@@ -232,10 +233,11 @@ namespace Wiesend.IoC.Interfaces.Contracts
         /// <returns>
         /// A list of objects of the specified type
         /// </returns>
+        [NotNull]
         public IEnumerable<T> ResolveAll<T>() where T : class
         {
-            Contract.Ensures(Contract.Result<IEnumerable<T>>() != null);
-            return new List<T>();
+            var result = new List<T>() ?? throw new InvalidOperationException($"Contract assertion not met: $result != null");
+            return result;
         }
 
         /// <summary>
@@ -245,11 +247,12 @@ namespace Wiesend.IoC.Interfaces.Contracts
         /// <returns>
         /// A list of objects of the specified type
         /// </returns>
-        public IEnumerable<object> ResolveAll(Type ObjectType)
+        [NotNull]
+        public IEnumerable<object> ResolveAll([NotNull] Type ObjectType)
         {
-            Contract.Requires<ArgumentNullException>(ObjectType != null);
-            Contract.Ensures(Contract.Result<IEnumerable<object>>() != null);
-            return new List<object>();
+            if (ObjectType == null) throw new ArgumentNullException(nameof(ObjectType), $"Contract assertion not met: {nameof(ObjectType)} != null");
+            var result = new List<object>() ?? throw new InvalidOperationException($"Contract assertion not met: $result != null");
+            return result;
         }
     }
 }

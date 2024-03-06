@@ -74,7 +74,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Reflection;
 using System.Text;
 using Wiesend.DataTypes.AOP.Generators.BaseClasses;
@@ -92,10 +92,9 @@ namespace Wiesend.DataTypes.AOP.Generators
         /// Initializes a new instance of the <see cref="PropertyGenerator"/> class.
         /// </summary>
         /// <param name="propertyInfo">The property information.</param>
-        public PropertyGenerator(PropertyInfo propertyInfo)
+        public PropertyGenerator([NotNull] PropertyInfo propertyInfo)
         {
-            Contract.Requires(propertyInfo != null);
-            PropertyInfo = propertyInfo;
+            PropertyInfo = propertyInfo ?? throw new ArgumentNullException(nameof(propertyInfo), $"Contract assertion not met: {nameof(propertyInfo)} != null");
             DeclaringType = PropertyInfo.DeclaringType;
         }
 
@@ -117,6 +116,8 @@ namespace Wiesend.DataTypes.AOP.Generators
         /// <param name="assembliesUsing">The assemblies using.</param>
         /// <param name="aspects">The aspects.</param>
         /// <returns>The string version of this property</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0054:Use compound assignment", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0031:Use null propagation", Justification = "<Pending>")]
         public string Generate(List<Assembly> assembliesUsing, IEnumerable<IAspect> aspects)
         {
             aspects = aspects ?? new List<IAspect>();
@@ -166,6 +167,7 @@ namespace Wiesend.DataTypes.AOP.Generators
         /// Returns a <see cref="System.String"/> that represents this instance.
         /// </summary>
         /// <returns>A <see cref="System.String"/> that represents this instance.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "<Pending>")]
         public override string ToString()
         {
             var Method = PropertyInfo.GetGetMethod() ?? PropertyInfo.GetSetMethod();
@@ -176,6 +178,7 @@ namespace Wiesend.DataTypes.AOP.Generators
                 PropertyInfo.Name);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "<Pending>")]
         private string CreateBackingField(bool v)
         {
             if (!v)

@@ -75,7 +75,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Linq.Expressions;
 using Wiesend.DataTypes;
 using Wiesend.ORM.Manager.Mapper.Interfaces;
@@ -87,6 +87,7 @@ namespace Wiesend.ORM.Manager.Mapper.BaseClasses
     /// <summary>
     /// Property base class
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public abstract class PropertyBase<ClassType, DataType, ReturnType> : IProperty<ClassType, DataType, ReturnType>, IProperty<ClassType, DataType>
         where ClassType : class
         where ReturnType : IProperty<ClassType, DataType, ReturnType>
@@ -96,9 +97,10 @@ namespace Wiesend.ORM.Manager.Mapper.BaseClasses
         /// </summary>
         /// <param name="Expression">Expression used to point to the property</param>
         /// <param name="Mapping">Mapping the StringID is added to</param>
-        protected PropertyBase(Expression<Func<ClassType, DataType>> Expression, IMapping Mapping)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0016:Use 'throw' expression", Justification = "<Pending>")]
+        protected PropertyBase([NotNull] Expression<Func<ClassType, DataType>> Expression, IMapping Mapping)
         {
-            Contract.Requires<ArgumentNullException>(Expression != null, "Expression");
+            if (Expression == null) throw new ArgumentNullException(nameof(Expression));
             this.Expression = Expression;
             Name = Expression.PropertyName();
             Type = typeof(DataType);
@@ -106,7 +108,7 @@ namespace Wiesend.ORM.Manager.Mapper.BaseClasses
             this.Mapping = Mapping;
             CompiledExpression = this.Expression.Compile();
             MaxLength = typeof(DataType) == typeof(string) ? 100 : 0;
-            DefaultValue = () => default(DataType);
+            DefaultValue = () => default;
         }
 
         /// <summary>
@@ -228,6 +230,7 @@ namespace Wiesend.ORM.Manager.Mapper.BaseClasses
         /// <param name="first">First item</param>
         /// <param name="second">Second item</param>
         /// <returns>True if the first item is less than the second, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
         public static bool operator <(PropertyBase<ClassType, DataType, ReturnType> first, PropertyBase<ClassType, DataType, ReturnType> second)
         {
             if (ReferenceEquals(first, second))
@@ -243,6 +246,7 @@ namespace Wiesend.ORM.Manager.Mapper.BaseClasses
         /// <param name="first">First item</param>
         /// <param name="second">Second item</param>
         /// <returns>true if the first and second item are the same, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
         public static bool operator ==(PropertyBase<ClassType, DataType, ReturnType> first, PropertyBase<ClassType, DataType, ReturnType> second)
         {
             if (ReferenceEquals(first, second))
@@ -260,6 +264,7 @@ namespace Wiesend.ORM.Manager.Mapper.BaseClasses
         /// <param name="first">First item</param>
         /// <param name="second">Second item</param>
         /// <returns>True if the first item is greater than the second, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
         public static bool operator >(PropertyBase<ClassType, DataType, ReturnType> first, PropertyBase<ClassType, DataType, ReturnType> second)
         {
             if (ReferenceEquals(first, second))
@@ -310,6 +315,7 @@ namespace Wiesend.ORM.Manager.Mapper.BaseClasses
         /// </summary>
         /// <param name="obj">Object to compare to</param>
         /// <returns>True if they are equal, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
         public override bool Equals(object obj)
         {
             var SecondObj = obj as PropertyBase<ClassType, DataType, ReturnType>;

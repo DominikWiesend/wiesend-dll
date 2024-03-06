@@ -163,10 +163,8 @@ namespace Wiesend.IO.FileSystem.Default
         {
             get
             {
-                using (Stream TempStream = AssemblyFrom.GetManifestResourceStream(Resource))
-                {
-                    return TempStream.Length;
-                }
+                using Stream TempStream = AssemblyFrom.GetManifestResourceStream(Resource);
+                return TempStream.Length;
             }
         }
 
@@ -265,24 +263,21 @@ namespace Wiesend.IO.FileSystem.Default
         {
             if (InternalFile == null)
                 return "";
-            using (Stream TempStream = AssemblyFrom.GetManifestResourceStream(Resource))
-            {
-                return TempStream.ReadAll();
-            }
+            using Stream TempStream = AssemblyFrom.GetManifestResourceStream(Resource);
+            return TempStream.ReadAll();
         }
 
         /// <summary>
         /// Reads the Resource page
         /// </summary>
         /// <returns>The content as a byte array</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public override byte[] ReadBinary()
         {
             if (InternalFile == null)
                 return new byte[0];
-            using (Stream TempStream = AssemblyFrom.GetManifestResourceStream(Resource))
-            {
-                return TempStream.ReadAllBinary();
-            }
+            using Stream TempStream = AssemblyFrom.GetManifestResourceStream(Resource);
+            return TempStream.ReadAllBinary();
         }
 
         /// <summary>
@@ -311,6 +306,7 @@ namespace Wiesend.IO.FileSystem.Default
         /// <param name="Content">Not used</param>
         /// <param name="Mode">Not used</param>
         /// <returns>The result of the write or original content</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public override byte[] Write(byte[] Content, System.IO.FileMode Mode = FileMode.Create)
         {
             return new byte[0];

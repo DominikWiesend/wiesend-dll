@@ -123,6 +123,8 @@ namespace Wiesend.DataTypes
         /// <summary>
         /// The delegates_
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         private List<NotifyCollectionChangedEventHandler> CollectionChangedDelegates = new List<NotifyCollectionChangedEventHandler>();
 
         /// <summary>
@@ -133,6 +135,8 @@ namespace Wiesend.DataTypes
         /// <summary>
         /// The property changed delegates
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         private List<PropertyChangedEventHandler> PropertyChangedDelegates = new List<PropertyChangedEventHandler>();
 
         /// <summary>
@@ -176,6 +180,7 @@ namespace Wiesend.DataTypes
         /// <summary>
         /// Gets the number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Documentation", "CA1200:Avoid using cref tags with a prefix", Justification = "<Pending>")]
         public int Count
         {
             get { return BaseList.Count; }
@@ -185,6 +190,7 @@ namespace Wiesend.DataTypes
         /// Gets a value indicating whether the <see
         /// cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Documentation", "CA1200:Avoid using cref tags with a prefix", Justification = "<Pending>")]
         public bool IsReadOnly
         {
             get { return false; }
@@ -222,10 +228,11 @@ namespace Wiesend.DataTypes
         /// The object to be added to the end of the <see
         /// cref="T:System.Collections.Generic.List`1"/>. The value can be null for reference types.
         /// </param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Documentation", "CA1200:Avoid using cref tags with a prefix", Justification = "<Pending>")]
         public virtual void Add(T item)
         {
             NotifyCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item));
-            NotifyPropertyChanged("Count");
+            NotifyPropertyChanged(nameof(Count));
             BaseList.Add(item);
         }
 
@@ -236,17 +243,18 @@ namespace Wiesend.DataTypes
         public virtual void AddRange(IEnumerable<T> collection)
         {
             NotifyCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, collection));
-            NotifyPropertyChanged("Count");
+            NotifyPropertyChanged(nameof(Count));
             BaseList.AddRange(collection);
         }
 
         /// <summary>
         /// Removes all elements from the <see cref="T:System.Collections.Generic.List`1"/>.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Documentation", "CA1200:Avoid using cref tags with a prefix", Justification = "<Pending>")]
         public virtual void Clear()
         {
             NotifyCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
-            NotifyPropertyChanged("Count");
+            NotifyPropertyChanged(nameof(Count));
             BaseList.Clear();
         }
 
@@ -270,6 +278,7 @@ namespace Wiesend.DataTypes
         /// true if <paramref name="item"/> is found in the <see
         /// cref="T:System.Collections.Generic.ICollection`1"/>; otherwise, false.
         /// </returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Documentation", "CA1200:Avoid using cref tags with a prefix", Justification = "<Pending>")]
         public bool Contains(T item)
         {
             return BaseList.Contains(item);
@@ -292,6 +301,7 @@ namespace Wiesend.DataTypes
         /// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate
         /// through the collection.
         /// </returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Documentation", "CA1200:Avoid using cref tags with a prefix", Justification = "<Pending>")]
         public IEnumerator<T> GetEnumerator()
         {
             return BaseList.GetEnumerator();
@@ -302,6 +312,7 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="item">The object to locate in the <see cref="T:System.Collections.Generic.IList`1"/>.</param>
         /// <returns>The index of <paramref name="item"/> if found in the list; otherwise, -1.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Documentation", "CA1200:Avoid using cref tags with a prefix", Justification = "<Pending>")]
         public int IndexOf(T item)
         {
             return BaseList.IndexOf(item);
@@ -315,10 +326,11 @@ namespace Wiesend.DataTypes
         /// The zero-based index at which <paramref name="item"/> should be inserted.
         /// </param>
         /// <param name="item">The object to insert. The value can be null for reference types.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Documentation", "CA1200:Avoid using cref tags with a prefix", Justification = "<Pending>")]
         public virtual void Insert(int index, T item)
         {
             NotifyCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, item, index));
-            NotifyPropertyChanged("Count");
+            NotifyPropertyChanged(nameof(Count));
             BaseList.Insert(index, item);
         }
 
@@ -330,7 +342,7 @@ namespace Wiesend.DataTypes
         public virtual void InsertRange(int index, IEnumerable<T> collection)
         {
             NotifyCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Add, collection.ToList(), index));
-            NotifyPropertyChanged("Count");
+            NotifyPropertyChanged(nameof(Count));
             BaseList.InsertRange(index, collection);
         }
 
@@ -338,6 +350,7 @@ namespace Wiesend.DataTypes
         /// Notifies the list that an item in the list has been modified.
         /// </summary>
         /// <param name="itemChanged">The item that was changed.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1005:Delegate invocation can be simplified.", Justification = "<Pending>")]
         public void NotifyObjectChanged(object itemChanged)
         {
             var Handler = collectionChanged_;
@@ -356,10 +369,11 @@ namespace Wiesend.DataTypes
         /// true if <paramref name="item"/> is successfully removed; otherwise, false. This method
         /// also returns false if <paramref name="item"/> was not found in the <see cref="T:System.Collections.Generic.List`1"/>.
         /// </returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Documentation", "CA1200:Avoid using cref tags with a prefix", Justification = "<Pending>")]
         public virtual bool Remove(T item)
         {
             NotifyCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, item));
-            NotifyPropertyChanged("Count");
+            NotifyPropertyChanged(nameof(Count));
             return BaseList.Remove(item);
         }
 
@@ -371,7 +385,7 @@ namespace Wiesend.DataTypes
         public virtual int RemoveAll(Predicate<T> match)
         {
             NotifyCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, this.Where(x => match(x))));
-            NotifyPropertyChanged("Count");
+            NotifyPropertyChanged(nameof(Count));
             return BaseList.RemoveAll(match);
         }
 
@@ -379,10 +393,11 @@ namespace Wiesend.DataTypes
         /// Removes the element at the specified index of the <see cref="T:System.Collections.Generic.List`1"/>.
         /// </summary>
         /// <param name="index">The zero-based index of the element to remove.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Documentation", "CA1200:Avoid using cref tags with a prefix", Justification = "<Pending>")]
         public virtual void RemoveAt(int index)
         {
             NotifyCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove, this[index], index));
-            NotifyPropertyChanged("Count");
+            NotifyPropertyChanged(nameof(Count));
             BaseList.RemoveAt(index);
         }
 
@@ -391,12 +406,13 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="index">The zero-based starting index of the range of elements to remove.</param>
         /// <param name="count">The number of elements to remove.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Documentation", "CA1200:Avoid using cref tags with a prefix", Justification = "<Pending>")]
         public virtual void RemoveRange(int index, int count)
         {
             NotifyCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Remove,
                                                                                     this.ElementsBetween(index, index + count),
                                                                                     index));
-            NotifyPropertyChanged("Count");
+            NotifyPropertyChanged(nameof(Count));
             BaseList.RemoveRange(index, count);
         }
 
@@ -407,6 +423,7 @@ namespace Wiesend.DataTypes
         /// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate
         /// through the collection.
         /// </returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Documentation", "CA1200:Avoid using cref tags with a prefix", Justification = "<Pending>")]
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
             return BaseList.GetEnumerator();
@@ -418,6 +435,7 @@ namespace Wiesend.DataTypes
         /// <param name="args">
         /// The <see cref="NotifyCollectionChangedEventArgs"/> instance containing the event data.
         /// </param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1005:Delegate invocation can be simplified.", Justification = "<Pending>")]
         protected void NotifyCollectionChanged(NotifyCollectionChangedEventArgs args)
         {
             var Handler = collectionChanged_;
@@ -429,6 +447,7 @@ namespace Wiesend.DataTypes
         /// Notifies the property changed.
         /// </summary>
         /// <param name="propertyName">Name of the property.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1005:Delegate invocation can be simplified.", Justification = "<Pending>")]
         protected void NotifyPropertyChanged([CallerMemberName]string propertyName = "")
         {
             var Handler = propertyChanged_;

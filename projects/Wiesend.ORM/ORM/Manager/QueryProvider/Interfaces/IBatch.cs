@@ -97,6 +97,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Interfaces
         /// <param name="CallBack">Callback action</param>
         /// <param name="Object">Object used in the callback action</param>
         /// <returns>This</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         IBatch AddCommand(Action<Command, IList<dynamic>> CallBack, object Object, CommandType CommandType, string Command);
 
         /// <summary>
@@ -108,6 +109,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Interfaces
         /// <param name="CallBack">Callback action</param>
         /// <param name="Object">Object used in the callback action</param>
         /// <returns>This</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         IBatch AddCommand(Action<Command, IList<dynamic>> CallBack, object Object, string Command, CommandType CommandType, params object[] Parameters);
 
         /// <summary>
@@ -119,6 +121,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Interfaces
         /// <param name="CallBack">Callback action</param>
         /// <param name="Object">Object used in the callback action</param>
         /// <returns>This</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         IBatch AddCommand(Action<Command, IList<dynamic>> CallBack, object Object, string Command, CommandType CommandType, params IParameter[] Parameters);
 
         /// <summary>

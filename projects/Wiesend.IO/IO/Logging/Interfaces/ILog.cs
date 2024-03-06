@@ -72,7 +72,6 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-#if NETFULL
 using System;
 using Wiesend.IO.Logging.Enums;
 
@@ -99,4 +98,3 @@ namespace Wiesend.IO.Logging.Interfaces
         void LogMessage(string Message, MessageType Type, params object[] args);
     }
 }
-#endif

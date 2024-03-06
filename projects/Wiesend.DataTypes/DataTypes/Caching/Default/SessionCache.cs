@@ -72,7 +72,6 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-#if NETFULL
 using System.Collections.Generic;
 using System.Web;
 using Wiesend.DataTypes.Caching.BaseClasses;
@@ -108,9 +107,7 @@ namespace Wiesend.DataTypes.Caching.Default
                     return new List<string>();
                 var Temp = new List<string>();
                 foreach (string Key in HttpContext.Current.Session.Keys)
-                {
                     Temp.Add(Key);
-                }
                 return Temp;
             }
         }
@@ -131,9 +128,7 @@ namespace Wiesend.DataTypes.Caching.Default
                     return new List<object>();
                 var Temp = new List<object>();
                 foreach (string Key in HttpContext.Current.Session.Keys)
-                {
                     Temp.Add(HttpContext.Current.Session[Key]);
-                }
                 return Temp;
             }
         }
@@ -175,6 +170,7 @@ namespace Wiesend.DataTypes.Caching.Default
         /// </summary>
         /// <param name="key">Key to check</param>
         /// <returns>True if it is there, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1841:Prefer Dictionary.Contains methods", Justification = "<Pending>")]
         public override bool ContainsKey(string key)
         {
             if (HttpContext.Current == null)
@@ -204,9 +200,7 @@ namespace Wiesend.DataTypes.Caching.Default
                 return new List<KeyValuePair<string, object>>().GetEnumerator();
             var Temp = new List<KeyValuePair<string, object>>();
             foreach (string Key in HttpContext.Current.Session.Keys)
-            {
                 Temp.Add(new KeyValuePair<string, object>(Key, HttpContext.Current.Session[Key]));
-            }
             return Temp.GetEnumerator();
         }
 
@@ -265,4 +259,3 @@ namespace Wiesend.DataTypes.Caching.Default
         }
     }
 }
-#endif

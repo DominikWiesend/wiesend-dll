@@ -72,7 +72,6 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-#if NETFULL
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -189,6 +188,7 @@ namespace Wiesend.DataTypes.Caching.Default
         /// </summary>
         /// <param name="key">Key to check</param>
         /// <returns>True if it is there, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1841:Prefer Dictionary.Contains methods", Justification = "<Pending>")]
         public override bool ContainsKey(string key)
         {
             if (HttpContext.Current == null)
@@ -217,9 +217,7 @@ namespace Wiesend.DataTypes.Caching.Default
                 return new List<KeyValuePair<string, object>>().GetEnumerator();
             var Temp = new List<KeyValuePair<string, object>>();
             foreach (string Key in Keys)
-            {
                 Temp.Add(new KeyValuePair<string, object>(Key, HttpContext.Current.Cache.Get(Key)));
-            }
             return Temp.GetEnumerator();
         }
 
@@ -278,4 +276,3 @@ namespace Wiesend.DataTypes.Caching.Default
         }
     }
 }
-#endif

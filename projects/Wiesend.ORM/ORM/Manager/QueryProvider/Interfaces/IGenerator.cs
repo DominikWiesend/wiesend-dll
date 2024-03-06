@@ -112,6 +112,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Interfaces
         /// </summary>
         /// <param name="Object">Object to delete</param>
         /// <returns>Batch with the appropriate commands</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         IBatch Delete(T Object);
 
         /// <summary>
@@ -126,6 +127,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Interfaces
         /// </summary>
         /// <param name="Object">Object to insert</param>
         /// <returns>Batch with the appropriate commands</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         IBatch Insert(T Object);
 
         /// <summary>
@@ -142,6 +144,8 @@ namespace Wiesend.ORM.Manager.QueryProvider.Interfaces
         /// <param name="Object">Object</param>
         /// <typeparam name="P">Property type</typeparam>
         /// <returns>The batch with the appropriate commands</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         IBatch JoinsDelete<P>(IProperty<T, P> Property, T Object);
 
         /// <summary>
@@ -152,6 +156,8 @@ namespace Wiesend.ORM.Manager.QueryProvider.Interfaces
         /// <typeparam name="P">Property type</typeparam>
         /// <typeparam name="ItemType">Item type</typeparam>
         /// <returns>The batch with the appropriate commands</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         IBatch JoinsSave<P, ItemType>(IProperty<T, P> Property, T Object);
 
         /// <summary>
@@ -161,6 +167,8 @@ namespace Wiesend.ORM.Manager.QueryProvider.Interfaces
         /// <param name="Object">Object to get the property for</param>
         /// <param name="Property">Property to get</param>
         /// <returns>Batch with the appropriate commands</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         IBatch LoadProperty<P>(T Object, IProperty Property);
 
         /// <summary>
@@ -187,6 +195,8 @@ namespace Wiesend.ORM.Manager.QueryProvider.Interfaces
         /// </summary>
         /// <typeparam name="PrimaryKeyType">Primary key type</typeparam>
         /// <param name="Object">Object to save</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         IBatch Save<PrimaryKeyType>(T Object);
 
         /// <summary>
@@ -200,6 +210,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Interfaces
         /// </summary>
         /// <typeparam name="D">Data type</typeparam>
         /// <param name="Property">Map property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         void SetupLoadCommands<D>(Map<T, D> Property)
             where D : class;
 
@@ -208,6 +219,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Interfaces
         /// </summary>
         /// <typeparam name="D">Data type</typeparam>
         /// <param name="Property">IEnumerableManyToOne property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         void SetupLoadCommands<D>(IEnumerableManyToOne<T, D> Property)
             where D : class;
 
@@ -216,6 +228,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Interfaces
         /// </summary>
         /// <typeparam name="D">Data type</typeparam>
         /// <param name="Property">ListManyToOne property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         void SetupLoadCommands<D>(ListManyToOne<T, D> Property)
             where D : class;
 
@@ -232,6 +245,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Interfaces
         /// </summary>
         /// <typeparam name="D">Data type</typeparam>
         /// <param name="Property">ListManyToMany property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         void SetupLoadCommands<D>(IListManyToMany<T, D> Property)
             where D : class;
 
@@ -240,6 +254,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Interfaces
         /// </summary>
         /// <typeparam name="D"></typeparam>
         /// <param name="Property">The property.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         void SetupLoadCommands<D>(IListManyToOne<T, D> Property)
             where D : class;
 
@@ -248,6 +263,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Interfaces
         /// </summary>
         /// <typeparam name="D">Data type</typeparam>
         /// <param name="Property">ListManyToMany property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         void SetupLoadCommands<D>(ICollectionManyToMany<T, D> Property)
             where D : class;
 
@@ -256,6 +272,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Interfaces
         /// </summary>
         /// <typeparam name="D"></typeparam>
         /// <param name="Property">The property.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         void SetupLoadCommands<D>(ICollectionManyToOne<T, D> Property)
             where D : class;
 
@@ -264,6 +281,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Interfaces
         /// </summary>
         /// <typeparam name="D">Data type</typeparam>
         /// <param name="Property">ManyToMany property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         void SetupLoadCommands<D>(ManyToMany<T, D> Property)
             where D : class;
 
@@ -272,6 +290,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Interfaces
         /// </summary>
         /// <typeparam name="D">Data type</typeparam>
         /// <param name="Property">ManyToOne property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         void SetupLoadCommands<D>(ManyToOne<T, D> Property)
             where D : class;
 
@@ -280,6 +299,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Interfaces
         /// </summary>
         /// <param name="Object">Object to update</param>
         /// <returns>Batch with the appropriate commands</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         IBatch Update(T Object);
 
         /// <summary>

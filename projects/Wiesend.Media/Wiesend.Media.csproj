@@ -1,134 +1,213 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project>
 
-  <!-- Target Fameworks [.NET Framework 4.5] -->
+  <!-- ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗  -->
+  <!-- ║ [ProjectRoot] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [ProjectRoot] ║  -->
+  <!-- ║ [ProjectRoot] □■□ |xx| □■□ - - - » Project: Import SDKs (implicit top import)                                                                                              □■□ |xx| □■□ [ProjectRoot] ║  -->
+  <!-- ║ [ProjectRoot] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [ProjectRoot] ║  -->
+  <!-- ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝  -->
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.props" />
+
+  <!-- ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ - - - » Project: Target Fameworks                                                                                                           □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝  -->
   <PropertyGroup>
-    <TargetFrameworks>net45</TargetFrameworks>
+    <LangVersion>latest</LangVersion>
+    <TargetFrameworks>net45;net48;netstandard2.0;netstandard2.1;net6.0;net7.0</TargetFrameworks>
   </PropertyGroup>
 
-  <!-- Set the [CodeContracts] settings for [.NET Framework 4.5] -->
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net45'">
-    <CodeContractsAssemblyMode>1</CodeContractsAssemblyMode>
-    <CodeContractsEnableRuntimeChecking>True</CodeContractsEnableRuntimeChecking>
-    <CodeContractsRuntimeOnlyPublicSurface>False</CodeContractsRuntimeOnlyPublicSurface>
-    <CodeContractsRuntimeThrowOnFailure>True</CodeContractsRuntimeThrowOnFailure>
-    <CodeContractsRuntimeCallSiteRequires>False</CodeContractsRuntimeCallSiteRequires>
-    <CodeContractsRuntimeSkipQuantifiers>False</CodeContractsRuntimeSkipQuantifiers>
-    <CodeContractsRunCodeAnalysis>True</CodeContractsRunCodeAnalysis>
-    <CodeContractsNonNullObligations>True</CodeContractsNonNullObligations>
-    <CodeContractsBoundsObligations>True</CodeContractsBoundsObligations>
-    <CodeContractsArithmeticObligations>False</CodeContractsArithmeticObligations>
-    <CodeContractsEnumObligations>False</CodeContractsEnumObligations>
-    <CodeContractsRedundantAssumptions>False</CodeContractsRedundantAssumptions>
-    <CodeContractsMissingPublicRequiresAsWarnings>True</CodeContractsMissingPublicRequiresAsWarnings>
-    <CodeContractsInferRequires>True</CodeContractsInferRequires>
-    <CodeContractsInferEnsures>False</CodeContractsInferEnsures>
-    <CodeContractsInferObjectInvariants>False</CodeContractsInferObjectInvariants>
-    <CodeContractsSuggestAssumptions>False</CodeContractsSuggestAssumptions>
-    <CodeContractsSuggestRequires>True</CodeContractsSuggestRequires>
-    <CodeContractsSuggestEnsures>False</CodeContractsSuggestEnsures>
-    <CodeContractsSuggestObjectInvariants>False</CodeContractsSuggestObjectInvariants>
-    <CodeContractsRunInBackground>True</CodeContractsRunInBackground>
-    <CodeContractsShowSquigglies>True</CodeContractsShowSquigglies>
-    <CodeContractsUseBaseLine>False</CodeContractsUseBaseLine>
-    <CodeContractsCustomRewriterAssembly />
-    <CodeContractsCustomRewriterClass />
-    <CodeContractsLibPaths />
-    <CodeContractsExtraRewriteOptions />
-    <CodeContractsExtraAnalysisOptions />
-    <CodeContractsSQLServerOption />
-    <CodeContractsBaseLineFile />
-    <CodeContractsCacheAnalysisResults>True</CodeContractsCacheAnalysisResults>
-    <CodeContractsFailBuildOnWarnings>False</CodeContractsFailBuildOnWarnings>
-    <CodeContractsRuntimeCheckingLevel>Full</CodeContractsRuntimeCheckingLevel>
-    <CodeContractsAnalysisWarningLevel>0</CodeContractsAnalysisWarningLevel>
-    <CodeContractsReferenceAssembly>Build</CodeContractsReferenceAssembly>
-    <CodeContractsEmitXMLDocs>False</CodeContractsEmitXMLDocs>
-    <CodeContractsAssertsToContractsCheckBox>True</CodeContractsAssertsToContractsCheckBox>
-    <CodeContractsRedundantTests>True</CodeContractsRedundantTests>
-    <CodeContractsMissingPublicEnsuresAsWarnings>False</CodeContractsMissingPublicEnsuresAsWarnings>
-    <CodeContractsInferEnsuresAutoProperties>True</CodeContractsInferEnsuresAutoProperties>
-    <CodeContractsSuggestAssumptionsForCallees>False</CodeContractsSuggestAssumptionsForCallees>
-    <CodeContractsNecessaryEnsures>True</CodeContractsNecessaryEnsures>
-    <CodeContractsSuggestReadonly>True</CodeContractsSuggestReadonly>
-    <CodeContractsSkipAnalysisIfCannotConnectToCache>False</CodeContractsSkipAnalysisIfCannotConnectToCache>
-    <CodeContractsBeingOptimisticOnExternal>True</CodeContractsBeingOptimisticOnExternal>
-  </PropertyGroup>
-
-  <!-- Product specific values -->
+  <!-- ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ - - - » Project: Product Specifications (Info)                                                                                              □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝  -->
   <PropertyGroup>
+    <RootNamespace>Wiesend</RootNamespace>
     <AssemblyName>Wiesend.Media</AssemblyName>
-    <RootNamespace>Wiesend.Media</RootNamespace>
-    <AssemblyOriginatorKeyFile>[InternalKeys]\Wiesend.Media.snk</AssemblyOriginatorKeyFile>
+    <Title>Dominik Wiesend's [Dynamic Link Library] - Wiesend.Media</Title>
     <Product>Dominik Wiesend's [Dynamic Link Library] - Wiesend.Media</Product>
-    <PackageTags>wiesend, wiesend-dll, wiesend media</PackageTags>
+    <Description>Wiesend's Dynamic Link Library is a collection of reusable code that I've written, or found throughout my programming career. It includes code to help with tasks including encryption, file management, compression, serialization, email, image manipulation, SQL, various file formats (CSV, iCal, etc.), randomization, validation, various data types, reflection, code gen, events, code profiling, math related classes, etc.</Description>
   </PropertyGroup>
 
-  <!-- Product non-specific values -->
+  <!-- ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ - - - » Project: Company & Copyright                                                                                                        □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝  -->
   <PropertyGroup>
-    <Description>Wiesend's Dynamic Link Library is a collection of reusable code that I've written, or found throughout my programming career. It includes code to help with tasks including encryption, file management, compression, serialization, email, image manipulation, SQL, various file formats (CSV, iCal, etc.), randomization, validation, various data types, reflection, code gen, events, code profiling, math related classes, etc.</Description>
-    <NeutralLanguage>en-US</NeutralLanguage>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicenseUrl>https://github.com/DominikWiesend/wiesend-dll/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>https://dominikwiesend.github.io/wiesend-dll/</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/DominikWiesend/wiesend-dll</RepositoryUrl>
-    <RepositoryType>GitHub Repository</RepositoryType>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-    <PackageReleaseNotes />
-    <Company>Dominik Wiesend Cooperation</Company>
     <Authors>Dominik Wiesend</Authors>
+    <Company>Dominik Wiesend Cloud (Solutions)</Company>
     <Copyright>Copyright(c) 2018 Dominik Wiesend. All rights reserved.</Copyright>
+  </PropertyGroup>
+
+  <!-- ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ - - - » Variables: Custom Variables (Configuration)                                                                                         □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝  -->
+  <PropertyGroup>
+    <ProjectBuildType       Condition="'$(ProjectBuildType)'       == ''">Dynamic Link Library</ProjectBuildType>
+    <GitHubRepositoryName   Condition="'$(GitHubRepositoryName)'   == ''">wiesend-dll</GitHubRepositoryName>
+    <GitHubRepositoryRoot   Condition="'$(GitHubRepositoryRoot)'   == ''">https://github.com/DominikWiesend</GitHubRepositoryRoot>
+    <GitHubRepositoryType   Condition="'$(GitHubRepositoryType)'   == ''">GitHub Repository</GitHubRepositoryType>
+    <NugetPackageTags       Condition="'$(NugetPackageTags)'       == ''">wiesend;lib;library;dll;media</NugetPackageTags>
+    <NugetPackageName       Condition="'$(NugetPackageName)'       == ''">Wiesend.Media</NugetPackageName>
+    <NugetPackageVersion    Condition="'$(NugetPackageVersion)'    == ''">5.0.3.0</NugetPackageVersion>
+    <NugetPackageExtensions Condition="'$(NugetPackageExtensions)' == ''">.pdb</NugetPackageExtensions>
+  </PropertyGroup>
+
+  <!-- ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ - - - » Project: Configurations (Debug & Release)                                                                                           □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝  -->
+  <PropertyGroup>
+    <Configurations>Debug;Release</Configurations>
+  </PropertyGroup>
+
+  <!-- ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ - - - » Project: Signing & Sealing (KeyFile)                                                                                                □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝  -->
+  <PropertyGroup>
     <SignAssembly>true</SignAssembly>
-    <Version>5.0.1.0</Version>
+    <AssemblyOriginatorKeyFile>..\..\keys\$(AssemblyName).snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <!-- ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ - - - » Project: Settings (Default)                                                                                                         □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝  -->
+  <PropertyGroup>
+    <IncludeSymbols>false</IncludeSymbols>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <NeutralLanguage>en-US</NeutralLanguage>
     <FileVersion>4.0.0.0</FileVersion>
     <AssemblyVersion>4.0.0.0</AssemblyVersion>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Optimize>true</Optimize>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <NoWarn>CA1716;NU1803;1701;1702;1705</NoWarn>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DocumentationFile />
   </PropertyGroup>
 
-  <!-- Configuration (PropertyGroup) for [.NET Framework 4.5] -->
+  <!-- ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ - - - » Repository: Settings                                                                                                                □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝  -->
   <PropertyGroup>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <NoWarn>1701;1702;1705</NoWarn>
+    <RepositoryType>$(GitHubRepositoryType)</RepositoryType>
+    <RepositoryUrl>$(GitHubRepositoryRoot)/$(GitHubRepositoryName)</RepositoryUrl>
   </PropertyGroup>
 
-  <!-- Constants (define) for the [Debug]-Configuration -->
-  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
-    <DefineConstants>TRACE;DEBUG;</DefineConstants>
-    <RunCodeAnalysis>True</RunCodeAnalysis>
+  <!-- ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ - - - » Project: Settings (Default)                                                                                                         □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝  -->
+  <PropertyGroup>
+    <PackageReleaseNotes />
+    <PackageId>$(AssemblyName)</PackageId>
+    <PackageTags>$(NugetPackageTags)</PackageTags>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageProjectUrl>$(GitHubRoot)/$(GitHubRepositoryName)/</PackageProjectUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Version>$(NugetPackageVersion)</Version>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);$(NugetPackageExtensions)</AllowedOutputExtensionsInPackageBuildOutputFolder>
   </PropertyGroup>
 
-  <!-- Property group for the [Release]-Configuration -->
-  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <DefineConstants>RELEASE</DefineConstants>
-    <RunCodeAnalysis>False</RunCodeAnalysis>
-    <GenerateDocumentationFile>True</GenerateDocumentationFile>
-    <IncludeSymbols>False</IncludeSymbols>
-  </PropertyGroup>
-
-  <!-- Property group for the [.NET Framework 4.5]-Configuration -->
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net45'">
-    <DebugType>pdbonly</DebugType>
-    <DebugSymbols>True</DebugSymbols>
-    <CodeAnalysisRuleSet>..\AnalyzerSet.ruleset</CodeAnalysisRuleSet>
-    <CodeContractsRuntimeCheckingLevel>ReleaseRequires</CodeContractsRuntimeCheckingLevel>
-  </PropertyGroup>
-
-  <!-- Constants (define) for [.NET Framework 4.5] -->
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net45'">
-    <DefineConstants>NET45;NETFULL</DefineConstants>
-  </PropertyGroup>
-
-  <!-- Nuget packages for [.NET Framework 4.5] (Projects)-->
+  <!-- ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗  -->
+  <!-- ║ [ItemGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [ItemGroup] ║  -->
+  <!-- ║ [ItemGroup] □■□ |xx| □■□ - - - » Project: Copyright (License)                                                                                                                □■□ |xx| □■□ [ItemGroup] ║  -->
+  <!-- ║ [ItemGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [ItemGroup] ║  -->
+  <!-- ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝  -->
   <ItemGroup>
-    <ProjectReference Include="..\Wiesend.DataTypes\Wiesend.DataTypes.csproj" />
-    <ProjectReference Include="..\Wiesend.IoC\Wiesend.IoC.csproj" />
-    <ProjectReference Include="..\Wiesend.Random\Wiesend.Random.csproj" />
+    <None Include="..\..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
-  <!-- Nuget packages for [.NET Framework 4.5] -->
-  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
-    <Reference Include="Microsoft.CSharp" />
+  <!-- ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ - - - » Project: CodeAnalysis Settings                                                                                                      □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝  -->
+  <PropertyGroup>
+    <Nullable>disable</Nullable>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <AnalysisModeSecurity>All</AnalysisModeSecurity>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <AutoGenerateBindingRedirects>False</AutoGenerateBindingRedirects>
+    <CodeAnalysisRuleSet>..\AnalyzerSet.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+
+  <!-- ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ - - - » Project: Settings (Debug)                                                                                                           □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝  -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+  </PropertyGroup>
+
+  <!-- ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ - - - » Project: Settings (Release)                                                                                                         □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ║ [PropertyGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [PropertyGroup] ║  -->
+  <!-- ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝  -->
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'">
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DefineConstants>RELEASE</DefineConstants>
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+
+  <!-- ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗  -->
+  <!-- ║ [ItemGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [ItemGroup] ║  -->
+  <!-- ║ [ItemGroup] □■□ |xx| □■□ - - - » Projects: Define Constants  >>>  [TargetFramework]                                                                                          □■□ |xx| □■□ [ItemGroup] ║  -->
+  <!-- ║ [ItemGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [ItemGroup] ║  -->
+  <!-- ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝  -->
+  <PropertyGroup>
+    <DefineConstants Condition="'$(TargetFramework)' == 'net6.0'">$(DefineConstants);NET;NET60</DefineConstants>
+    <DefineConstants Condition="'$(TargetFramework)' == 'net7.0'">$(DefineConstants);NET;NET70</DefineConstants>
+    <DefineConstants Condition="'$(TargetFramework)' == 'net45'">$(DefineConstants);NETFRAMEWORK;NET45</DefineConstants>
+    <DefineConstants Condition="'$(TargetFramework)' == 'net48'">$(DefineConstants);NETFRAMEWORK;NET48</DefineConstants>
+    <DefineConstants Condition="'$(TargetFramework)' == 'netstandard2.0'">$(DefineConstants);NETSTANDARD;NETSTANDARD20</DefineConstants>
+    <DefineConstants Condition="'$(TargetFramework)' == 'netstandard2.1'">$(DefineConstants);NETSTANDARD;NETSTANDARD21</DefineConstants>
+  </PropertyGroup>
+
+  <!-- ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗  -->
+  <!-- ║ [ItemGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [ItemGroup] ║  -->
+  <!-- ║ [ItemGroup] □■□ |xx| □■□ - - - » Reference: Include (ProjectReference)                                                                                                       □■□ |xx| □■□ [ItemGroup] ║  -->
+  <!-- ║ [ItemGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [ItemGroup] ║  -->
+  <!-- ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝  -->
+  <ItemGroup>
+    <ProjectReference Include="..\Wiesend.DataTypes\Wiesend.DataTypes.csproj" />
+    <ProjectReference Include="..\Wiesend.Random\Wiesend.Random.csproj" />
+    <ProjectReference Include="..\Wiesend.IoC\Wiesend.IoC.csproj" />
+  </ItemGroup>
+
+  <!-- ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗  -->
+  <!-- ║ [ItemGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [ItemGroup] ║  -->
+  <!-- ║ [ItemGroup] □■□ |xx| □■□ - - - » Reference: Include (AssemblyReference)  >>>  [TargetFramework(net45/net48)]                                                                 □■□ |xx| □■□ [ItemGroup] ║  -->
+  <!-- ║ [ItemGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [ItemGroup] ║  -->
+  <!-- ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝  -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net45' OR '$(TargetFramework)' == 'net48'">
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -143,5 +222,55 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
+
+  <!-- ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗  -->
+  <!-- ║ [ItemGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [ItemGroup] ║  -->
+  <!-- ║ [ItemGroup] □■□ |xx| □■□ - - - » Reference: Include (AssemblyReference)  >>>  [TargetFramework(net6.0/net7.0)]                                                               □■□ |xx| □■□ [ItemGroup] ║  -->
+  <!-- ║ [ItemGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [ItemGroup] ║  -->
+  <!-- ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝  -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0' OR '$(TargetFramework)' == 'net7.0'">
+  </ItemGroup>
+
+  <!-- ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗  -->
+  <!-- ║ [ItemGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [ItemGroup] ║  -->
+  <!-- ║ [ItemGroup] □■□ |xx| □■□ - - - » Reference: Include (PackageReference)  >>>  [TargetFramework(net45/net48)]                                                                  □■□ |xx| □■□ [ItemGroup] ║  -->
+  <!-- ║ [ItemGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [ItemGroup] ║  -->
+  <!-- ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝  -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net45' OR '$(TargetFramework)' == 'net48'">
+    <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" PrivateAssets="All" />
+    <PackageReference Include="System.Collections.Immutable" Version="1.3.0" PrivateAssets="All" />
+    <PackageReference Include="System.Reflection.Metadata" Version="1.3.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <!-- ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗  -->
+  <!-- ║ [ItemGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [ItemGroup] ║  -->
+  <!-- ║ [ItemGroup] □■□ |xx| □■□ - - - » Reference: Include (PackageReference)  >>>  [TargetFramework(netstandard2.0/netstandard2.1)]                                                □■□ |xx| □■□ [ItemGroup] ║  -->
+  <!-- ║ [ItemGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [ItemGroup] ║  -->
+  <!-- ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝  -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' OR '$(TargetFramework)' == 'netstandard2.1'">
+    <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" PrivateAssets="All" />
+    <PackageReference Include="System.Collections.Immutable" Version="7.0.0" PrivateAssets="All" />
+    <PackageReference Include="System.Reflection.Metadata" Version="7.0.0" PrivateAssets="All" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
+  </ItemGroup>
+
+  <!-- ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗  -->
+  <!-- ║ [ItemGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [ItemGroup] ║  -->
+  <!-- ║ [ItemGroup] □■□ |xx| □■□ - - - » Reference: Include (PackageReference)  >>>  [TargetFramework(net6.0/net7.0)]                                                                □■□ |xx| □■□ [ItemGroup] ║  -->
+  <!-- ║ [ItemGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [ItemGroup] ║  -->
+  <!-- ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝  -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0' OR '$(TargetFramework)' == 'net7.0'">
+    <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" PrivateAssets="All" />
+    <PackageReference Include="System.Collections.Immutable" Version="7.0.0" PrivateAssets="All" />
+    <PackageReference Include="System.Reflection.Metadata" Version="7.0.0" PrivateAssets="All" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.0" />
+  </ItemGroup>
+
+  <!-- ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗  -->
+  <!-- ║ [ProjectRoot] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [ProjectRoot] ║  -->
+  <!-- ║ [ProjectRoot] □■□ |xx| □■□ - - - » Project: Import SDKs (implicit top import)                                                                                              □■□ |xx| □■□ [ProjectRoot] ║  -->
+  <!-- ║ [ProjectRoot] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [ProjectRoot] ║  -->
+  <!-- ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝  -->
+  <Import Sdk="Microsoft.NET.Sdk" Project="Sdk.targets" />
 
 </Project>

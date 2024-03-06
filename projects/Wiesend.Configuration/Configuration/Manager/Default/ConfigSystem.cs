@@ -72,9 +72,9 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using Wiesend.Configuration.Manager.Interfaces;
 
@@ -89,9 +89,9 @@ namespace Wiesend.Configuration.Manager.Default
         /// Constructor
         /// </summary>
         /// <param name="Configs">The configs.</param>
-        public ConfigSystem(IEnumerable<IConfig> Configs)
+        public ConfigSystem([NotNull] IEnumerable<IConfig> Configs)
         {
-            Contract.Requires<ArgumentNullException>(Configs != null, "Configs");
+            if (Configs == null) throw new ArgumentNullException(nameof(Configs));
             ConfigFiles = Configs.ToDictionary(x => x.Name, x => (IConfig)x);
         }
 

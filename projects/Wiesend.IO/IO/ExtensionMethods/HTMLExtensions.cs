@@ -72,10 +72,10 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -116,9 +116,9 @@ namespace Wiesend.IO
         /// <param name="Input">input strings (file contents)</param>
         /// <param name="Type">Type of minification</param>
         /// <returns>A minified/packed string</returns>
-        public static string Minify(this IEnumerable<string> Input, MinificationType Type = MinificationType.HTML)
+        public static string Minify([NotNull] this IEnumerable<string> Input, MinificationType Type = MinificationType.HTML)
         {
-            Contract.Requires<ArgumentNullException>(Input != null, "Input");
+            if (Input == null) throw new ArgumentNullException(nameof(Input));
             return Minify(Input.ToString(x => x, System.Environment.NewLine), Type);
         }
 
@@ -128,9 +128,9 @@ namespace Wiesend.IO
         /// <param name="Input">input strings (file contents)</param>
         /// <param name="Type">Type of minification</param>
         /// <returns>A minified/packed string</returns>
-        public static string Minify(this IEnumerable<FileInfo> Input, MinificationType Type = MinificationType.HTML)
+        public static string Minify([NotNull] this IEnumerable<FileInfo> Input, MinificationType Type = MinificationType.HTML)
         {
-            Contract.Requires<ArgumentNullException>(Input != null, "Input");
+            if (Input == null) throw new ArgumentNullException(nameof(Input));
             return Minify(Input.Where(x => x.Exists).ToString(x => x.Read(), System.Environment.NewLine), Type);
         }
 
@@ -157,10 +157,10 @@ namespace Wiesend.IO
         /// <param name="Input">Input file</param>
         /// <param name="Type">Type of minification to run</param>
         /// <returns>A stripped file</returns>
-        public static string Minify(this FileInfo Input, MinificationType Type = MinificationType.HTML)
+        public static string Minify([NotNull] this FileInfo Input, MinificationType Type = MinificationType.HTML)
         {
-            Contract.Requires<ArgumentNullException>(Input != null, "Input");
-            Contract.Requires<System.IO.FileNotFoundException>(Input.Exists, "Input file does not exist");
+            if (Input == null) throw new ArgumentNullException(nameof(Input));
+            if (!(Input.Exists)) throw new System.IO.FileNotFoundException(nameof(Input), "Input file does not exist");
             return Input.Read().Minify(Type);
         }
 
@@ -185,9 +185,9 @@ namespace Wiesend.IO
             return Input;
         }
 
-        private static string Evaluate(Match Matcher)
+        private static string Evaluate([NotNull] Match Matcher)
         {
-            Contract.Requires<ArgumentNullException>(Matcher != null, "Matcher");
+            if (Matcher == null) throw new ArgumentNullException(nameof(Matcher));
             var MyString = Matcher.ToString();
             if (string.IsNullOrEmpty(MyString))
                 return "";

@@ -82,6 +82,7 @@ namespace Wiesend.DataTypes.Patterns
     /// </summary>
     /// <typeparam name="Key">The "message" type</typeparam>
     /// <typeparam name="T">The class type that you want created</typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public class Factory<Key, T>
     {
         /// <summary>
@@ -104,7 +105,7 @@ namespace Wiesend.DataTypes.Patterns
         /// <returns>The type returned by the initializer</returns>
         public virtual T Create(Key Key)
         {
-            return Constructors.GetValue(Key, () => default(T))();
+            return Constructors.GetValue(Key, () => default)();
         }
 
         /// <summary>

@@ -75,7 +75,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Text;
 
 namespace Wiesend.Web
@@ -91,9 +91,9 @@ namespace Wiesend.Web
         /// </summary>
         /// <param name="Input">Input</param>
         /// <returns>The IDictionary expressed as a string</returns>
-        public static string ToQueryString(this IDictionary<string, string> Input)
+        public static string ToQueryString([NotNull] this IDictionary<string, string> Input)
         {
-            Contract.Requires<ArgumentNullException>(Input != null, "Input");
+            if (Input == null) throw new ArgumentNullException(nameof(Input), "Input");
             if (Input.Count <= 0)
                 return "";
             var Builder = new StringBuilder();

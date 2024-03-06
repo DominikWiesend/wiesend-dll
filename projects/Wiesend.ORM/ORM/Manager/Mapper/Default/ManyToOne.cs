@@ -74,7 +74,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Linq;
 using System.Linq.Expressions;
 using Wiesend.DataTypes;
@@ -91,6 +91,7 @@ namespace Wiesend.ORM.Manager.Mapper.Default
     /// </summary>
     /// <typeparam name="ClassType">Class type</typeparam>
     /// <typeparam name="DataType">Data type</typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public class ManyToOne<ClassType, DataType> : PropertyBase<ClassType, DataType, ManyToOne<ClassType, DataType>>, IManyToOne
         where ClassType : class
         where DataType : class
@@ -100,11 +101,11 @@ namespace Wiesend.ORM.Manager.Mapper.Default
         /// </summary>
         /// <param name="Expression">Expression pointing to the many to one</param>
         /// <param name="Mapping">Mapping the StringID is added to</param>
-        public ManyToOne(Expression<Func<ClassType, DataType>> Expression, IMapping Mapping)
+        public ManyToOne([NotNull] Expression<Func<ClassType, DataType>> Expression, IMapping Mapping)
             : base(Expression, Mapping)
         {
-            Contract.Requires<ArgumentNullException>(Expression != null, "Expression");
-            SetDefaultValue(() => default(DataType));
+            if (Expression == null) throw new ArgumentNullException(nameof(Expression));
+            SetDefaultValue(() => default);
             string Class1 = typeof(ClassType).Name;
             string Class2 = typeof(DataType).Name;
             if (string.Compare(Class1, Class2, StringComparison.Ordinal) < 0)
@@ -129,6 +130,7 @@ namespace Wiesend.ORM.Manager.Mapper.Default
         /// <param name="Source">Source info</param>
         /// <param name="ObjectsSeen">Objects seen thus far</param>
         /// <returns>Batch object with the appropriate commands</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
         public override IBatch CascadeDelete(ClassType Object, ISourceInfo Source, IList<object> ObjectsSeen)
         {
             var Provider = IoC.Manager.Bootstrapper.Resolve<QueryProvider.Manager>();
@@ -144,9 +146,7 @@ namespace Wiesend.ORM.Manager.Mapper.Default
             if (Item == null)
                 return Batch;
             foreach (IProperty<DataType> Property in PropertyMapping.Properties.Where(x => x.Cascade))
-            {
                 Batch.AddCommand(Property.CascadeDelete(Item, Source, ObjectsSeen.ToList()));
-            }
             Batch.AddCommand(Provider.Generate<DataType>(Source, PropertyMapping, Structure).Delete(Item));
             IoC.Manager.Bootstrapper.Resolve<DataTypes.Caching.Manager>().Cache().RemoveByTag(typeof(DataType).GetName());
             return Batch;
@@ -159,6 +159,7 @@ namespace Wiesend.ORM.Manager.Mapper.Default
         /// <param name="Source">Source info</param>
         /// <param name="ObjectsSeen">Objects seen thus far</param>
         /// <returns>Batch object with the appropriate commands</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
         public override IBatch CascadeJoinsDelete(ClassType Object, ISourceInfo Source, IList<object> ObjectsSeen)
         {
             var Provider = IoC.Manager.Bootstrapper.Resolve<QueryProvider.Manager>();
@@ -175,16 +176,10 @@ namespace Wiesend.ORM.Manager.Mapper.Default
                 return Batch;
             foreach (IProperty<DataType> Property in PropertyMapping.Properties)
             {
-                if (!Property.Cascade
-                    && (Property is IMultiMapping
-                        || Property is ISingleMapping))
-                {
+                if (!Property.Cascade && (Property is IMultiMapping || Property is ISingleMapping))
                     Batch.AddCommand(Property.JoinsDelete(Item, Source, ObjectsSeen.ToList()));
-                }
                 else if (Property.Cascade)
-                {
                     Batch.AddCommand(Property.CascadeJoinsDelete(Item, Source, ObjectsSeen.ToList()));
-                }
             }
             Batch.AddCommand(Provider.Generate<ClassType>(Source, Mapping, Structure).JoinsDelete(this, Object));
             return Batch;
@@ -197,6 +192,7 @@ namespace Wiesend.ORM.Manager.Mapper.Default
         /// <param name="Source">Source info</param>
         /// <param name="ObjectsSeen">Objects seen thus far</param>
         /// <returns>Batch object with the appropriate commands</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
         public override IBatch CascadeJoinsSave(ClassType Object, ISourceInfo Source, IList<object> ObjectsSeen)
         {
             var Provider = IoC.Manager.Bootstrapper.Resolve<QueryProvider.Manager>();
@@ -213,16 +209,10 @@ namespace Wiesend.ORM.Manager.Mapper.Default
                 return Batch;
             foreach (IProperty<DataType> Property in PropertyMapping.Properties)
             {
-                if (!Property.Cascade
-                    && (Property is IMultiMapping
-                        || Property is ISingleMapping))
-                {
+                if (!Property.Cascade && (Property is IMultiMapping || Property is ISingleMapping))
                     Batch.AddCommand(Property.JoinsSave(Item, Source, ObjectsSeen.ToList()));
-                }
                 else if (Property.Cascade)
-                {
                     Batch.AddCommand(Property.CascadeJoinsSave(Item, Source, ObjectsSeen.ToList()));
-                }
             }
             Batch.AddCommand(Provider.Generate<ClassType>(Source, Mapping, Structure).JoinsSave<DataType, DataType>(this, Object));
             return Batch;
@@ -235,6 +225,7 @@ namespace Wiesend.ORM.Manager.Mapper.Default
         /// <param name="Source">Source info</param>
         /// <param name="ObjectsSeen">Objects seen thus far</param>
         /// <returns>Batch object with the appropriate commands</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
         public override IBatch CascadeSave(ClassType Object, ISourceInfo Source, IList<object> ObjectsSeen)
         {
             var Provider = IoC.Manager.Bootstrapper.Resolve<QueryProvider.Manager>();
@@ -250,9 +241,7 @@ namespace Wiesend.ORM.Manager.Mapper.Default
             if (Item == null)
                 return Batch;
             foreach (IProperty<DataType> Property in PropertyMapping.Properties.Where(x => x.Cascade))
-            {
                 Batch.AddCommand(Property.CascadeSave(Item, Source, ObjectsSeen.ToList()));
-            }
             Batch.AddCommand(((IProperty<DataType>)PropertyMapping.IDProperties.FirstOrDefault()).CascadeSave(Item, Source, ObjectsSeen.ToList()));
             IoC.Manager.Bootstrapper.Resolve<DataTypes.Caching.Manager>().Cache().RemoveByTag(typeof(DataType).GetName());
             return Batch;

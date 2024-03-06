@@ -82,6 +82,7 @@ namespace Wiesend.Random.NameGenerators
     /// </summary>
     public class FemaleFirstNameGenerator : GeneratorAttributeBase, IGenerator<string>
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
         private string[] FemaleFirstNames = { "Sophia", "Isabella", "Emma", "Olivia", "Ava", "Emily",
                                                 "Abigail", "Madison", "Mia", "Chloe", "Elizabeth",
                                                 "Ella", "Addison", "Natalie", "Lily", "Grace", "Samantha"

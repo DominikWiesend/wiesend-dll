@@ -72,9 +72,9 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
 using System.Security.Cryptography;
 using System.Text;
 using Wiesend.DataTypes;
@@ -94,6 +94,7 @@ namespace Wiesend.IO
         /// <param name="Random">Random object</param>
         /// <param name="PrivatePublic">True if private key should be included, false otherwise</param>
         /// <returns>XML representation of the key information</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         public static string CreateKey(this System.Random Random, bool PrivatePublic)
         {
             var TempManager = IoC.Manager.Bootstrapper.Resolve<Manager>();
@@ -147,6 +148,7 @@ namespace Wiesend.IO
         /// Can be 64 (DES only), 128 (AES), 192 (AES and Triple DES), or 256 (AES)
         /// </param>
         /// <returns>An encrypted byte array</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public static byte[] Decrypt(this byte[] Data,
             DeriveBytes Key,
             string AlgorithmUsing = "AES",
@@ -165,9 +167,10 @@ namespace Wiesend.IO
         /// <param name="Data">Data to encrypt</param>
         /// <param name="Key">Key to use</param>
         /// <returns>The decrypted data</returns>
-        public static byte[] Decrypt(this byte[] Data, byte[] Key)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
+        public static byte[] Decrypt(this byte[] Data, [NotNull] byte[] Key)
         {
-            Contract.Requires<ArgumentNullException>(Key != null, "Key");
+            if (Key == null) throw new ArgumentNullException(nameof(Key));
             if (Data == null)
                 return null;
             var TempManager = IoC.Manager.Bootstrapper.Resolve<Manager>();
@@ -213,6 +216,7 @@ namespace Wiesend.IO
         /// <param name="Data">Data to encrypt</param>
         /// <param name="Key">Key to use</param>
         /// <returns>The encrypted data</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public static byte[] Encrypt(this byte[] Data, byte[] Key)
         {
             var TempManager = IoC.Manager.Bootstrapper.Resolve<Manager>();
@@ -266,6 +270,7 @@ namespace Wiesend.IO
         /// Can be 64 (DES only), 128 (AES), 192 (AES and Triple DES), or 256 (AES)
         /// </param>
         /// <returns>An encrypted byte array</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public static byte[] Encrypt(this byte[] Data,
             DeriveBytes Key,
             string AlgorithmUsing = "AES",
@@ -284,14 +289,13 @@ namespace Wiesend.IO
         /// <param name="Random">Randomization object</param>
         /// <param name="Size">Size of the salt byte array</param>
         /// <returns>A byte array as salt</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         public static byte[] GenerateSalt(this System.Random Random, int Size)
         {
-            Contract.Requires<ArgumentException>(Size > 0, "Size must be greater than 0");
+            if (!(Size > 0)) throw new ArgumentException("Size must be greater than 0", nameof(Size));
             byte[] Salt = new byte[Size];
-            using (RNGCryptoServiceProvider CryptoProvider = new RNGCryptoServiceProvider())
-            {
-                CryptoProvider.GetNonZeroBytes(Salt);
-            }
+            using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
+                rng.GetNonZeroBytes(Salt);
             return Salt;
         }
 
@@ -301,6 +305,7 @@ namespace Wiesend.IO
         /// <param name="Data">Byte array to hash</param>
         /// <param name="Algorithm">Hash algorithm to use (defaults to SHA1)</param>
         /// <returns>The hash of the byte array</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public static byte[] Hash(this byte[] Data, string Algorithm = "SHA1")
         {
             var TempManager = IoC.Manager.Bootstrapper.Resolve<Manager>();

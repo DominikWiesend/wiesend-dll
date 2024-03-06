@@ -73,7 +73,7 @@
 #endregion of Licenses [MIT Licenses]
 
 using System;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Text;
 
 namespace Wiesend.DataTypes
@@ -126,21 +126,23 @@ namespace Wiesend.DataTypes
         /// <param name="X">X position</param>
         /// <param name="Y">Y position</param>
         /// <returns>the value at a point in the matrix</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public virtual double this[int X, int Y]
         {
             get
             {
-                Contract.Requires<ArgumentOutOfRangeException>(X >= 0 && X <= Width, "X");
-                Contract.Requires<ArgumentOutOfRangeException>(Y >= 0 && Y <= Height, "Y");
-                Contract.Requires<NullReferenceException>(Values != null, "Values");
+                if (!(X >= 0 && X <= Width)) throw new ArgumentOutOfRangeException(nameof(X), $"Contract assertion not met: {nameof(X)} >= 0 && {nameof(X)} <= Width");
+                if (!(Y >= 0 && Y <= Height)) throw new ArgumentOutOfRangeException(nameof(Y), $"Contract assertion not met: {nameof(Y)} >= 0 && {nameof(Y)} <= Height");
+                if (Values == null) throw new NullReferenceException("Values");
                 return Values[X, Y];
             }
 
             set
             {
-                Contract.Requires<ArgumentOutOfRangeException>(X >= 0 && X <= Width, "X");
-                Contract.Requires<ArgumentOutOfRangeException>(Y >= 0 && Y <= Height, "Y");
-                Contract.Requires<NullReferenceException>(Values != null, "Values");
+                if (!(X >= 0 && X <= Width)) throw new ArgumentOutOfRangeException(nameof(X), $"Contract assertion not met: {nameof(X)} >= 0 && {nameof(X)} <= Width");
+                if (!(Y >= 0 && Y <= Height)) throw new ArgumentOutOfRangeException(nameof(Y), $"Contract assertion not met: {nameof(Y)} >= 0 && {nameof(Y)} <= Height");
+                if (Values == null) throw new NullReferenceException("Values");
                 Values[X, Y] = value;
             }
         }
@@ -157,9 +159,9 @@ namespace Wiesend.DataTypes
         /// <returns>The result</returns>
         public static Matrix operator -(Matrix M1, Matrix M2)
         {
-            Contract.Requires<ArgumentNullException>(M1 != null, "M1");
-            Contract.Requires<ArgumentNullException>(M2 != null, "M2");
-            Contract.Requires<ArgumentException>(M1.Width == M2.Width && M1.Height == M2.Height, "Both matrices must be the same dimensions.");
+            if (M1 == null) throw new ArgumentNullException(nameof(M1));
+            if (M2 == null) throw new ArgumentNullException(nameof(M2));
+            if (!(M1.Width == M2.Width && M1.Height == M2.Height)) throw new ArgumentException("Both matrices must be the same dimensions.");
             var TempMatrix = new Matrix(M1.Width, M1.Height);
             for (int x = 0; x < M1.Width; ++x)
                 for (int y = 0; y < M1.Height; ++y)
@@ -174,7 +176,7 @@ namespace Wiesend.DataTypes
         /// <returns>The result</returns>
         public static Matrix operator -(Matrix M1)
         {
-            Contract.Requires<ArgumentNullException>(M1 != null, "M1");
+            if (M1 == null) throw new ArgumentNullException(nameof(M1));
             var TempMatrix = new Matrix(M1.Width, M1.Height);
             for (int x = 0; x < M1.Width; ++x)
                 for (int y = 0; y < M1.Height; ++y)
@@ -201,9 +203,9 @@ namespace Wiesend.DataTypes
         /// <returns>The result</returns>
         public static Matrix operator *(Matrix M1, Matrix M2)
         {
-            Contract.Requires<ArgumentNullException>(M1 != null, "M1");
-            Contract.Requires<ArgumentNullException>(M2 != null, "M2");
-            Contract.Requires<ArgumentException>(M1.Width == M2.Width && M1.Height == M2.Height, "Both matrices must be the same dimensions.");
+            if (M1 == null) throw new ArgumentNullException(nameof(M1));
+            if (M2 == null) throw new ArgumentNullException(nameof(M2));
+            if (!(M1.Width == M2.Width && M1.Height == M2.Height)) throw new ArgumentException("Both matrices must be the same dimensions.");
             var TempMatrix = new Matrix(M2.Width, M1.Height);
             for (int x = 0; x < M2.Width; ++x)
             {
@@ -226,7 +228,7 @@ namespace Wiesend.DataTypes
         /// <returns>The result</returns>
         public static Matrix operator *(Matrix M1, double D)
         {
-            Contract.Requires<ArgumentNullException>(M1 != null, "M1");
+            if (M1 == null) throw new ArgumentNullException(nameof(M1));
             var TempMatrix = new Matrix(M1.Width, M1.Height);
             for (int x = 0; x < M1.Width; ++x)
                 for (int y = 0; y < M1.Height; ++y)
@@ -242,7 +244,7 @@ namespace Wiesend.DataTypes
         /// <returns>The result</returns>
         public static Matrix operator *(double D, Matrix M1)
         {
-            Contract.Requires<ArgumentNullException>(M1 != null, "M1");
+            if (M1 == null) throw new ArgumentNullException(nameof(M1));
             var TempMatrix = new Matrix(M1.Width, M1.Height);
             for (int x = 0; x < M1.Width; ++x)
                 for (int y = 0; y < M1.Height; ++y)
@@ -258,7 +260,7 @@ namespace Wiesend.DataTypes
         /// <returns>The result</returns>
         public static Matrix operator /(Matrix M1, double D)
         {
-            Contract.Requires<ArgumentNullException>(M1 != null, "M1");
+            if (M1 == null) throw new ArgumentNullException(nameof(M1));
             return M1 * (1 / D);
         }
 
@@ -270,7 +272,7 @@ namespace Wiesend.DataTypes
         /// <returns>The result</returns>
         public static Matrix operator /(double D, Matrix M1)
         {
-            Contract.Requires<ArgumentNullException>(M1 != null, "M1");
+            if (M1 == null) throw new ArgumentNullException(nameof(M1));
             return M1 * (1 / D);
         }
 
@@ -282,9 +284,9 @@ namespace Wiesend.DataTypes
         /// <returns>The result</returns>
         public static Matrix operator +(Matrix M1, Matrix M2)
         {
-            Contract.Requires<ArgumentNullException>(M1 != null, "M1");
-            Contract.Requires<ArgumentNullException>(M2 != null, "M2");
-            Contract.Requires<ArgumentException>(M1.Width == M2.Width && M1.Height == M2.Height, "Both matrices must be the same dimensions.");
+            if (M1 == null) throw new ArgumentNullException(nameof(M1));
+            if (M2 == null) throw new ArgumentNullException(nameof(M2));
+            if (!(M1.Width == M2.Width && M1.Height == M2.Height)) throw new ArgumentException("Both matrices must be the same dimensions.");
             var TempMatrix = new Matrix(M1.Width, M1.Height);
             for (int x = 0; x < M1.Width; ++x)
                 for (int y = 0; y < M1.Height; ++y)
@@ -298,6 +300,7 @@ namespace Wiesend.DataTypes
         /// <param name="M1">Matrix 1</param>
         /// <param name="M2">Matrix 2</param>
         /// <returns>True if they are equal, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
         public static bool operator ==(Matrix M1, Matrix M2)
         {
             if ((object)M1 == null && (object)M2 == null)
@@ -321,7 +324,7 @@ namespace Wiesend.DataTypes
         /// <returns>The determinant of a square matrix</returns>
         public virtual double Determinant()
         {
-            Contract.Requires<InvalidOperationException>(Width == Height, "The determinant can not be calculated for a non square matrix");
+            if (!(Width == Height)) throw new InvalidOperationException("The determinant can not be calculated for a non square matrix");
             if (Width == 2)
                 return (this[0, 0] * this[1, 1]) - (this[0, 1] * this[1, 0]);
             double Answer = 0.0;
@@ -382,19 +385,19 @@ namespace Wiesend.DataTypes
         {
             var Builder = new StringBuilder();
             string Seperator = "";
-            Builder.Append("{").Append(System.Environment.NewLine);
+            Builder.Append('{').Append(System.Environment.NewLine);
             for (int x = 0; x < Width; ++x)
             {
-                Builder.Append("{");
+                Builder.Append('{');
                 for (int y = 0; y < Height; ++y)
                 {
                     Builder.Append(Seperator).Append(this[x, y]);
                     Seperator = ",";
                 }
-                Builder.Append("}").Append(System.Environment.NewLine);
+                Builder.Append('}').Append(System.Environment.NewLine);
                 Seperator = "";
             }
-            Builder.Append("}");
+            Builder.Append('}');
             return Builder.ToString();
         }
 

@@ -72,9 +72,9 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Net.Mail;
 using System.Net.Mime;
 using Wiesend.DataTypes;
@@ -101,6 +101,8 @@ namespace Wiesend.IO.Messaging.Default
         /// Internal send message
         /// </summary>
         /// <param name="message">The message.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         protected override void InternalSend(Interfaces.IMessage message)
         {
             var Message = message as EmailMessage;
@@ -108,61 +110,49 @@ namespace Wiesend.IO.Messaging.Default
                 return;
             if (string.IsNullOrEmpty(Message.Body))
                 Message.Body = " ";
-            using (MailMessage TempMailMessage = new MailMessage())
+            using MailMessage TempMailMessage = new MailMessage();
+            char[] Splitter = { ',', ';' };
+            var AddressCollection = Message.To.Split(Splitter);
+            for (int x = 0; x < AddressCollection.Length; ++x)
             {
-                char[] Splitter = { ',', ';' };
-                var AddressCollection = Message.To.Split(Splitter);
+                if (!string.IsNullOrEmpty(AddressCollection[x].Trim()))
+                    TempMailMessage.To.Add(AddressCollection[x]);
+            }
+            if (!string.IsNullOrEmpty(Message.CC))
+            {
+                AddressCollection = Message.CC.Split(Splitter);
                 for (int x = 0; x < AddressCollection.Length; ++x)
                 {
                     if (!string.IsNullOrEmpty(AddressCollection[x].Trim()))
-                        TempMailMessage.To.Add(AddressCollection[x]);
-                }
-                if (!string.IsNullOrEmpty(Message.CC))
-                {
-                    AddressCollection = Message.CC.Split(Splitter);
-                    for (int x = 0; x < AddressCollection.Length; ++x)
-                    {
-                        if (!string.IsNullOrEmpty(AddressCollection[x].Trim()))
-                            TempMailMessage.CC.Add(AddressCollection[x]);
-                    }
-                }
-                if (!string.IsNullOrEmpty(Message.Bcc))
-                {
-                    AddressCollection = Message.Bcc.Split(Splitter);
-                    for (int x = 0; x < AddressCollection.Length; ++x)
-                    {
-                        if (!string.IsNullOrEmpty(AddressCollection[x].Trim()))
-                            TempMailMessage.Bcc.Add(AddressCollection[x]);
-                    }
-                }
-                TempMailMessage.Subject = Message.Subject;
-                if (!string.IsNullOrEmpty(Message.From))
-                    TempMailMessage.From = new System.Net.Mail.MailAddress(Message.From);
-                using (AlternateView BodyView = AlternateView.CreateAlternateViewFromString(Message.Body, null, MediaTypeNames.Text.Html))
-                {
-                    foreach (LinkedResource Resource in Message.EmbeddedResources.Check(new List<LinkedResource>()))
-                    {
-                        BodyView.LinkedResources.Add(Resource);
-                    }
-                    TempMailMessage.AlternateViews.Add(BodyView);
-                    TempMailMessage.Priority = Message.Priority;
-                    TempMailMessage.SubjectEncoding = System.Text.Encoding.GetEncoding("ISO-8859-1");
-                    TempMailMessage.BodyEncoding = System.Text.Encoding.GetEncoding("ISO-8859-1");
-                    TempMailMessage.IsBodyHtml = true;
-                    foreach (Attachment TempAttachment in Message.Attachments.Check(new List<Attachment>()))
-                    {
-                        TempMailMessage.Attachments.Add(TempAttachment);
-                    }
-                    if (!string.IsNullOrEmpty(Message.Server))
-                    {
-                        SendMessage(new SmtpClient(Message.Server, Message.Port), Message, TempMailMessage);
-                    }
-                    else
-                    {
-                        SendMessage(new SmtpClient(), Message, TempMailMessage);
-                    }
+                        TempMailMessage.CC.Add(AddressCollection[x]);
                 }
             }
+            if (!string.IsNullOrEmpty(Message.Bcc))
+            {
+                AddressCollection = Message.Bcc.Split(Splitter);
+                for (int x = 0; x < AddressCollection.Length; ++x)
+                {
+                    if (!string.IsNullOrEmpty(AddressCollection[x].Trim()))
+                        TempMailMessage.Bcc.Add(AddressCollection[x]);
+                }
+            }
+            TempMailMessage.Subject = Message.Subject;
+            if (!string.IsNullOrEmpty(Message.From))
+                TempMailMessage.From = new System.Net.Mail.MailAddress(Message.From);
+            using AlternateView BodyView = AlternateView.CreateAlternateViewFromString(Message.Body, null, MediaTypeNames.Text.Html);
+            foreach (LinkedResource Resource in Message.EmbeddedResources.Check(new List<LinkedResource>()))
+                BodyView.LinkedResources.Add(Resource);
+            TempMailMessage.AlternateViews.Add(BodyView);
+            TempMailMessage.Priority = Message.Priority;
+            TempMailMessage.SubjectEncoding = System.Text.Encoding.GetEncoding("ISO-8859-1");
+            TempMailMessage.BodyEncoding = System.Text.Encoding.GetEncoding("ISO-8859-1");
+            TempMailMessage.IsBodyHtml = true;
+            foreach (Attachment TempAttachment in Message.Attachments.Check(new List<Attachment>()))
+                TempMailMessage.Attachments.Add(TempAttachment);
+            if (!string.IsNullOrEmpty(Message.Server))
+                SendMessage(new SmtpClient(Message.Server, Message.Port), Message, TempMailMessage);
+            else
+                SendMessage(new SmtpClient(), Message, TempMailMessage);
         }
 
         /// <summary>
@@ -171,20 +161,16 @@ namespace Wiesend.IO.Messaging.Default
         /// <param name="smtpClient">SMTP client object</param>
         /// <param name="Message">Email message object</param>
         /// <param name="message">Mail message object</param>
-        private static void SendMessage(SmtpClient smtpClient, EmailMessage Message, MailMessage message)
+        private static void SendMessage([NotNull] SmtpClient smtpClient, [NotNull] EmailMessage Message, [NotNull] MailMessage message)
         {
-            Contract.Requires<ArgumentNullException>(Message != null, "Message");
-            Contract.Requires<ArgumentNullException>(smtpClient != null, "smtpClient");
-            Contract.Requires<ArgumentNullException>(message != null, "message");
-            using (SmtpClient smtp = smtpClient)
-            {
-                if (!string.IsNullOrEmpty(Message.UserName) && !string.IsNullOrEmpty(Message.Password))
-                {
-                    smtp.Credentials = new System.Net.NetworkCredential(Message.UserName, Message.Password);
-                }
-                smtp.EnableSsl = Message.UseSSL;
-                smtp.Send(message);
-            }
+            if (Message == null) throw new ArgumentNullException(nameof(Message));
+            if (smtpClient == null) throw new ArgumentNullException(nameof(smtpClient));
+            if (message == null) throw new ArgumentNullException(nameof(message));
+            using SmtpClient smtp = smtpClient;
+            if (!string.IsNullOrEmpty(Message.UserName) && !string.IsNullOrEmpty(Message.Password))
+                smtp.Credentials = new System.Net.NetworkCredential(Message.UserName, Message.Password);
+            smtp.EnableSsl = Message.UseSSL;
+            smtp.Send(message);
         }
     }
 }

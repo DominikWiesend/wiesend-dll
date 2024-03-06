@@ -87,6 +87,8 @@ namespace Wiesend.Configuration.Manager.BaseClasses
     /// </summary>
     /// <typeparam name="ConfigClassType">Config class type</typeparam>
     [Serializable]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2229:Implement serialization constructors", Justification = "<Pending>")]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public abstract class Config<ConfigClassType> : Dynamo<ConfigClassType>, IConfig
         where ConfigClassType : Config<ConfigClassType>, new()
     {
@@ -156,30 +158,24 @@ namespace Wiesend.Configuration.Manager.BaseClasses
             Decrypt();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         private void Decrypt()
         {
             if (string.IsNullOrEmpty(EncryptionPassword))
                 return;
-            using (PasswordDeriveBytes Temp = new PasswordDeriveBytes(EncryptionPassword, "Kosher".ToByteArray(), "SHA1", 2))
-            {
-                foreach (KeyValuePair<string, object> Item in this.Where(x => x.Value.GetType() == typeof(string)))
-                {
-                    SetValue(Item.Key, ((string)Item.Value).Decrypt(Temp));
-                }
-            }
+            using PasswordDeriveBytes Temp = new PasswordDeriveBytes(EncryptionPassword, "Kosher".ToByteArray(), "SHA1", 2);
+            foreach (KeyValuePair<string, object> Item in this.Where(x => x.Value.GetType() == typeof(string)))
+                SetValue(Item.Key, ((string)Item.Value).Decrypt(Temp));
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         private void Encrypt()
         {
             if (string.IsNullOrEmpty(EncryptionPassword))
                 return;
-            using (PasswordDeriveBytes Temp = new PasswordDeriveBytes(EncryptionPassword, "Kosher".ToByteArray(), "SHA1", 2))
-            {
-                foreach (KeyValuePair<string, object> Item in this.Where(x => x.Value.GetType() == typeof(string)))
-                {
-                    SetValue(Item.Key, ((string)Item.Value).Encrypt(Temp));
-                }
-            }
+            using PasswordDeriveBytes Temp = new PasswordDeriveBytes(EncryptionPassword, "Kosher".ToByteArray(), "SHA1", 2);
+            foreach (KeyValuePair<string, object> Item in this.Where(x => x.Value.GetType() == typeof(string)))
+                SetValue(Item.Key, ((string)Item.Value).Encrypt(Temp));
         }
 
         private void LoadProperties(ConfigClassType Temp)
@@ -187,9 +183,7 @@ namespace Wiesend.Configuration.Manager.BaseClasses
             if (Temp == null)
                 return;
             foreach (KeyValuePair<string, object> Item in this)
-            {
                 SetValue(Item.Key, Item.Value);
-            }
         }
     }
 }

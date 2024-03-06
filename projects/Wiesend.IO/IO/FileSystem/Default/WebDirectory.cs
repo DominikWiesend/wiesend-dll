@@ -72,9 +72,9 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -82,6 +82,9 @@ using Wiesend.DataTypes;
 using Wiesend.IO.Enums;
 using Wiesend.IO.FileSystem.BaseClasses;
 using Wiesend.IO.FileSystem.Interfaces;
+#if NET
+using System.Net.Http;
+#endif
 
 namespace Wiesend.IO.FileSystem.Default
 {
@@ -215,14 +218,26 @@ namespace Wiesend.IO.FileSystem.Default
         /// <summary>
         /// Not used
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public override void Create()
         {
-            var Request = WebRequest.Create(InternalDirectory) as HttpWebRequest;
+#if NETFRAMEWORK || NETSTANDARD
+            HttpWebRequest Request = WebRequest.Create(InternalDirectory) as HttpWebRequest;
             Request.Method = "POST";
             Request.ContentType = "text/xml";
             SetupData(Request, "");
             SetupCredentials(Request);
             SendRequest(Request);
+#endif
+#if NET
+            HttpClientHandler Handler = new HttpClientHandler();
+            HttpRequestMessage Request = new HttpRequestMessage { Method = HttpMethod.Post };
+            Request.Headers.Add("Content-Type", "text/xml");
+            Request.RequestUri = InternalDirectory;
+            SetupData(Request, "");
+            SetupCredentials(Handler);
+            SendRequest(Handler, Request);
+#endif
         }
 
         /// <summary>
@@ -232,12 +247,23 @@ namespace Wiesend.IO.FileSystem.Default
         {
             if (InternalDirectory == null)
                 return;
-            var Request = WebRequest.Create(InternalDirectory) as HttpWebRequest;
+#if NETFRAMEWORK || NETSTANDARD
+            HttpWebRequest Request = WebRequest.Create(InternalDirectory) as HttpWebRequest;
             Request.Method = "DELETE";
             Request.ContentType = "text/xml";
             SetupData(Request, "");
             SetupCredentials(Request);
             SendRequest(Request);
+#endif
+#if NET
+            HttpClientHandler Handler = new();
+            HttpRequestMessage Request = new() { Method = HttpMethod.Delete };
+            Request.Headers.Add("Content-Type", "text/xml");
+            Request.RequestUri = InternalDirectory;
+            SetupData(Request, "");
+            SetupCredentials(Handler);
+            SendRequest(Handler, Request);
+#endif
         }
 
         /// <summary>
@@ -270,23 +296,21 @@ namespace Wiesend.IO.FileSystem.Default
         {
         }
 
+#if NETFRAMEWORK || NETSTANDARD
         /// <summary>
         /// Sends the request to the URL specified
         /// </summary>
         /// <param name="Request">The web request object</param>
         /// <returns>The string returned by the service</returns>
-        private static string SendRequest(HttpWebRequest Request)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
+        private static string SendRequest([NotNull] HttpWebRequest Request)
         {
-            Contract.Requires<ArgumentNullException>(Request != null, "Request");
-            using (HttpWebResponse Response = Request.GetResponse() as HttpWebResponse)
-            {
-                if (Response.StatusCode != HttpStatusCode.OK)
-                    return "";
-                using (StreamReader Reader = new StreamReader(Response.GetResponseStream()))
-                {
-                    return Reader.ReadToEnd();
-                }
-            }
+            if (Request == null) throw new ArgumentNullException(nameof(Request));
+            using HttpWebResponse Response = Request.GetResponse() as HttpWebResponse;
+            if (Response.StatusCode != HttpStatusCode.OK)
+                return "";
+            using StreamReader Reader = new StreamReader(Response.GetResponseStream());
+            return Reader.ReadToEnd();
         }
 
         /// <summary>
@@ -294,9 +318,9 @@ namespace Wiesend.IO.FileSystem.Default
         /// </summary>
         /// <param name="Request">The web request object</param>
         /// <param name="Data">Data to send with the request</param>
-        private static void SetupData(HttpWebRequest Request, string Data)
+        private static void SetupData([NotNull] HttpWebRequest Request, string Data)
         {
-            Contract.Requires<ArgumentNullException>(Request != null, "Request");
+            if (Request == null) throw new ArgumentNullException(nameof(Request));
             if (string.IsNullOrEmpty(Data))
             {
                 Request.ContentLength = 0;
@@ -304,10 +328,8 @@ namespace Wiesend.IO.FileSystem.Default
             }
             var ByteData = Data.ToByteArray();
             Request.ContentLength = ByteData.Length;
-            using (Stream RequestStream = Request.GetRequestStream())
-            {
-                RequestStream.Write(ByteData, 0, ByteData.Length);
-            }
+            using Stream RequestStream = Request.GetRequestStream();
+            RequestStream.Write(ByteData, 0, ByteData.Length);
         }
 
         /// <summary>
@@ -318,9 +340,57 @@ namespace Wiesend.IO.FileSystem.Default
         private void SetupCredentials(HttpWebRequest Request)
         {
             if (!string.IsNullOrEmpty(UserName) && !string.IsNullOrEmpty(Password))
-            {
                 Request.Credentials = new NetworkCredential(UserName, Password);
-            }
         }
+#endif
+
+#if NET
+        /// <summary>
+        /// Sends the request to the URL specified
+        /// </summary>
+        /// <param name="Handler">The http client handler object</param>
+        /// <param name="Request">The request message object</param>
+        /// <returns>The string returned by the service</returns>
+        private static string SendRequest([NotNull] HttpClientHandler Handler, [NotNull] HttpRequestMessage Request)
+        {
+            if (Handler == null) throw new ArgumentNullException(nameof(Handler));
+            if (Request == null) throw new ArgumentNullException(nameof(Request));
+            using HttpClient client = new(Handler);
+            HttpResponseMessage Response = client.SendAsync(Request).Result;
+            if (Response.StatusCode != HttpStatusCode.OK)
+                return "";
+            using StreamReader Reader = new(Response.Content.ReadAsStreamAsync().Result);
+            return Reader.ReadToEnd();
+        }
+
+        /// <summary>
+        /// Sets up any data that needs to be sent
+        /// </summary>
+        /// <param name="Request">The request message object</param>
+        /// <param name="Data">Data to send with the request</param>
+        private static void SetupData([NotNull] HttpRequestMessage Request, string Data)
+        {
+            if (Request == null) throw new ArgumentNullException(nameof(Request));
+            if (string.IsNullOrEmpty(Data))
+            {
+                Request.Headers.Add("Content-Length", "0");
+                return;
+            }
+            var ByteData = Data.ToByteArray();
+            Request.Headers.Add("Content-Length", ByteData.Length.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            Request.Content = new ByteArrayContent(ByteData);
+        }
+
+        /// <summary>
+        /// Sets up any credentials (basic authentication, for OAuth, 
+        /// please use the OAuth class to create the URL)
+        /// </summary>
+        /// <param name="Handler">The http client handler object</param>
+        private void SetupCredentials(HttpClientHandler Handler)
+        {
+            if (!string.IsNullOrEmpty(UserName) && !string.IsNullOrEmpty(Password))
+                Handler.Credentials = new NetworkCredential(UserName, Password);
+        }
+#endif
     }
 }

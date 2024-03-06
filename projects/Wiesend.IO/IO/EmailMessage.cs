@@ -158,17 +158,13 @@ namespace Wiesend.IO
             if (Attachments != null)
             {
                 foreach (Attachment Attachment in Attachments)
-                {
                     Attachment.Dispose();
-                }
                 Attachments = null;
             }
             if (EmbeddedResources != null)
             {
                 foreach (LinkedResource Resource in EmbeddedResources)
-                {
                     Resource.Dispose();
-                }
                 EmbeddedResources = null;
             }
         }

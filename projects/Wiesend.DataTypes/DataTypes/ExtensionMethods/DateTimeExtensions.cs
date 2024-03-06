@@ -74,7 +74,7 @@
 
 using System;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Globalization;
 
 namespace Wiesend.DataTypes
@@ -178,9 +178,9 @@ namespace Wiesend.DataTypes
         /// <param name="Date">Birth date</param>
         /// <param name="CalculateFrom">Date to calculate from</param>
         /// <returns>The total age in years</returns>
-        public static int Age(this DateTime Date, DateTime CalculateFrom = default(DateTime))
+        public static int Age(this DateTime Date, DateTime CalculateFrom = default)
         {
-            if (CalculateFrom == default(DateTime))
+            if (CalculateFrom == default)
                 CalculateFrom = DateTime.Now;
             return (CalculateFrom - Date).Years();
         }
@@ -218,6 +218,7 @@ namespace Wiesend.DataTypes
         /// </param>
         /// <param name="StartOfQuarter1">Start of the first quarter</param>
         /// <returns>The beginning of a specific time frame</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
         public static DateTime BeginningOf(this DateTime Date, TimeFrame TimeFrame, DateTime StartOfQuarter1, CultureInfo Culture = null)
         {
             if (TimeFrame != TimeFrame.Quarter)
@@ -395,6 +396,7 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Date">Date object</param>
         /// <returns>The local time zone</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         public static TimeZoneInfo LocalTimeZone(this DateTime Date)
         {
             return TimeZoneInfo.Local;
@@ -430,9 +432,9 @@ namespace Wiesend.DataTypes
         /// <param name="Date">DateTime to convert</param>
         /// <param name="TimeZone">Time zone to convert to</param>
         /// <returns>The converted DateTime</returns>
-        public static DateTime To(this DateTime Date, TimeZoneInfo TimeZone)
+        public static DateTime To(this DateTime Date, [NotNull] TimeZoneInfo TimeZone)
         {
-            Contract.Requires<ArgumentNullException>(TimeZone != null, "TimeZone");
+            if (TimeZone == null) throw new ArgumentNullException(nameof(TimeZone));
             return TimeZoneInfo.ConvertTime(Date, TimeZone);
         }
 
@@ -442,9 +444,9 @@ namespace Wiesend.DataTypes
         /// <param name="Date">Date to convert</param>
         /// <param name="Epoch">Epoch to use (defaults to unix epoch of 1/1/1970)</param>
         /// <returns>The date in Unix format</returns>
-        public static int To(this DateTime Date, DateTime Epoch = default(DateTime))
+        public static int To(this DateTime Date, DateTime Epoch = default)
         {
-            Epoch = Epoch.Check(x => x != default(DateTime), () => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+            Epoch = Epoch.Check(x => x != default, () => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc));
             return (int)((Date.ToUniversalTime() - Epoch).Ticks / TimeSpan.TicksPerSecond);
         }
 
@@ -454,9 +456,9 @@ namespace Wiesend.DataTypes
         /// <param name="Date">Date to convert</param>
         /// <param name="Epoch">Epoch to use (defaults to unix epoch of 1/1/1970)</param>
         /// <returns>The Unix Date in DateTime format</returns>
-        public static DateTime To(this int Date, DateTime Epoch = default(DateTime))
+        public static DateTime To(this int Date, DateTime Epoch = default)
         {
-            Epoch = Epoch.Check(x => x != default(DateTime), () => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+            Epoch = Epoch.Check(x => x != default, () => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc));
             return new DateTime((Date * TimeSpan.TicksPerSecond) + Epoch.Ticks, DateTimeKind.Utc);
         }
 
@@ -466,9 +468,9 @@ namespace Wiesend.DataTypes
         /// <param name="Date">Date to convert</param>
         /// <param name="Epoch">Epoch to use (defaults to unix epoch of 1/1/1970)</param>
         /// <returns>The Unix Date in DateTime format</returns>
-        public static DateTime To(this long Date, DateTime Epoch = default(DateTime))
+        public static DateTime To(this long Date, DateTime Epoch = default)
         {
-            Epoch = Epoch.Check(x => x != default(DateTime), () => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc));
+            Epoch = Epoch.Check(x => x != default, () => new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc));
             return new DateTime((Date * TimeSpan.TicksPerSecond) + Epoch.Ticks, DateTimeKind.Utc);
         }
 

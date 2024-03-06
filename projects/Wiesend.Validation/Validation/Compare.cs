@@ -76,7 +76,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
-#if NETFULL
+#if NETFRAMEWORK
 using System.Web.Mvc;
 #else
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
@@ -86,7 +86,7 @@ using Wiesend.DataTypes.Comparison;
 
 namespace Wiesend.Validation
 {
-#if NETFULL
+#if NETFRAMEWORK
     /// <summary>
     /// Compare attribute
     /// </summary>
@@ -155,9 +155,11 @@ namespace Wiesend.Validation
         /// <param name="metadata">Model meta data</param>
         /// <param name="context">Controller context</param>
         /// <returns>The list of client side validation rules</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public IEnumerable<ModelClientValidationRule> GetClientValidationRules(ModelMetadata metadata, ControllerContext context)
         {
-            var Rule = new ModelClientValidationRule();
+            ModelClientValidationRule Rule = new ModelClientValidationRule();
             Rule.ErrorMessage = FormatErrorMessage(metadata.GetDisplayName());
             Rule.ValidationParameters.Add("Type", Type);
             Rule.ValidationParameters.Add("Value", Value);
@@ -171,11 +173,13 @@ namespace Wiesend.Validation
         /// <param name="value">Value to check</param>
         /// <param name="validationContext">Validation context</param>
         /// <returns>The validation result</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0066:Convert switch statement to expression", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var Comparer = new GenericComparer<IComparable>();
-            var Value2 = (IComparable)Value.To<object>(value.GetType());
-            var TempValue = value as IComparable;
+            GenericComparer<IComparable> Comparer = new GenericComparer<IComparable>();
+            IComparable Value2 = (IComparable)Value.To<object>(value.GetType());
+            IComparable TempValue = value as IComparable;
             switch (Type)
             {
                 case ComparisonType.Equal:
@@ -264,11 +268,13 @@ namespace Wiesend.Validation
         /// <param name="value">Value to check</param>
         /// <param name="validationContext">Validation context</param>
         /// <returns>The validation result</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0066:Convert switch statement to expression", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var Comparer = new GenericComparer<IComparable>();
-            var Value2 = (IComparable)Value.To<object>(value.GetType());
-            var TempValue = value as IComparable;
+            GenericComparer<IComparable> Comparer = new GenericComparer<IComparable>();
+            IComparable Value2 = (IComparable)Value.To<object>(value.GetType());
+            IComparable TempValue = value as IComparable;
             switch (Type)
             {
                 case ComparisonType.Equal:
@@ -296,7 +302,7 @@ namespace Wiesend.Validation
         public void AddValidation(ClientModelValidationContext context)
         {
             MergeAttribute(context.Attributes, "data-val", "true");
-            var errorMessage = FormatErrorMessage(context.ModelMetadata.GetDisplayName());
+            string errorMessage = FormatErrorMessage(context.ModelMetadata.GetDisplayName());
             MergeAttribute(context.Attributes, "data-val-compare", errorMessage);
         }
 
@@ -307,12 +313,11 @@ namespace Wiesend.Validation
         /// <param name="key">Key</param>
         /// <param name="value">Value</param>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "<Pending>")]
         private bool MergeAttribute(IDictionary<string, string> attributes, string key, string value)
         {
             if (attributes.ContainsKey(key))
-            {
                 return false;
-            }
             attributes.Add(key, value);
             return true;
         }

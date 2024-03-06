@@ -81,6 +81,7 @@ namespace Wiesend.ORM.Interfaces
     /// <summary>
     /// Object interface
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public interface IObject<IDType>
     {
         /// <summary>

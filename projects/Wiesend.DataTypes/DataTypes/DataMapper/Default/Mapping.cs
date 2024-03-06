@@ -83,6 +83,7 @@ namespace Wiesend.DataTypes.DataMapper.Default
     /// </summary>
     /// <typeparam name="Left">Left type</typeparam>
     /// <typeparam name="Right">Right type</typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public class Mapping<Left, Right> : MappingBase<Left, Right>
     {
         /// <summary>
@@ -91,10 +92,10 @@ namespace Wiesend.DataTypes.DataMapper.Default
         /// <param name="LeftExpression">Left expression</param>
         /// <param name="RightExpression">Right expression</param>
         public Mapping(Expression<Func<Left, object>> LeftExpression, Expression<Func<Right, object>> RightExpression)
-            : this(LeftExpression == null ? null : LeftExpression.Compile(),
-                    LeftExpression == null ? null : LeftExpression.PropertySetter<Left>().Compile(),
-                    RightExpression == null ? null : RightExpression.Compile(),
-                    RightExpression == null ? null : RightExpression.PropertySetter<Right>().Compile())
+            : this(LeftExpression?.Compile(),
+                    LeftExpression?.PropertySetter<Left>().Compile(),
+                    RightExpression?.Compile(),
+                    RightExpression?.PropertySetter<Right>().Compile())
         {
         }
 
@@ -107,8 +108,8 @@ namespace Wiesend.DataTypes.DataMapper.Default
         public Mapping(Func<Left, object> LeftGet, Action<Left, object> LeftSet, Expression<Func<Right, object>> RightExpression)
             : this(LeftGet,
                     LeftSet,
-                    RightExpression == null ? null : RightExpression.Compile(),
-                    RightExpression == null ? null : RightExpression.PropertySetter<Right>().Compile())
+                    RightExpression?.Compile(),
+                    RightExpression?.PropertySetter<Right>().Compile())
         {
         }
 
@@ -119,8 +120,8 @@ namespace Wiesend.DataTypes.DataMapper.Default
         /// <param name="RightGet">Right get function</param>
         /// <param name="RightSet">Right set function</param>
         public Mapping(Expression<Func<Left, object>> LeftExpression, Func<Right, object> RightGet, Action<Right, object> RightSet)
-            : this(LeftExpression == null ? null : LeftExpression.Compile(),
-                    LeftExpression == null ? null : LeftExpression.PropertySetter<Left>().Compile(),
+            : this(LeftExpression?.Compile(),
+                    LeftExpression?.PropertySetter<Left>().Compile(),
                     RightGet,
                     RightSet)
         {

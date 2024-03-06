@@ -72,9 +72,9 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Threading.Tasks;
 using Wiesend.IO.Messaging.Interfaces;
 
@@ -112,9 +112,9 @@ namespace Wiesend.IO.Messaging.BaseClasses
         /// Initializes the system
         /// </summary>
         /// <param name="Formatters">Passes in the list of formatters that the system has found</param>
-        public void Initialize(IEnumerable<IFormatter> Formatters)
+        public void Initialize([NotNull] IEnumerable<IFormatter> Formatters)
         {
-            Contract.Requires<ArgumentNullException>(Formatters != null, "Formatters");
+            if (Formatters == null) throw new ArgumentNullException(nameof(Formatters));
             this.Formatters = Formatters;
         }
 

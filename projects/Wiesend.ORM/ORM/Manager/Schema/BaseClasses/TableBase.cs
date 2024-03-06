@@ -138,7 +138,7 @@ namespace Wiesend.ORM.Manager.Schema.BaseClasses
         /// <typeparam name="T">Column type</typeparam>
         public abstract IColumn AddColumn<T>(string ColumnName, DbType ColumnType, int Length = 0, bool Nullable = true,
             bool Identity = false, bool Index = false, bool PrimaryKey = false, bool Unique = false,
-            string ForeignKeyTable = "", string ForeignKeyColumn = "", T DefaultValue = default(T),
+            string ForeignKeyTable = "", string ForeignKeyColumn = "", T DefaultValue = default,
             bool OnDeleteCascade = false, bool OnUpdateCascade = false, bool OnDeleteSetNull = false);
 
         /// <summary>
@@ -181,6 +181,6 @@ namespace Wiesend.ORM.Manager.Schema.BaseClasses
         /// </summary>
         /// <param name="Name">Name of the column</param>
         /// <returns>The column specified</returns>
-        public IColumn this[string Name] { get { return Columns.FirstOrDefault(x => string.Equals(x.Name, Name, System.StringComparison.CurrentCultureIgnoreCase)); } }
+        public IColumn this[string Name] { get { return Columns.FirstOrDefault(x => string.Equals(x.Name, Name, System.StringComparison.OrdinalIgnoreCase)); } }
     }
 }

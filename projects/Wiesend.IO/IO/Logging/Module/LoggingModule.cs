@@ -72,7 +72,6 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-#if NETFULL
 using System;
 using Wiesend.IO.Logging.Interfaces;
 using Wiesend.IoC.Interfaces;
@@ -104,4 +103,3 @@ namespace Wiesend.IO.Logging.Module
         }
     }
 }
-#endif

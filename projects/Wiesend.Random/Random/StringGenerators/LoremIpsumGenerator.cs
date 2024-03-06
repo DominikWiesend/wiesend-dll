@@ -73,7 +73,7 @@
 #endregion of Licenses [MIT Licenses]
 
 using System;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Text;
 using Wiesend.DataTypes;
 using Wiesend.Random.BaseClasses;
@@ -188,7 +188,7 @@ namespace Wiesend.Random.StringGenerators
                 Builder.Append("<p>");
             Builder.Append("Lorem ipsum dolor sit amet. ");
             for (int y = 1; y < NumberOfSentences; ++y)
-                Builder.Append(NextSentence(Rand, Rand.Next(MinSentenceLength, MaxSentenceLength))).Append(" ");
+                Builder.Append(NextSentence(Rand, Rand.Next(MinSentenceLength, MaxSentenceLength))).Append(' ');
             if (HTMLFormatting)
                 Builder.Append("</p>");
             for (int x = 1; x < NumberOfParagraphs; ++x)
@@ -196,7 +196,7 @@ namespace Wiesend.Random.StringGenerators
                 if (HTMLFormatting)
                     Builder.Append("<p>");
                 for (int y = 0; y < NumberOfSentences; ++y)
-                    Builder.Append(NextSentence(Rand, Rand.Next(MinSentenceLength, MaxSentenceLength))).Append(" ");
+                    Builder.Append(NextSentence(Rand, Rand.Next(MinSentenceLength, MaxSentenceLength))).Append(' ');
                 if (HTMLFormatting)
                     Builder.Append("</p>");
                 else
@@ -233,14 +233,14 @@ namespace Wiesend.Random.StringGenerators
         /// <param name="NumberOfWords">Number of words for the sentence</param>
         /// <param name="Rand">Random number generator using</param>
         /// <returns>A string containing Lorem Ipsum text</returns>
-        protected virtual string NextSentence(System.Random Rand, int NumberOfWords)
+        protected virtual string NextSentence([NotNull] System.Random Rand, int NumberOfWords)
         {
-            Contract.Requires<ArgumentNullException>(Rand != null, "Rand");
+            if (Rand == null) throw new ArgumentNullException(nameof(Rand));
             var Builder = new StringBuilder();
             Builder.Append(Words[Rand.Next(Words.Length)].ToString(StringCase.FirstCharacterUpperCase));
             for (int x = 1; x < NumberOfWords; ++x)
-                Builder.Append(" ").Append(Words[Rand.Next(Words.Length)]);
-            Builder.Append(".");
+                Builder.Append(' ').Append(Words[Rand.Next(Words.Length)]);
+            Builder.Append('.');
             return Builder.ToString();
         }
     }

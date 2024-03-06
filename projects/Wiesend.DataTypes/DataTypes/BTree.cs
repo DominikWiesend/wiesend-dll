@@ -74,8 +74,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Linq;
+using System.Reflection;
+using System.Collections;
 
 namespace Wiesend.DataTypes
 {
@@ -83,6 +85,7 @@ namespace Wiesend.DataTypes
     /// Binary tree
     /// </summary>
     /// <typeparam name="T">The type held by the nodes</typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "<Pending>")]
     public class BinaryTree<T> : ICollection<T>
         where T : IComparable<T>
     {
@@ -90,6 +93,7 @@ namespace Wiesend.DataTypes
         /// Constructor
         /// </summary>
         /// <param name="root">Root of the binary tree</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2214:Do not call overridable methods in constructors", Justification = "<Pending>")]
         public BinaryTree(TreeNode<T> root = null)
         {
             if (Root == null)
@@ -125,12 +129,14 @@ namespace Wiesend.DataTypes
         /// <summary>
         /// Gets the maximum value of the tree
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public virtual T MaxValue
         {
             get
             {
-                Contract.Requires<InvalidOperationException>(!IsEmpty, "The tree is empty");
-                Contract.Requires<NullReferenceException>(Root != null, "Root");
+                if (IsEmpty) throw new InvalidOperationException("The tree is empty");
+                if (Root == null) throw new NullReferenceException("Root");
                 TreeNode<T> TempNode = Root;
                 while (TempNode.Right != null)
                     TempNode = TempNode.Right;
@@ -141,12 +147,14 @@ namespace Wiesend.DataTypes
         /// <summary>
         /// Gets the minimum value of the tree
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public virtual T MinValue
         {
             get
             {
-                Contract.Requires<InvalidOperationException>(!IsEmpty, "The tree is empty");
-                Contract.Requires<NullReferenceException>(Root != null, "Root");
+                if (IsEmpty) throw new InvalidOperationException("The tree is empty");
+                if (Root == null) throw new NullReferenceException("Root");
                 TreeNode<T> TempNode = Root;
                 while (TempNode.Left != null)
                     TempNode = TempNode.Left;
@@ -169,9 +177,10 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Value">Value to convert</param>
         /// <returns>The value as a string</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public static implicit operator string (BinaryTree<T> Value)
         {
-            Contract.Requires<ArgumentNullException>(Value != null, "Value");
+            if (Value == null) throw new ArgumentNullException(nameof(Value));
             return Value.ToString();
         }
 
@@ -323,9 +332,10 @@ namespace Wiesend.DataTypes
         /// Inserts a value
         /// </summary>
         /// <param name="item">item to insert</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         protected virtual void Insert(T item)
         {
-            Contract.Requires<NullReferenceException>(Root != null, "Root");
+            if (Root == null) throw new NullReferenceException("Root");
             TreeNode<T> TempNode = Root;
             bool Found = false;
             while (!Found)
@@ -401,7 +411,7 @@ namespace Wiesend.DataTypes
         /// <param name="parent">Parent node</param>
         /// <param name="left">Left node</param>
         /// <param name="right">Right node</param>
-        public TreeNode(T value = default(T), TreeNode<T> parent = null, TreeNode<T> left = null, TreeNode<T> right = null)
+        public TreeNode(T value = default, TreeNode<T> parent = null, TreeNode<T> left = null, TreeNode<T> right = null)
         {
             Value = value;
             Right = right;

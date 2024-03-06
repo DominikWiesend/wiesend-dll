@@ -72,15 +72,12 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-using System.Diagnostics.Contracts;
-using Wiesend.DataTypes.DataMapper.Interfaces.Contracts;
-
 namespace Wiesend.DataTypes.DataMapper.Interfaces
 {
     /// <summary>
     /// Mapping interface
     /// </summary>
-    [ContractClass(typeof(IMapperModuleContract))]
+    //[ContractClass(typeof(IMapperModuleContract))]
     public interface IMapperModule
     {
         /// <summary>

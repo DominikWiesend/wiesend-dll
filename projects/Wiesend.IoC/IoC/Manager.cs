@@ -72,10 +72,10 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -103,15 +103,11 @@ namespace Wiesend.IoC
                                                                     && !x.Namespace.StartsWith("WIESEND", StringComparison.OrdinalIgnoreCase))
                                                    .ToList();
             if (Bootstrappers.Count == 0)
-            {
                 Bootstrappers.Add(typeof(DefaultBootstrapper));
-            }
             InternalBootstrapper = (IBootstrapper)Activator.CreateInstance(Bootstrappers[0], LoadedAssemblies, LoadedTypes);
             InternalBootstrapper.RegisterAll<IModule>();
             foreach (IModule Module in InternalBootstrapper.ResolveAll<IModule>().OrderBy(x => x.Order))
-            {
                 Module.Load(InternalBootstrapper);
-            }
         }
 
         /// <summary>
@@ -125,10 +121,7 @@ namespace Wiesend.IoC
                 {
                     lock (Temp)
                     {
-                        if (_Instance == null)
-                        {
-                            _Instance = new Manager();
-                        }
+                        _Instance ??= new Manager();
                     }
                 }
                 return _Instance.InternalBootstrapper;
@@ -140,8 +133,10 @@ namespace Wiesend.IoC
         /// </summary>
         protected IBootstrapper InternalBootstrapper { get; private set; }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         private static Manager _Instance = new Manager();
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
         private static object Temp = 1;
 
         /// <summary>
@@ -182,10 +177,11 @@ namespace Wiesend.IoC
         /// </summary>
         /// <param name="LoadedAssemblies">The loaded assemblies.</param>
         /// <returns>The list of</returns>
-        private static List<Type> GetTypes(ref ConcurrentBag<Assembly> LoadedAssemblies)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
+        private static List<Type> GetTypes([NotNull] ref ConcurrentBag<Assembly> LoadedAssemblies)
         {
-            Contract.Requires<ArgumentNullException>(LoadedAssemblies != null);
-            var TempTypes = new List<Type>();
+            if (LoadedAssemblies == null) throw new ArgumentNullException(nameof(LoadedAssemblies), $"Contract assertion not met: {nameof(LoadedAssemblies)} != null");
+            List<Type> TempTypes = new List<Type>();
             LoadedAssemblies = new ConcurrentBag<Assembly>(LoadedAssemblies.Where(x =>
             {
                 try
@@ -204,8 +200,9 @@ namespace Wiesend.IoC
         /// <returns>The list of assemblies that the system has loaded</returns>
         private static ConcurrentBag<Assembly> LoadAssemblies()
         {
-            var Files = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory).GetFiles("*.dll", SearchOption.TopDirectoryOnly)
+            List<FileInfo> Files = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory).GetFiles("*.dll", SearchOption.TopDirectoryOnly)
                                                                                               .Where(x => !x.Name.Equals("CULGeneratedTypes.dll", StringComparison.InvariantCultureIgnoreCase))
+                                                                                              .Where(x => !x.FullName.StartsWith(@"C:\Windows\system32\WindowsPowerShell", StringComparison.InvariantCultureIgnoreCase))
                                                                                               .ToList();
             if (!new DirectoryInfo(".").FullName.Contains(System.Environment.GetFolderPath(Environment.SpecialFolder.SystemX86))
                     && !new DirectoryInfo(".").FullName.Contains(System.Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles))

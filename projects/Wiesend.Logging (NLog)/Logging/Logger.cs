@@ -99,8 +99,7 @@ namespace Wiesend.Logging
                 Logs.Add(Name, new Log(Name));
             else
             {
-                if (Logs[Name] != null)
-                    Logs[Name].Dispose();
+                Logs[Name]?.Dispose();
                 Logs[Name] = new Log(Name);
             }
         }

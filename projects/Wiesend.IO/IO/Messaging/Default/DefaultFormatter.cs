@@ -72,6 +72,7 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using Wiesend.DataTypes;
 using Wiesend.IO.Messaging.Interfaces;
@@ -94,12 +95,10 @@ namespace Wiesend.IO.Messaging.Default
         /// <param name="Message">Message to format</param>
         /// <param name="Model">Model object used to format the message</param>
         /// <returns>The formatted message</returns>
-        public void Format<T>(IMessage Message, T Model)
+        public void Format<T>([NotNull] IMessage Message, [NotNull] T Model)
         {
-            if (Message == null)
-                throw new ArgumentNullException(nameof(Message));
-            if (Model == null)
-                throw new ArgumentNullException(nameof(Model));
+            if (Message == null) throw new ArgumentNullException(nameof(Message));
+            if (Model == null) throw new ArgumentNullException(nameof(Model));
             if (string.IsNullOrEmpty(Message.Body) || Model.Is<string>())
                 Message.Body = Model.ToString();
             else

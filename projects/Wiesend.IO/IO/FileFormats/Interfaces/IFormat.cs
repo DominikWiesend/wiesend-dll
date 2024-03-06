@@ -81,6 +81,7 @@ namespace Wiesend.IO.FileFormats.Interfaces
     /// </summary>
     /// <typeparam name="ContentType">Content type</typeparam>
     /// <typeparam name="FormatType">Format type</typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public interface IFormat<FormatType, ContentType> : IComparable, IComparable<FormatType>, IEquatable<FormatType>, ICloneable
         where FormatType : IFormat<FormatType, ContentType>, new()
     {

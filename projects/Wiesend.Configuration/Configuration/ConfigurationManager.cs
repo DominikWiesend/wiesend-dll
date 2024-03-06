@@ -73,7 +73,7 @@
 #endregion of Licenses [MIT Licenses]
 
 using System;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using Wiesend.Configuration.Manager.Interfaces;
 
 namespace Wiesend.Configuration
@@ -99,10 +99,11 @@ namespace Wiesend.Configuration
         /// if using the default config system)
         /// </param>
         /// <returns>The config file specified</returns>
-        public static T Get<T>(ConfigurationSystem System, string Name = "Default")
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
+        public static T Get<T>([NotNull] ConfigurationSystem System, string Name = "Default")
             where T : IConfig, new()
         {
-            Contract.Requires<ArgumentNullException>(System != null, "The config system can not be null.");
+            if (System == null) throw new ArgumentNullException(nameof(System), "The config system can not be null.");
             if (ConfigManager == null)
                 ConfigManager = IoC.Manager.Bootstrapper.Resolve<Configuration.Manager.Manager>();
             return ConfigManager.Get(System).Config<T>(Name);
@@ -155,9 +156,11 @@ namespace Wiesend.Configuration
         /// </summary>
         /// <param name="Object">Object to convert</param>
         /// <returns>The string version of the configuration system type</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public static implicit operator string(ConfigurationSystem Object)
         {
-            Contract.Requires<ArgumentNullException>(Object != null, "Object");
+            if (Object == null) throw new ArgumentNullException(nameof(Object));
             return Object.ToString();
         }
 

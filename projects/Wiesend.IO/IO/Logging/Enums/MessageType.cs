@@ -72,7 +72,6 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-#if NETFULL
 namespace Wiesend.IO.Logging.Enums
 {
     /// <summary>
@@ -111,4 +110,3 @@ namespace Wiesend.IO.Logging.Enums
         Error
     }
 }
-#endif

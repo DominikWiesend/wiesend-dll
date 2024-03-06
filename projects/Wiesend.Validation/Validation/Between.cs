@@ -76,7 +76,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
-#if NETFULL
+#if NETFRAMEWORK
 using System.Web.Mvc;
 #else
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
@@ -86,80 +86,83 @@ using Wiesend.DataTypes.Comparison;
 
 namespace Wiesend.Validation
 {
-#if NETFULL
-     /// <summary>
-     /// Between attribute
-     /// </summary>
-     [AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
-     public class BetweenAttribute : ValidationAttribute, IClientValidatable
-     {
-         /// <summary>
-         /// Constructor
-         /// </summary>
-         /// <param name="Max">Max value</param>
-         /// <param name="Min">Min value</param>
-         /// <param name="ErrorMessage">Error message</param>
-         public BetweenAttribute(object Min, object Max, string ErrorMessage = "")
-             : base(string.IsNullOrEmpty(ErrorMessage) ? "{0} is not between {1} and {2}" : ErrorMessage)
-         {
-             this.Min = Min;
-             this.Max = Max;
-         }
+#if NETFRAMEWORK
+    /// <summary>
+    /// Between attribute
+    /// </summary>
+    [AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
+    public class BetweenAttribute : ValidationAttribute, IClientValidatable
+    {
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="Max">Max value</param>
+        /// <param name="Min">Min value</param>
+        /// <param name="ErrorMessage">Error message</param>
+        public BetweenAttribute(object Min, object Max, string ErrorMessage = "")
+            : base(string.IsNullOrEmpty(ErrorMessage) ? "{0} is not between {1} and {2}" : ErrorMessage)
+        {
+            this.Min = Min;
+            this.Max = Max;
+        }
+    
+        /// <summary>
+        /// Max value to compare to
+        /// </summary>
+        public object Max { get; private set; }
+    
+        /// <summary>
+        /// Min value to compare to
+        /// </summary>
+        public object Min { get; private set; }
+    
+        /// <summary>
+        /// Formats the error message
+        /// </summary>
+        /// <param name="name">Property name</param>
+        /// <returns>The formatted string</returns>
+        public override string FormatErrorMessage(string name)
+        {
+            return string.Format(CultureInfo.InvariantCulture, ErrorMessageString, name, Min.ToString(), Max.ToString());
+        }
 
-         /// <summary>
-         /// Max value to compare to
-         /// </summary>
-         public object Max { get; private set; }
+        /// <summary>
+        /// Gets the client side validation rules
+        /// </summary>
+        /// <param name="metadata">Model meta data</param>
+        /// <param name="context">Controller context</param>
+        /// <returns>The list of client side validation rules</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
+        public IEnumerable<ModelClientValidationRule> GetClientValidationRules(ModelMetadata metadata, ControllerContext context)
+        {
+            ModelClientValidationRule Rule = new ModelClientValidationRule();
+            Rule.ErrorMessage = FormatErrorMessage(metadata.GetDisplayName());
+            Rule.ValidationParameters.Add("Min", Min);
+            Rule.ValidationParameters.Add("Max", Max);
+            Rule.ValidationType = "Between";
+            return new ModelClientValidationRule[] { Rule };
+        }
 
-         /// <summary>
-         /// Min value to compare to
-         /// </summary>
-         public object Min { get; private set; }
-
-         /// <summary>
-         /// Formats the error message
-         /// </summary>
-         /// <param name="name">Property name</param>
-         /// <returns>The formatted string</returns>
-         public override string FormatErrorMessage(string name)
-         {
-             return string.Format(CultureInfo.InvariantCulture, ErrorMessageString, name, Min.ToString(), Max.ToString());
-         }
-
-         /// <summary>
-         /// Gets the client side validation rules
-         /// </summary>
-         /// <param name="metadata">Model meta data</param>
-         /// <param name="context">Controller context</param>
-         /// <returns>The list of client side validation rules</returns>
-         public IEnumerable<ModelClientValidationRule> GetClientValidationRules(ModelMetadata metadata, ControllerContext context)
-         {
-             var Rule = new ModelClientValidationRule();
-             Rule.ErrorMessage = FormatErrorMessage(metadata.GetDisplayName());
-             Rule.ValidationParameters.Add("Min", Min);
-             Rule.ValidationParameters.Add("Max", Max);
-             Rule.ValidationType = "Between";
-             return new ModelClientValidationRule[] { Rule };
-         }
-
-         /// <summary>
-         /// Determines if the property is valid
-         /// </summary>
-         /// <param name="value">Value to check</param>
-         /// <param name="validationContext">Validation context</param>
-         /// <returns>The validation result</returns>
-         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
-         {
-             var Comparer = new GenericComparer<IComparable>();
-             var MaxValue = (IComparable)Max.To<object>(value.GetType());
-             var MinValue = (IComparable)Min.To<object>(value.GetType());
-             var TempValue = value as IComparable;
-             return (Comparer.Compare(MaxValue, TempValue) < 0
-                     || Comparer.Compare(TempValue, MinValue) < 0) ?
-                 new ValidationResult(FormatErrorMessage(validationContext.DisplayName)) :
-                 ValidationResult.Success;
-         }
-     }
+        /// <summary>
+        /// Determines if the property is valid
+        /// </summary>
+        /// <param name="value">Value to check</param>
+        /// <param name="validationContext">Validation context</param>
+        /// <returns>The validation result</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
+        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
+        {
+            GenericComparer<IComparable> Comparer = new GenericComparer<IComparable>();
+            IComparable MaxValue = (IComparable)Max.To<object>(value.GetType());
+            IComparable MinValue = (IComparable)Min.To<object>(value.GetType());
+            IComparable TempValue = value as IComparable;
+            return (Comparer.Compare(MaxValue, TempValue) < 0
+                    || Comparer.Compare(TempValue, MinValue) < 0) ?
+                new ValidationResult(FormatErrorMessage(validationContext.DisplayName)) :
+                ValidationResult.Success;
+        }
+    }
 #else
     /// <summary>
     /// Between attribute
@@ -196,12 +199,13 @@ namespace Wiesend.Validation
         /// <param name="value">Value to check</param>
         /// <param name="validationContext">Validation context</param>
         /// <returns>The validation result</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var Comparer = new GenericComparer<IComparable>();
-            var MaxValue = (IComparable)Max.To<object>(value.GetType());
-            var MinValue = (IComparable)Min.To<object>(value.GetType());
-            var TempValue = value as IComparable;
+            GenericComparer<IComparable> Comparer = new GenericComparer<IComparable>();
+            IComparable MaxValue = (IComparable)Max.To<object>(value.GetType());
+            IComparable MinValue = (IComparable)Min.To<object>(value.GetType());
+            IComparable TempValue = value as IComparable;
             return (Comparer.Compare(MaxValue, TempValue) < 0
                     || Comparer.Compare(TempValue, MinValue) < 0) ?
                 new ValidationResult(FormatErrorMessage(validationContext.DisplayName)) :
@@ -226,7 +230,7 @@ namespace Wiesend.Validation
         public void AddValidation(ClientModelValidationContext context)
         {
             MergeAttribute(context.Attributes, "data-val", "true");
-            var errorMessage = FormatErrorMessage(context.ModelMetadata.GetDisplayName());
+            string errorMessage = FormatErrorMessage(context.ModelMetadata.GetDisplayName());
             MergeAttribute(context.Attributes, "data-val-between", errorMessage);
         }
 
@@ -237,12 +241,11 @@ namespace Wiesend.Validation
         /// <param name="key">Key</param>
         /// <param name="value">Value</param>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "<Pending>")]
         private bool MergeAttribute(IDictionary<string, string> attributes, string key, string value)
         {
             if (attributes.ContainsKey(key))
-            {
                 return false;
-            }
             attributes.Add(key, value);
             return true;
         }

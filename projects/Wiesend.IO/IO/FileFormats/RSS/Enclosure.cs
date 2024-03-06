@@ -72,8 +72,8 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
-using System.Diagnostics.Contracts;
 using System.Xml.XPath;
 
 namespace Wiesend.IO.FileFormats.RSS
@@ -94,9 +94,9 @@ namespace Wiesend.IO.FileFormats.RSS
         /// Constructor
         /// </summary>
         /// <param name="Doc">XML element holding info for the enclosure</param>
-        public Enclosure(IXPathNavigable Doc)
+        public Enclosure([NotNull] IXPathNavigable Doc)
         {
-            Contract.Requires<ArgumentNullException>(Doc != null, "Doc");
+            if (Doc == null) throw new ArgumentNullException(nameof(Doc));
             var Element = Doc.CreateNavigator();
             if (string.IsNullOrEmpty(Element.GetAttribute("url", "")))
             {

@@ -133,7 +133,7 @@ namespace Wiesend.Random.DefaultClasses
         /// <returns>The next object</returns>
         public override object NextObj(System.Random Rand)
         {
-            if ((DateTime)Min != default(DateTime) || (DateTime)Max != default(DateTime))
+            if ((DateTime)Min != default || (DateTime)Max != default)
                 return Next(Rand, (DateTime)Min, (DateTime)Max);
             return Next(Rand);
         }

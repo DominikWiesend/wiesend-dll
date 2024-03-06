@@ -82,6 +82,7 @@ namespace Wiesend.Random.NameGenerators
     /// </summary>
     public class MaleFirstNameGenerator : GeneratorAttributeBase, IGenerator<string>
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
         private string[] MaleFirstNames = { "Jacob", "Mason", "William", "Jayden", "Noah", "Michael", "Ethan",
                                               "Alexander", "Aiden", "Daniel", "Anthony", "Matthew", "Elijah", "Joshua",
                                               "Liam", "Andrew", "James", "David", "Benjamin", "Logan", "Christopher", "Joseph",

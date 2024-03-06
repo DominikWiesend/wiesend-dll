@@ -73,7 +73,7 @@
 #endregion of Licenses [MIT Licenses]
 
 using System;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Text;
 using Wiesend.DataTypes.Formatters.Interfaces;
 
@@ -127,6 +127,7 @@ namespace Wiesend.DataTypes.Formatters
         /// <param name="Input">Input string</param>
         /// <param name="FormatPattern">Format pattern</param>
         /// <returns>The formatted string</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
         public virtual string Format(string Input, string FormatPattern)
         {
             if (!IsValid(FormatPattern))
@@ -195,9 +196,9 @@ namespace Wiesend.DataTypes.Formatters
         /// </summary>
         /// <param name="FormatPattern">Format pattern</param>
         /// <returns>Returns true if it's valid, otherwise false</returns>
-        protected virtual bool IsValid(string FormatPattern)
+        protected virtual bool IsValid([NotNull] string FormatPattern)
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(FormatPattern), "FormatPattern");
+            if (string.IsNullOrEmpty(FormatPattern)) throw new ArgumentNullException(nameof(FormatPattern));
             bool EscapeCharFound = false;
             for (int x = 0; x < FormatPattern.Length; ++x)
             {

@@ -72,9 +72,9 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Text;
 using System.Xml;
@@ -105,12 +105,12 @@ namespace Wiesend.IO.FileFormats.RSS
         /// Constructor
         /// </summary>
         /// <param name="Doc">XML representation of the channel</param>
-        public Channel(IXPathNavigable Doc)
+        public Channel([NotNull] IXPathNavigable Doc)
             : this()
         {
-            Contract.Requires<ArgumentNullException>(Doc != null, "Element");
+            if (Doc == null) throw new ArgumentNullException(nameof(Doc), "Element");
             var Element = Doc.CreateNavigator();
-            if (!Element.Name.Equals("channel", StringComparison.CurrentCultureIgnoreCase))
+            if (!Element.Name.Equals("channel", StringComparison.OrdinalIgnoreCase))
                 throw new ArgumentException("Element is not a channel");
             var NamespaceManager = new XmlNamespaceManager(Element.NameTable);
             var Node = Element.SelectSingleNode("./title", NamespaceManager);

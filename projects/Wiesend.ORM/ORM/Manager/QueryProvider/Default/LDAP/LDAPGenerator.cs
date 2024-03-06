@@ -125,6 +125,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.LDAP
         /// </summary>
         /// <param name="Parameters">Parameters</param>
         /// <returns>Batch with the appropriate commands</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public IBatch All(params IParameter[] Parameters)
         {
             if (Mapping == null)
@@ -222,6 +223,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.LDAP
         /// <param name="Object">Object</param>
         /// <typeparam name="P">Property type</typeparam>
         /// <returns>The batch with the appropriate commands</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public IBatch JoinsDelete<P>(IProperty<T, P> Property, T Object)
         {
             return QueryProvider.Batch(Source);
@@ -235,6 +237,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.LDAP
         /// <typeparam name="P">Property type</typeparam>
         /// <typeparam name="ItemType">Item type</typeparam>
         /// <returns>The batch with the appropriate commands</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public IBatch JoinsSave<P, ItemType>(IProperty<T, P> Property, T Object)
         {
             return QueryProvider.Batch(Source);
@@ -247,6 +250,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.LDAP
         /// <param name="Object">Object to get the property for</param>
         /// <param name="Property">Property to get</param>
         /// <returns>Batch with the appropriate commands</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public IBatch LoadProperty<P>(T Object, IProperty Property)
         {
             return QueryProvider.Batch(Source);
@@ -282,6 +286,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.LDAP
         /// </summary>
         /// <typeparam name="PrimaryKeyType">Primary key type</typeparam>
         /// <param name="Object">Object to save</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public IBatch Save<PrimaryKeyType>(T Object)
         {
             return QueryProvider.Batch(Source);
@@ -300,6 +305,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.LDAP
         /// </summary>
         /// <typeparam name="D">Data type</typeparam>
         /// <param name="Property">Map property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public void SetupLoadCommands<D>(Mapper.Default.Map<T, D> Property) where D : class
         {
         }
@@ -309,6 +315,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.LDAP
         /// </summary>
         /// <typeparam name="D">Data type</typeparam>
         /// <param name="Property">IEnumerableManyToOne property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public void SetupLoadCommands<D>(Mapper.Default.IEnumerableManyToOne<T, D> Property)
             where D : class
         {
@@ -319,6 +326,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.LDAP
         /// </summary>
         /// <typeparam name="D">Data type</typeparam>
         /// <param name="Property">ListManyToOne property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public void SetupLoadCommands<D>(Mapper.Default.ListManyToOne<T, D> Property)
                     where D : class
         {
@@ -329,6 +337,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.LDAP
         /// </summary>
         /// <typeparam name="D">Data type</typeparam>
         /// <param name="Property">ListManyToMany property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public void SetupLoadCommands<D>(Mapper.Default.ListManyToMany<T, D> Property)
             where D : class
         {
@@ -339,6 +348,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.LDAP
         /// </summary>
         /// <typeparam name="D">Data type</typeparam>
         /// <param name="Property">ManyToOne property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public void SetupLoadCommands<D>(Mapper.Default.ManyToOne<T, D> Property)
             where D : class
         {
@@ -349,6 +359,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.LDAP
         /// </summary>
         /// <typeparam name="D">Data type</typeparam>
         /// <param name="Property">ManyToMany property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public void SetupLoadCommands<D>(Mapper.Default.ManyToMany<T, D> Property)
             where D : class
         {
@@ -359,6 +370,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.LDAP
         /// </summary>
         /// <typeparam name="D">Data type</typeparam>
         /// <param name="Property">Map property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public void SetupLoadCommands<D>(Mapper.Default.IListManyToMany<T, D> Property)
             where D : class
         {
@@ -369,6 +381,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.LDAP
         /// </summary>
         /// <typeparam name="D">Data type</typeparam>
         /// <param name="Property">Map property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public void SetupLoadCommands<D>(Mapper.Default.IListManyToOne<T, D> Property)
             where D : class
         {
@@ -379,6 +392,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.LDAP
         /// </summary>
         /// <typeparam name="D">Data type</typeparam>
         /// <param name="Property">Map property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public void SetupLoadCommands<D>(Mapper.Default.ICollectionManyToMany<T, D> Property)
             where D : class
         {
@@ -389,6 +403,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.LDAP
         /// </summary>
         /// <typeparam name="D">Data type</typeparam>
         /// <param name="Property">Map property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public void SetupLoadCommands<D>(Mapper.Default.ICollectionManyToOne<T, D> Property)
             where D : class
         {

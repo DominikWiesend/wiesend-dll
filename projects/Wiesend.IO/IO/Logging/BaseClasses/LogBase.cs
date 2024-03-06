@@ -72,7 +72,6 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-#if NETFULL
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -96,6 +95,7 @@ namespace Wiesend.IO.Logging.BaseClasses
     /// Base class for logs
     /// </summary>
     /// <typeparam name="LogType">Log type</typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public abstract class LogBase<LogType> : SafeDisposableBaseClass, ILog
         where LogType : LogBase<LogType>
     {
@@ -169,4 +169,3 @@ namespace Wiesend.IO.Logging.BaseClasses
         }
     }
 }
-#endif

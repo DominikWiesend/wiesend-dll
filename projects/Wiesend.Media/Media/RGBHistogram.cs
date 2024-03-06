@@ -73,7 +73,7 @@
 #endregion of Licenses [MIT Licenses]
 
 using System;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Linq;
@@ -94,6 +94,7 @@ namespace Wiesend.Media
         /// Constructor
         /// </summary>
         /// <param name="Image">Image to load</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2214:Do not call overridable methods in constructors", Justification = "<Pending>")]
         public RGBHistogram(SwiftBitmap Image = null)
         {
             R = new float[256];
@@ -106,19 +107,16 @@ namespace Wiesend.Media
         /// <summary>
         /// Blue values
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")]
         public virtual float[] B { get; set; }
 
         /// <summary>
         /// Green values
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")]
         public virtual float[] G { get; set; }
 
         /// <summary>
         /// Red values
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays")]
         public virtual float[] R { get; set; }
 
         /// <summary>
@@ -181,9 +179,9 @@ namespace Wiesend.Media
         /// Loads an image
         /// </summary>
         /// <param name="ImageUsing">Image to load</param>
-        public virtual void LoadImage(SwiftBitmap ImageUsing)
+        public virtual void LoadImage([NotNull] SwiftBitmap ImageUsing)
         {
-            Contract.Requires<ArgumentNullException>(ImageUsing != null, "ImageUsing");
+            if (ImageUsing == null) throw new ArgumentNullException(nameof(ImageUsing));
             Width = ImageUsing.Width;
             Height = ImageUsing.Height;
             ImageUsing.Lock();

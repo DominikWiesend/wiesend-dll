@@ -73,7 +73,7 @@
 #endregion of Licenses [MIT Licenses]
 
 using System;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Drawing;
 using System.Drawing.Imaging;
 using Wiesend.DataTypes;
@@ -98,7 +98,6 @@ namespace Wiesend.Media.Procedural
         /// <param name="Octaves">Octaves</param>
         /// <param name="Seed">Random seed</param>
         /// <returns>An image containing perlin noise</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope")]
         public static SwiftBitmap Generate(int Width, int Height, int MaxRGBValue, int MinRGBValue,
             float Frequency, float Amplitude, float Persistance, int Octaves, int Seed)
         {
@@ -119,7 +118,6 @@ namespace Wiesend.Media.Procedural
             return ReturnValue.Unlock();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Body"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Return")]
         private static float[,] GenerateNoise(int Seed, int Width, int Height)
         {
             float[,] Noise = new float[Width, Height];
@@ -134,7 +132,6 @@ namespace Wiesend.Media.Procedural
             return Noise;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "4#")]
         private static float GetSmoothNoise(float X, float Y, int Width, int Height, float[,] Noise)
         {
             if (Noise == null)
@@ -155,11 +152,10 @@ namespace Wiesend.Media.Procedural
             return FinalValue;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "8#")]
         private static float GetValue(int X, int Y, int Width, int Height, float Frequency, float Amplitude,
             float Persistance, int Octaves, float[,] Noise)
         {
-            Contract.Requires<ArgumentException>(Octaves >= 0, "Octaves should be greater than or equal to 0");
+            if (!(Octaves >= 0)) throw new ArgumentException("Octaves should be greater than or equal to 0", nameof(Octaves));
             if (Noise == null)
                 return 0.0f;
             float FinalValue = 0.0f;

@@ -74,16 +74,14 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Reflection;
-using Wiesend.IoC.Interfaces.Contracts;
 
 namespace Wiesend.IoC.Interfaces
 {
     /// <summary>
     /// Bootstrapper interface
     /// </summary>
-    [ContractClass(typeof(IBootstrapperContract))]
+    //[ContractClass(typeof(IBootstrapperContract))]
     public interface IBootstrapper : IDisposable
     {
         /// <summary>
@@ -146,7 +144,7 @@ namespace Wiesend.IoC.Interfaces
         /// <typeparam name="T">Type to resolve</typeparam>
         /// <param name="DefaultObject">Default object to return if the type can not be resolved</param>
         /// <returns>An object of the specified type</returns>
-        T Resolve<T>(T DefaultObject = default(T))
+        T Resolve<T>(T DefaultObject = default)
             where T : class;
 
         /// <summary>
@@ -156,7 +154,7 @@ namespace Wiesend.IoC.Interfaces
         /// <param name="Name">Name associated with the object</param>
         /// <param name="DefaultObject">Default object to return if the type can not be resolved</param>
         /// <returns>An object of the specified type</returns>
-        T Resolve<T>(string Name, T DefaultObject = default(T))
+        T Resolve<T>(string Name, T DefaultObject = default)
             where T : class;
 
         /// <summary>

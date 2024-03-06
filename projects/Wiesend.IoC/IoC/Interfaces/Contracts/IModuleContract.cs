@@ -72,18 +72,15 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics.Contracts;
-using System.Reflection;
-using Wiesend.IoC.Interfaces.Contracts;
 
 namespace Wiesend.IoC.Interfaces.Contracts
 {
     /// <summary>
     /// IModule contract class
     /// </summary>
-    [ContractClassFor(typeof(IModule))]
+    //[ContractClassFor(typeof(IModule))]
     internal abstract class IModuleContract : IModule
     {
         /// <summary>
@@ -98,9 +95,10 @@ namespace Wiesend.IoC.Interfaces.Contracts
         /// Loads the module using the bootstrapper
         /// </summary>
         /// <param name="Bootstrapper">Bootstrapper used to register various objects</param>
-        public void Load(IBootstrapper Bootstrapper)
+        public void Load([NotNull] IBootstrapper Bootstrapper)
         {
-            Contract.Requires<ArgumentNullException>(Bootstrapper != null);
+            if (Bootstrapper == null) 
+                throw new ArgumentNullException(nameof(Bootstrapper), $"Contract assertion not met: {nameof(Bootstrapper)} != null");
         }
     }
 }

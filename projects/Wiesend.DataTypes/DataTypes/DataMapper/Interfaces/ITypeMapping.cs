@@ -73,16 +73,14 @@
 #endregion of Licenses [MIT Licenses]
 
 using System;
-using System.Diagnostics.Contracts;
 using System.Linq.Expressions;
-using Wiesend.DataTypes.DataMapper.Interfaces.Contracts;
 
 namespace Wiesend.DataTypes.DataMapper.Interfaces
 {
     /// <summary>
     /// Type mapping interface
     /// </summary>
-    [ContractClass(typeof(ITypeMappingContract))]
+    //[ContractClass(typeof(ITypeMappingContract))]
     public interface ITypeMapping
     {
         /// <summary>
@@ -103,7 +101,8 @@ namespace Wiesend.DataTypes.DataMapper.Interfaces
     /// </summary>
     /// <typeparam name="Left">Left type</typeparam>
     /// <typeparam name="Right">Right type</typeparam>
-    [ContractClass(typeof(ITypeMappingContract<,>))]
+    //ContractClass(typeof(ITypeMappingContract<,>))]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public interface ITypeMapping<Left, Right> : ITypeMapping
     {
         /// <summary>

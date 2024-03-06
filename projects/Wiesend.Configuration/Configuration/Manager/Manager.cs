@@ -74,7 +74,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Linq;
 using Wiesend.Configuration.Manager.Interfaces;
 using Wiesend.DataTypes;
@@ -91,9 +91,9 @@ namespace Wiesend.Configuration.Manager
         /// Initializes a new instance of the <see cref="Manager" /> class.
         /// </summary>
         /// <param name="ConfigSystems">The configuration systems.</param>
-        public Manager(IEnumerable<IConfigSystem> ConfigSystems)
+        public Manager([NotNull] IEnumerable<IConfigSystem> ConfigSystems)
         {
-            Contract.Requires<ArgumentNullException>(ConfigSystems != null, "ConfigSystems");
+            if (ConfigSystems == null) throw new ArgumentNullException(nameof(ConfigSystems));
             this.ConfigSystems = ConfigSystems.ToDictionary(x => x.Name);
         }
 
@@ -116,7 +116,7 @@ namespace Wiesend.Configuration.Manager
         /// <returns>The config system specified</returns>
         public IConfigSystem Get(string Name)
         {
-            Contract.Requires<ArgumentException>(ConfigSystems.ContainsKey(Name), "The config system was not found.");
+            if (!(ConfigSystems.ContainsKey(Name))) throw new ArgumentException("The config system was not found.");
             return ConfigSystems[Name];
         }
 

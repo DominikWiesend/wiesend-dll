@@ -83,6 +83,7 @@ namespace Wiesend.IO.FileFormats.FixedLength.BaseClasses
     /// </summary>
     /// <typeparam name="ObjectType">Object Type</typeparam>
     /// <typeparam name="FieldType">Field Type</typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public abstract class FixedLengthBase<ObjectType, FieldType> : StringListFormatBase<ObjectType, IRecord<FieldType>>
         where ObjectType : FixedLengthBase<ObjectType, FieldType>, new()
     {

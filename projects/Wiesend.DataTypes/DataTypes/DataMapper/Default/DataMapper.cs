@@ -94,6 +94,7 @@ namespace Wiesend.DataTypes.DataMapper.Default
         /// <typeparam name="Left">Left type</typeparam>
         /// <typeparam name="Right">Right type</typeparam>
         /// <returns>A mapping object for the two types specified</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         protected override ITypeMapping<Left, Right> CreateTypeMapping<Left, Right>()
         {
             return new TypeMapping<Left, Right>();

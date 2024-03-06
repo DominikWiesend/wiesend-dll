@@ -79,6 +79,7 @@ namespace Wiesend.DataTypes.DataMapper.BaseClasses
     /// <summary>
     /// Mapping base class
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public abstract class MappingBase<Left, Right> : IMapping<Left, Right>
     {
         /// <summary>

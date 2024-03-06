@@ -77,7 +77,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -107,11 +107,11 @@ namespace Wiesend.DataTypes
         /// TestObject1.Concat(TestObject2, TestObject3).ToArray();
         /// </code>
         /// </example>
-        public static IEnumerable<T> Concat<T>(this IEnumerable<T> Enumerable1, params IEnumerable<T>[] Additions)
+        public static IEnumerable<T> Concat<T>([NotNull] this IEnumerable<T> Enumerable1, [NotNull] params IEnumerable<T>[] Additions)
         {
-            Contract.Requires<ArgumentNullException>(Enumerable1 != null, "Enumerable1");
-            Contract.Requires<ArgumentNullException>(Additions != null, "Additions");
-            Contract.Requires<ArgumentNullException>(Contract.ForAll(Additions, x => x != null), "Additions");
+            if (Enumerable1 == null) throw new ArgumentNullException(nameof(Enumerable1));
+            if (Additions == null) throw new ArgumentNullException(nameof(Additions));
+            Additions.ThrowIfAny(x => x == null, new ArgumentNullException(nameof(Additions)));
             var Results = new List<T>();
             Results.AddRange(Enumerable1);
             for (int x = 0; x < Additions.Length; ++x)
@@ -129,10 +129,10 @@ namespace Wiesend.DataTypes
         /// false otherwise
         /// </param>
         /// <returns>An IEnumerable of only the distinct items</returns>
-        public static IEnumerable<T> Distinct<T>(this IEnumerable<T> Enumerable, Func<T, T, bool> Predicate)
+        public static IEnumerable<T> Distinct<T>([NotNull] this IEnumerable<T> Enumerable, [NotNull] Func<T, T, bool> Predicate)
         {
-            Contract.Requires<ArgumentNullException>(Predicate != null, "Predicate");
-            Contract.Requires<ArgumentNullException>(Enumerable != null, "Enumerable");
+            if (Predicate == null) throw new ArgumentNullException(nameof(Predicate));
+            if (Enumerable == null) throw new ArgumentNullException(nameof(Enumerable));
             var Results = new List<T>();
             foreach (T Item in Enumerable)
             {
@@ -167,7 +167,7 @@ namespace Wiesend.DataTypes
                 End = List.Count();
             if (Start < 0)
                 Start = 0;
-            var ReturnList = new System.Collections.Generic.List<T>();
+            var ReturnList = new List<T>();
             for (int x = Start; x < End; ++x)
                 ReturnList.Add(List.ElementAt(x));
             return ReturnList;
@@ -180,9 +180,9 @@ namespace Wiesend.DataTypes
         /// <param name="Value">List to cull items from</param>
         /// <param name="Predicate">Predicate that determines what items to remove</param>
         /// <returns>An IEnumerable with the objects that meet the criteria removed</returns>
-        public static IEnumerable<T> Except<T>(this IEnumerable<T> Value, Func<T, bool> Predicate)
+        public static IEnumerable<T> Except<T>(this IEnumerable<T> Value, [NotNull] Func<T, bool> Predicate)
         {
-            Contract.Requires<ArgumentNullException>(Predicate != null, "Predicate");
+            if (Predicate == null) throw new ArgumentNullException(nameof(Predicate));
             if (Value == null)
                 return Value;
             return Value.Where(x => !Predicate(x));
@@ -197,11 +197,11 @@ namespace Wiesend.DataTypes
         /// <param name="End">Item to end with</param>
         /// <param name="Action">Action to do</param>
         /// <returns>The original list</returns>
-        public static IEnumerable<T> For<T>(this IEnumerable<T> List, int Start, int End, Action<T> Action)
+        public static IEnumerable<T> For<T>([NotNull] this IEnumerable<T> List, int Start, int End, [NotNull] Action<T> Action)
         {
-            Contract.Requires<ArgumentNullException>(List != null, "List");
-            Contract.Requires<ArgumentNullException>(Action != null, "Action");
-            Contract.Requires<ArgumentException>(End + 1 - Start >= 0, "End must be greater than start");
+            if (List == null) throw new ArgumentNullException(nameof(List));
+            if (Action == null) throw new ArgumentNullException(nameof(Action));
+            if (!(End + 1 - Start >= 0)) throw new ArgumentException("End must be greater than start", nameof(End));
             foreach (T Item in List.ElementsBetween(Start, End + 1))
                 Action(Item);
             return List;
@@ -218,11 +218,12 @@ namespace Wiesend.DataTypes
         /// <param name="End">Item to end with</param>
         /// <param name="Function">Function to do</param>
         /// <returns>The resulting list</returns>
-        public static IEnumerable<R> For<T, R>(this IEnumerable<T> List, int Start, int End, Func<T, R> Function)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static IEnumerable<R> For<T, R>([NotNull] this IEnumerable<T> List, int Start, int End, [NotNull] Func<T, R> Function)
         {
-            Contract.Requires<ArgumentNullException>(List != null, "List");
-            Contract.Requires<ArgumentNullException>(Function != null, "Function");
-            Contract.Requires<ArgumentException>(End + 1 - Start >= 0, "End must be greater than start");
+            if (List == null) throw new ArgumentNullException(nameof(List));
+            if (Function == null) throw new ArgumentNullException(nameof(Function));
+            if (!(End + 1 - Start >= 0)) throw new InvalidOperationException("End must be greater than start");
             var ReturnValues = new List<R>();
             foreach (T Item in List.ElementsBetween(Start, End + 1))
                 ReturnValues.Add(Function(Item));
@@ -236,10 +237,10 @@ namespace Wiesend.DataTypes
         /// <param name="List">IEnumerable to iterate over</param>
         /// <param name="Action">Action to do</param>
         /// <returns>The original list</returns>
-        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> List, Action<T> Action)
+        public static IEnumerable<T> ForEach<T>([NotNull] this IEnumerable<T> List, [NotNull] Action<T> Action)
         {
-            Contract.Requires<ArgumentNullException>(List != null, "List");
-            Contract.Requires<ArgumentNullException>(Action != null, "Action");
+            if (List == null) throw new ArgumentNullException(nameof(List));
+            if (Action == null) throw new ArgumentNullException(nameof(Action));
             foreach (T Item in List)
                 Action(Item);
             return List;
@@ -253,10 +254,11 @@ namespace Wiesend.DataTypes
         /// <param name="List">IEnumerable to iterate over</param>
         /// <param name="Function">Function to do</param>
         /// <returns>The resulting list</returns>
-        public static IEnumerable<R> ForEach<T, R>(this IEnumerable<T> List, Func<T, R> Function)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static IEnumerable<R> ForEach<T, R>([NotNull] this IEnumerable<T> List, [NotNull] Func<T, R> Function)
         {
-            Contract.Requires<ArgumentNullException>(List != null, "List");
-            Contract.Requires<ArgumentNullException>(Function != null, "Function");
+            if (List == null) throw new ArgumentNullException(nameof(List));
+            if (Function == null) throw new ArgumentNullException(nameof(Function));
             var ReturnValues = new List<R>();
             foreach (T Item in List)
                 ReturnValues.Add(Function(Item));
@@ -271,11 +273,11 @@ namespace Wiesend.DataTypes
         /// <param name="Action">Action to do</param>
         /// <param name="CatchAction">Action that occurs if an exception occurs</param>
         /// <returns>The original list</returns>
-        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> List, Action<T> Action, Action<T, Exception> CatchAction)
+        public static IEnumerable<T> ForEach<T>([NotNull] this IEnumerable<T> List, [NotNull] Action<T> Action, [NotNull] Action<T, Exception> CatchAction)
         {
-            Contract.Requires<ArgumentNullException>(List != null, "List");
-            Contract.Requires<ArgumentNullException>(Action != null, "Action");
-            Contract.Requires<ArgumentNullException>(CatchAction != null, "CatchAction");
+            if (List == null) throw new ArgumentNullException(nameof(List));
+            if (Action == null) throw new ArgumentNullException(nameof(Action));
+            if (CatchAction == null) throw new ArgumentNullException(nameof(CatchAction));
             foreach (T Item in List)
             {
                 try
@@ -296,11 +298,12 @@ namespace Wiesend.DataTypes
         /// <param name="Function">Function to do</param>
         /// <param name="CatchAction">Action that occurs if an exception occurs</param>
         /// <returns>The resulting list</returns>
-        public static IEnumerable<R> ForEach<T, R>(this IEnumerable<T> List, Func<T, R> Function, Action<T, Exception> CatchAction)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static IEnumerable<R> ForEach<T, R>([NotNull] this IEnumerable<T> List, [NotNull] Func<T, R> Function, [NotNull] Action<T, Exception> CatchAction)
         {
-            Contract.Requires<ArgumentNullException>(List != null, "List");
-            Contract.Requires<ArgumentNullException>(Function != null, "Function");
-            Contract.Requires<ArgumentNullException>(CatchAction != null, "CatchAction");
+            if (List == null) throw new ArgumentNullException(nameof(List));
+            if (Function == null) throw new ArgumentNullException(nameof(Function));
+            if (CatchAction == null) throw new ArgumentNullException(nameof(CatchAction));
             var ReturnValues = new List<R>();
             foreach (T Item in List)
             {
@@ -320,10 +323,10 @@ namespace Wiesend.DataTypes
         /// <param name="List">IEnumerable to iterate over</param>
         /// <param name="Action">Action to do</param>
         /// <returns>The original list</returns>
-        public static IEnumerable<T> ForEachParallel<T>(this IEnumerable<T> List, Action<T> Action)
+        public static IEnumerable<T> ForEachParallel<T>([NotNull] this IEnumerable<T> List, [NotNull] Action<T> Action)
         {
-            Contract.Requires<ArgumentNullException>(List != null, "List");
-            Contract.Requires<ArgumentNullException>(Action != null, "Action");
+            if (List == null) throw new ArgumentNullException(nameof(List));
+            if (Action == null) throw new ArgumentNullException(nameof(Action));
             Parallel.ForEach(List, Action);
             return List;
         }
@@ -336,10 +339,11 @@ namespace Wiesend.DataTypes
         /// <param name="List">IEnumerable to iterate over</param>
         /// <param name="Function">Function to do</param>
         /// <returns>The results in an IEnumerable list</returns>
-        public static IEnumerable<R> ForEachParallel<T, R>(this IEnumerable<T> List, Func<T, R> Function)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static IEnumerable<R> ForEachParallel<T, R>([NotNull] this IEnumerable<T> List, [NotNull] Func<T, R> Function)
         {
-            Contract.Requires<ArgumentNullException>(List != null, "List");
-            Contract.Requires<ArgumentNullException>(Function != null, "Function");
+            if (List == null) throw new ArgumentNullException(nameof(List));
+            if (Function == null) throw new ArgumentNullException(nameof(Function));
             return List.ForParallel(0, List.Count() - 1, Function);
         }
 
@@ -351,11 +355,11 @@ namespace Wiesend.DataTypes
         /// <param name="Action">Action to do</param>
         /// <param name="CatchAction">Action that occurs if an exception occurs</param>
         /// <returns>The original list</returns>
-        public static IEnumerable<T> ForEachParallel<T>(this IEnumerable<T> List, Action<T> Action, Action<T, Exception> CatchAction)
+        public static IEnumerable<T> ForEachParallel<T>([NotNull] this IEnumerable<T> List, [NotNull] Action<T> Action, [NotNull] Action<T, Exception> CatchAction)
         {
-            Contract.Requires<ArgumentNullException>(List != null, "List");
-            Contract.Requires<ArgumentNullException>(Action != null, "Action");
-            Contract.Requires<ArgumentNullException>(CatchAction != null, "CatchAction");
+            if (List == null) throw new ArgumentNullException(nameof(List));
+            if (Action == null) throw new ArgumentNullException(nameof(Action));
+            if (CatchAction == null) throw new ArgumentNullException(nameof(CatchAction));
             Parallel.ForEach<T>(List, delegate(T Item)
             {
                 try
@@ -376,11 +380,12 @@ namespace Wiesend.DataTypes
         /// <param name="Function">Function to do</param>
         /// <param name="CatchAction">Action that occurs if an exception occurs</param>
         /// <returns>The resulting list</returns>
-        public static IEnumerable<R> ForEachParallel<T, R>(this IEnumerable<T> List, Func<T, R> Function, Action<T, Exception> CatchAction)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static IEnumerable<R> ForEachParallel<T, R>([NotNull] this IEnumerable<T> List, [NotNull] Func<T, R> Function, [NotNull] Action<T, Exception> CatchAction)
         {
-            Contract.Requires<ArgumentNullException>(List != null, "List");
-            Contract.Requires<ArgumentNullException>(Function != null, "Function");
-            Contract.Requires<ArgumentNullException>(CatchAction != null, "CatchAction");
+            if (List == null) throw new ArgumentNullException(nameof(List));
+            if (Function == null) throw new ArgumentNullException(nameof(Function));
+            if (CatchAction == null) throw new ArgumentNullException(nameof(CatchAction));
             var ReturnValues = new List<R>();
             Parallel.ForEach<T>(List, delegate(T Item)
             {
@@ -402,11 +407,11 @@ namespace Wiesend.DataTypes
         /// <param name="End">Item to end with</param>
         /// <param name="Action">Action to do</param>
         /// <returns>The original list</returns>
-        public static IEnumerable<T> ForParallel<T>(this IEnumerable<T> List, int Start, int End, Action<T> Action)
+        public static IEnumerable<T> ForParallel<T>([NotNull] this IEnumerable<T> List, int Start, int End, [NotNull] Action<T> Action)
         {
-            Contract.Requires<ArgumentNullException>(List != null, "List");
-            Contract.Requires<ArgumentNullException>(Action != null, "Action");
-            Contract.Requires<ArgumentException>(End + 1 - Start >= 0, "End must be greater than start");
+            if (List == null) throw new ArgumentNullException(nameof(List));
+            if (Action == null) throw new ArgumentNullException(nameof(Action));
+            if (!(End + 1 - Start >= 0)) throw new InvalidOperationException("End must be greater than start");
             Parallel.For(Start, End + 1, new Action<int>(x => Action(List.ElementAt(x))));
             return List;
         }
@@ -421,11 +426,12 @@ namespace Wiesend.DataTypes
         /// <param name="End">Item to end with</param>
         /// <param name="Function">Function to do</param>
         /// <returns>The resulting list</returns>
-        public static IEnumerable<R> ForParallel<T, R>(this IEnumerable<T> List, int Start, int End, Func<T, R> Function)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static IEnumerable<R> ForParallel<T, R>([NotNull] this IEnumerable<T> List, int Start, int End, [NotNull] Func<T, R> Function)
         {
-            Contract.Requires<ArgumentNullException>(List != null, "List");
-            Contract.Requires<ArgumentNullException>(Function != null, "Function");
-            Contract.Requires<ArgumentException>(End + 1 - Start >= 0, "End must be greater than start");
+            if (List == null) throw new ArgumentNullException(nameof(List));
+            if (Function == null) throw new ArgumentNullException(nameof(Function));
+            if (!(End + 1 - Start >= 0)) throw new InvalidOperationException("End must be greater than start");
             R[] Results = new R[(End + 1) - Start];
             Parallel.For(Start, End + 1, new Action<int>(x => Results[x - Start] = Function(List.ElementAt(x))));
             return Results;
@@ -438,9 +444,9 @@ namespace Wiesend.DataTypes
         /// <param name="List">IEnumerable to iterate over</param>
         /// <param name="Count">Numbers of items to return</param>
         /// <returns>The last X items from the list</returns>
-        public static IEnumerable<T> Last<T>(this IEnumerable<T> List, int Count)
+        public static IEnumerable<T> Last<T>([NotNull] this IEnumerable<T> List, int Count)
         {
-            Contract.Requires<ArgumentNullException>(List != null, "List");
+            if (List == null) throw new ArgumentNullException(nameof(List));
             return List.ElementsBetween(List.Count() - Count, List.Count());
         }
 
@@ -458,17 +464,19 @@ namespace Wiesend.DataTypes
         /// <param name="resultSelector">The result selector.</param>
         /// <param name="comparer">The comparer (if null, a generic comparer is used).</param>
         /// <returns>Returns a left join of the two lists</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0054:Use compound assignment", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public static IEnumerable<R> LeftJoin<T1, T2, Key, R>(this IEnumerable<T1> outer,
-            IEnumerable<T2> inner,
-            Func<T1, Key> outerKeySelector,
-            Func<T2, Key> innerKeySelector,
-            Func<T1, T2, R> resultSelector,
+            [NotNull] IEnumerable<T2> inner,
+            [NotNull] Func<T1, Key> outerKeySelector,
+            [NotNull] Func<T2, Key> innerKeySelector,
+            [NotNull] Func<T1, T2, R> resultSelector,
             IEqualityComparer<Key> comparer = null)
         {
-            Contract.Requires<ArgumentNullException>(inner != null, "inner");
-            Contract.Requires<ArgumentNullException>(outerKeySelector != null, "outerKeySelector");
-            Contract.Requires<ArgumentNullException>(innerKeySelector != null, "innerKeySelector");
-            Contract.Requires<ArgumentNullException>(resultSelector != null, "resultSelector");
+            if (inner == null) throw new ArgumentNullException(nameof(inner));
+            if (outerKeySelector == null) throw new ArgumentNullException(nameof(outerKeySelector));
+            if (innerKeySelector == null) throw new ArgumentNullException(nameof(innerKeySelector));
+            if (resultSelector == null) throw new ArgumentNullException(nameof(resultSelector));
 
             comparer = comparer ?? new GenericEqualityComparer<Key>();
             return outer.ForEach(x => new { left = x, right = inner.FirstOrDefault(y => comparer.Equals(innerKeySelector(y), outerKeySelector(x))) })
@@ -489,17 +497,18 @@ namespace Wiesend.DataTypes
         /// <param name="resultSelector">The result selector.</param>
         /// <param name="comparer">The comparer (if null, a generic comparer is used).</param>
         /// <returns>Returns an outer join of the two lists</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public static IEnumerable<R> OuterJoin<T1, T2, Key, R>(this IEnumerable<T1> outer,
-            IEnumerable<T2> inner,
-            Func<T1, Key> outerKeySelector,
-            Func<T2, Key> innerKeySelector,
-            Func<T1, T2, R> resultSelector,
+            [NotNull] IEnumerable<T2> inner,
+            [NotNull] Func<T1, Key> outerKeySelector,
+            [NotNull] Func<T2, Key> innerKeySelector,
+            [NotNull] Func<T1, T2, R> resultSelector,
             IEqualityComparer<Key> comparer = null)
         {
-            Contract.Requires<ArgumentNullException>(inner != null, "inner");
-            Contract.Requires<ArgumentNullException>(outerKeySelector != null, "outerKeySelector");
-            Contract.Requires<ArgumentNullException>(innerKeySelector != null, "innerKeySelector");
-            Contract.Requires<ArgumentNullException>(resultSelector != null, "resultSelector");
+            if (inner == null) throw new ArgumentNullException(nameof(inner));
+            if (outerKeySelector == null) throw new ArgumentNullException(nameof(outerKeySelector));
+            if (innerKeySelector == null) throw new ArgumentNullException(nameof(innerKeySelector));
+            if (resultSelector == null) throw new ArgumentNullException(nameof(resultSelector));
 
             var Left = outer.LeftJoin(inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
             var Right = outer.RightJoin(inner, outerKeySelector, innerKeySelector, resultSelector, comparer);
@@ -516,9 +525,10 @@ namespace Wiesend.DataTypes
         /// Equality comparer used to determine if the object is present
         /// </param>
         /// <returns>The position of the object if it is present, otherwise -1</returns>
-        public static int PositionOf<T>(this IEnumerable<T> List, T Object, IEqualityComparer<T> EqualityComparer = null)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        public static int PositionOf<T>([NotNull] this IEnumerable<T> List, T Object, IEqualityComparer<T> EqualityComparer = null)
         {
-            Contract.Requires<ArgumentNullException>(List != null, "List");
+            if (List == null) throw new ArgumentNullException(nameof(List));
             EqualityComparer = EqualityComparer.Check(() => new GenericEqualityComparer<T>());
             int Count = 0;
             foreach (T Item in List)
@@ -544,17 +554,19 @@ namespace Wiesend.DataTypes
         /// <param name="resultSelector">The result selector.</param>
         /// <param name="comparer">The comparer (if null, a generic comparer is used).</param>
         /// <returns>Returns a right join of the two lists</returns>
-        public static IEnumerable<R> RightJoin<T1, T2, Key, R>(this IEnumerable<T1> outer,
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0054:Use compound assignment", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static IEnumerable<R> RightJoin<T1, T2, Key, R>([NotNull] this IEnumerable<T1> outer,
             IEnumerable<T2> inner,
-            Func<T1, Key> outerKeySelector,
-            Func<T2, Key> innerKeySelector,
-            Func<T1, T2, R> resultSelector,
+            [NotNull] Func<T1, Key> outerKeySelector,
+            [NotNull] Func<T2, Key> innerKeySelector,
+            [NotNull] Func<T1, T2, R> resultSelector,
             IEqualityComparer<Key> comparer = null)
         {
-            Contract.Requires<ArgumentNullException>(outer != null, "outer");
-            Contract.Requires<ArgumentNullException>(outerKeySelector != null, "outerKeySelector");
-            Contract.Requires<ArgumentNullException>(innerKeySelector != null, "innerKeySelector");
-            Contract.Requires<ArgumentNullException>(resultSelector != null, "resultSelector");
+            if (outer == null) throw new ArgumentNullException(nameof(outer));
+            if (outerKeySelector == null) throw new ArgumentNullException(nameof(outerKeySelector));
+            if (innerKeySelector == null) throw new ArgumentNullException(nameof(innerKeySelector));
+            if (resultSelector == null) throw new ArgumentNullException(nameof(resultSelector));
 
             comparer = comparer ?? new GenericEqualityComparer<Key>();
             return inner.ForEach(x => new { left = outer.FirstOrDefault(y => comparer.Equals(innerKeySelector(x), outerKeySelector(y))), right = x })
@@ -569,11 +581,11 @@ namespace Wiesend.DataTypes
         /// <param name="Predicate">Predicate to check</param>
         /// <param name="Exception">Exception to throw if predicate is true</param>
         /// <returns>the original Item</returns>
-        public static IEnumerable<T> ThrowIfAll<T>(this IEnumerable<T> List, Predicate<T> Predicate, Func<Exception> Exception)
+        public static IEnumerable<T> ThrowIfAll<T>([NotNull] this IEnumerable<T> List, [NotNull] Predicate<T> Predicate, [NotNull] Func<Exception> Exception)
         {
-            Contract.Requires<ArgumentNullException>(List != null, "List");
-            Contract.Requires<ArgumentNullException>(Predicate != null, "Predicate");
-            Contract.Requires<ArgumentNullException>(Exception != null, "Exception");
+            if (List == null) throw new ArgumentNullException(nameof(List));
+            if (Predicate == null) throw new ArgumentNullException(nameof(Predicate));
+            if (Exception == null) throw new ArgumentNullException(nameof(Exception));
             foreach (T Item in List)
             {
                 if (!Predicate(Item))
@@ -590,11 +602,11 @@ namespace Wiesend.DataTypes
         /// <param name="Predicate">Predicate to check</param>
         /// <param name="Exception">Exception to throw if predicate is true</param>
         /// <returns>the original Item</returns>
-        public static IEnumerable<T> ThrowIfAll<T>(this IEnumerable<T> List, Predicate<T> Predicate, Exception Exception)
+        public static IEnumerable<T> ThrowIfAll<T>([NotNull] this IEnumerable<T> List, [NotNull] Predicate<T> Predicate, [NotNull] Exception Exception)
         {
-            Contract.Requires<ArgumentNullException>(List != null, "List");
-            Contract.Requires<ArgumentNullException>(Predicate != null, "Predicate");
-            Contract.Requires<ArgumentNullException>(Exception != null, "Exception");
+            if (List == null) throw new ArgumentNullException(nameof(List));
+            if (Predicate == null) throw new ArgumentNullException(nameof(Predicate));
+            if (Exception == null) throw new ArgumentNullException(nameof(Exception));
             foreach (T Item in List)
             {
                 if (!Predicate(Item))
@@ -611,11 +623,11 @@ namespace Wiesend.DataTypes
         /// <param name="Predicate">Predicate to check</param>
         /// <param name="Exception">Exception to throw if predicate is true</param>
         /// <returns>the original Item</returns>
-        public static IEnumerable<T> ThrowIfAny<T>(this IEnumerable<T> List, Predicate<T> Predicate, Func<Exception> Exception)
+        public static IEnumerable<T> ThrowIfAny<T>([NotNull] this IEnumerable<T> List, [NotNull] Predicate<T> Predicate, [NotNull] Func<Exception> Exception)
         {
-            Contract.Requires<ArgumentNullException>(List != null, "List");
-            Contract.Requires<ArgumentNullException>(Predicate != null, "Predicate");
-            Contract.Requires<ArgumentNullException>(Exception != null, "Exception");
+            if (List == null) throw new ArgumentNullException(nameof(List));
+            if (Predicate == null) throw new ArgumentNullException(nameof(Predicate));
+            if (Exception == null) throw new ArgumentNullException(nameof(Exception));
             foreach (T Item in List)
             {
                 if (Predicate(Item))
@@ -632,11 +644,11 @@ namespace Wiesend.DataTypes
         /// <param name="Predicate">Predicate to check</param>
         /// <param name="Exception">Exception to throw if predicate is true</param>
         /// <returns>the original Item</returns>
-        public static IEnumerable<T> ThrowIfAny<T>(this IEnumerable<T> List, Predicate<T> Predicate, Exception Exception)
+        public static IEnumerable<T> ThrowIfAny<T>([NotNull] this IEnumerable<T> List, [NotNull] Predicate<T> Predicate, [NotNull] Exception Exception)
         {
-            Contract.Requires<ArgumentNullException>(List != null, "List");
-            Contract.Requires<ArgumentNullException>(Predicate != null, "Predicate");
-            Contract.Requires<ArgumentNullException>(Exception != null, "Exception");
+            if (List == null) throw new ArgumentNullException(nameof(List));
+            if (Predicate == null) throw new ArgumentNullException(nameof(Predicate));
+            if (Exception == null) throw new ArgumentNullException(nameof(Exception));
             foreach (T Item in List)
             {
                 if (Predicate(Item))
@@ -652,6 +664,9 @@ namespace Wiesend.DataTypes
         /// <param name="List">List to convert</param>
         /// <param name="Columns">Column names (if empty, uses property names)</param>
         /// <returns>The list as a DataTable</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1827:Do not use Count() or LongCount() when Any() can be used", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         public static DataTable To<T>(this IEnumerable<T> List, params string[] Columns)
         {
             var ReturnValue = new DataTable();
@@ -680,9 +695,11 @@ namespace Wiesend.DataTypes
         /// <param name="List">List to convert</param>
         /// <param name="Columns">Column names (if empty, uses property names)</param>
         /// <returns>The list as a DataTable</returns>
-        public static DataTable To(this IEnumerable List, params string[] Columns)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
+        public static DataTable To([NotNull] this IEnumerable List, params string[] Columns)
         {
-            Contract.Requires<ArgumentNullException>(List != null, "List");
+            if (List == null) throw new ArgumentNullException(nameof(List));
             var ReturnValue = new DataTable();
             ReturnValue.Locale = CultureInfo.CurrentCulture;
             int Count = 0;
@@ -717,10 +734,11 @@ namespace Wiesend.DataTypes
         /// <param name="List">List to convert</param>
         /// <param name="ConvertingFunction">Function used to convert each item</param>
         /// <returns>The array containing the items from the list</returns>
-        public static Target[] ToArray<Source, Target>(this IEnumerable<Source> List, Func<Source, Target> ConvertingFunction)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static Target[] ToArray<Source, Target>([NotNull] this IEnumerable<Source> List, [NotNull] Func<Source, Target> ConvertingFunction)
         {
-            Contract.Requires<ArgumentNullException>(List != null, "List");
-            Contract.Requires<ArgumentNullException>(ConvertingFunction != null, "ConvertingFunction");
+            if (List == null) throw new ArgumentNullException(nameof(List));
+            if (ConvertingFunction == null) throw new ArgumentNullException(nameof(ConvertingFunction));
             return List.ForEach(ConvertingFunction).ToArray();
         }
 
@@ -732,10 +750,11 @@ namespace Wiesend.DataTypes
         /// <param name="List">IEnumerable to convert</param>
         /// <param name="ConvertingFunction">Function used to convert each item</param>
         /// <returns>The list containing the items from the IEnumerable</returns>
-        public static List<Target> ToList<Source, Target>(this IEnumerable<Source> List, Func<Source, Target> ConvertingFunction)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static List<Target> ToList<Source, Target>([NotNull] this IEnumerable<Source> List, [NotNull] Func<Source, Target> ConvertingFunction)
         {
-            Contract.Requires<ArgumentNullException>(List != null, "List");
-            Contract.Requires<ArgumentNullException>(ConvertingFunction != null, "ConvertingFunction");
+            if (List == null) throw new ArgumentNullException(nameof(List));
+            if (ConvertingFunction == null) throw new ArgumentNullException(nameof(ConvertingFunction));
             return List.ForEach(ConvertingFunction).ToList();
         }
 
@@ -747,10 +766,11 @@ namespace Wiesend.DataTypes
         /// <param name="List">The list to convert</param>
         /// <param name="ConvertingFunction">The converting function.</param>
         /// <returns>The observable list version of the original list</returns>
-        public static ObservableList<Target> ToObservableList<Source, Target>(this IEnumerable<Source> List, Func<Source, Target> ConvertingFunction)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static ObservableList<Target> ToObservableList<Source, Target>([NotNull] this IEnumerable<Source> List, [NotNull] Func<Source, Target> ConvertingFunction)
         {
-            Contract.Requires<ArgumentNullException>(List != null, "List");
-            Contract.Requires<ArgumentNullException>(ConvertingFunction != null, "ConvertingFunction");
+            if (List == null) throw new ArgumentNullException(nameof(List));
+            if (ConvertingFunction == null) throw new ArgumentNullException(nameof(ConvertingFunction));
             return new ObservableList<Target>(List.ForEach(ConvertingFunction));
         }
 
@@ -764,9 +784,9 @@ namespace Wiesend.DataTypes
         /// </param>
         /// <param name="Seperator">Seperator to use between items (defaults to ,)</param>
         /// <returns>The string version of the list</returns>
-        public static string ToString<T>(this IEnumerable<T> List, Func<T, string> ItemOutput = null, string Seperator = ",")
+        public static string ToString<T>([NotNull] this IEnumerable<T> List, Func<T, string> ItemOutput = null, string Seperator = ",")
         {
-            Contract.Requires<ArgumentNullException>(List != null, "List");
+            if (List == null) throw new ArgumentNullException(nameof(List));
             Seperator = Seperator.Check("");
             ItemOutput = ItemOutput.Check(x => x.ToString());
             var Builder = new StringBuilder();

@@ -73,7 +73,6 @@
 #endregion of Licenses [MIT Licenses]
 
 using System;
-using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Net.Mail;
 using System.Text;
@@ -88,6 +87,7 @@ namespace Wiesend.IO.FileFormats
     /// </summary>
     public class VCalendar : StringFormatBase<VCalendar>
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         private static readonly Regex STRIP_HTML_REGEX = new Regex("<[^>]*>", RegexOptions.Compiled);
 
         /// <summary>
@@ -191,9 +191,10 @@ namespace Wiesend.IO.FileFormats
         /// Returns the ICalendar item
         /// </summary>
         /// <returns>a string output of the ICalendar item</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         public virtual string GetICalendar()
         {
-            Contract.Requires<NullReferenceException>(!string.IsNullOrEmpty(Description), "Description");
+            if (string.IsNullOrEmpty(Description)) throw new NullReferenceException("Description");
             var FileOutput = new StringBuilder();
             FileOutput.AppendLine("BEGIN:VCALENDAR")
                       .AppendLineFormat("METHOD:{0}", Cancel ? "CANCEL" : "REQUEST")
@@ -265,9 +266,10 @@ namespace Wiesend.IO.FileFormats
         /// Returns the VCalendar item
         /// </summary>
         /// <returns>a string output of the VCalendar item</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         public virtual string GetVCalendar()
         {
-            Contract.Requires<NullReferenceException>(CurrentTimeZone != null, "CurrentTimeZone");
+            if (CurrentTimeZone == null) throw new NullReferenceException("CurrentTimeZone");
             return new StringBuilder().AppendLine("BEGIN:VCALENDAR")
                       .AppendLine("VERSION:1.0")
                       .AppendLine("BEGIN:VEVENT")

@@ -73,13 +73,13 @@
 #endregion of Licenses [MIT Licenses]
 
 using System;
-using System.Diagnostics.Contracts;
 
 namespace Wiesend.IO.FileFormats.BaseClasses
 {
     /// <summary>
     /// Format base class for objects that are string based
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public abstract class StringFormatBase<FormatType> : FormatBase<FormatType, string>
         where FormatType : StringFormatBase<FormatType>, new()
     {
@@ -95,9 +95,10 @@ namespace Wiesend.IO.FileFormats.BaseClasses
         /// </summary>
         /// <param name="Value">Value to convert</param>
         /// <returns>The value as a string</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public static implicit operator string(StringFormatBase<FormatType> Value)
         {
-            Contract.Requires<ArgumentNullException>(Value != null, "Value");
+            if (Value == null) throw new ArgumentNullException(nameof(Value));
             return Value.ToString();
         }
 

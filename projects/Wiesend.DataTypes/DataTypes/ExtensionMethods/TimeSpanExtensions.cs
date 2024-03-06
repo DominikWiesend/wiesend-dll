@@ -122,6 +122,7 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Input">Input TimeSpan</param>
         /// <returns>The TimeSpan as a string</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
         public static string ToStringFull(this TimeSpan Input)
         {
             string Result = "";

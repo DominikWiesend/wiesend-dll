@@ -74,7 +74,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Linq;
 using Wiesend.DataTypes;
 using Wiesend.ORM.Interfaces;
@@ -93,9 +93,9 @@ namespace Wiesend.ORM.Manager.Schema
         /// Constructor
         /// </summary>
         /// <param name="SchemaGenerators">The schema generators.</param>
-        public Manager(IEnumerable<ISchemaGenerator> SchemaGenerators)
+        public Manager([NotNull] IEnumerable<ISchemaGenerator> SchemaGenerators)
         {
-            Contract.Requires<ArgumentNullException>(SchemaGenerators != null, "SchemaGenerators");
+            if (SchemaGenerators == null) throw new ArgumentNullException(nameof(SchemaGenerators));
             this.SchemaGenerators = SchemaGenerators.ToDictionary(x => x.ProviderName);
         }
 
@@ -112,9 +112,9 @@ namespace Wiesend.ORM.Manager.Schema
         /// <param name="DesiredStructure">Desired source structure</param>
         /// <param name="Source">Source to use</param>
         /// <returns>List of commands generated</returns>
-        public IEnumerable<string> GenerateSchema(ISource DesiredStructure, ISourceInfo Source)
+        public IEnumerable<string> GenerateSchema(ISource DesiredStructure, [NotNull] ISourceInfo Source)
         {
-            Contract.Requires<ArgumentNullException>(Source != null, "Source");
+            if (Source == null) throw new ArgumentNullException(nameof(Source));
             return SchemaGenerators.ContainsKey(Source.SourceType) ?
                 SchemaGenerators[Source.SourceType].GenerateSchema(DesiredStructure, Source) :
                 new List<string>();
@@ -128,9 +128,10 @@ namespace Wiesend.ORM.Manager.Schema
         /// <param name="Database">The database.</param>
         /// <param name="Source">The source.</param>
         /// <param name="Structure">The structure.</param>
-        public void Setup(ListMapping<IDatabase, IMapping> Mappings, QueryProvider.Manager QueryProvider, IDatabase Database, ISourceInfo Source, Graph<IMapping> Structure)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        public void Setup([NotNull] ListMapping<IDatabase, IMapping> Mappings, QueryProvider.Manager QueryProvider, IDatabase Database, ISourceInfo Source, Graph<IMapping> Structure)
         {
-            Contract.Requires<NullReferenceException>(Mappings != null, "Mappings");
+            if (Mappings == null) throw new NullReferenceException(nameof(Mappings));
             SchemaGenerators[Source.SourceType].Setup(Mappings, Database, QueryProvider, Structure);
         }
 

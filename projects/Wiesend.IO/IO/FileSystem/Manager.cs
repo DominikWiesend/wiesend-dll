@@ -150,14 +150,13 @@ namespace Wiesend.IO.FileSystem
         /// <param name="Managed">
         /// Determines if all objects should be disposed or just managed objects
         /// </param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
         protected override void Dispose(bool Managed)
         {
             if (FileSystems != null)
             {
                 foreach (IDisposable FileSystem in FileSystems)
-                {
                     FileSystem.Dispose();
-                }
                 FileSystems = null;
             }
         }

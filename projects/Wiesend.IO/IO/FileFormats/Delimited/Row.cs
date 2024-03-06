@@ -72,9 +72,9 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -108,10 +108,10 @@ namespace Wiesend.IO.FileFormats.Delimited
         /// </summary>
         /// <param name="Content">Content of the row</param>
         /// <param name="Delimiter">Delimiter to parse the individual cells</param>
-        public Row(string Content, string Delimiter)
+        public Row([NotNull] string Content, [NotNull] string Delimiter)
         {
-            Contract.Requires<ArgumentNullException>(Content != null, "Content");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(Delimiter), "Delimiter");
+            if (Content == null) throw new ArgumentNullException(nameof(Content));
+            if (string.IsNullOrEmpty(Delimiter)) throw new ArgumentNullException(nameof(Delimiter));
             this.Cells = new List<Cell>();
             this.Delimiter = Delimiter;
             var TempSplitter = new Regex(string.Format(CultureInfo.InvariantCulture, "(?<Value>\"(?:[^\"]|\"\")*\"|[^{0}\r\n]*?)(?<Delimiter>{0}|\r\n|\n|$)", Regex.Escape(Delimiter)));

@@ -74,7 +74,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Linq;
 using Wiesend.DataTypes;
 using Wiesend.ORM.Manager.Mapper.Interfaces;
@@ -92,9 +92,9 @@ namespace Wiesend.ORM.Manager.QueryProvider
         /// Constructor
         /// </summary>
         /// <param name="Providers">The providers.</param>
-        public Manager(IEnumerable<Interfaces.IQueryProvider> Providers)
+        public Manager([NotNull] IEnumerable<Interfaces.IQueryProvider> Providers)
         {
-            Contract.Requires<ArgumentNullException>(Providers != null, "Providers");
+            if (Providers == null) throw new ArgumentNullException(nameof(Providers));
             this.Providers = Providers.ToDictionary(x => x.ProviderName);
         }
 
@@ -108,9 +108,9 @@ namespace Wiesend.ORM.Manager.QueryProvider
         /// </summary>
         /// <param name="Source">Source to use</param>
         /// <returns>The batch object</returns>
-        public IBatch Batch(ISourceInfo Source)
+        public IBatch Batch([NotNull] ISourceInfo Source)
         {
-            Contract.Requires<ArgumentNullException>(Source != null, "Source");
+            if (Source == null) throw new ArgumentNullException(nameof(Source));
             return Providers.ContainsKey(Source.SourceType) ? Providers[Source.SourceType].Batch(Source) : null;
         }
 
@@ -122,10 +122,10 @@ namespace Wiesend.ORM.Manager.QueryProvider
         /// <param name="Mapping">Mapping info</param>
         /// <param name="Structure">The structure.</param>
         /// <returns>The generator object</returns>
-        public IGenerator<T> Generate<T>(ISourceInfo Source, IMapping Mapping, Graph<IMapping> Structure)
+        public IGenerator<T> Generate<T>([NotNull] ISourceInfo Source, IMapping Mapping, Graph<IMapping> Structure)
             where T : class
         {
-            Contract.Requires<ArgumentNullException>(Source != null, "Source");
+            if (Source == null) throw new ArgumentNullException(nameof(Source));
             return Providers.ContainsKey(Source.SourceType) ? Providers[Source.SourceType].Generate<T>(Source, Mapping, Structure) : null;
         }
 

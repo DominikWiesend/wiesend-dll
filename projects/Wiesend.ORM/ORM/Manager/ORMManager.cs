@@ -74,7 +74,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Linq;
 using Wiesend.DataTypes;
 using Wiesend.ORM.Interfaces;
@@ -95,17 +95,14 @@ namespace Wiesend.ORM.Manager
         /// <param name="SchemaProvider">The schema provider.</param>
         /// <param name="SourceProvider">The source provider.</param>
         /// <param name="Databases">The databases.</param>
-        public ORMManager(Mapper.Manager MapperProvider,
-            QueryProvider.Manager QueryProvider,
-            Schema.Manager SchemaProvider,
-            SourceProvider.Manager SourceProvider,
-            IEnumerable<IDatabase> Databases)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0016:Use 'throw' expression", Justification = "<Pending>")]
+        public ORMManager([NotNull] Mapper.Manager MapperProvider, [NotNull] QueryProvider.Manager QueryProvider, [NotNull] Schema.Manager SchemaProvider, [NotNull] SourceProvider.Manager SourceProvider, [NotNull] IEnumerable<IDatabase> Databases)
         {
-            Contract.Requires<ArgumentNullException>(MapperProvider != null, "MapperProvider");
-            Contract.Requires<ArgumentNullException>(QueryProvider != null, "QueryProvider");
-            Contract.Requires<ArgumentNullException>(SchemaProvider != null, "SchemaProvider");
-            Contract.Requires<ArgumentNullException>(SourceProvider != null, "SourceProvider");
-            Contract.Requires<ArgumentNullException>(Databases != null, "Databases");
+            if (MapperProvider == null) throw new ArgumentNullException(nameof(MapperProvider));
+            if (QueryProvider == null) throw new ArgumentNullException(nameof(QueryProvider));
+            if (SchemaProvider == null) throw new ArgumentNullException(nameof(SchemaProvider));
+            if (SourceProvider == null) throw new ArgumentNullException(nameof(SourceProvider));
+            if (Databases == null) throw new ArgumentNullException(nameof(Databases));
             this.Mappings = new ListMapping<IDatabase, IMapping>();
             this.MapperProvider = MapperProvider;
             this.QueryProvider = QueryProvider;
@@ -114,9 +111,7 @@ namespace Wiesend.ORM.Manager
             SetupMappings(Databases);
             SortMappings();
             foreach (IDatabase Database in Mappings.Keys.Where(x => x.Update))
-            {
                 this.SchemaProvider.Setup(Mappings, QueryProvider, Database, SourceProvider.GetSource(Database.GetType()), MapperProvider.GetStructure(Database.GetType()));
-            }
         }
 
         /// <summary>
@@ -153,6 +148,7 @@ namespace Wiesend.ORM.Manager
             return "ORM Manager\r\n";
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "<Pending>")]
         private List<Vertex<IMapping>> FindStartingVertices(Graph<IMapping> graph)
         {
             return graph.Vertices.Where(x => x.IncomingEdges.Count == 0).ToList();
@@ -181,21 +177,16 @@ namespace Wiesend.ORM.Manager
             return ResultList;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         private void SetupMappings(IEnumerable<IDatabase> Databases)
         {
-            Contract.Requires<NullReferenceException>(MapperProvider != null, "MapperProvider");
+            if (MapperProvider == null) throw new NullReferenceException("MapperProvider");
             foreach (IMapping Mapping in MapperProvider)
-            {
                 Mappings.Add(Databases.FirstOrDefault(x => x.GetType() == Mapping.DatabaseConfigType), Mapping);
-            }
 
             foreach (IDatabase Database in Mappings.Keys)
-            {
                 foreach (IMapping Mapping in Mappings[Database])
-                {
                     Mapping.Setup(SourceProvider.GetSource(Database.GetType()), MapperProvider, QueryProvider);
-                }
-            }
         }
 
         private void SortMappings()

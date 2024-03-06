@@ -72,8 +72,8 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
-using System.Diagnostics.Contracts;
 
 namespace Wiesend.IO.FileFormats.Delimited
 {
@@ -94,9 +94,9 @@ namespace Wiesend.IO.FileFormats.Delimited
         /// Constructor
         /// </summary>
         /// <param name="Content">Value within the cell</param>
-        public Cell(string Content)
+        public Cell([NotNull] string Content)
         {
-            Contract.Requires<ArgumentNullException>(Content != null, "Content");
+            if (Content == null) throw new ArgumentNullException(nameof(Content));
             Value = Content.Replace("\"", "");
         }
 
@@ -110,9 +110,10 @@ namespace Wiesend.IO.FileFormats.Delimited
         /// </summary>
         /// <param name="Value">Value to convert</param>
         /// <returns>The string as a cell</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public static implicit operator Cell(string Value)
         {
-            Contract.Requires<ArgumentNullException>(Value != null, "Value");
+            if (Value == null) throw new ArgumentNullException(nameof(Value));
             return new Cell(Value);
         }
 
@@ -121,9 +122,10 @@ namespace Wiesend.IO.FileFormats.Delimited
         /// </summary>
         /// <param name="Value">Value to convert</param>
         /// <returns>The value as a string</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public static implicit operator string(Cell Value)
         {
-            Contract.Requires<ArgumentNullException>(Value != null, "Value");
+            if (Value == null) throw new ArgumentNullException(nameof(Value));
             return Value.ToString();
         }
 

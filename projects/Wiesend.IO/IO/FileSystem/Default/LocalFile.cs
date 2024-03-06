@@ -237,33 +237,29 @@ namespace Wiesend.IO.FileSystem.Default
         {
             if (!Exists)
                 return "";
-            using (StreamReader Reader = InternalFile.OpenText())
-            {
-                return Reader.ReadToEnd();
-            }
+            using StreamReader Reader = InternalFile.OpenText();
+            return Reader.ReadToEnd();
         }
 
         /// <summary>
         /// Reads a file as binary
         /// </summary>
         /// <returns>The file contents as a byte array</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public override byte[] ReadBinary()
         {
             if (!Exists)
                 return new byte[0];
-            using (FileStream Reader = InternalFile.OpenRead())
+            using FileStream Reader = InternalFile.OpenRead();
+            byte[] Buffer = new byte[1024];
+            using MemoryStream Temp = new MemoryStream();
+            while (true)
             {
-                byte[] Buffer = new byte[1024];
-                using (MemoryStream Temp = new MemoryStream())
-                {
-                    while (true)
-                    {
-                        var Count = Reader.Read(Buffer, 0, Buffer.Length);
-                        if (Count <= 0)
-                            return Temp.ToArray();
-                        Temp.Write(Buffer, 0, Count);
-                    }
-                }
+                var Count = Reader.Read(Buffer, 0, Buffer.Length);
+                if (Count <= 0)
+                    return Temp.ToArray();
+                Temp.Write(Buffer, 0, Count);
             }
         }
 
@@ -286,6 +282,7 @@ namespace Wiesend.IO.FileSystem.Default
         /// <param name="Mode">Mode to open the file as</param>
         /// <param name="Encoding">Encoding to use for the content</param>
         /// <returns>The result of the write or original content</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
         public override string Write(string Content, System.IO.FileMode Mode = FileMode.Create, Encoding Encoding = null)
         {
             if (Content == null)
@@ -301,10 +298,13 @@ namespace Wiesend.IO.FileSystem.Default
         /// <param name="Content">Content to write</param>
         /// <param name="Mode">Mode to open the file as</param>
         /// <returns>The result of the write or original content</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
         public override byte[] Write(byte[] Content, System.IO.FileMode Mode = FileMode.Create)
         {
             if (Content == null)
                 Content = new byte[0];
+
             Directory.Create();
             using (FileStream Writer = InternalFile.Open(Mode, FileAccess.Write))
             {

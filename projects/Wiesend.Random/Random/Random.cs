@@ -73,7 +73,7 @@
 #endregion of Licenses [MIT Licenses]
 
 using System;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 
 namespace Wiesend.Random
 {
@@ -82,6 +82,7 @@ namespace Wiesend.Random
     /// </summary>
     public class Random : System.Random
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         private static readonly Random GlobalSeed = new Random();
 
         [ThreadStatic]
@@ -111,7 +112,7 @@ namespace Wiesend.Random
         /// <returns>A randomly generated value</returns>
         public static int ThreadSafeNext(int Min = int.MinValue, int Max = int.MaxValue)
         {
-            Contract.Requires<ArgumentException>(Min <= Max);
+            if (!(Min <= Max)) throw new ArgumentException($"Contract assertion not met: {nameof(Min)} <= Max", nameof(Min));
             if (Local == null)
             {
                 int Seed;

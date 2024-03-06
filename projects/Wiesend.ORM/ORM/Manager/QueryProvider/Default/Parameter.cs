@@ -83,6 +83,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default
     /// Holds parameter information
     /// </summary>
     /// <typeparam name="DataType">Data type of the parameter</typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public class Parameter<DataType> : ParameterBase<DataType>
     {
         /// <summary>

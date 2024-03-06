@@ -76,7 +76,7 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Linq;
 using Wiesend.DataTypes;
 using Wiesend.ORM.Manager.Mapper.Interfaces;
@@ -92,9 +92,9 @@ namespace Wiesend.ORM.Manager.Mapper
         /// <summary>
         /// Constructor
         /// </summary>
-        public Manager(IEnumerable<IMapping> Mappings)
+        public Manager([NotNull] IEnumerable<IMapping> Mappings)
         {
-            Contract.Requires<ArgumentNullException>(Mappings != null, "Mappings");
+            if (Mappings == null) throw new ArgumentNullException(nameof(Mappings));
             this.Mappings = new ListMapping<Type, IMapping>();
             this.Structures = new Dictionary<Type, Graph<IMapping>>();
             Mappings.ForEach(x => this.Mappings.Add(x.ObjectType, x));
@@ -119,12 +119,8 @@ namespace Wiesend.ORM.Manager.Mapper
         public IEnumerator<IMapping> GetEnumerator()
         {
             foreach (IEnumerable<IMapping> MappingList in Mappings.Values)
-            {
                 foreach (IMapping Mapping in MappingList)
-                {
                     yield return Mapping;
-                }
-            }
         }
 
         /// <summary>
@@ -142,12 +138,8 @@ namespace Wiesend.ORM.Manager.Mapper
         IEnumerator IEnumerable.GetEnumerator()
         {
             foreach (IEnumerable<IMapping> MappingList in Mappings.Values)
-            {
                 foreach (IMapping Mapping in MappingList)
-                {
                     yield return Mapping;
-                }
-            }
         }
 
         /// <summary>
@@ -164,19 +156,17 @@ namespace Wiesend.ORM.Manager.Mapper
         /// </summary>
         /// <param name="mappings">The mappings.</param>
         /// <returns>The graph for the list of mappings</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "<Pending>")]
         private Graph<IMapping> FindGraph(IEnumerable<IMapping> mappings)
         {
             var Graph = new Graph<IMapping>();
             foreach (var Mapping in mappings)
-            {
                 Graph.AddVertex(Mapping);
-            }
             foreach (var Mapping in mappings)
             {
                 Type ObjectType = Mapping.ObjectType;
                 Type BaseType = ObjectType.BaseType;
-                while (BaseType != typeof(object)
-                    && BaseType != null)
+                while (BaseType != typeof(object) && BaseType != null)
                 {
                     var BaseMapping = mappings.FirstOrDefault(x => x.ObjectType == BaseType);
                     if (BaseMapping != null)

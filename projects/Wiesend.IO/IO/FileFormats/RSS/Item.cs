@@ -72,9 +72,9 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Text;
 using System.Xml;
@@ -100,10 +100,10 @@ namespace Wiesend.IO.FileFormats.RSS
         /// Constructor
         /// </summary>
         /// <param name="Doc">XML element containing the item content</param>
-        public Item(IXPathNavigable Doc)
+        public Item([NotNull] IXPathNavigable Doc)
             : this()
         {
-            Contract.Requires<ArgumentNullException>(Doc != null, "Doc");
+            if (Doc == null) throw new ArgumentNullException(nameof(Doc));
             var Element = Doc.CreateNavigator();
             var NamespaceManager = new XmlNamespaceManager(Element.NameTable);
             NamespaceManager.AddNamespace("media", "http://search.yahoo.com/mrss/");
@@ -177,6 +177,7 @@ namespace Wiesend.IO.FileFormats.RSS
         /// <summary>
         /// GUID for the item
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         public virtual GUID GUID { get; set; }
 
         /// <summary>

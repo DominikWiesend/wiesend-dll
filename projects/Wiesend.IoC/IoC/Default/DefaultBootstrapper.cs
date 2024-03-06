@@ -76,7 +76,6 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -219,7 +218,7 @@ namespace Wiesend.IoC.Default
         /// <typeparam name="T">Type of object to return</typeparam>
         /// <param name="DefaultObject">Default value if type is not registered or error occurs</param>
         /// <returns>Object of the type specified</returns>
-        public override T Resolve<T>(T DefaultObject = default(T))
+        public override T Resolve<T>(T DefaultObject = default)
         {
             return (T)Resolve(typeof(T), "", DefaultObject);
         }
@@ -231,7 +230,7 @@ namespace Wiesend.IoC.Default
         /// <param name="DefaultObject">Default value if type is not registered or error occurs</param>
         /// <param name="Name">Name of the object to return</param>
         /// <returns>Object of the type specified</returns>
-        public override T Resolve<T>(string Name, T DefaultObject = default(T))
+        public override T Resolve<T>(string Name, T DefaultObject = default)
         {
             return (T)Resolve(typeof(T), Name, DefaultObject);
         }
@@ -259,8 +258,7 @@ namespace Wiesend.IoC.Default
             try
             {
                 var Key = new Tuple<Type, string>(ObjectType, Name);
-                ITypeBuilder Builder = null;
-                return _AppContainer.TryGetValue(Key, out Builder) ? Builder.Create() : DefaultObject;
+                return _AppContainer.TryGetValue(Key, out ITypeBuilder Builder) ? Builder.Create() : DefaultObject;
             }
             catch { return DefaultObject; }
         }
@@ -308,14 +306,13 @@ namespace Wiesend.IoC.Default
         /// Disposes of the object
         /// </summary>
         /// <param name="Managed">Not used</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
         protected override void Dispose(bool Managed)
         {
             if (_AppContainer != null)
             {
                 foreach (IDisposable Item in _AppContainer.Values.Where(x => IsOfType(x.ReturnType, typeof(IDisposable))).Reverse().Select(x => x.Create()))
-                {
                     Item.Dispose();
-                }
                 _AppContainer.Clear();
                 _AppContainer = null;
             }
@@ -329,7 +326,9 @@ namespace Wiesend.IoC.Default
         /// <returns>The constructor that should be used</returns>
         private ConstructorInfo FindConstructor(Type Type)
         {
-            Contract.Requires<ArgumentNullException>(Type != null, "Type");
+            if (Type == null)
+                throw new ArgumentNullException(nameof(Type));
+
             var Constructors = Type.GetConstructors();
             ConstructorInfo Constructor = null;
             foreach (ConstructorInfo TempConstructor in Constructors.OrderByDescending(x => x.GetParameters().Length))
@@ -369,7 +368,9 @@ namespace Wiesend.IoC.Default
         /// <returns>The parameters</returns>
         private List<object> GetParameters(ConstructorInfo Constructor)
         {
-            Contract.Requires<ArgumentNullException>(Constructor != null, "Constructor");
+            if (Constructor == null)
+                throw new ArgumentNullException(nameof(Constructor));
+
             var Params = new List<object>();
             foreach (ParameterInfo Parameter in Constructor.GetParameters())
             {

@@ -91,7 +91,7 @@ namespace Wiesend.Media.Procedural
         /// <param name="NumberOfPoints">Number of points</param>
         /// <param name="Seed">Random seed</param>
         /// <returns>Returns an image of a cellular texture</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Body")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
         public static SwiftBitmap Generate(int Width, int Height, int NumberOfPoints, int Seed)
         {
             float[,] DistanceBuffer = new float[Width, Height];
@@ -116,7 +116,6 @@ namespace Wiesend.Media.Procedural
             return ReturnValue.Unlock();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "2#")]
         private static float GetHeight(float X, float Y, float[,] DistanceBuffer,
             float MinimumDistance, float MaxDistance)
         {

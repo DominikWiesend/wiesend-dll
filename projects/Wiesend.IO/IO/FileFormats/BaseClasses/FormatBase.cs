@@ -73,7 +73,6 @@
 #endregion of Licenses [MIT Licenses]
 
 using System;
-using System.Diagnostics.Contracts;
 using Wiesend.IO.FileFormats.Interfaces;
 
 namespace Wiesend.IO.FileFormats.BaseClasses
@@ -83,6 +82,7 @@ namespace Wiesend.IO.FileFormats.BaseClasses
     /// </summary>
     /// <typeparam name="ContentType">Content type</typeparam>
     /// <typeparam name="FormatType">Format type</typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public abstract class FormatBase<FormatType, ContentType> : IFormat<FormatType, ContentType>
         where FormatType : FormatBase<FormatType, ContentType>, new()
     {
@@ -98,6 +98,7 @@ namespace Wiesend.IO.FileFormats.BaseClasses
         /// </summary>
         /// <param name="Location">Location of the file to load</param>
         /// <returns>The object specified in the location</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1000:Do not declare static members on generic types", Justification = "<Pending>")]
         public static FormatType Load(string Location)
         {
             return new FormatType().InternalLoad(Location);
@@ -120,9 +121,10 @@ namespace Wiesend.IO.FileFormats.BaseClasses
         /// <param name="Value1">Value 1</param>
         /// <param name="Value2">Value 2</param>
         /// <returns>True if it is less than, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public static bool operator <(FormatBase<FormatType, ContentType> Value1, FormatBase<FormatType, ContentType> Value2)
         {
-            Contract.Requires<ArgumentNullException>(Value1 != null, "Value1");
+            if (Value1 == null) throw new ArgumentNullException(nameof(Value1));
             return Value1.CompareTo(Value2) < 0;
         }
 
@@ -132,9 +134,10 @@ namespace Wiesend.IO.FileFormats.BaseClasses
         /// <param name="Value1">Value 1</param>
         /// <param name="Value2">Value 2</param>
         /// <returns>True if it is less than or equal, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public static bool operator <=(FormatBase<FormatType, ContentType> Value1, FormatBase<FormatType, ContentType> Value2)
         {
-            Contract.Requires<ArgumentNullException>(Value1 != null, "Value1");
+            if (Value1 == null) throw new ArgumentNullException(nameof(Value1));
             return Value1.CompareTo(Value2) <= 0;
         }
 
@@ -155,9 +158,10 @@ namespace Wiesend.IO.FileFormats.BaseClasses
         /// <param name="Value1">Value 1</param>
         /// <param name="Value2">Value 2</param>
         /// <returns>True if it is greater than, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public static bool operator >(FormatBase<FormatType, ContentType> Value1, FormatBase<FormatType, ContentType> Value2)
         {
-            Contract.Requires<ArgumentNullException>(Value1 != null, "Value1");
+            if (Value1 == null) throw new ArgumentNullException(nameof(Value1));
             return Value1.CompareTo(Value2) > 0;
         }
 
@@ -167,9 +171,10 @@ namespace Wiesend.IO.FileFormats.BaseClasses
         /// <param name="Value1">Value 1</param>
         /// <param name="Value2">Value 2</param>
         /// <returns>True if it is greater than or equal, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public static bool operator >=(FormatBase<FormatType, ContentType> Value1, FormatBase<FormatType, ContentType> Value2)
         {
-            Contract.Requires<ArgumentNullException>(Value1 != null, "Value1");
+            if (Value1 == null) throw new ArgumentNullException(nameof(Value1));
             return Value1.CompareTo(Value2) >= 0;
         }
 

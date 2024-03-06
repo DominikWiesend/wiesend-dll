@@ -75,7 +75,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Linq;
 using System.Threading;
 using Wiesend.DataTypes.Comparison;
@@ -98,7 +98,8 @@ namespace Wiesend.DataTypes
         /// <param name="Action">Action to run</param>
         /// <param name="DefaultObjectValue">Default object value</param>
         /// <returns>The original object</returns>
-        public static T Chain<T>(this T Object, Action<T> Action, T DefaultObjectValue = default(T))
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        public static T Chain<T>(this T Object, Action<T> Action, T DefaultObjectValue = default)
         {
             Object = Object.Check(DefaultObjectValue);
             if (Action == null || Object == null)
@@ -122,7 +123,9 @@ namespace Wiesend.DataTypes
         /// <param name="DefaultObjectValue">Default object value</param>
         /// <param name="DefaultReturnValue">Default return value</param>
         /// <returns>The result from the function</returns>
-        public static R Chain<T, R>(this T Object, Func<T, R> Function, R DefaultReturnValue = default(R), T DefaultObjectValue = default(T))
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        public static R Chain<T, R>(this T Object, Func<T, R> Function, R DefaultReturnValue = default, T DefaultObjectValue = default)
         {
             Object = Object.Check(DefaultObjectValue);
             if (Function == null || Object == null)
@@ -139,9 +142,10 @@ namespace Wiesend.DataTypes
         /// <param name="DefaultValue">The default value to return</param>
         /// <param name="Predicate">Predicate to check the object against</param>
         /// <returns>The default object if it fails the criteria, the object otherwise</returns>
-        public static T Check<T>(this T Object, Predicate<T> Predicate, T DefaultValue = default(T))
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        public static T Check<T>(this T Object, [NotNull] Predicate<T> Predicate, T DefaultValue = default)
         {
-            Contract.Requires<ArgumentNullException>(Predicate != null, "Predicate");
+            if (Predicate == null) throw new ArgumentNullException(nameof(Predicate));
             return Predicate(Object) ? Object : DefaultValue;
         }
 
@@ -154,10 +158,11 @@ namespace Wiesend.DataTypes
         /// <param name="DefaultValue">The default value to return</param>
         /// <param name="Predicate">Predicate to check the object against</param>
         /// <returns>The default object if it fails the criteria, the object otherwise</returns>
-        public static T Check<T>(this T Object, Predicate<T> Predicate, Func<T> DefaultValue)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        public static T Check<T>(this T Object, [NotNull] Predicate<T> Predicate, [NotNull] Func<T> DefaultValue)
         {
-            Contract.Requires<ArgumentNullException>(Predicate != null, "Predicate");
-            Contract.Requires<ArgumentNullException>(DefaultValue != null, "DefaultValue");
+            if (Predicate == null) throw new ArgumentNullException(nameof(Predicate));
+            if (DefaultValue == null) throw new ArgumentNullException(nameof(DefaultValue));
             return Predicate(Object) ? Object : DefaultValue();
         }
 
@@ -169,7 +174,8 @@ namespace Wiesend.DataTypes
         /// <param name="Object">Object to check</param>
         /// <param name="DefaultValue">The default value to return</param>
         /// <returns>The default object if it is null, the object otherwise</returns>
-        public static T Check<T>(this T Object, T DefaultValue = default(T))
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        public static T Check<T>(this T Object, T DefaultValue = default)
         {
             return Object.Check(x => x != null, DefaultValue);
         }
@@ -182,9 +188,10 @@ namespace Wiesend.DataTypes
         /// <param name="Object">Object to check</param>
         /// <param name="DefaultValue">The default value to return</param>
         /// <returns>The default object if it is null, the object otherwise</returns>
-        public static T Check<T>(this T Object, Func<T> DefaultValue)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        public static T Check<T>(this T Object, [NotNull] Func<T> DefaultValue)
         {
-            Contract.Requires<ArgumentNullException>(DefaultValue != null, "DefaultValue");
+            if (DefaultValue == null) throw new ArgumentNullException(nameof(DefaultValue));
             return Object.Check(x => x != null, DefaultValue);
         }
 
@@ -200,9 +207,9 @@ namespace Wiesend.DataTypes
         /// finish before checking)
         /// </param>
         /// <returns>The returned value from the function</returns>
-        public static T Execute<T>(this Func<T> Function, int Attempts = 3, int RetryDelay = 0, int TimeOut = int.MaxValue)
+        public static T Execute<T>([NotNull] this Func<T> Function, int Attempts = 3, int RetryDelay = 0, int TimeOut = int.MaxValue)
         {
-            Contract.Requires<ArgumentNullException>(Function != null, "Function");
+            if (Function == null) throw new ArgumentNullException(nameof(Function));
             Exception Holder = null;
             long Start = System.Environment.TickCount;
             while (Attempts > 0)
@@ -230,9 +237,9 @@ namespace Wiesend.DataTypes
         /// Max amount of time to wait for the function to run (waits for the current attempt to
         /// finish before checking)
         /// </param>
-        public static void Execute(this Action Action, int Attempts = 3, int RetryDelay = 0, int TimeOut = int.MaxValue)
+        public static void Execute([NotNull] this Action Action, int Attempts = 3, int RetryDelay = 0, int TimeOut = int.MaxValue)
         {
-            Contract.Requires<ArgumentNullException>(Action != null, "Action");
+            if (Action == null) throw new ArgumentNullException(nameof(Action));
             Exception Holder = null;
             long Start = System.Environment.TickCount;
             while (Attempts > 0)
@@ -258,9 +265,10 @@ namespace Wiesend.DataTypes
         /// <param name="Object">Object to test</param>
         /// <param name="Predicate">Predicate to test</param>
         /// <returns>True if the object passes the predicate, false otherwise</returns>
-        public static bool Is<T>(this T Object, Predicate<T> Predicate)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        public static bool Is<T>(this T Object, [NotNull] Predicate<T> Predicate)
         {
-            Contract.Requires<ArgumentNullException>(Predicate != null, "Predicate");
+            if (Predicate == null) throw new ArgumentNullException(nameof(Predicate));
             return Predicate(Object);
         }
 
@@ -272,6 +280,7 @@ namespace Wiesend.DataTypes
         /// <param name="ComparisonObject">Comparison object</param>
         /// <param name="Comparer">Comparer</param>
         /// <returns>True if the object passes the predicate, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         public static bool Is<T>(this T Object, T ComparisonObject, IEqualityComparer<T> Comparer = null)
         {
             Comparer = Comparer.Check(() => new GenericEqualityComparer<T>());
@@ -286,9 +295,9 @@ namespace Wiesend.DataTypes
         /// <param name="Predicate">Predicate to check</param>
         /// <param name="Exception">Exception to throw if predicate is true</param>
         /// <returns>the original Item</returns>
-        public static T ThrowIf<T>(this T Item, Predicate<T> Predicate, Func<Exception> Exception)
+        public static T ThrowIf<T>(this T Item, [NotNull] Predicate<T> Predicate, Func<Exception> Exception)
         {
-            Contract.Requires<ArgumentNullException>(Predicate != null, "Predicate");
+            if (Predicate == null) throw new ArgumentNullException(nameof(Predicate));
             if (Predicate(Item))
                 throw Exception();
             return Item;
@@ -302,9 +311,9 @@ namespace Wiesend.DataTypes
         /// <param name="Predicate">Predicate to check</param>
         /// <param name="Exception">Exception to throw if predicate is true</param>
         /// <returns>the original Item</returns>
-        public static T ThrowIf<T>(this T Item, Predicate<T> Predicate, Exception Exception)
+        public static T ThrowIf<T>(this T Item, [NotNull] Predicate<T> Predicate, Exception Exception)
         {
-            Contract.Requires<ArgumentNullException>(Predicate != null, "Predicate");
+            if (Predicate == null) throw new ArgumentNullException(nameof(Predicate));
             if (Predicate(Item))
                 throw Exception;
             return Item;
@@ -337,7 +346,7 @@ namespace Wiesend.DataTypes
         /// <returns>Returns Item</returns>
         public static T ThrowIfDefault<T>(this T Item, Exception Exception, IEqualityComparer<T> EqualityComparer = null)
         {
-            return Item.ThrowIf(x => EqualityComparer.Check(() => new GenericEqualityComparer<T>()).Equals(x, default(T)), Exception);
+            return Item.ThrowIf(x => EqualityComparer.Check(() => new GenericEqualityComparer<T>()).Equals(x, default), Exception);
         }
 
         /// <summary>
@@ -380,7 +389,7 @@ namespace Wiesend.DataTypes
         /// <returns>Returns Item</returns>
         public static T ThrowIfNotDefault<T>(this T Item, Exception Exception, IEqualityComparer<T> EqualityComparer = null)
         {
-            return Item.ThrowIf(x => !EqualityComparer.Check(() => new GenericEqualityComparer<T>()).Equals(x, default(T)), Exception);
+            return Item.ThrowIf(x => !EqualityComparer.Check(() => new GenericEqualityComparer<T>()).Equals(x, default), Exception);
         }
 
         /// <summary>
@@ -425,6 +434,7 @@ namespace Wiesend.DataTypes
         /// <param name="Item">The object to check</param>
         /// <param name="Exception">Exception to throw</param>
         /// <returns>Returns Item</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1827:Do not use Count() or LongCount() when Any() can be used", Justification = "<Pending>")]
         public static IEnumerable<T> ThrowIfNotNullOrEmpty<T>(this IEnumerable<T> Item, Exception Exception)
         {
             return Item.ThrowIf(x => x != null && x.Count() > 0, Exception);
@@ -471,6 +481,7 @@ namespace Wiesend.DataTypes
         /// <param name="Item">The object to check</param>
         /// <param name="Exception">Exception to throw</param>
         /// <returns>Returns Item</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1827:Do not use Count() or LongCount() when Any() can be used", Justification = "<Pending>")]
         public static IEnumerable<T> ThrowIfNullOrEmpty<T>(this IEnumerable<T> Item, Exception Exception)
         {
             return Item.ThrowIf(x => x == null || x.Count() == 0, Exception);

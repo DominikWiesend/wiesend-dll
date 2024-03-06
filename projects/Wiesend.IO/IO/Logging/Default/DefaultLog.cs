@@ -72,12 +72,13 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-#if NETFULL
 using System;
 using System.Globalization;
-using System.Web;
 using Wiesend.IO.Logging.BaseClasses;
 using Wiesend.IO.Logging.Enums;
+#if NETFRAMEWORK
+using System.Web;
+#endif
 
 namespace Wiesend.IO.Logging.Default
 {
@@ -117,9 +118,14 @@ namespace Wiesend.IO.Logging.Default
             {
                 if (string.IsNullOrEmpty(_FileName))
                 {
+#if NETFRAMEWORK
                     _FileName = HttpContext.Current == null ?
                         "~/Logs/" + Name + "-" + DateTime.Now.ToString("yyyyMMddhhmmss", CultureInfo.CurrentCulture) + ".log" :
                         "~/App_Data/Logs/" + Name + "-" + DateTime.Now.ToString("yyyyMMddhhmmss", CultureInfo.CurrentCulture) + ".log";
+#else
+                    _FileName = "~/Logs/" + Name + "-" + DateTime.Now.ToString("yyyyMMddhhmmss", CultureInfo.CurrentCulture) + ".log";
+#endif
+
                 }
                 return _FileName;
             }
@@ -133,4 +139,3 @@ namespace Wiesend.IO.Logging.Default
         private string _FileName = "";
     }
 }
-#endif

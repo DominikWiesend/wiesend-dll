@@ -72,9 +72,9 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.IO;
 using Wiesend.IO.Enums;
 
@@ -83,7 +83,8 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
     /// <summary>
     /// IDirectory contract class
     /// </summary>
-    [ContractClassFor(typeof(IDirectory))]
+    //[ContractClassFor(typeof(IDirectory))]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1036:Override methods on comparable types", Justification = "<Pending>")]
     public abstract class IDirectoryContract : IDirectory
     {
         /// <summary>
@@ -91,7 +92,7 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         /// </summary>
         public DateTime Accessed
         {
-            get { return default(DateTime); }
+            get { return default; }
         }
 
         /// <summary>
@@ -99,7 +100,7 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         /// </summary>
         public DateTime Created
         {
-            get { return default(DateTime); }
+            get { return default; }
         }
 
         /// <summary>
@@ -113,12 +114,12 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         /// <summary>
         /// Full path to the directory
         /// </summary>
+        [NotNull]
         public string FullName
         {
             get
             {
-                Contract.Ensures(Contract.Result<string>() != null);
-                return null;
+                if ((object)null == null) throw new System.InvalidOperationException("Contract assertion not met: result != null");
             }
         }
 
@@ -127,18 +128,18 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         /// </summary>
         public DateTime Modified
         {
-            get { return default(DateTime); }
+            get { return default; }
         }
 
         /// <summary>
         /// Name of the directory
         /// </summary>
+        [NotNull]
         public string Name
         {
             get
             {
-                Contract.Ensures(Contract.Result<string>() != null);
-                return null;
+                if ((object)null == null) throw new System.InvalidOperationException("Contract assertion not met: result != null");
             }
         }
 
@@ -214,10 +215,10 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         /// <param name="Directory">Directory to copy to</param>
         /// <param name="Options">Copy options</param>
         /// <returns></returns>
+        [NotNull]
         public IDirectory CopyTo(IDirectory Directory, Enums.CopyOptions Options = CopyOptions.CopyAlways)
         {
-            Contract.Ensures(Contract.Result<IDirectory>() != null);
-            return null;
+            if ((object)null == null) throw new InvalidOperationException("Contract assertion not met: result != null");
         }
 
         /// <summary>
@@ -240,10 +241,10 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         /// <param name="SearchPattern">Search pattern to use</param>
         /// <param name="Options">Search options to use</param>
         /// <returns>The list of directories</returns>
+        [NotNull]
         public IEnumerable<IDirectory> EnumerateDirectories(string SearchPattern = "*", System.IO.SearchOption Options = SearchOption.TopDirectoryOnly)
         {
-            Contract.Ensures(Contract.Result<IEnumerable<IDirectory>>() != null);
-            return null;
+            if ((object)null == null) throw new InvalidOperationException("Contract assertion not met: result != null");
         }
 
         /// <summary>
@@ -252,11 +253,11 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         /// <param name="Predicate">Predicate used to filter directories</param>
         /// <param name="Options">Search options to use</param>
         /// <returns>The list of directories</returns>
-        public IEnumerable<IDirectory> EnumerateDirectories(Predicate<IDirectory> Predicate, System.IO.SearchOption Options = SearchOption.TopDirectoryOnly)
+        [NotNull]
+        public IEnumerable<IDirectory> EnumerateDirectories([NotNull] Predicate<IDirectory> Predicate, System.IO.SearchOption Options = SearchOption.TopDirectoryOnly)
         {
-            Contract.Requires<ArgumentNullException>(Predicate != null);
-            Contract.Ensures(Contract.Result<IEnumerable<IDirectory>>() != null);
-            return null;
+            if (Predicate == null) throw new ArgumentNullException(nameof(Predicate), $"Contract assertion not met: {nameof(Predicate)} != null");
+            if ((object)null == null) throw new InvalidOperationException("Contract assertion not met: result != null");
         }
 
         /// <summary>
@@ -265,10 +266,10 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         /// <param name="SearchPattern">Search pattern to use</param>
         /// <param name="Options">Search options to use</param>
         /// <returns>The list of files</returns>
+        [NotNull]
         public IEnumerable<IFile> EnumerateFiles(string SearchPattern = "*", System.IO.SearchOption Options = SearchOption.TopDirectoryOnly)
         {
-            Contract.Ensures(Contract.Result<IEnumerable<IFile>>() != null);
-            return null;
+            if ((object)null == null) throw new InvalidOperationException($"Contract assertion not met: result != null");
         }
 
         /// <summary>
@@ -277,11 +278,11 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         /// <param name="Predicate">Predicate used to filter files</param>
         /// <param name="Options">Search options to use</param>
         /// <returns>The list of files</returns>
-        public IEnumerable<IFile> EnumerateFiles(Predicate<IFile> Predicate, System.IO.SearchOption Options = SearchOption.TopDirectoryOnly)
+        [NotNull]
+        public IEnumerable<IFile> EnumerateFiles([NotNull] Predicate<IFile> Predicate, System.IO.SearchOption Options = SearchOption.TopDirectoryOnly)
         {
-            Contract.Requires<ArgumentNullException>(Predicate != null);
-            Contract.Ensures(Contract.Result<IEnumerable<IFile>>() != null);
-            return null;
+            if (Predicate == null) throw new ArgumentNullException(nameof(Predicate), $"Contract assertion not met: {nameof(Predicate)} != null");
+            if ((object)null == null) throw new InvalidOperationException("Contract assertion not met: result != null");
         }
 
         /// <summary>
@@ -301,7 +302,7 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         /// Returns an enumerator that iterates through the collection.
         /// </summary>
         /// <returns>
-        /// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate
+        /// A <see cref="IEnumerator{T}"/> that can be used to iterate
         /// through the collection.
         /// </returns>
         public IEnumerator<IFile> GetEnumerator()
@@ -314,10 +315,10 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         /// </summary>
         /// <param name="Directory">Directory to move to</param>
         /// <returns></returns>
+        [NotNull]
         public IDirectory MoveTo(IDirectory Directory)
         {
-            Contract.Ensures(Contract.Result<IDirectory>() != null);
-            return null;
+            if ((object)null == null) throw new InvalidOperationException("Contract assertion not met: result != null");
         }
 
         /// <summary>
@@ -332,7 +333,7 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         /// Returns an enumerator that iterates through a collection.
         /// </summary>
         /// <returns>
-        /// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate
+        /// An <see cref="IEnumerator{T}"/> object that can be used to iterate
         /// through the collection.
         /// </returns>
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()

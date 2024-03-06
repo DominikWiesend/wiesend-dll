@@ -72,10 +72,10 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -96,12 +96,13 @@ namespace Wiesend.DataTypes.AOP
         /// <param name="Compiler">The compiler.</param>
         /// <param name="Aspects">The aspects.</param>
         /// <param name="Modules">The modules.</param>
-        public Manager(Compiler Compiler, IEnumerable<IAspect> Aspects, IEnumerable<IAOPModule> Modules)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1836:Prefer IsEmpty over Count", Justification = "<Pending>")]
+        public Manager([NotNull] Compiler Compiler, [NotNull] IEnumerable<IAspect> Aspects, [NotNull] IEnumerable<IAOPModule> Modules)
         {
-            Contract.Requires<ArgumentNullException>(Compiler != null, "Compiler");
-            Contract.Requires<ArgumentNullException>(Compiler.Classes != null, "Compiler.Classes");
-            Contract.Requires<ArgumentNullException>(Aspects != null, "Aspects");
-            Contract.Requires<ArgumentNullException>(Modules != null, "Modules");
+            if (Compiler == null) throw new ArgumentNullException(nameof(Compiler));
+            if (Compiler.Classes == null) throw new ArgumentNullException(nameof(Compiler.Classes), "Compiler.Classes");
+            if (Aspects == null) throw new ArgumentNullException(nameof(Aspects));
+            if (Modules == null) throw new ArgumentNullException(nameof(Modules));
             Manager.Compiler = Compiler;
             if (Manager.Aspects.Count == 0)
                 Manager.Aspects.Add(Aspects);
@@ -117,11 +118,14 @@ namespace Wiesend.DataTypes.AOP
         /// <summary>
         /// The list of aspects that are being used
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         private static readonly ConcurrentBag<IAspect> Aspects = new ConcurrentBag<IAspect>();
 
         /// <summary>
         /// Dictionary containing generated types and associates it with original type
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
         private static ConcurrentDictionary<Type, Type> Classes = new ConcurrentDictionary<Type, Type>();
 
         /// <summary>
@@ -153,9 +157,9 @@ namespace Wiesend.DataTypes.AOP
         /// Sets up all types from the assembly that it can
         /// </summary>
         /// <param name="Assembly">Assembly to set up</param>
-        public virtual void Setup(params Assembly[] Assembly)
+        public virtual void Setup([NotNull] params Assembly[] Assembly)
         {
-            Contract.Requires<ArgumentNullException>(Assembly != null, "Assembly");
+            if (Assembly == null) throw new ArgumentNullException(nameof(Assembly));
             Setup(FilterTypesToSetup(Assembly.Types()));
         }
 
@@ -163,6 +167,7 @@ namespace Wiesend.DataTypes.AOP
         /// Sets up a type so it can be used in the system later
         /// </summary>
         /// <param name="types">The types.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0028:Simplify collection initialization", Justification = "<Pending>")]
         public virtual void Setup(params Type[] types)
         {
             IEnumerable<Type> TempTypes = FilterTypesToSetup(types);
@@ -227,9 +232,9 @@ namespace Wiesend.DataTypes.AOP
         /// </summary>
         /// <param name="enumerable">The list of types</param>
         /// <returns>The types that can be set up</returns>
-        private static Type[] FilterTypesToSetup(IEnumerable<Type> enumerable)
+        private static Type[] FilterTypesToSetup([NotNull] IEnumerable<Type> enumerable)
         {
-            Contract.Requires<ArgumentNullException>(enumerable != null);
+            if (enumerable == null) throw new ArgumentNullException(nameof(enumerable), $"Contract assertion not met: {nameof(enumerable)} != null");
             return enumerable.Where(x => !Classes.ContainsKey(x)
                                 && !x.ContainsGenericParameters
                                 && (x.IsPublic || x.IsNestedPublic)
@@ -310,11 +315,14 @@ namespace Wiesend.DataTypes.AOP
             return new ClassGenerator(Type, Aspects).Generate(Namespace, ClassName, Usings, Interfaces, AssembliesUsing);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         private static string SetupAbstract(Type type, string @namespace, string className, List<string> usings, List<Type> interfaces, List<Assembly> assembliesUsing)
         {
             return "";
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "<Pending>")]
         private static string SetupClass(Type type, string @namespace, string className, List<string> usings, List<Type> interfaces, List<Assembly> assembliesUsing)
         {
             var Builder = new StringBuilder();
@@ -396,11 +404,14 @@ namespace Wiesend.DataTypes.AOP
             return Builder.ToString();
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         private static string SetupInterface(Type type, string @namespace, string className, List<string> usings, List<Type> interfaces, List<Assembly> assembliesUsing)
         {
             return "";
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "<Pending>")]
         private static string SetupMethod(Type Type, MethodInfo MethodInfo, bool IsProperty)
         {
             if (MethodInfo == null)

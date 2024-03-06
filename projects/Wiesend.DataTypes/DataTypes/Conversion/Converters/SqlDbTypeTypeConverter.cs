@@ -142,6 +142,8 @@ namespace Wiesend.DataTypes.Conversion.Converters
         /// </summary>
         protected override TypeConverter InternalConverter { get { return new EnumConverter(typeof(SqlDbType)); } }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0083:Use pattern matching", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         private static object DbTypeToSqlDbType(object value)
         {
             if (!(value is DbType))
@@ -152,6 +154,8 @@ namespace Wiesend.DataTypes.Conversion.Converters
             return Parameter.SqlDbType;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0083:Use pattern matching", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         private static object SqlDbTypeToDbType(object sqlDbType)
         {
             if (!(sqlDbType is SqlDbType))
@@ -162,6 +166,9 @@ namespace Wiesend.DataTypes.Conversion.Converters
             return Parameter.DbType;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0083:Use pattern matching", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0066:Convert switch statement to expression", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         private static object SqlDbTypeToType(object arg)
         {
             if (!(arg is SqlDbType))
@@ -214,6 +221,8 @@ namespace Wiesend.DataTypes.Conversion.Converters
             return typeof(int);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         private static object TypeToSqlDbType(object arg)
         {
             var TempValue = arg as Type;

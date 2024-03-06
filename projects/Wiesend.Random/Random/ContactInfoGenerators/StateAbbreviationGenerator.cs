@@ -82,6 +82,7 @@ namespace Wiesend.Random.ContactInfoGenerators
     /// </summary>
     public class StateAbbreviationGenerator : GeneratorAttributeBase, IGenerator<string>
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
         private string[] StateAndDistrictAbbreviations = { "AL", "AK", "AZ", "AR", "CA", "CO", "CT", "DE", "FL", "GA", "HI",
                                                              "ID", "IL", "IN", "IA", "KS", "KY", "LA", "ME", "MD", "MA", "MI",
                                                              "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC",

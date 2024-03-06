@@ -74,7 +74,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 
 namespace Wiesend.Media.Procedural
 {
@@ -90,6 +89,7 @@ namespace Wiesend.Media.Procedural
         /// <param name="Width">Width of the image</param>
         /// <param name="Height">Height of the image</param>
         /// <param name="NumberOfPoints">Number of cells</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         public CellularMap(int Seed, int Width, int Height, int NumberOfPoints)
         {
             _Width = Width;
@@ -112,13 +112,11 @@ namespace Wiesend.Media.Procedural
         /// <summary>
         /// List of closest cells
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Member")]
         public virtual int[,] ClosestPoint { get; set; }
 
         /// <summary>
         /// Distances to the closest cell
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1819:PropertiesShouldNotReturnArrays"), System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "Member")]
         public virtual float[,] Distances { get; set; }
 
         /// <summary>
@@ -131,20 +129,24 @@ namespace Wiesend.Media.Procedural
         /// </summary>
         public virtual float MinDistance { get; set; }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
         private int _Height = 0;
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
         private int _Width = 0;
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         private readonly List<Point> Points = new List<Point>();
 
         /// <summary>
         /// Calculate the distance between the points
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         private void CalculateDistances()
         {
-            Contract.Requires<ArgumentOutOfRangeException>(_Width >= 0, "_Width");
-            Contract.Requires<ArgumentOutOfRangeException>(_Height >= 0, "_Height");
-            Contract.Requires<NullReferenceException>(Points != null, "Points");
+            if (!(_Width >= 0)) throw new ArgumentOutOfRangeException("_Width", "_Width");
+            if (!(_Height >= 0)) throw new ArgumentOutOfRangeException("_Height", "_Height");
+            if (Points == null) throw new NullReferenceException("Points");
             for (int x = 0; x < _Width; ++x)
             {
                 for (int y = 0; y < _Height; ++y)
@@ -159,9 +161,10 @@ namespace Wiesend.Media.Procedural
         /// </summary>
         /// <param name="x">x axis</param>
         /// <param name="y">y axis</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         private void FindClosestPoint(int x, int y)
         {
-            Contract.Requires<NullReferenceException>(Points != null, "Points");
+            if (Points == null) throw new NullReferenceException("Points");
             float MaxDistance = float.MaxValue;
             int Index = -1;
             for (int z = 0; z < Points.Count; ++z)
@@ -185,6 +188,7 @@ namespace Wiesend.Media.Procedural
     /// <summary>
     /// Individual point
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1852:Seal internal types", Justification = "<Pending>")]
     internal class Point
     {
         /// <summary>

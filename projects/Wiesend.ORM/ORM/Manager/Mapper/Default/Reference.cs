@@ -74,7 +74,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Linq.Expressions;
 using Wiesend.DataTypes;
 using Wiesend.ORM.Manager.Mapper.BaseClasses;
@@ -89,6 +89,7 @@ namespace Wiesend.ORM.Manager.Mapper.Default
     /// </summary>
     /// <typeparam name="ClassType">Class type</typeparam>
     /// <typeparam name="DataType">Data type</typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public class Reference<ClassType, DataType> : PropertyBase<ClassType, DataType, Reference<ClassType, DataType>>, IReference
         where ClassType : class
     {
@@ -97,11 +98,11 @@ namespace Wiesend.ORM.Manager.Mapper.Default
         /// </summary>
         /// <param name="Expression">Expression pointing to the property</param>
         /// <param name="Mapping">Mapping the StringID is added to</param>
-        public Reference(Expression<Func<ClassType, DataType>> Expression, IMapping Mapping)
+        public Reference([NotNull] Expression<Func<ClassType, DataType>> Expression, [NotNull] IMapping Mapping)
             : base(Expression, Mapping)
         {
-            Contract.Requires<ArgumentNullException>(Expression != null, "Expression");
-            Contract.Requires<ArgumentNullException>(Mapping != null, "Mapping");
+            if (Expression == null) throw new ArgumentNullException(nameof(Expression));
+            if (Mapping == null) throw new ArgumentNullException(nameof(Mapping));
             SetTableName(Mapping.TableName);
             SetFieldName(Name + "_");
         }

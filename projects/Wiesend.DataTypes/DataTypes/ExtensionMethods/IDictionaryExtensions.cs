@@ -75,7 +75,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Linq;
 using Wiesend.DataTypes.Comparison;
 
@@ -98,10 +98,10 @@ namespace Wiesend.DataTypes
         /// This
         /// </returns>
         /// <exception cref="System.ArgumentNullException">Thrown if the dictionary is null</exception>
-        public static IDictionary<TKey, TValue> CopyTo<TKey, TValue>(this IDictionary<TKey, TValue> Dictionary, IDictionary<TKey, TValue> Target)
+        public static IDictionary<TKey, TValue> CopyTo<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> Dictionary, [NotNull] IDictionary<TKey, TValue> Target)
         {
-            Contract.Requires<ArgumentNullException>(Dictionary != null, "Dictionary");
-            Contract.Requires<ArgumentNullException>(Target != null, "Target");
+            if (Dictionary == null) throw new ArgumentNullException(nameof(Dictionary));
+            if (Target == null) throw new ArgumentNullException(nameof(Target));
             foreach (KeyValuePair<TKey, TValue> Pair in Dictionary)
             {
                 Target.SetValue(Pair.Key, Pair.Value);
@@ -121,9 +121,10 @@ namespace Wiesend.DataTypes
         /// The value associated with the key or the default value if the key is not found
         /// </returns>
         /// <exception cref="System.ArgumentNullException">Thrown if the dictionary is null</exception>
-        public static TValue GetValue<TKey, TValue>(this IDictionary<TKey, TValue> Dictionary, TKey Key, TValue Default = default(TValue))
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
+        public static TValue GetValue<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> Dictionary, TKey Key, TValue Default = default)
         {
-            Contract.Requires<ArgumentNullException>(Dictionary != null, "Dictionary");
+            if (Dictionary == null) throw new ArgumentNullException(nameof(Dictionary));
             TValue ReturnValue = Default;
             return Dictionary.TryGetValue(Key, out ReturnValue) ? ReturnValue : Default;
         }
@@ -138,9 +139,9 @@ namespace Wiesend.DataTypes
         /// <param name="Value">Value to add</param>
         /// <returns>The dictionary</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if the dictionary is null</exception>
-        public static IDictionary<TKey, TValue> SetValue<TKey, TValue>(this IDictionary<TKey, TValue> Dictionary, TKey Key, TValue Value)
+        public static IDictionary<TKey, TValue> SetValue<TKey, TValue>([NotNull] this IDictionary<TKey, TValue> Dictionary, TKey Key, TValue Value)
         {
-            Contract.Requires<ArgumentNullException>(Dictionary != null, "Dictionary");
+            if (Dictionary == null) throw new ArgumentNullException(nameof(Dictionary));
             if (Dictionary.ContainsKey(Key))
                 Dictionary[Key] = Value;
             else
@@ -156,10 +157,10 @@ namespace Wiesend.DataTypes
         /// <param name="Dictionary">Dictionary to sort</param>
         /// <param name="Comparer">Comparer used to sort (defaults to GenericComparer)</param>
         /// <returns>The sorted dictionary</returns>
-        public static IDictionary<T1, T2> Sort<T1, T2>(this IDictionary<T1, T2> Dictionary, IComparer<T1> Comparer = null)
+        public static IDictionary<T1, T2> Sort<T1, T2>([NotNull] this IDictionary<T1, T2> Dictionary, IComparer<T1> Comparer = null)
             where T1 : IComparable
         {
-            Contract.Requires<ArgumentNullException>(Dictionary != null, "Dictionary");
+            if (Dictionary == null) throw new ArgumentNullException(nameof(Dictionary));
             return Dictionary.Sort(x => x.Key, Comparer);
         }
 
@@ -173,11 +174,11 @@ namespace Wiesend.DataTypes
         /// <param name="OrderBy">Function used to order the dictionary</param>
         /// <param name="Comparer">Comparer used to sort (defaults to GenericComparer)</param>
         /// <returns>The sorted dictionary</returns>
-        public static IDictionary<T1, T2> Sort<T1, T2, T3>(this IDictionary<T1, T2> Dictionary, Func<KeyValuePair<T1, T2>, T3> OrderBy, IComparer<T3> Comparer = null)
+        public static IDictionary<T1, T2> Sort<T1, T2, T3>([NotNull] this IDictionary<T1, T2> Dictionary, [NotNull] Func<KeyValuePair<T1, T2>, T3> OrderBy, IComparer<T3> Comparer = null)
             where T3 : IComparable
         {
-            Contract.Requires<ArgumentNullException>(Dictionary != null, "Dictionary");
-            Contract.Requires<ArgumentNullException>(OrderBy != null, "OrderBy");
+            if (Dictionary == null) throw new ArgumentNullException(nameof(Dictionary));
+            if (OrderBy == null) throw new ArgumentNullException(nameof(OrderBy));
             return Dictionary.OrderBy(OrderBy, Comparer.Check(() => new GenericComparer<T3>())).ToDictionary(x => x.Key, x => x.Value);
         }
     }

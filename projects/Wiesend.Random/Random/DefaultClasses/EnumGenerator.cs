@@ -89,7 +89,7 @@ namespace Wiesend.Random.DefaultClasses
         /// <returns>A randomly generated object of the specified type</returns>
         public T Next(System.Random Rand)
         {
-            return Next(Rand, default(T), default(T));
+            return Next(Rand, default, default);
         }
 
         /// <summary>

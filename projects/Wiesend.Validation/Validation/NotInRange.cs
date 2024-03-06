@@ -83,7 +83,7 @@ namespace Wiesend.Validation
     /// <summary>
     /// Not in range attribute
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1019:DefineAccessorsForAttributeArguments"), AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
+    [AttributeUsage(AttributeTargets.Property, Inherited = true, AllowMultiple = false)]
     public class NotInRangeAttribute : ValidationAttribute
     {
         /// <summary>
@@ -125,12 +125,13 @@ namespace Wiesend.Validation
         /// <param name="value">Value to check</param>
         /// <param name="validationContext">Validation context</param>
         /// <returns>The validation result</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            var Comparer = new GenericComparer<IComparable>();
-            var MaxValue = (IComparable)Max.To<object>(value.GetType());
-            var MinValue = (IComparable)Min.To<object>(value.GetType());
-            var TempValue = value as IComparable;
+            GenericComparer<IComparable> Comparer = new GenericComparer<IComparable>();
+            IComparable MaxValue = (IComparable)Max.To<object>(value.GetType());
+            IComparable MinValue = (IComparable)Min.To<object>(value.GetType());
+            IComparable TempValue = value as IComparable;
             return (Comparer.Compare(MaxValue, TempValue) >= 0
                     && Comparer.Compare(TempValue, MinValue) >= 0) ?
                 new ValidationResult(FormatErrorMessage(validationContext.DisplayName)) :

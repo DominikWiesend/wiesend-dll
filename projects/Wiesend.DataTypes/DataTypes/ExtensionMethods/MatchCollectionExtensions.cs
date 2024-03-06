@@ -75,7 +75,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Text.RegularExpressions;
 
 namespace Wiesend.DataTypes
@@ -92,9 +92,9 @@ namespace Wiesend.DataTypes
         /// <param name="Collection">Collection to search through</param>
         /// <param name="Predicate">Predicate that the items must satisfy</param>
         /// <returns>The matches that satisfy the predicate</returns>
-        public static IEnumerable<Match> Where(this MatchCollection Collection, Predicate<Match> Predicate)
+        public static IEnumerable<Match> Where(this MatchCollection Collection, [NotNull] Predicate<Match> Predicate)
         {
-            Contract.Requires<ArgumentNullException>(Predicate != null, "Predicate");
+            if (Predicate == null) throw new ArgumentNullException(nameof(Predicate));
             if (Collection == null)
                 return null;
             var Matches = new List<Match>();

@@ -74,7 +74,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -128,12 +127,11 @@ namespace Wiesend.IO.Encryption
         /// </summary>
         /// <param name="PrivatePublic">True if private key should be included, false otherwise</param>
         /// <returns>XML representation of the key information</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         public string CreateKey(bool PrivatePublic)
         {
-            Contract.Requires<NullReferenceException>(AsymmetricAlgorithms != null, "AsymmetricAlgorithms");
-            var Found = AsymmetricAlgorithms.FirstOrDefault();
-            if (Found == null)
-                throw new ArgumentException("No asymmetric encryption algorithm found");
+            if (AsymmetricAlgorithms == null) throw new NullReferenceException("AsymmetricAlgorithms");
+            var Found = AsymmetricAlgorithms.FirstOrDefault() ?? throw new ArgumentException("No asymmetric encryption algorithm found");
             return Found.CreateKey(PrivatePublic);
         }
 
@@ -148,12 +146,14 @@ namespace Wiesend.IO.Encryption
         /// Can be 64 (DES only), 128 (AES), 192 (AES and Triple DES), or 256 (AES)
         /// </param>
         /// <returns>A decrypted byte array</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0270:Use coalesce expression", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         public byte[] Decrypt(byte[] Data, DeriveBytes Key,
             string Algorithm = "AES",
             string InitialVector = "OFRna73m*aze01xY",
             int KeySize = 256)
         {
-            Contract.Requires<NullReferenceException>(SymmetricAlgorithms != null, "SymmetricAlgorithms");
+            if (SymmetricAlgorithms == null) throw new NullReferenceException("SymmetricAlgorithms");
             var Found = SymmetricAlgorithms.FirstOrDefault(x => x.CanHandle(Algorithm));
             if (Found == null)
                 throw new ArgumentException(Algorithm + " not found");
@@ -174,6 +174,7 @@ namespace Wiesend.IO.Encryption
         /// Can be 64 (DES only), 128 (AES), 192 (AES and Triple DES), or 256 (AES)
         /// </param>
         /// <returns>A decrypted byte array</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         public byte[] Decrypt(byte[] Data, string Key,
             string Algorithm,
             string Salt = "Kosher",
@@ -182,10 +183,8 @@ namespace Wiesend.IO.Encryption
             string InitialVector = "OFRna73m*aze01xY",
             int KeySize = 256)
         {
-            Contract.Requires<NullReferenceException>(SymmetricAlgorithms != null, "SymmetricAlgorithms");
-            var Found = SymmetricAlgorithms.FirstOrDefault(x => x.CanHandle(Algorithm));
-            if (Found == null)
-                throw new ArgumentException(Algorithm + " not found");
+            if (SymmetricAlgorithms == null) throw new NullReferenceException("SymmetricAlgorithms");
+            var Found = SymmetricAlgorithms.FirstOrDefault(x => x.CanHandle(Algorithm)) ?? throw new ArgumentException(Algorithm + " not found");
             return Found.Decrypt(Data, Key, Algorithm, Salt, HashAlgorithm, PasswordIterations, InitialVector, KeySize);
         }
 
@@ -195,12 +194,11 @@ namespace Wiesend.IO.Encryption
         /// <param name="Data">Data to encrypt</param>
         /// <param name="Key">Key to use</param>
         /// <returns>The decrypted data</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         public byte[] Decrypt(byte[] Data, byte[] Key)
         {
-            Contract.Requires<NullReferenceException>(ShiftAlgorithms != null, "ShiftAlgorithms");
-            var Found = ShiftAlgorithms.FirstOrDefault();
-            if (Found == null)
-                throw new ArgumentException("No shift based encryption algorithm found");
+            if (ShiftAlgorithms == null) throw new NullReferenceException("ShiftAlgorithms");
+            var Found = ShiftAlgorithms.FirstOrDefault() ?? throw new ArgumentException("No shift based encryption algorithm found");
             return Found.Decrypt(Data, Key);
         }
 
@@ -212,12 +210,11 @@ namespace Wiesend.IO.Encryption
         /// </param>
         /// <param name="Key">Key to use for decryption</param>
         /// <returns>A decrypted byte array</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         public byte[] Decrypt(byte[] Input, string Key)
         {
-            Contract.Requires<NullReferenceException>(AsymmetricAlgorithms != null, "AsymmetricAlgorithms");
-            var Found = AsymmetricAlgorithms.FirstOrDefault();
-            if (Found == null)
-                throw new ArgumentException("No asymmetric encryption algorithm found");
+            if (AsymmetricAlgorithms == null) throw new NullReferenceException("AsymmetricAlgorithms");
+            var Found = AsymmetricAlgorithms.FirstOrDefault() ?? throw new ArgumentException("No asymmetric encryption algorithm found");
             return Found.Decrypt(Input, Key);
         }
 
@@ -232,15 +229,14 @@ namespace Wiesend.IO.Encryption
         /// </param>
         /// <param name="Algorithm">Algorithm</param>
         /// <returns>An encrypted byte array</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         public byte[] Encrypt(byte[] Data, DeriveBytes Key,
             string Algorithm = "AES",
             string InitialVector = "OFRna73m*aze01xY",
             int KeySize = 256)
         {
-            Contract.Requires<NullReferenceException>(SymmetricAlgorithms != null, "SymmetricAlgorithms");
-            var Found = SymmetricAlgorithms.FirstOrDefault(x => x.CanHandle(Algorithm));
-            if (Found == null)
-                throw new ArgumentException(Algorithm + " not found");
+            if (SymmetricAlgorithms == null) throw new NullReferenceException("SymmetricAlgorithms");
+            var Found = SymmetricAlgorithms.FirstOrDefault(x => x.CanHandle(Algorithm)) ?? throw new ArgumentException(Algorithm + " not found");
             return Found.Encrypt(Data, Key, Algorithm, InitialVector, KeySize);
         }
 
@@ -258,6 +254,7 @@ namespace Wiesend.IO.Encryption
         /// </param>
         /// <param name="Algorithm">Algorithm</param>
         /// <returns>An encrypted byte array</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         public byte[] Encrypt(byte[] Data, string Key,
             string Algorithm,
             string Salt = "Kosher",
@@ -266,10 +263,8 @@ namespace Wiesend.IO.Encryption
             string InitialVector = "OFRna73m*aze01xY",
             int KeySize = 256)
         {
-            Contract.Requires<NullReferenceException>(SymmetricAlgorithms != null, "SymmetricAlgorithms");
-            var Found = SymmetricAlgorithms.FirstOrDefault(x => x.CanHandle(Algorithm));
-            if (Found == null)
-                throw new ArgumentException(Algorithm + " not found");
+            if (SymmetricAlgorithms == null) throw new NullReferenceException("SymmetricAlgorithms");
+            var Found = SymmetricAlgorithms.FirstOrDefault(x => x.CanHandle(Algorithm)) ?? throw new ArgumentException(Algorithm + " not found");
             return Found.Encrypt(Data, Key, Algorithm, Salt, HashAlgorithm, PasswordIterations, InitialVector, KeySize);
         }
 
@@ -279,12 +274,11 @@ namespace Wiesend.IO.Encryption
         /// <param name="Data">Data to encrypt</param>
         /// <param name="Key">Key to use</param>
         /// <returns>The encrypted data</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         public byte[] Encrypt(byte[] Data, byte[] Key)
         {
-            Contract.Requires<NullReferenceException>(ShiftAlgorithms != null, "ShiftAlgorithms");
-            var Found = ShiftAlgorithms.FirstOrDefault();
-            if (Found == null)
-                throw new ArgumentException("No shift based encryption algorithm found");
+            if (ShiftAlgorithms == null) throw new NullReferenceException("ShiftAlgorithms");
+            var Found = ShiftAlgorithms.FirstOrDefault() ?? throw new ArgumentException("No shift based encryption algorithm found");
             return Found.Encrypt(Data, Key);
         }
 
@@ -296,12 +290,11 @@ namespace Wiesend.IO.Encryption
         /// </param>
         /// <param name="Key">Key to use for encryption</param>
         /// <returns>An encrypted byte array (64bit string)</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         public byte[] Encrypt(byte[] Input, string Key)
         {
-            Contract.Requires<NullReferenceException>(AsymmetricAlgorithms != null, "AsymmetricAlgorithms");
-            var Found = AsymmetricAlgorithms.FirstOrDefault();
-            if (Found == null)
-                throw new ArgumentException("No asymmetric encryption algorithm found");
+            if (AsymmetricAlgorithms == null) throw new NullReferenceException("AsymmetricAlgorithms");
+            var Found = AsymmetricAlgorithms.FirstOrDefault() ?? throw new ArgumentException("No asymmetric encryption algorithm found");
             return Found.Encrypt(Input, Key);
         }
 
@@ -311,12 +304,11 @@ namespace Wiesend.IO.Encryption
         /// <param name="Data">Data to hash</param>
         /// <param name="Algorithm">Algorithm</param>
         /// <returns>The hashed data</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         public byte[] Hash(byte[] Data, string Algorithm)
         {
-            Contract.Requires<NullReferenceException>(HasherAlgorithms != null, "HasherAlgorithms");
-            var Found = HasherAlgorithms.FirstOrDefault(x => x.CanHandle(Algorithm));
-            if (Found == null)
-                throw new ArgumentException(Algorithm + " not found");
+            if (HasherAlgorithms == null) throw new NullReferenceException("HasherAlgorithms");
+            var Found = HasherAlgorithms.FirstOrDefault(x => x.CanHandle(Algorithm)) ?? throw new ArgumentException(Algorithm + " not found");
             return Found.Hash(Data, Algorithm);
         }
 
@@ -328,12 +320,11 @@ namespace Wiesend.IO.Encryption
         /// <param name="Hash">This will be filled with the unsigned hash</param>
         /// <param name="EncodingUsing">Encoding that the input is using (defaults to UTF8)</param>
         /// <returns>A signed hash of the input (64bit string)</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         public string SignHash(string Input, string Key, out string Hash, Encoding EncodingUsing = null)
         {
-            Contract.Requires<NullReferenceException>(AsymmetricAlgorithms != null, "AsymmetricAlgorithms");
-            var Found = AsymmetricAlgorithms.FirstOrDefault();
-            if (Found == null)
-                throw new ArgumentException("No asymmetric encryption algorithm found");
+            if (AsymmetricAlgorithms == null) throw new NullReferenceException("AsymmetricAlgorithms");
+            var Found = AsymmetricAlgorithms.FirstOrDefault() ?? throw new ArgumentException("No asymmetric encryption algorithm found");
             return Found.SignHash(Input, Key, out Hash, EncodingUsing);
         }
 
@@ -358,12 +349,11 @@ namespace Wiesend.IO.Encryption
         /// <param name="SignedHash">The signed hash (should be 64bit string)</param>
         /// <param name="Key">The key to use in decryption</param>
         /// <returns>True if it is verified, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         public bool VerifyHash(string Hash, string SignedHash, string Key)
         {
-            Contract.Requires<NullReferenceException>(AsymmetricAlgorithms != null, "AsymmetricAlgorithms");
-            var Found = AsymmetricAlgorithms.FirstOrDefault();
-            if (Found == null)
-                throw new ArgumentException("No asymmetric encryption algorithm found");
+            if (AsymmetricAlgorithms == null) throw new NullReferenceException("AsymmetricAlgorithms");
+            var Found = AsymmetricAlgorithms.FirstOrDefault() ?? throw new ArgumentException("No asymmetric encryption algorithm found");
             return Found.VerifyHash(Hash, SignedHash, Key);
         }
     }

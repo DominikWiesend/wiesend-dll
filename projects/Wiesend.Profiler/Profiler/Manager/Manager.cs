@@ -74,7 +74,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Linq;
 using Wiesend.DataTypes.Patterns.BaseClasses;
 using Wiesend.Profiler.Manager.Interfaces;
@@ -90,9 +90,9 @@ namespace Wiesend.Profiler.Manager
         /// Constructor
         /// </summary>
         /// <param name="Profilers">The profilers.</param>
-        public Manager(IEnumerable<IProfiler> Profilers)
+        public Manager([NotNull] IEnumerable<IProfiler> Profilers)
         {
-            Contract.Requires<ArgumentNullException>(Profilers != null, "Profilers");
+            if (Profilers == null) throw new ArgumentNullException(nameof(Profilers), "Profilers");
             Profiler = Profilers.FirstOrDefault(x => !x.GetType().Namespace.StartsWith("WIESEND", StringComparison.OrdinalIgnoreCase));
             if (Profiler == null)
                 Profiler = Profilers.FirstOrDefault(x => x.GetType().Namespace.StartsWith("WIESEND", StringComparison.OrdinalIgnoreCase));

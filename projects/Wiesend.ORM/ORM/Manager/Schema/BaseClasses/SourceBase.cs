@@ -155,6 +155,6 @@ namespace Wiesend.ORM.Manager.Schema.BaseClasses
         /// </summary>
         /// <param name="Name">Name of the table</param>
         /// <returns>The table specified</returns>
-        public ITable this[string Name] { get { return Tables.FirstOrDefault(x => string.Equals(x.Name, Name, System.StringComparison.CurrentCultureIgnoreCase)); } }
+        public ITable this[string Name] { get { return Tables.FirstOrDefault(x => string.Equals(x.Name, Name, System.StringComparison.OrdinalIgnoreCase)); } }
     }
 }

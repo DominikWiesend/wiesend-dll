@@ -72,6 +72,7 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.IO;
 using System.IO.Compression;
@@ -101,22 +102,18 @@ namespace Wiesend.IO.Compression.BaseClasses
         /// </summary>
         /// <param name="Data">Data to compress</param>
         /// <returns>Compressed data</returns>
-        public byte[] Compress(byte[] Data)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
+        public byte[] Compress([NotNull]byte[] Data)
         {
-            if (Data == null)
-                throw new ArgumentNullException(nameof(Data));
-            using (MemoryStream Stream = new MemoryStream())
+            if (Data == null) throw new ArgumentNullException(nameof(Data));
+            using MemoryStream Stream = new MemoryStream();
+            using Stream ZipStream = GetStream(Stream, CompressionMode.Compress);
+            if (ZipStream != null)
             {
-                using (Stream ZipStream = GetStream(Stream, CompressionMode.Compress))
-                {
-                    if (ZipStream != null)
-                    {
-                        ZipStream.Write(Data, 0, Data.Length);
-                        ZipStream.Close();
-                    }
-                    return Stream.ToArray();
-                }
+                ZipStream.Write(Data, 0, Data.Length);
+                ZipStream.Close();
             }
+            return Stream.ToArray();
         }
 
         /// <summary>
@@ -124,31 +121,25 @@ namespace Wiesend.IO.Compression.BaseClasses
         /// </summary>
         /// <param name="Data">Data to decompress</param>
         /// <returns>The decompressed data</returns>
-        public byte[] Decompress(byte[] Data)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
+        public byte[] Decompress([NotNull] byte[] Data)
         {
-            if (Data == null)
-                throw new ArgumentNullException(nameof(Data));
-            using (MemoryStream Stream = new MemoryStream())
+            if (Data == null) throw new ArgumentNullException(nameof(Data));
+            using MemoryStream Stream = new MemoryStream();
+            using MemoryStream DataStream = new MemoryStream(Data);
+            using Stream ZipStream = GetStream(DataStream, CompressionMode.Decompress);
+            if (ZipStream != null)
             {
-                using (MemoryStream DataStream = new MemoryStream(Data))
+                byte[] Buffer = new byte[4096];
+                while (true)
                 {
-                    using (Stream ZipStream = GetStream(DataStream, CompressionMode.Decompress))
-                    {
-                        if (ZipStream != null)
-                        {
-                            byte[] Buffer = new byte[4096];
-                            while (true)
-                            {
-                                var Size = ZipStream.Read(Buffer, 0, Buffer.Length);
-                                if (Size > 0) Stream.Write(Buffer, 0, Size);
-                                else break;
-                            }
-                            ZipStream.Close();
-                        }
-                        return Stream.ToArray();
-                    }
+                    var Size = ZipStream.Read(Buffer, 0, Buffer.Length);
+                    if (Size > 0) Stream.Write(Buffer, 0, Size);
+                    else break;
                 }
+                ZipStream.Close();
             }
+            return Stream.ToArray();
         }
 
         /// <summary>

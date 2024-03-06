@@ -72,7 +72,6 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-#if NETFULL
 using System;
 using System.Web;
 using Wiesend.IO.FileSystem.BaseClasses;
@@ -104,6 +103,7 @@ namespace Wiesend.IO.FileSystem.Default
             Path = Path.Replace("/", "\\");
             string BaseDirectory = "";
             string ParentDirectory = "";
+#if NETFRAMEWORK
             if (HttpContext.Current == null)
             {
                 BaseDirectory = new System.IO.DirectoryInfo(".").FullName;
@@ -114,6 +114,10 @@ namespace Wiesend.IO.FileSystem.Default
                 BaseDirectory = HttpContext.Current.Server.MapPath("~/");
                 ParentDirectory = new LocalDirectory(BaseDirectory).Parent.FullName;
             }
+#else
+            BaseDirectory = new System.IO.DirectoryInfo(".").FullName;
+            ParentDirectory = new LocalDirectory(BaseDirectory).Parent.FullName;
+#endif
             if (Path.StartsWith("..\\", StringComparison.OrdinalIgnoreCase))
             {
                 Path = ParentDirectory + Path.Remove(0, 2);
@@ -141,4 +145,3 @@ namespace Wiesend.IO.FileSystem.Default
         }
     }
 }
-#endif

@@ -72,9 +72,9 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using System.Xml;
@@ -101,10 +101,10 @@ namespace Wiesend.IO.FileFormats.RSS
         /// Constructor
         /// </summary>
         /// <param name="Location">Location of the RSS feed to load</param>
-        public Document(string Location)
+        public Document([NotNull] string Location)
             : this()
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(Location), "Location");
+            if (string.IsNullOrEmpty(Location)) throw new ArgumentNullException(nameof(Location));
             InternalLoad(Location);
         }
 
@@ -112,10 +112,10 @@ namespace Wiesend.IO.FileFormats.RSS
         /// Constructor
         /// </summary>
         /// <param name="Document">XML document containing an RSS feed</param>
-        public Document(IXPathNavigable Document)
+        public Document([NotNull] IXPathNavigable Document)
             : this()
         {
-            Contract.Requires<ArgumentNullException>(Document != null, "Document");
+            if (Document == null) throw new ArgumentNullException(nameof(Document));
             Load(Document);
         }
 
@@ -188,9 +188,9 @@ namespace Wiesend.IO.FileFormats.RSS
         /// Copies one document's channels to another
         /// </summary>
         /// <param name="CopyFrom">RSS document to copy from</param>
-        public virtual void Copy(Document CopyFrom)
+        public virtual void Copy([NotNull] Document CopyFrom)
         {
-            Contract.Requires<ArgumentNullException>(CopyFrom != null, "CopyFrom");
+            if (CopyFrom == null) throw new ArgumentNullException(nameof(CopyFrom));
             foreach (Channel CurrentChannel in CopyFrom)
             {
                 Channels.Add(CurrentChannel);
@@ -280,6 +280,7 @@ namespace Wiesend.IO.FileFormats.RSS
         /// Loads the object from the data specified
         /// </summary>
         /// <param name="Data">Data to load into the object</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA3075:Insecure DTD processing in XML", Justification = "<Pending>")]
         protected override void LoadFromData(string Data)
         {
             var Document = new XmlDocument();
@@ -287,9 +288,9 @@ namespace Wiesend.IO.FileFormats.RSS
             Load(Document);
         }
 
-        private void Load(IXPathNavigable Document)
+        private void Load([NotNull] IXPathNavigable Document)
         {
-            Contract.Requires<ArgumentNullException>(Document != null, "Document");
+            if (Document == null) throw new ArgumentNullException(nameof(Document));
             Channels = Channels.Check(new List<Channel>());
             var Navigator = Document.CreateNavigator();
             var NamespaceManager = new XmlNamespaceManager(Navigator.NameTable);

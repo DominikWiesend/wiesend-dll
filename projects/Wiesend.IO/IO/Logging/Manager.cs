@@ -72,10 +72,9 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-#if NETFULL
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using Wiesend.DataTypes.Patterns.BaseClasses;
 using Wiesend.IO.Logging.Default;
@@ -92,9 +91,10 @@ namespace Wiesend.IO.Logging
         /// Constructor
         /// </summary>
         /// <param name="Loggers">The loggers.</param>
-        public Manager(IEnumerable<ILogger> Loggers)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
+        public Manager([NotNull] IEnumerable<ILogger> Loggers)
         {
-            Contract.Requires<ArgumentNullException>(Loggers != null, "Loggers");
+            if (Loggers == null) throw new ArgumentNullException(nameof(Loggers));
             LoggerUsing = Loggers.FirstOrDefault(x => !x.GetType().Namespace.StartsWith("WIESEND", StringComparison.OrdinalIgnoreCase));
             if (LoggerUsing == null)
                 LoggerUsing = new DefaultLogger();
@@ -140,4 +140,3 @@ namespace Wiesend.IO.Logging
         }
     }
 }
-#endif

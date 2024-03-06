@@ -73,7 +73,7 @@
 #endregion of Licenses [MIT Licenses]
 
 using System;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 
 namespace Wiesend.DataTypes
 {
@@ -89,7 +89,7 @@ namespace Wiesend.DataTypes
         /// <param name="end">End of the date span</param>
         public DateSpan(DateTime start, DateTime end)
         {
-            Contract.Requires<ArgumentException>(start <= end, "Start is after End");
+            if (!(start <= end)) throw new ArgumentException("Start is after End", nameof(start));
             Start = start;
             End = end;
         }
@@ -175,6 +175,7 @@ namespace Wiesend.DataTypes
         /// <param name="Span1">Span 1</param>
         /// <param name="Span2">Span 2</param>
         /// <returns>True if they are, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
         public static bool operator ==(DateSpan Span1, DateSpan Span2)
         {
             if ((object)Span1 == null && (object)Span2 == null)
@@ -189,9 +190,10 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Value">Value to convert</param>
         /// <returns>The value as a string</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public static implicit operator string (DateSpan Value)
         {
-            Contract.Requires<ArgumentNullException>(Value != null, "Value");
+            if (Value == null) throw new ArgumentNullException(nameof(Value));
             return Value.ToString();
         }
 
@@ -236,9 +238,9 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Span">The span to compare to</param>
         /// <returns>True if they overlap, false otherwise</returns>
-        public bool Overlap(DateSpan Span)
+        public bool Overlap([NotNull] DateSpan Span)
         {
-            Contract.Requires<ArgumentNullException>(Span != null, "Span");
+            if (Span == null) throw new ArgumentNullException(nameof(Span));
             return ((Start >= Span.Start && Start < Span.End) || (End <= Span.End && End > Span.Start) || (Start <= Span.Start && End >= Span.End));
         }
 
@@ -246,6 +248,7 @@ namespace Wiesend.DataTypes
         /// Converts the DateSpan to a string
         /// </summary>
         /// <returns>The DateSpan as a string</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "<Pending>")]
         public override string ToString()
         {
             return "Start: " + Start.ToString() + " End: " + End.ToString();

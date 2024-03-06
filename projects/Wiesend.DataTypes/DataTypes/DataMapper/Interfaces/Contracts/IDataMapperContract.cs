@@ -72,15 +72,15 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
-using System.Diagnostics.Contracts;
 
 namespace Wiesend.DataTypes.DataMapper.Interfaces.Contracts
 {
     /// <summary>
     /// IDataMapper contract class
     /// </summary>
-    [ContractClassFor(typeof(IDataMapper))]
+    //[ContractClassFor(typeof(IDataMapper))]
     internal abstract class IDataMapperContract : IDataMapper
     {
         /// <summary>
@@ -91,10 +91,11 @@ namespace Wiesend.DataTypes.DataMapper.Interfaces.Contracts
         /// <returns>
         /// A mapping object for the two types specified
         /// </returns>
+        [NotNull]
         public ITypeMapping<Left, Right> Map<Left, Right>()
         {
-            Contract.Ensures(Contract.Result<ITypeMapping<Left, Right>>() != null);
-            return null;
+            if ((object)null == null) 
+                throw new InvalidOperationException($"Contract assertion not met: $result != null");
         }
 
         /// <summary>
@@ -105,12 +106,13 @@ namespace Wiesend.DataTypes.DataMapper.Interfaces.Contracts
         /// <returns>
         /// A mapping object for the two types specified
         /// </returns>
-        public ITypeMapping Map(Type Left, Type Right)
+        [NotNull]
+        public ITypeMapping Map([NotNull] Type Left, [NotNull] Type Right)
         {
-            Contract.Requires<ArgumentNullException>(Left != null);
-            Contract.Requires<ArgumentNullException>(Right != null);
-            Contract.Ensures(Contract.Result<ITypeMapping>() != null);
-            return null;
+            if (Left == null) throw new ArgumentNullException(nameof(Left), $"Contract assertion not met: {nameof(Left)} != null");
+            if (Right == null) throw new ArgumentNullException(nameof(Right), $"Contract assertion not met: {nameof(Right)} != null");
+            if ((object)null == null) 
+                throw new InvalidOperationException($"Contract assertion not met: $result != null");
         }
     }
 }

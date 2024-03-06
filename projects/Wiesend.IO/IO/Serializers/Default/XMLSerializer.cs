@@ -75,6 +75,7 @@
 using System;
 using System.IO;
 using System.Text;
+using System.Xml;
 using System.Xml.Serialization;
 using Wiesend.IO.Serializers.BaseClasses;
 
@@ -106,15 +107,15 @@ namespace Wiesend.IO.Serializers.Default
         /// <param name="ObjectType">Object type</param>
         /// <param name="Data">Data to deserialize</param>
         /// <returns>The deserialized data</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA3075:Insecure DTD processing in XML", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA5369:Use XmlReader for 'XmlSerializer.Deserialize()'", Justification = "<Pending>")]
         public override object Deserialize(Type ObjectType, string Data)
         {
             if (string.IsNullOrEmpty(Data) || ObjectType == null)
                 return null;
-            using (MemoryStream Stream = new MemoryStream(Encoding.UTF8.GetBytes(Data)))
-            {
-                var Serializer = new XmlSerializer(ObjectType);
-                return Serializer.Deserialize(Stream);
-            }
+            using MemoryStream Stream = new(Encoding.UTF8.GetBytes(Data));
+            var Serializer = new XmlSerializer(ObjectType);
+            return Serializer.Deserialize(Stream);
         }
 
         /// <summary>
@@ -127,13 +128,11 @@ namespace Wiesend.IO.Serializers.Default
         {
             if (Data == null || ObjectType == null)
                 return null;
-            using (MemoryStream Stream = new MemoryStream())
-            {
-                var Serializer = new XmlSerializer(ObjectType);
-                Serializer.Serialize(Stream, Data);
-                Stream.Flush();
-                return Encoding.UTF8.GetString(Stream.GetBuffer(), 0, (int)Stream.Position);
-            }
+            using MemoryStream Stream = new();
+            var Serializer = new XmlSerializer(ObjectType);
+            Serializer.Serialize(Stream, Data);
+            Stream.Flush();
+            return Encoding.UTF8.GetString(Stream.GetBuffer(), 0, (int)Stream.Position);
         }
     }
 }

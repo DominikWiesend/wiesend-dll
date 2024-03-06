@@ -1,12 +1,5 @@
-﻿
-// This file is used by Code Analysis to maintain SuppressMessage 
+﻿// This file is used by Code Analysis to maintain SuppressMessage 
 // attributes that are applied to this project.
 // Project-level suppressions either have no target or are given 
 // a specific target and scoped to a namespace, type, member, etc.
-
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.Validation.BetweenAttribute.GetClientValidationRules(System.Web.Mvc.ModelMetadata,System.Web.Mvc.ControllerContext)~System.Collections.Generic.IEnumerable{System.Web.Mvc.ModelClientValidationRule}")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.Validation.CompareAttribute.GetClientValidationRules(System.Web.Mvc.ModelMetadata,System.Web.Mvc.ControllerContext)~System.Collections.Generic.IEnumerable{System.Web.Mvc.ModelClientValidationRule}")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.Validation.CompareToAttribute.GetClientValidationRules(System.Web.Mvc.ModelMetadata,System.Web.Mvc.ControllerContext)~System.Collections.Generic.IEnumerable{System.Web.Mvc.ModelClientValidationRule}")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.Validation.IsAttribute.GetClientValidationRules(System.Web.Mvc.ModelMetadata,System.Web.Mvc.ControllerContext)~System.Collections.Generic.IEnumerable{System.Web.Mvc.ModelClientValidationRule}")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.Validation.EmptyAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)~System.ComponentModel.DataAnnotations.ValidationResult")]
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.Validation.NotEmptyAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)~System.ComponentModel.DataAnnotations.ValidationResult")]
+using System.Diagnostics.CodeAnalysis;

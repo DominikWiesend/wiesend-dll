@@ -72,7 +72,6 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-#if NETFULL
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -183,8 +182,7 @@ namespace Wiesend.DataTypes.Caching.Default
         /// <returns>True if it is removed, false otherwise</returns>
         public override bool Remove(string key)
         {
-            object Value = null;
-            return InternalCache.TryRemove(key, out Value);
+            return InternalCache.TryRemove(key, out _);
         }
 
         /// <summary>
@@ -194,8 +192,7 @@ namespace Wiesend.DataTypes.Caching.Default
         /// <returns>True if it is removed, false otherwise</returns>
         public override bool Remove(KeyValuePair<string, object> item)
         {
-            object Value = null;
-            return InternalCache.TryRemove(item.Key, out Value);
+            return InternalCache.TryRemove(item.Key, out _);
         }
 
         /// <summary>
@@ -227,4 +224,3 @@ namespace Wiesend.DataTypes.Caching.Default
         }
     }
 }
-#endif

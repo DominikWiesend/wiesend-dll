@@ -75,7 +75,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -87,6 +87,7 @@ namespace Wiesend.DataTypes.DataMapper.BaseClasses
     /// <summary>
     /// Type mapping base class
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public abstract class TypeMappingBase<Left, Right> : ITypeMapping<Left, Right>
     {
         /// <summary>
@@ -142,6 +143,7 @@ namespace Wiesend.DataTypes.DataMapper.BaseClasses
         /// Automatically maps properties that are named the same thing
         /// </summary>
         /// <returns>This</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1836:Prefer IsEmpty over Count", Justification = "<Pending>")]
         public virtual ITypeMapping AutoMap()
         {
             if (Mappings.Count > 0)
@@ -235,10 +237,10 @@ namespace Wiesend.DataTypes.DataMapper.BaseClasses
             }));
         }
 
-        private void AddLeftIDictionaryMapping(Type LeftType, Type RightType)
+        private void AddLeftIDictionaryMapping([NotNull] Type LeftType, [NotNull] Type RightType)
         {
-            Contract.Requires<ArgumentNullException>(RightType != null, "RightType");
-            Contract.Requires<ArgumentNullException>(LeftType != null, "LeftType");
+            if (LeftType == null) throw new ArgumentNullException(nameof(LeftType));
+            if (RightType == null) throw new ArgumentNullException(nameof(RightType));
             var Properties = RightType.GetProperties();
             Parallel.For(0, Properties.Length, x =>
             {
@@ -258,7 +260,7 @@ namespace Wiesend.DataTypes.DataMapper.BaseClasses
                         var Temp = (IDictionary<string, object>)y;
                         if (Temp.ContainsKey(Property.Name))
                             return Temp[Property.Name];
-                        var Key = Temp.Keys.FirstOrDefault(z => string.Equals(z.Replace("_", ""), Property.Name, StringComparison.InvariantCultureIgnoreCase));
+                        var Key = Temp.Keys.FirstOrDefault(z => string.Equals(z.Replace("_", ""), Property.Name, StringComparison.OrdinalIgnoreCase));
                         if (!string.IsNullOrEmpty(Key))
                             return Temp[Key];
                         return null;
@@ -281,10 +283,10 @@ namespace Wiesend.DataTypes.DataMapper.BaseClasses
             });
         }
 
-        private void AddRightIDictionaryMapping(Type LeftType, Type RightType)
+        private void AddRightIDictionaryMapping([NotNull] Type LeftType, [NotNull] Type RightType)
         {
-            Contract.Requires<ArgumentNullException>(RightType != null, "RightType");
-            Contract.Requires<ArgumentNullException>(LeftType != null, "LeftType");
+            if (LeftType == null) throw new ArgumentNullException(nameof(LeftType));
+            if (RightType == null) throw new ArgumentNullException(nameof(RightType));
             var Properties = LeftType.GetProperties();
             Parallel.For(0, Properties.Length, x =>
             {
@@ -310,7 +312,7 @@ namespace Wiesend.DataTypes.DataMapper.BaseClasses
                         var Temp = (IDictionary<string, object>)y;
                         if (Temp.ContainsKey(Property.Name))
                             return Temp[Property.Name];
-                        var Key = Temp.Keys.FirstOrDefault(z => string.Equals(z.Replace("_", ""), Property.Name, StringComparison.InvariantCultureIgnoreCase));
+                        var Key = Temp.Keys.FirstOrDefault(z => string.Equals(z.Replace("_", ""), Property.Name, StringComparison.OrdinalIgnoreCase));
                         if (!string.IsNullOrEmpty(Key))
                             return Temp[Key];
                         return null;

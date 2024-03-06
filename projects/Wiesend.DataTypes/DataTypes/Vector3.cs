@@ -73,7 +73,7 @@
 #endregion of Licenses [MIT Licenses]
 
 using System;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Xml.Serialization;
 
 namespace Wiesend.DataTypes
@@ -105,7 +105,7 @@ namespace Wiesend.DataTypes
             get { return new double[] { X, Y, Z }; }
             set
             {
-                Contract.Requires<ArgumentNullException>(value != null, "value");
+                if (value == null) throw new ArgumentNullException(nameof(value));
                 if (value.Length == 3)
                 {
                     X = value[0];
@@ -147,10 +147,10 @@ namespace Wiesend.DataTypes
         /// <param name="V1">Vector 1</param>
         /// <param name="V2">Vector 2</param>
         /// <returns>Angle between the vectors</returns>
-        public static double Angle(Vector3 V1, Vector3 V2)
+        public static double Angle([NotNull] Vector3 V1, [NotNull] Vector3 V2)
         {
-            Contract.Requires<ArgumentNullException>(V1 != null, "V1");
-            Contract.Requires<ArgumentNullException>(V2 != null, "V2");
+            if (V1 == null) throw new ArgumentNullException(nameof(V1));
+            if (V2 == null) throw new ArgumentNullException(nameof(V2));
             V1.Normalize();
             V2.Normalize();
             return System.Math.Acos(Vector3.DotProduct(V1, V2));
@@ -162,10 +162,10 @@ namespace Wiesend.DataTypes
         /// <param name="V1">Vector 1</param>
         /// <param name="V2">Vector 2</param>
         /// <returns>Distance between the vectors</returns>
-        public static double Distance(Vector3 V1, Vector3 V2)
+        public static double Distance([NotNull] Vector3 V1, [NotNull] Vector3 V2)
         {
-            Contract.Requires<ArgumentNullException>(V1 != null, "V1");
-            Contract.Requires<ArgumentNullException>(V2 != null, "V2");
+            if (V1 == null) throw new ArgumentNullException(nameof(V1));
+            if (V2 == null) throw new ArgumentNullException(nameof(V2));
             return (((V1.X - V2.X) * (V1.X - V2.X)) + ((V1.Y - V2.Y) * (V1.Y - V2.Y)) + ((V1.Z - V2.Z) * (V1.Z - V2.Z))).Sqrt();
         }
 
@@ -175,10 +175,10 @@ namespace Wiesend.DataTypes
         /// <param name="V1">Vector 1</param>
         /// <param name="V2">Vector 2</param>
         /// <returns>a dot product</returns>
-        public static double DotProduct(Vector3 V1, Vector3 V2)
+        public static double DotProduct([NotNull] Vector3 V1, [NotNull] Vector3 V2)
         {
-            Contract.Requires<ArgumentNullException>(V1 != null, "V1");
-            Contract.Requires<ArgumentNullException>(V2 != null, "V2");
+            if (V1 == null) throw new ArgumentNullException(nameof(V1));
+            if (V2 == null) throw new ArgumentNullException(nameof(V2));
             return (V1.X * V2.X) + (V1.Y * V2.Y) + (V1.Z * V2.Z);
         }
 
@@ -189,10 +189,11 @@ namespace Wiesend.DataTypes
         /// <param name="V2">Vector 2</param>
         /// <param name="Control">Percent to move between 1 and 2</param>
         /// <returns>The interpolated vector</returns>
-        public static Vector3 Interpolate(Vector3 V1, Vector3 V2, double Control)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
+        public static Vector3 Interpolate([NotNull] Vector3 V1, [NotNull] Vector3 V2, double Control)
         {
-            Contract.Requires<ArgumentNullException>(V1 != null, "V1");
-            Contract.Requires<ArgumentNullException>(V2 != null, "V2");
+            if (V1 == null) throw new ArgumentNullException(nameof(V1));
+            if (V2 == null) throw new ArgumentNullException(nameof(V2));
             var TempVector = new Vector3(0.0, 0.0, 0.0);
             TempVector.X = (V1.X * (1 - Control)) + (V2.X * Control);
             TempVector.Y = (V1.Y * (1 - Control)) + (V2.Y * Control);
@@ -208,8 +209,8 @@ namespace Wiesend.DataTypes
         /// <returns>The resulting vector</returns>
         public static Vector3 operator -(Vector3 V1, Vector3 V2)
         {
-            Contract.Requires<ArgumentNullException>(V1 != null, "V1");
-            Contract.Requires<ArgumentNullException>(V2 != null, "V2");
+            if (V1 == null) throw new ArgumentNullException(nameof(V1));
+            if (V2 == null) throw new ArgumentNullException(nameof(V2));
             return new Vector3(V1.X - V2.X, V1.Y - V2.Y, V1.Z - V2.Z);
         }
 
@@ -220,7 +221,7 @@ namespace Wiesend.DataTypes
         /// <returns>The resulting vector</returns>
         public static Vector3 operator -(Vector3 V1)
         {
-            Contract.Requires<ArgumentNullException>(V1 != null, "V1");
+            if (V1 == null) throw new ArgumentNullException(nameof(V1));
             return new Vector3(-V1.X, -V1.Y, -V1.Z);
         }
 
@@ -230,10 +231,11 @@ namespace Wiesend.DataTypes
         /// <param name="V1">Item 1</param>
         /// <param name="V2">Item 2</param>
         /// <returns>The resulting vector</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public static bool operator !=(Vector3 V1, Vector3 V2)
         {
-            Contract.Requires<ArgumentNullException>(V1 != null, "V1");
-            Contract.Requires<ArgumentNullException>(V2 != null, "V2");
+            if (V1 == null) throw new ArgumentNullException(nameof(V1));
+            if (V2 == null) throw new ArgumentNullException(nameof(V2));
             return !(V1 == V2);
         }
 
@@ -245,7 +247,7 @@ namespace Wiesend.DataTypes
         /// <returns>The resulting vector</returns>
         public static Vector3 operator *(Vector3 V1, double D)
         {
-            Contract.Requires<ArgumentNullException>(V1 != null, "V1");
+            if (V1 == null) throw new ArgumentNullException(nameof(V1));
             return new Vector3(V1.X * D, V1.Y * D, V1.Z * D);
         }
 
@@ -257,7 +259,7 @@ namespace Wiesend.DataTypes
         /// <returns>The resulting vector</returns>
         public static Vector3 operator *(double D, Vector3 V1)
         {
-            Contract.Requires<ArgumentNullException>(V1 != null, "V1");
+            if (V1 == null) throw new ArgumentNullException(nameof(V1));
             return new Vector3(V1.X * D, V1.Y * D, V1.Z * D);
         }
 
@@ -267,10 +269,11 @@ namespace Wiesend.DataTypes
         /// <param name="V1">Item 1</param>
         /// <param name="V2">Item 2</param>
         /// <returns>The resulting vector</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         public static Vector3 operator *(Vector3 V1, Vector3 V2)
         {
-            Contract.Requires<ArgumentNullException>(V1 != null, "V1");
-            Contract.Requires<ArgumentNullException>(V2 != null, "V2");
+            if (V1 == null) throw new ArgumentNullException(nameof(V1));
+            if (V2 == null) throw new ArgumentNullException(nameof(V2));
             var TempVector = new Vector3(0.0, 0.0, 0.0);
             TempVector.X = (V1.Y * V2.Z) - (V1.Z * V2.Y);
             TempVector.Y = (V1.Z * V2.X) - (V1.X * V2.Z);
@@ -286,7 +289,7 @@ namespace Wiesend.DataTypes
         /// <returns>The resulting vector</returns>
         public static Vector3 operator /(Vector3 V1, double D)
         {
-            Contract.Requires<ArgumentNullException>(V1 != null, "V1");
+            if (V1 == null) throw new ArgumentNullException(nameof(V1));
             return new Vector3(V1.X / D, V1.Y / D, V1.Z / D);
         }
 
@@ -298,8 +301,8 @@ namespace Wiesend.DataTypes
         /// <returns>The resulting vector</returns>
         public static Vector3 operator +(Vector3 V1, Vector3 V2)
         {
-            Contract.Requires<ArgumentNullException>(V1 != null, "V1");
-            Contract.Requires<ArgumentNullException>(V2 != null, "V2");
+            if (V1 == null) throw new ArgumentNullException(nameof(V1));
+            if (V2 == null) throw new ArgumentNullException(nameof(V2));
             return new Vector3(V1.X + V2.X, V1.Y + V2.Y, V1.Z + V2.Z);
         }
 
@@ -309,10 +312,11 @@ namespace Wiesend.DataTypes
         /// <param name="V1">Item 1</param>
         /// <param name="V2">Item 2</param>
         /// <returns>The resulting vector</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public static bool operator <(Vector3 V1, Vector3 V2)
         {
-            Contract.Requires<ArgumentNullException>(V1 != null, "V1");
-            Contract.Requires<ArgumentNullException>(V2 != null, "V2");
+            if (V1 == null) throw new ArgumentNullException(nameof(V1));
+            if (V2 == null) throw new ArgumentNullException(nameof(V2));
             return V1.Magnitude < V2.Magnitude;
         }
 
@@ -322,10 +326,11 @@ namespace Wiesend.DataTypes
         /// <param name="V1">Item 1</param>
         /// <param name="V2">Item 2</param>
         /// <returns>The resulting vector</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public static bool operator <=(Vector3 V1, Vector3 V2)
         {
-            Contract.Requires<ArgumentNullException>(V1 != null, "V1");
-            Contract.Requires<ArgumentNullException>(V2 != null, "V2");
+            if (V1 == null) throw new ArgumentNullException(nameof(V1));
+            if (V2 == null) throw new ArgumentNullException(nameof(V2));
             return V1.Magnitude <= V2.Magnitude;
         }
 
@@ -335,10 +340,11 @@ namespace Wiesend.DataTypes
         /// <param name="V1">Item 1</param>
         /// <param name="V2">Item 2</param>
         /// <returns>The resulting vector</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public static bool operator ==(Vector3 V1, Vector3 V2)
         {
-            Contract.Requires<ArgumentNullException>(V1 != null, "V1");
-            Contract.Requires<ArgumentNullException>(V2 != null, "V2");
+            if (V1 == null) throw new ArgumentNullException(nameof(V1));
+            if (V2 == null) throw new ArgumentNullException(nameof(V2));
             return V1.X == V2.X && V1.Y == V2.Y && V1.Z == V2.Z;
         }
 
@@ -348,10 +354,11 @@ namespace Wiesend.DataTypes
         /// <param name="V1">Item 1</param>
         /// <param name="V2">Item 2</param>
         /// <returns>The resulting vector</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public static bool operator >(Vector3 V1, Vector3 V2)
         {
-            Contract.Requires<ArgumentNullException>(V1 != null, "V1");
-            Contract.Requires<ArgumentNullException>(V2 != null, "V2");
+            if (V1 == null) throw new ArgumentNullException(nameof(V1));
+            if (V2 == null) throw new ArgumentNullException(nameof(V2));
             return V1.Magnitude > V2.Magnitude;
         }
 
@@ -361,10 +368,11 @@ namespace Wiesend.DataTypes
         /// <param name="V1">Item 1</param>
         /// <param name="V2">Item 2</param>
         /// <returns>The resulting vector</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public static bool operator >=(Vector3 V1, Vector3 V2)
         {
-            Contract.Requires<ArgumentNullException>(V1 != null, "V1");
-            Contract.Requires<ArgumentNullException>(V2 != null, "V2");
+            if (V1 == null) throw new ArgumentNullException(nameof(V1));
+            if (V2 == null) throw new ArgumentNullException(nameof(V2));
             return V1.Magnitude >= V2.Magnitude;
         }
 
@@ -373,9 +381,11 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="obj">Object to compare</param>
         /// <returns>true if they are, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
         public override bool Equals(object obj)
         {
-            var Tempobj = obj as Vector3;
+            Vector3 Tempobj = obj as Vector3;
             return (object)Tempobj != null && this == Tempobj;
         }
 

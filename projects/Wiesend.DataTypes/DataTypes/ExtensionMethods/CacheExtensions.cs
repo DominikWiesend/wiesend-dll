@@ -72,7 +72,7 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-#if NETFULL
+#if NETFRAMEWORK
 using System.ComponentModel;
 
 namespace Wiesend.DataTypes
@@ -89,6 +89,7 @@ namespace Wiesend.DataTypes
         /// <param name="Object">Object to cache</param>
         /// <param name="Key">Cache key</param>
         /// <param name="Cache">Name of the cache to use</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         public static void Cache(this object Object, string Key, string Cache = "Default")
         {
             if (IoC.Manager.Bootstrapper == null)
@@ -104,7 +105,7 @@ namespace Wiesend.DataTypes
         /// <param name="DefaultValue">Default value if the key is not found</param>
         /// <param name="Cache">Cache to get the item from</param>
         /// <returns>The object specified or the default value if it is not found</returns>
-        public static T GetFromCache<T>(this string Key, T DefaultValue = default(T), string Cache = "Default")
+        public static T GetFromCache<T>(this string Key, T DefaultValue = default, string Cache = "Default")
         {
             if (IoC.Manager.Bootstrapper == null)
                 return DefaultValue;

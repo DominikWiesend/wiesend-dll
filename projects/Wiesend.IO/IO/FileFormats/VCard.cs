@@ -181,6 +181,7 @@ namespace Wiesend.IO.FileFormats
     /// </summary>
     public class VCard : StringFormatBase<VCard>
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         private static readonly Regex STRIP_HTML_REGEX = new Regex("<[^>]*>", RegexOptions.Compiled);
 
         /// <summary>
@@ -249,6 +250,7 @@ namespace Wiesend.IO.FileFormats
         /// <summary>
         /// Full name
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "<Pending>")]
         protected string FullName
         {
             get
@@ -287,6 +289,7 @@ namespace Wiesend.IO.FileFormats
         /// Gets the hCard version of the vCard
         /// </summary>
         /// <returns>A hCard in string format</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "<Pending>")]
         public string HCard()
         {
             var Builder = new StringBuilder();
@@ -303,9 +306,9 @@ namespace Wiesend.IO.FileFormats
                     Builder.Append(" rel=\"");
                     foreach (Relationship Relationship in Relationships)
                     {
-                        Builder.Append(Relationship.ToString()).Append(" ");
+                        Builder.Append(Relationship.ToString()).Append(' ');
                     }
-                    Builder.Append("\"");
+                    Builder.Append('\"');
                 }
                 Builder.AppendFormat(">{0}</a>", FullName);
             }

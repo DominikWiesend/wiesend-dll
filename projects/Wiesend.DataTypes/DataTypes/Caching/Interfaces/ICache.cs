@@ -72,7 +72,6 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-#if NETFULL
 using System;
 using System.Collections.Generic;
 
@@ -81,6 +80,7 @@ namespace Wiesend.DataTypes.Caching.Interfaces
     /// <summary>
     /// Cache interface
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "<Pending>")]
     public interface ICache : IDictionary<string, object>, IDisposable
     {
         /// <summary>
@@ -115,4 +115,3 @@ namespace Wiesend.DataTypes.Caching.Interfaces
         void RemoveByTag(string Tag);
     }
 }
-#endif

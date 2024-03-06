@@ -203,6 +203,7 @@ namespace Wiesend.DataTypes
         /// An <see cref="T:System.Collections.IEnumerator"/> object that can be used to iterate
         /// through the collection.
         /// </returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Documentation", "CA1200:Avoid using cref tags with a prefix", Justification = "<Pending>")]
         IEnumerator IEnumerable.GetEnumerator()
         {
             return Vertices.GetEnumerator();

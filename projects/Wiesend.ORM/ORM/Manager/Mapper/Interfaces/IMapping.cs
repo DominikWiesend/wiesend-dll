@@ -86,6 +86,7 @@ namespace Wiesend.ORM.Manager.Mapper.Interfaces
     /// Class mapping interface
     /// </summary>
     /// <typeparam name="ClassType">Class type</typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public interface IMapping<ClassType> : IMapping
         where ClassType : class
     {

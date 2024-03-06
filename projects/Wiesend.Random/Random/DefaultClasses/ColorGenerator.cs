@@ -124,7 +124,7 @@ namespace Wiesend.Random.DefaultClasses
         /// <returns>The next object</returns>
         public override object NextObj(System.Random Rand)
         {
-            if ((Color)Min != default(Color) || (Color)Max != default(Color))
+            if ((Color)Min != default || (Color)Max != default)
                 return Next(Rand, (Color)Min, (Color)Max);
             return Next(Rand);
         }

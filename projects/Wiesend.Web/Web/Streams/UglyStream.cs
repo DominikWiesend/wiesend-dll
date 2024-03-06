@@ -73,7 +73,7 @@
 #endregion of Licenses [MIT Licenses]
 
 using System;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.IO;
 using System.Text.RegularExpressions;
 using Wiesend.DataTypes;
@@ -228,9 +228,9 @@ namespace Wiesend.Web.Streams
         /// </summary>
         /// <param name="Matcher">Match found</param>
         /// <returns>The string minus any extra white space</returns>
-        protected static string Evaluate(Match Matcher)
+        protected static string Evaluate([NotNull] Match Matcher)
         {
-            Contract.Requires<ArgumentNullException>(Matcher != null, "Matcher");
+            if (Matcher == null) throw new ArgumentNullException(nameof(Matcher), "Matcher");
             var MyString = Matcher.ToString();
             MyString = Regex.Replace(MyString, @"\r\n\s*", "");
             return MyString;

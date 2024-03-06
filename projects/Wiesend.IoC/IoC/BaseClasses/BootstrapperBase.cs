@@ -200,7 +200,7 @@ namespace Wiesend.IoC.BaseClasses
         /// <typeparam name="T">Type to resolve</typeparam>
         /// <param name="DefaultObject">Default object to return if the type can not be resolved</param>
         /// <returns>An object of the specified type</returns>
-        public abstract T Resolve<T>(T DefaultObject = default(T))
+        public abstract T Resolve<T>(T DefaultObject = default)
             where T : class;
 
         /// <summary>
@@ -210,7 +210,7 @@ namespace Wiesend.IoC.BaseClasses
         /// <param name="Name">Name associated with the object</param>
         /// <param name="DefaultObject">Default object to return if the type can not be resolved</param>
         /// <returns>An object of the specified type</returns>
-        public abstract T Resolve<T>(string Name, T DefaultObject = default(T))
+        public abstract T Resolve<T>(string Name, T DefaultObject = default)
             where T : class;
 
         /// <summary>

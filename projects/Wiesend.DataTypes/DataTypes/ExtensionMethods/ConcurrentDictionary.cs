@@ -77,7 +77,7 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Wiesend.DataTypes.Comparison;
@@ -101,10 +101,10 @@ namespace Wiesend.DataTypes
         /// This
         /// </returns>
         /// <exception cref="System.ArgumentNullException">Thrown if the dictionary is null</exception>
-        public static ConcurrentDictionary<TKey, TValue> CopyTo<TKey, TValue>(this ConcurrentDictionary<TKey, TValue> Dictionary, ConcurrentDictionary<TKey, TValue> Target)
+        public static ConcurrentDictionary<TKey, TValue> CopyTo<TKey, TValue>([NotNull] this ConcurrentDictionary<TKey, TValue> Dictionary, [NotNull] ConcurrentDictionary<TKey, TValue> Target)
         {
-            Contract.Requires<ArgumentNullException>(Dictionary != null, "Dictionary");
-            Contract.Requires<ArgumentNullException>(Target != null, "Target");
+            if (Dictionary == null) throw new ArgumentNullException(nameof(Dictionary));
+            if (Target == null) throw new ArgumentNullException(nameof(Target));
             Parallel.ForEach(Dictionary, x => Target.SetValue(x.Key, x.Value));
             return Dictionary;
         }
@@ -121,9 +121,10 @@ namespace Wiesend.DataTypes
         /// The value associated with the key or the default value if the key is not found
         /// </returns>
         /// <exception cref="System.ArgumentNullException">Thrown if the dictionary is null</exception>
-        public static TValue GetValue<TKey, TValue>(this ConcurrentDictionary<TKey, TValue> Dictionary, TKey Key, TValue Default = default(TValue))
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
+        public static TValue GetValue<TKey, TValue>([NotNull] this ConcurrentDictionary<TKey, TValue> Dictionary, TKey Key, TValue Default = default)
         {
-            Contract.Requires<ArgumentNullException>(Dictionary != null, "Dictionary");
+            if (Dictionary == null) throw new ArgumentNullException(nameof(Dictionary));
             TValue ReturnValue = Default;
             return Dictionary.TryGetValue(Key, out ReturnValue) ? ReturnValue : Default;
         }
@@ -138,9 +139,9 @@ namespace Wiesend.DataTypes
         /// <param name="Value">Value to add</param>
         /// <returns>The dictionary</returns>
         /// <exception cref="System.ArgumentNullException">Thrown if the dictionary is null</exception>
-        public static ConcurrentDictionary<TKey, TValue> SetValue<TKey, TValue>(this ConcurrentDictionary<TKey, TValue> Dictionary, TKey Key, TValue Value)
+        public static ConcurrentDictionary<TKey, TValue> SetValue<TKey, TValue>([NotNull] this ConcurrentDictionary<TKey, TValue> Dictionary, TKey Key, TValue Value)
         {
-            Contract.Requires<ArgumentNullException>(Dictionary != null, "Dictionary");
+            if (Dictionary == null) throw new ArgumentNullException(nameof(Dictionary));
             Dictionary.AddOrUpdate(Key, Value, (x, y) => Value);
             return Dictionary;
         }

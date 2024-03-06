@@ -75,7 +75,6 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.Linq;
 using Wiesend.DataTypes;
@@ -96,6 +95,8 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default
         /// <param name="Parameters">Parameters</param>
         /// <param name="CallBack">Called when command has been executed</param>
         /// <param name="Object">Object</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public Command(Action<Command, IList<dynamic>> CallBack, object Object, string SQLCommand, CommandType CommandType, IParameter[] Parameters)
         {
             this.SQLCommand = SQLCommand;
@@ -115,6 +116,9 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default
         /// <param name="ParameterStarter">Parameter starter</param>
         /// <param name="CallBack">Called when command has been executed</param>
         /// <param name="Object">Object</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1829:Use Length/Count property instead of Count() when available", Justification = "<Pending>")]
         public Command(Action<Command, IList<dynamic>> CallBack, object Object, string SQLCommand, CommandType CommandType, string ParameterStarter, object[] Parameters)
         {
             this.SQLCommand = SQLCommand;
@@ -156,6 +160,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default
         /// <summary>
         /// Object
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         public object Object { get; private set; }
 
         /// <summary>
@@ -173,6 +178,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default
         /// </summary>
         /// <param name="obj">Object to compare to</param>
         /// <returns>Determines if the commands are equal</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
         public override bool Equals(object obj)
         {
             var OtherCommand = obj as Command;
@@ -199,9 +205,10 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default
         /// Called after the command is run
         /// </summary>
         /// <param name="Result">Result of the command</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         public void Finalize(IList<dynamic> Result)
         {
-            Contract.Requires<NullReferenceException>(CallBack != null, "CallBack");
+            if (CallBack == null) throw new NullReferenceException("CallBack");
             CallBack(this, Result);
         }
 

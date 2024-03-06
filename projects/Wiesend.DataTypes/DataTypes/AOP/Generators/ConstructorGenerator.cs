@@ -116,6 +116,7 @@ namespace Wiesend.DataTypes.AOP.Generators
         /// <param name="assembliesUsing">The assemblies using.</param>
         /// <param name="aspects">The aspects.</param>
         /// <returns></returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         public string Generate(List<Assembly> assembliesUsing, IEnumerable<IAspect> aspects)
         {
             var Builder = new StringBuilder();

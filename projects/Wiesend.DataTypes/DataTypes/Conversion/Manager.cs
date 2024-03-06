@@ -75,7 +75,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Globalization;
 using Wiesend.DataTypes.Conversion.Converters.Interfaces;
 
@@ -90,13 +90,11 @@ namespace Wiesend.DataTypes.Conversion
         /// Constructor
         /// </summary>
         /// <param name="Converters">The converters.</param>
-        public Manager(IEnumerable<IConverter> Converters)
+        public Manager([NotNull] IEnumerable<IConverter> Converters)
         {
-            Contract.Requires<ArgumentNullException>(Converters != null, "Converters");
+            if (Converters == null) throw new ArgumentNullException(nameof(Converters));
             foreach (IConverter TypeConverter in Converters)
-            {
                 TypeDescriptor.AddAttributes(TypeConverter.AssociatedType, new TypeConverterAttribute(TypeConverter.GetType()));
-            }
         }
 
         /// <summary>
@@ -109,7 +107,8 @@ namespace Wiesend.DataTypes.Conversion
         /// Default return value if the item is null or can not be converted
         /// </param>
         /// <returns>The value converted to the specified type</returns>
-        public static R To<T, R>(T Item, R DefaultValue = default(R))
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static R To<T, R>(T Item, R DefaultValue = default)
         {
             return (R)To(Item, typeof(R), DefaultValue);
         }

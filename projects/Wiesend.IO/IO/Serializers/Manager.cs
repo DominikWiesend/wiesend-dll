@@ -72,9 +72,9 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using Wiesend.DataTypes;
@@ -91,9 +91,9 @@ namespace Wiesend.IO.Serializers
         /// Constructor
         /// </summary>
         /// <param name="Serializers">The serializers.</param>
-        public Manager(IEnumerable<ISerializer> Serializers)
+        public Manager([NotNull] IEnumerable<ISerializer> Serializers)
         {
-            Contract.Requires<ArgumentNullException>(Serializers != null, "Serializers");
+            if (Serializers == null) throw new ArgumentNullException(nameof(Serializers));
             this.Serializers = Serializers.Where(x => !x.GetType().Namespace.StartsWith("WIESEND", StringComparison.OrdinalIgnoreCase))
                                           .ToDictionary(x => x.ContentType);
             Serializers.Where(x => x.GetType().Namespace.StartsWith("WIESEND", StringComparison.OrdinalIgnoreCase))
@@ -114,9 +114,9 @@ namespace Wiesend.IO.Serializers
         /// </summary>
         /// <param name="ContentType">Content type</param>
         /// <returns>True if it can, false otherwise</returns>
-        public bool CanSerialize(string ContentType)
+        public bool CanSerialize([NotNull] string ContentType)
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(ContentType), "ContentType");
+            if (string.IsNullOrEmpty(ContentType)) throw new ArgumentNullException(nameof(ContentType));
             return Serializers.ContainsKey(ContentType.Split(';')[0]);
         }
 
@@ -128,9 +128,10 @@ namespace Wiesend.IO.Serializers
         /// <param name="Data">Data to deserialize</param>
         /// <param name="ContentType">Content type (MIME type)</param>
         /// <returns>The deserialized object</returns>
-        public R Deserialize<T, R>(T Data, string ContentType = "application/json")
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public R Deserialize<T, R>(T Data, [NotNull] string ContentType = "application/json")
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(ContentType), "ContentType");
+            if (string.IsNullOrEmpty(ContentType)) throw new ArgumentNullException(nameof(ContentType));
             return (R)Deserialize<T>(Data, typeof(R), ContentType);
         }
 
@@ -142,10 +143,10 @@ namespace Wiesend.IO.Serializers
         /// <param name="ObjectType">Object type requested</param>
         /// <param name="ContentType">Content type (MIME type)</param>
         /// <returns>The deserialized object</returns>
-        public object Deserialize<T>(T Data, Type ObjectType, string ContentType = "application/json")
+        public object Deserialize<T>(T Data, [NotNull] Type ObjectType, [NotNull] string ContentType = "application/json")
         {
-            Contract.Requires<ArgumentNullException>(ObjectType != null, "ObjectType");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(ContentType), "ContentType");
+            if (ObjectType == null) throw new ArgumentNullException(nameof(ObjectType));
+            if (string.IsNullOrEmpty(ContentType)) throw new ArgumentNullException(nameof(ContentType));
             ContentType = ContentType.Split(';')[0];
             if (!Serializers.ContainsKey(ContentType) || Serializers[ContentType].ReturnType != typeof(T))
                 return null;
@@ -159,7 +160,7 @@ namespace Wiesend.IO.Serializers
         /// <returns>Content type</returns>
         public string FileTypeToContentType(string FileType)
         {
-            return Serializers.FirstOrDefault(x => string.Equals(x.Value.FileType, FileType, StringComparison.InvariantCultureIgnoreCase)).Chain(x => x.Value).Chain(x => x.ContentType, "");
+            return Serializers.FirstOrDefault(x => string.Equals(x.Value.FileType, FileType, StringComparison.OrdinalIgnoreCase)).Chain(x => x.Value).Chain(x => x.ContentType, "");
         }
 
         /// <summary>
@@ -170,9 +171,11 @@ namespace Wiesend.IO.Serializers
         /// <param name="ContentType">Content type (MIME type)</param>
         /// <typeparam name="R">Return type</typeparam>
         /// <returns>The serialized object as a string</returns>
-        public R Serialize<T, R>(T Object, string ContentType = "application/json")
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public R Serialize<T, R>(T Object, [NotNull] string ContentType = "application/json")
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(ContentType), "ContentType");
+            if (string.IsNullOrEmpty(ContentType)) throw new ArgumentNullException(nameof(ContentType));
             return Serialize<R>(Object, typeof(T), ContentType);
         }
 
@@ -184,13 +187,14 @@ namespace Wiesend.IO.Serializers
         /// <param name="ContentType">Content type (MIME type)</param>
         /// <typeparam name="T">Return type</typeparam>
         /// <returns>The serialized object as a string</returns>
-        public T Serialize<T>(object Object, Type ObjectType, string ContentType = "application/json")
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        public T Serialize<T>(object Object, [NotNull] Type ObjectType, [NotNull] string ContentType = "application/json")
         {
-            Contract.Requires<ArgumentNullException>(ObjectType != null, "ObjectType");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(ContentType), "ContentType");
+            if (ObjectType == null) throw new ArgumentNullException(nameof(ObjectType));
+            if (string.IsNullOrEmpty(ContentType)) throw new ArgumentNullException(nameof(ContentType));
             ContentType = ContentType.Split(';')[0];
             if (!Serializers.ContainsKey(ContentType) || Serializers[ContentType].ReturnType != typeof(T))
-                return default(T);
+                return default;
             return ((ISerializer<T>)Serializers[ContentType]).Serialize(ObjectType, Object);
         }
 

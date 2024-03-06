@@ -74,7 +74,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Linq;
 using System.Text;
 using Wiesend.DataTypes;
@@ -91,9 +91,9 @@ namespace Wiesend.IO.Compression
         /// Constructor
         /// </summary>
         /// <param name="Compressors">The compressors.</param>
-        public Manager(IEnumerable<ICompressor> Compressors)
+        public Manager([NotNull] IEnumerable<ICompressor> Compressors)
         {
-            Contract.Requires<ArgumentNullException>(Compressors != null, "Compressors");
+            if (Compressors == null) throw new ArgumentNullException(nameof(Compressors));
             this.Compressors = Compressors.ToDictionary(x => x.Name);
         }
 
@@ -108,10 +108,11 @@ namespace Wiesend.IO.Compression
         /// <param name="Data">Data to compress</param>
         /// <param name="Compressor">Compressor name</param>
         /// <returns>The compressed data</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         public byte[] Compress(byte[] Data, string Compressor)
         {
-            Contract.Requires<NullReferenceException>(Compressors != null, "Compressors");
-            return Compressors.ContainsKey(Compressor) ? Compressors[Compressor].Compress(Data) : Data;
+            if (Compressors == null) throw new NullReferenceException("Compressors");
+            return Compressors.ContainsKey(Compressor) ? Compressors.GetValue(Compressor).Compress(Data) : Data;
         }
 
         /// <summary>
@@ -120,10 +121,11 @@ namespace Wiesend.IO.Compression
         /// <param name="Data">Data to decompress</param>
         /// <param name="Compressor">Compressor name</param>
         /// <returns>The decompressed data</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         public byte[] Decompress(byte[] Data, string Compressor)
         {
-            Contract.Requires<NullReferenceException>(Compressors != null, "Compressors");
-            return Compressors.ContainsKey(Compressor) ? Compressors[Compressor].Decompress(Data) : Data;
+            if (Compressors == null) throw new NullReferenceException("Compressors");
+            return Compressors.ContainsKey(Compressor) ? Compressors.GetValue(Compressor).Decompress(Data) : Data;
         }
 
         /// <summary>

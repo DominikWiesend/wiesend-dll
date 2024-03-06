@@ -72,7 +72,6 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-#if NETFULL
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Wiesend.DataTypes;
@@ -142,12 +141,9 @@ namespace Wiesend.IO.Logging.BaseClasses
             if (Logs != null)
             {
                 foreach (KeyValuePair<string, ILog> Log in Logs)
-                {
                     Log.Value.Dispose();
-                }
                 Logs.Clear();
             }
         }
     }
 }
-#endif

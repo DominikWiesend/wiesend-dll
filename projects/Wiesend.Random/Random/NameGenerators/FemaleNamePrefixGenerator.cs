@@ -82,6 +82,7 @@ namespace Wiesend.Random.NameGenerators
     /// </summary>
     public class FemaleNamePrefixGenerator : GeneratorAttributeBase, IGenerator<string>
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
         private string[] FemaleNamePrefixes = { "Mrs.", "Ms.", "Miss", "Dr.", "Prof.", "Rev." };
 
         /// <summary>

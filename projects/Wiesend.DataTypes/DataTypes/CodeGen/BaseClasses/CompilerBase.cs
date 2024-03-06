@@ -76,7 +76,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -167,9 +167,9 @@ namespace Wiesend.DataTypes.CodeGen.BaseClasses
         /// <param name="TypeToCreate">Type to create</param>
         /// <param name="Args">Args to pass to the constructor</param>
         /// <returns>The created object</returns>
-        protected static T Create<T>(Type TypeToCreate, params object[] Args)
+        protected static T Create<T>([NotNull] Type TypeToCreate, params object[] Args)
         {
-            Contract.Requires<ArgumentNullException>(TypeToCreate != null, "TypeToCreate");
+            if (TypeToCreate == null) throw new ArgumentNullException(nameof(TypeToCreate));
             return (T)Activator.CreateInstance(TypeToCreate, Args);
         }
 
@@ -196,6 +196,8 @@ namespace Wiesend.DataTypes.CodeGen.BaseClasses
         /// <param name="References">The references.</param>
         /// <returns>The list of types that have been added</returns>
         /// <exception cref="System.Exception">Any errors that are sent back by Roslyn</exception>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Globalization", "CA1305:Specify IFormatProvider", Justification = "<Pending>")]
         protected IEnumerable<Type> Add(string Code, IEnumerable<string> Usings, params Assembly[] References)
         {
             if (AssemblyStream == null)
@@ -204,7 +206,7 @@ namespace Wiesend.DataTypes.CodeGen.BaseClasses
                                                     new SyntaxTree[] { CSharpSyntaxTree.ParseText(Code) },
                                                     References.ForEach(x => MetadataReference.CreateFromFile(x.Location)),
                                                     new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary, usings: Usings, optimizationLevel: Optimize ? OptimizationLevel.Release : OptimizationLevel.Debug));
-            using (MemoryStream TempStream = new MemoryStream())
+            using (MemoryStream TempStream = new())
             {
                 var Result = CSharpCompiler.Emit(TempStream);
                 if (!Result.Success)
@@ -254,11 +256,9 @@ namespace Wiesend.DataTypes.CodeGen.BaseClasses
                 || RegenerateAssembly))
                 && AssemblyStream.Length > 0)
             {
-                using (FileStream TempStream = new FileInfo(AssemblyDirectory + "\\" + AssemblyName + ".dll").OpenWrite())
-                {
-                    var TempArray = AssemblyStream.ToArray();
-                    TempStream.Write(TempArray, 0, TempArray.Length);
-                }
+                using FileStream TempStream = new FileInfo(AssemblyDirectory + "\\" + AssemblyName + ".dll").OpenWrite();
+                var TempArray = AssemblyStream.ToArray();
+                TempStream.Write(TempArray, 0, TempArray.Length);
             }
         }
     }

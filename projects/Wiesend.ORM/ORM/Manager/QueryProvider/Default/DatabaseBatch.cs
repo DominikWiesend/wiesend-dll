@@ -76,7 +76,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -119,6 +119,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default
         /// <summary>
         /// Used to parse SQL commands to find parameters (when batching)
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         private static readonly Regex ParameterRegex = new Regex(@"[^@](?<ParamStart>[:@?])(?<ParamName>\w+)", RegexOptions.Compiled);
 
         /// <summary>
@@ -170,6 +171,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default
         /// </summary>
         /// <param name="Batch">Batch to add</param>
         /// <returns>This</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
         public IBatch AddCommand(IBatch Batch)
         {
             var TempValue = Batch as DatabaseBatch;
@@ -207,9 +209,9 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default
             return Commands.ToString(x => x.ToString(), Environment.NewLine);
         }
 
-        private static IList<dynamic> GetValues(DbDataReader TempReader)
+        private static IList<dynamic> GetValues([NotNull] DbDataReader TempReader)
         {
-            Contract.Requires<ArgumentNullException>(TempReader != null, "TempReader");
+            if (TempReader == null) throw new ArgumentNullException(nameof(TempReader));
             var ReturnValue = new List<dynamic>();
             string[] FieldNames = new string[TempReader.FieldCount];
             for (int x = 0; x < TempReader.FieldCount; ++x)
@@ -228,9 +230,11 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default
             return ReturnValue;
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA2100:Review SQL queries for security vulnerabilities", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1829:Use Length/Count property instead of Count() when available", Justification = "<Pending>")]
         private IList<IList<dynamic>> ExecuteCommands()
         {
-            Contract.Requires(Source != null);
+            if (Source == null) throw new ArgumentNullException("Source", $"Contract assertion not met: {nameof(Source)} != null");
             if (Commands == null)
                 return new List<IList<dynamic>>();
             var ReturnValue = new List<IList<dynamic>>();
@@ -243,81 +247,79 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default
             using (DbConnection Connection = Factory.CreateConnection())
             {
                 Connection.ConnectionString = Source.Connection;
-                using (DbCommand ExecutableCommand = Factory.CreateCommand())
+                using DbCommand ExecutableCommand = Factory.CreateCommand();
+                ExecutableCommand.Connection = Connection;
+                ExecutableCommand.CommandType = CommandType.Text;
+                if (Commands.Count > 1
+                    && !Commands.Any(x => x.SQLCommand.Contains("ALTER DATABASE"))
+                    && !Commands.Any(x => x.SQLCommand.Contains("CREATE DATABASE")))
+                    ExecutableCommand.BeginTransaction();
+                ExecutableCommand.Open();
+
+                try
                 {
-                    ExecutableCommand.Connection = Connection;
-                    ExecutableCommand.CommandType = CommandType.Text;
-                    if (Commands.Count > 1
-                        && !Commands.Any(x => x.SQLCommand.Contains("ALTER DATABASE"))
-                        && !Commands.Any(x => x.SQLCommand.Contains("CREATE DATABASE")))
-                        ExecutableCommand.BeginTransaction();
-                    ExecutableCommand.Open();
-
-                    try
+                    int Count = 0;
+                    while (true)
                     {
-                        int Count = 0;
-                        while (true)
+                        var FinalParameters = new List<IParameter>();
+                        bool Finalizable = false;
+                        string FinalSQLCommand = "";
+                        int ParameterTotal = 0;
+                        ExecutableCommand.Parameters.Clear();
+                        for (int y = Count; y < Commands.Count; ++y)
                         {
-                            var FinalParameters = new List<IParameter>();
-                            bool Finalizable = false;
-                            string FinalSQLCommand = "";
-                            int ParameterTotal = 0;
-                            ExecutableCommand.Parameters.Clear();
-                            for (int y = Count; y < Commands.Count; ++y)
+                            ICommand Command = Commands[y];
+                            if (ParameterTotal + Command.Parameters.Count > 2100)
+                                break;
+                            ParameterTotal += Command.Parameters.Count;
+                            Finalizable |= Commands[y].Finalizable;
+                            if (Command.CommandType == CommandType.Text)
                             {
-                                ICommand Command = Commands[y];
-                                if (ParameterTotal + Command.Parameters.Count > 2100)
-                                    break;
-                                ParameterTotal += Command.Parameters.Count;
-                                Finalizable |= Commands[y].Finalizable;
-                                if (Command.CommandType == CommandType.Text)
+                                FinalSQLCommand += string.IsNullOrEmpty(Command.SQLCommand) ?
+                                                    "" :
+                                                    ParameterRegex.Replace(Command.SQLCommand, x =>
+                                                    {
+                                                        if (!x.Value.StartsWith("@@", StringComparison.Ordinal))
+                                                            return x.Value + "Command" + Count.ToString(CultureInfo.InvariantCulture);
+                                                        return x.Value;
+                                                    }) + Environment.NewLine;
+                                foreach (IParameter Parameter in Command.Parameters)
                                 {
-                                    FinalSQLCommand += string.IsNullOrEmpty(Command.SQLCommand) ?
-                                                        "" :
-                                                        ParameterRegex.Replace(Command.SQLCommand, x =>
-                                                        {
-                                                            if (!x.Value.StartsWith("@@", StringComparison.Ordinal))
-                                                                return x.Value + "Command" + Count.ToString(CultureInfo.InvariantCulture);
-                                                            return x.Value;
-                                                        }) + Environment.NewLine;
-                                    foreach (IParameter Parameter in Command.Parameters)
-                                    {
-                                        FinalParameters.Add(Parameter.CreateCopy("Command" + Count.ToString(CultureInfo.InvariantCulture)));
-                                    }
+                                    FinalParameters.Add(Parameter.CreateCopy("Command" + Count.ToString(CultureInfo.InvariantCulture)));
                                 }
-                                else
-                                {
-                                    FinalSQLCommand += Command.SQLCommand + Environment.NewLine;
-                                    foreach (IParameter Parameter in Command.Parameters)
-                                    {
-                                        FinalParameters.Add(Parameter.CreateCopy(""));
-                                    }
-                                }
-                                ++Count;
                             }
-
-                            ExecutableCommand.CommandText = FinalSQLCommand;
-                            FinalParameters.ForEach(x => x.AddParameter(ExecutableCommand));
-
-                            using (DbDataReader TempReader = ExecutableCommand.ExecuteReader())
+                            else
                             {
-                                if (Finalizable)
+                                FinalSQLCommand += Command.SQLCommand + Environment.NewLine;
+                                foreach (IParameter Parameter in Command.Parameters)
+                                {
+                                    FinalParameters.Add(Parameter.CreateCopy(""));
+                                }
+                            }
+                            ++Count;
+                        }
+
+                        ExecutableCommand.CommandText = FinalSQLCommand;
+                        FinalParameters.ForEach(x => x.AddParameter(ExecutableCommand));
+
+                        using (DbDataReader TempReader = ExecutableCommand.ExecuteReader())
+                        {
+                            if (Finalizable)
+                            {
+                                ReturnValue.Add(GetValues(TempReader));
+                                while (TempReader.NextResult())
                                 {
                                     ReturnValue.Add(GetValues(TempReader));
-                                    while (TempReader.NextResult())
-                                    {
-                                        ReturnValue.Add(GetValues(TempReader));
-                                    }
                                 }
                             }
-                            if (Count >= CommandCount)
-                                break;
                         }
-                        ExecutableCommand.Commit();
+                        if (Count >= CommandCount)
+                            break;
                     }
-                    catch { ExecutableCommand.Rollback(); throw; }
-                    finally { ExecutableCommand.Close(); }
+                    ExecutableCommand.Commit();
                 }
+                catch { ExecutableCommand.Rollback(); throw; }
+                finally { ExecutableCommand.Close(); }
             }
             for (int x = 0, y = 0; x < Commands.Count(); ++x)
             {

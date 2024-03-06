@@ -117,12 +117,11 @@ namespace Wiesend.Validation
         /// <param name="value">Value to check</param>
         /// <param name="validationContext">Validation context</param>
         /// <returns>The validation result</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Performance", "CA1804:RemoveUnusedLocals", MessageId = "Item")]
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             if (value == null)
                 return new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
-            var ValueList = value as IEnumerable;
+            IEnumerable ValueList = value as IEnumerable;
             long Count = 0;
             foreach (object Item in ValueList)
             {

@@ -72,8 +72,8 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
-using System.Diagnostics.Contracts;
 
 namespace Wiesend.IO.FileFormats.RSS
 {
@@ -87,9 +87,9 @@ namespace Wiesend.IO.FileFormats.RSS
         /// </summary>
         /// <param name="Original">Original text</param>
         /// <returns>string stripped of certain characters.</returns>
-        public static string StripIllegalCharacters(string Original)
+        public static string StripIllegalCharacters([NotNull] string Original)
         {
-            Contract.Requires<ArgumentNullException>(Original != null, "Original");
+            if (Original == null) throw new ArgumentNullException(nameof(Original));
             Original = Original.Replace("&nbsp;", " ");
             Original = Original.Replace("&#160;", string.Empty);
             Original = Original.Trim().Replace("&", "and");

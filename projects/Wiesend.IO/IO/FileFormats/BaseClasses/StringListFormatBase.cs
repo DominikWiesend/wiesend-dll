@@ -79,6 +79,7 @@ namespace Wiesend.IO.FileFormats.BaseClasses
     /// <summary>
     /// Format base class for objects that are string based and list of records
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public abstract class StringListFormatBase<FormatType, RecordType> : StringFormatBase<FormatType>, IList<RecordType>
         where FormatType : StringListFormatBase<FormatType, RecordType>, new()
     {

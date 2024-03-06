@@ -72,14 +72,13 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+#if NETFRAMEWORK || NETSTANDARD
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Linq;
 using System.Net;
-using Wiesend.DataTypes;
-using Wiesend.IO.Enums;
 using Wiesend.IO.FileSystem.BaseClasses;
 using Wiesend.IO.FileSystem.Interfaces;
 
@@ -295,6 +294,7 @@ namespace Wiesend.IO.FileSystem.Default
         /// <param name="Name"></param>
         public override void Rename(string Name)
         {
+#if NETFRAMEWORK || NETSTANDARD
             var Request = WebRequest.Create(InternalDirectory) as FtpWebRequest;
             Request.Method = WebRequestMethods.Ftp.Rename;
             Request.RenameTo = Name;
@@ -302,6 +302,10 @@ namespace Wiesend.IO.FileSystem.Default
             SetupCredentials(Request);
             SendRequest(Request);
             InternalDirectory = new Uri(FullName + "/" + Name);
+#endif
+#if NET
+
+#endif
         }
 
         /// <summary>
@@ -309,16 +313,13 @@ namespace Wiesend.IO.FileSystem.Default
         /// </summary>
         /// <param name="Request">The web request object</param>
         /// <returns>The string returned by the service</returns>
-        private static string SendRequest(FtpWebRequest Request)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
+        private static string SendRequest([NotNull] FtpWebRequest Request)
         {
-            Contract.Requires<ArgumentNullException>(Request != null, "Request");
-            using (FtpWebResponse Response = Request.GetResponse() as FtpWebResponse)
-            {
-                using (StreamReader Reader = new StreamReader(Response.GetResponseStream()))
-                {
-                    return Reader.ReadToEnd();
-                }
-            }
+            if (Request == null) throw new ArgumentNullException(nameof(Request));
+            using FtpWebResponse Response = Request.GetResponse() as FtpWebResponse;
+            using StreamReader Reader = new StreamReader(Response.GetResponseStream());
+            return Reader.ReadToEnd();
         }
 
         /// <summary>
@@ -330,9 +331,7 @@ namespace Wiesend.IO.FileSystem.Default
         private void SetupCredentials(FtpWebRequest Request)
         {
             if (!string.IsNullOrEmpty(UserName) && !string.IsNullOrEmpty(Password))
-            {
                 Request.Credentials = new NetworkCredential(UserName, Password);
-            }
         }
 
         /// <summary>
@@ -340,10 +339,11 @@ namespace Wiesend.IO.FileSystem.Default
         /// </summary>
         /// <param name="Request">The web request object</param>
         /// <param name="Data">Data to send with the request</param>
-        private void SetupData(FtpWebRequest Request, byte[] Data)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        private void SetupData([NotNull] FtpWebRequest Request, byte[] Data)
         {
-            Contract.Requires<ArgumentNullException>(Request != null, "Request");
-            Contract.Requires<NullReferenceException>(!string.IsNullOrEmpty(Name), "Name");
+            if (Request == null) throw new ArgumentNullException(nameof(Request));
+            if (string.IsNullOrEmpty(Name)) throw new NullReferenceException("Name");
             Request.UsePassive = true;
             Request.KeepAlive = false;
             Request.UseBinary = true;
@@ -354,10 +354,9 @@ namespace Wiesend.IO.FileSystem.Default
                 return;
             }
             Request.ContentLength = Data.Length;
-            using (Stream RequestStream = Request.GetRequestStream())
-            {
-                RequestStream.Write(Data, 0, Data.Length);
-            }
+            using Stream RequestStream = Request.GetRequestStream();
+            RequestStream.Write(Data, 0, Data.Length);
         }
     }
 }
+#endif

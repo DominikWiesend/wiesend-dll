@@ -91,6 +91,8 @@ namespace Wiesend.Validation
         /// <param name="Object">Object to validate</param>
         /// <param name="Results">Results list</param>
         /// <returns>True if valid, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         public static bool TryValidate<ObjectType>(this ObjectType Object, ICollection<ValidationResult> Results)
         {
             if (Object == null)
@@ -104,6 +106,8 @@ namespace Wiesend.Validation
         /// <typeparam name="ObjectType">Object type</typeparam>
         /// <param name="Object">Object to validate</param>
         /// <exception cref="System.ComponentModel.DataAnnotations.ValidationException"/>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         public static void Validate<ObjectType>(this ObjectType Object)
         {
             if (Object == null)

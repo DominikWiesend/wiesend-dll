@@ -72,11 +72,11 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.ComponentModel;
 using System.Data;
 using System.Data.Common;
-using System.Diagnostics.Contracts;
 using System.Globalization;
 using Wiesend.DataTypes;
 using Wiesend.DataTypes.Comparison;
@@ -97,11 +97,10 @@ namespace Wiesend.ORM
         /// <param name="Value">Value to add</param>
         /// <param name="Direction">Direction that the parameter goes (in or out)</param>
         /// <returns>The DbCommand object</returns>
-        public static DbCommand AddParameter(this DbCommand Command, string ID, string Value = "",
-            ParameterDirection Direction = ParameterDirection.Input)
+        public static DbCommand AddParameter([NotNull] this DbCommand Command, [NotNull] string ID, string Value = "", ParameterDirection Direction = ParameterDirection.Input)
         {
-            Contract.Requires<ArgumentNullException>(Command != null, "Command");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(ID), "ID");
+            if (Command == null) throw new ArgumentNullException(nameof(Command));
+            if (string.IsNullOrEmpty(ID)) throw new ArgumentNullException(nameof(ID));
             int Length = string.IsNullOrEmpty(Value) ? 1 : Value.Length;
             if (Direction == ParameterDirection.Output
                 || Direction == ParameterDirection.InputOutput
@@ -126,11 +125,10 @@ namespace Wiesend.ORM
         /// <param name="Command">Command object</param>
         /// <param name="Type">SQL type of the parameter</param>
         /// <returns>The DbCommand object</returns>
-        public static DbCommand AddParameter(this DbCommand Command, string ID, SqlDbType Type,
-            object Value = null, ParameterDirection Direction = ParameterDirection.Input)
+        public static DbCommand AddParameter([NotNull] this DbCommand Command, [NotNull] string ID, SqlDbType Type, object Value = null, ParameterDirection Direction = ParameterDirection.Input)
         {
-            Contract.Requires<ArgumentNullException>(Command != null, "Command");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(ID), "ID");
+            if (Command == null) throw new ArgumentNullException(nameof(Command));
+            if (string.IsNullOrEmpty(ID)) throw new ArgumentNullException(nameof(ID));
             return Command.AddParameter(ID, Type.To(DbType.Int32), Value, Direction);
         }
 
@@ -143,13 +141,13 @@ namespace Wiesend.ORM
         /// <param name="Command">Command object</param>
         /// <param name="Value">Value to add</param>
         /// <returns>The DbCommand object</returns>
-        public static DbCommand AddParameter<DataType>(this DbCommand Command, string ID, DataType Value = default(DataType),
-            ParameterDirection Direction = ParameterDirection.Input)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static DbCommand AddParameter<DataType>([NotNull] this DbCommand Command, [NotNull] string ID, DataType Value = default, ParameterDirection Direction = ParameterDirection.Input)
         {
-            Contract.Requires<ArgumentNullException>(Command != null, "Command");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(ID), "ID");
+            if (Command == null) throw new ArgumentNullException(nameof(Command));
+            if (string.IsNullOrEmpty(ID)) throw new ArgumentNullException(nameof(ID));
             return Command.AddParameter(ID,
-                new GenericEqualityComparer<DataType>().Equals(Value, default(DataType)) ? typeof(DataType).To(DbType.Int32) : Value.GetType().To(DbType.Int32),
+                new GenericEqualityComparer<DataType>().Equals(Value, default) ? typeof(DataType).To(DbType.Int32) : Value.GetType().To(DbType.Int32),
                 Value, Direction);
         }
 
@@ -162,15 +160,14 @@ namespace Wiesend.ORM
         /// <param name="Value">Value to add</param>
         /// <param name="Type">SQL type of the parameter</param>
         /// <returns>The DbCommand object</returns>
-        public static DbCommand AddParameter(this DbCommand Command, string ID, DbType Type, object Value = null,
-            ParameterDirection Direction = ParameterDirection.Input)
+        public static DbCommand AddParameter([NotNull] this DbCommand Command, [NotNull] string ID, DbType Type, object Value = null, ParameterDirection Direction = ParameterDirection.Input)
         {
-            Contract.Requires<ArgumentNullException>(Command != null, "Command");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(ID), "ID");
+            if (Command == null) throw new ArgumentNullException(nameof(Command));
+            if (string.IsNullOrEmpty(ID)) throw new ArgumentNullException(nameof(ID));
             var Parameter = Command.GetOrCreateParameter(ID);
             Parameter.Value = Value == null || Convert.IsDBNull(Value) ? DBNull.Value : Value;
             Parameter.IsNullable = Value == null || Convert.IsDBNull(Value);
-            if (Type != default(DbType))
+            if (Type != default)
                 Parameter.DbType = Type;
             Parameter.Direction = Direction;
             return Command;
@@ -239,14 +236,12 @@ namespace Wiesend.ORM
             if (Command == null)
                 return null;
             Command.Open();
-            using (DbDataAdapter Adapter = Factory.CreateDataAdapter())
-            {
-                Adapter.SelectCommand = Command;
-                var ReturnSet = new DataSet();
-                ReturnSet.Locale = CultureInfo.CurrentCulture;
-                Adapter.Fill(ReturnSet);
-                return ReturnSet;
-            }
+            using DbDataAdapter Adapter = Factory.CreateDataAdapter();
+            Adapter.SelectCommand = Command;
+            var ReturnSet = new DataSet();
+            ReturnSet.Locale = CultureInfo.CurrentCulture;
+            Adapter.Fill(ReturnSet);
+            return ReturnSet;
         }
 
         /// <summary>
@@ -255,7 +250,8 @@ namespace Wiesend.ORM
         /// <param name="Command">Command object</param>
         /// <param name="Default">Default value if there is an issue</param>
         /// <returns>The object of the first row and first column</returns>
-        public static DataType ExecuteScalar<DataType>(this DbCommand Command, DataType Default = default(DataType))
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static DataType ExecuteScalar<DataType>(this DbCommand Command, DataType Default = default)
         {
             if (Command == null)
                 return Default;
@@ -292,7 +288,8 @@ namespace Wiesend.ORM
         /// if the parameter exists (and isn't null or empty), it returns the parameter's value.
         /// Otherwise the default value is returned.
         /// </returns>
-        public static DataType GetOutputParameter<DataType>(this DbCommand Command, string ID, DataType Default = default(DataType))
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static DataType GetOutputParameter<DataType>(this DbCommand Command, string ID, DataType Default = default)
         {
             return Command != null && Command.Parameters[ID] != null ?
                 Command.Parameters[ID].Value.To<object, DataType>(Default) :

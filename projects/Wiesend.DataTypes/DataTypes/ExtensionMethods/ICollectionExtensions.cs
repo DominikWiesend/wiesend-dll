@@ -75,7 +75,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Linq;
 
 namespace Wiesend.DataTypes
@@ -93,9 +93,9 @@ namespace Wiesend.DataTypes
         /// <param name="Collection">Collection</param>
         /// <param name="Items">Items to add</param>
         /// <returns>The collection with the added items</returns>
-        public static ICollection<T> Add<T>(this ICollection<T> Collection, IEnumerable<T> Items)
+        public static ICollection<T> Add<T>([NotNull] this ICollection<T> Collection, IEnumerable<T> Items)
         {
-            Contract.Requires<ArgumentNullException>(Collection != null, "Collection");
+            if (Collection == null) throw new ArgumentNullException(nameof(Collection));
             if (Items == null)
                 return Collection;
             Items.ForEach(x => Collection.Add(x));
@@ -109,9 +109,9 @@ namespace Wiesend.DataTypes
         /// <param name="Collection">Collection</param>
         /// <param name="Items">Items to add</param>
         /// <returns>The collection with the added items</returns>
-        public static ICollection<T> Add<T>(this ICollection<T> Collection, params T[] Items)
+        public static ICollection<T> Add<T>([NotNull] this ICollection<T> Collection, params T[] Items)
         {
-            Contract.Requires<ArgumentNullException>(Collection != null, "Collection");
+            if (Collection == null) throw new ArgumentNullException(nameof(Collection));
             if (Items == null)
                 return Collection;
             Items.ForEach(x => Collection.Add(x));
@@ -125,9 +125,9 @@ namespace Wiesend.DataTypes
         /// <param name="Collection">Collection to add to</param>
         /// <param name="Item">Item to add to the collection</param>
         /// <returns>The original item</returns>
-        public static T AddAndReturn<T>(this ICollection<T> Collection, T Item)
+        public static T AddAndReturn<T>([NotNull] this ICollection<T> Collection, T Item)
         {
-            Contract.Requires<ArgumentNullException>(Collection != null, "Collection");
+            if (Collection == null) throw new ArgumentNullException(nameof(Collection));
             Collection.Add(Item);
             return Item;
         }
@@ -140,10 +140,10 @@ namespace Wiesend.DataTypes
         /// <param name="Items">Items to add to the collection</param>
         /// <param name="Predicate">Predicate that an item needs to satisfy in order to be added</param>
         /// <returns>True if any are added, false otherwise</returns>
-        public static bool AddIf<T>(this ICollection<T> Collection, Predicate<T> Predicate, params T[] Items)
+        public static bool AddIf<T>([NotNull] this ICollection<T> Collection, [NotNull] Predicate<T> Predicate, params T[] Items)
         {
-            Contract.Requires<ArgumentNullException>(Collection != null, "Collection");
-            Contract.Requires<ArgumentNullException>(Predicate != null, "Predicate");
+            if (Collection == null) throw new ArgumentNullException(nameof(Collection));
+            if (Predicate == null) throw new ArgumentNullException(nameof(Predicate));
             if (Items == null)
                 return true;
             bool ReturnValue = false;
@@ -166,10 +166,10 @@ namespace Wiesend.DataTypes
         /// <param name="Items">Items to add to the collection</param>
         /// <param name="Predicate">Predicate that an item needs to satisfy in order to be added</param>
         /// <returns>True if it is added, false otherwise</returns>
-        public static bool AddIf<T>(this ICollection<T> Collection, Predicate<T> Predicate, IEnumerable<T> Items)
+        public static bool AddIf<T>([NotNull] this ICollection<T> Collection, [NotNull] Predicate<T> Predicate, IEnumerable<T> Items)
         {
-            Contract.Requires<ArgumentNullException>(Collection != null, "Collection");
-            Contract.Requires<ArgumentNullException>(Predicate != null, "Predicate");
+            if (Collection == null) throw new ArgumentNullException(nameof(Collection));
+            if (Predicate == null) throw new ArgumentNullException(nameof(Predicate));
             if (Items == null)
                 return true;
             return Collection.AddIf(Predicate, Items.ToArray());
@@ -182,9 +182,9 @@ namespace Wiesend.DataTypes
         /// <param name="Collection">Collection to add to</param>
         /// <param name="Items">Items to add to the collection</param>
         /// <returns>True if it is added, false otherwise</returns>
-        public static bool AddIfUnique<T>(this ICollection<T> Collection, params T[] Items)
+        public static bool AddIfUnique<T>([NotNull] this ICollection<T> Collection, params T[] Items)
         {
-            Contract.Requires<ArgumentNullException>(Collection != null, "Collection");
+            if (Collection == null) throw new ArgumentNullException(nameof(Collection));
             if (Items == null)
                 return true;
             return Collection.AddIf(x => !Collection.Contains(x), Items);
@@ -201,10 +201,10 @@ namespace Wiesend.DataTypes
         /// false otherwise
         /// </param>
         /// <returns>True if it is added, false otherwise</returns>
-        public static bool AddIfUnique<T>(this ICollection<T> Collection, Func<T, T, bool> Predicate, params T[] Items)
+        public static bool AddIfUnique<T>([NotNull] this ICollection<T> Collection, [NotNull] Func<T, T, bool> Predicate, params T[] Items)
         {
-            Contract.Requires<ArgumentNullException>(Collection != null, "Collection");
-            Contract.Requires<ArgumentNullException>(Predicate != null, "Predicate");
+            if (Collection == null) throw new ArgumentNullException(nameof(Collection));
+            if (Predicate == null) throw new ArgumentNullException(nameof(Predicate));
             if (Items == null)
                 return true;
             return Collection.AddIf(x => !Collection.Any(y => Predicate(x, y)), Items);
@@ -217,9 +217,9 @@ namespace Wiesend.DataTypes
         /// <param name="Collection">Collection to add to</param>
         /// <param name="Items">Items to add to the collection</param>
         /// <returns>True if it is added, false otherwise</returns>
-        public static bool AddIfUnique<T>(this ICollection<T> Collection, IEnumerable<T> Items)
+        public static bool AddIfUnique<T>([NotNull] this ICollection<T> Collection, IEnumerable<T> Items)
         {
-            Contract.Requires<ArgumentNullException>(Collection != null, "Collection");
+            if (Collection == null) throw new ArgumentNullException(nameof(Collection));
             if (Items == null)
                 return true;
             return Collection.AddIf(x => !Collection.Contains(x), Items);
@@ -236,10 +236,10 @@ namespace Wiesend.DataTypes
         /// false otherwise
         /// </param>
         /// <returns>True if it is added, false otherwise</returns>
-        public static bool AddIfUnique<T>(this ICollection<T> Collection, Func<T, T, bool> Predicate, IEnumerable<T> Items)
+        public static bool AddIfUnique<T>([NotNull] this ICollection<T> Collection, [NotNull] Func<T, T, bool> Predicate, IEnumerable<T> Items)
         {
-            Contract.Requires<ArgumentNullException>(Collection != null, "Collection");
-            Contract.Requires<ArgumentNullException>(Predicate != null, "Predicate");
+            if (Collection == null) throw new ArgumentNullException(nameof(Collection));
+            if (Predicate == null) throw new ArgumentNullException(nameof(Predicate));
             if (Items == null)
                 return true;
             return Collection.AddIf(x => !Collection.Any(y => Predicate(x, y)), Items);
@@ -254,11 +254,11 @@ namespace Wiesend.DataTypes
         /// <param name="End">Item to end with</param>
         /// <param name="Action">Action to do</param>
         /// <returns>The original list</returns>
-        public static IList<T> For<T>(this IList<T> List, int Start, int End, Action<int, T> Action)
+        public static IList<T> For<T>([NotNull] this IList<T> List, int Start, int End, [NotNull] Action<int, T> Action)
         {
-            Contract.Requires<ArgumentNullException>(List != null, "List");
-            Contract.Requires<ArgumentNullException>(Action != null, "Action");
-            Contract.Requires<ArgumentException>(End + 1 - Start >= 0, "End must be greater than start");
+            if (List == null) throw new ArgumentNullException(nameof(List));
+            if (Action == null) throw new ArgumentNullException(nameof(Action));
+            if (!(End + 1 - Start >= 0)) throw new InvalidOperationException("End must be greater than start");
             if (End >= List.Count)
                 End = List.Count - 1;
             if (Start < 0)
@@ -279,11 +279,12 @@ namespace Wiesend.DataTypes
         /// <param name="End">Item to end with</param>
         /// <param name="Function">Function to do</param>
         /// <returns>The resulting list</returns>
-        public static IList<R> For<T, R>(this IList<T> List, int Start, int End, Func<int, T, R> Function)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static IList<R> For<T, R>([NotNull] this IList<T> List, int Start, int End, [NotNull] Func<int, T, R> Function)
         {
-            Contract.Requires<ArgumentNullException>(List != null, "List");
-            Contract.Requires<ArgumentNullException>(Function != null, "Function");
-            Contract.Requires<ArgumentException>(End + 1 - Start >= 0, "End must be greater than start");
+            if (List == null) throw new ArgumentNullException(nameof(List));
+            if (Function == null) throw new ArgumentNullException(nameof(Function));
+            if (!(End + 1 - Start >= 0)) throw new InvalidOperationException("End must be greater than start");
             var ReturnValues = new List<R>();
             if (End >= List.Count)
                 End = List.Count - 1;
@@ -300,9 +301,9 @@ namespace Wiesend.DataTypes
         /// <typeparam name="T">The type of the items in the collection</typeparam>
         /// <param name="Collection">Collection to remove items from</param>
         /// <param name="Predicate">Predicate used to determine what items to remove</param>
-        public static ICollection<T> Remove<T>(this ICollection<T> Collection, Func<T, bool> Predicate)
+        public static ICollection<T> Remove<T>([NotNull] this ICollection<T> Collection, Func<T, bool> Predicate)
         {
-            Contract.Requires<ArgumentNullException>(Collection != null, "Collection");
+            if (Collection == null) throw new ArgumentNullException(nameof(Collection));
             return Collection.Where(x => !Predicate(x)).ToList();
         }
 
@@ -313,9 +314,9 @@ namespace Wiesend.DataTypes
         /// <param name="Collection">Collection</param>
         /// <param name="Items">Items to remove</param>
         /// <returns>The collection with the items removed</returns>
-        public static ICollection<T> Remove<T>(this ICollection<T> Collection, IEnumerable<T> Items)
+        public static ICollection<T> Remove<T>([NotNull] this ICollection<T> Collection, IEnumerable<T> Items)
         {
-            Contract.Requires<ArgumentNullException>(Collection != null, "Collection");
+            if (Collection == null) throw new ArgumentNullException(nameof(Collection));
             if (Items == null)
                 return Collection;
             return Collection.Where(x => !Items.Contains(x)).ToList();

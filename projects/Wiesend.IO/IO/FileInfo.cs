@@ -122,6 +122,7 @@ namespace Wiesend.IO
         /// <summary>
         /// Directory the file is within
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0031:Use null propagation", Justification = "<Pending>")]
         public IDirectory Directory { get { return InternalFile == null ? null : InternalFile.Directory; } }
 
         /// <summary>
@@ -202,6 +203,7 @@ namespace Wiesend.IO
         /// <param name="File1">File 1</param>
         /// <param name="File2">File 2</param>
         /// <returns>True if they are, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
         public static bool operator ==(FileInfo File1, FileInfo File2)
         {
             if ((object)File1 == null && (object)File2 == null)
@@ -242,6 +244,7 @@ namespace Wiesend.IO
         /// </summary>
         /// <param name="File">File to read</param>
         /// <returns>The file as a byte array</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public static implicit operator byte[] (FileInfo File)
         {
             if (File == null)
@@ -350,6 +353,7 @@ namespace Wiesend.IO
         /// </summary>
         /// <param name="Info">Info used to execute the file</param>
         /// <returns>The process object created when the executable is started</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0054:Use compound assignment", Justification = "<Pending>")]
         public Process Execute(ProcessStartInfo Info = null)
         {
             if (InternalFile == null)
@@ -394,6 +398,7 @@ namespace Wiesend.IO
         /// Reads a file as binary
         /// </summary>
         /// <returns>The file contents as a byte array</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public byte[] ReadBinary()
         {
             if (InternalFile == null)
@@ -429,13 +434,13 @@ namespace Wiesend.IO
         /// <typeparam name="T">File format</typeparam>
         /// <typeparam name="R">Record type</typeparam>
         /// <returns>The file as the file format object</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public T To<T, R>()
             where T : StringListFormatBase<T, R>, new()
         {
             return FormatBase<T, string>.Load(FullName);
         }
 
-#if NETFULL
         /// <summary>
         /// Converts the file to the specified file format
         /// </summary>
@@ -444,7 +449,6 @@ namespace Wiesend.IO
         {
             return Excel.Load(FullName);
         }
-#endif
 
         /// <summary>
         /// Returns the name of the file

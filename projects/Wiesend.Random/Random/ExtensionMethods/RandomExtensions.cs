@@ -75,7 +75,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Drawing;
 using System.Linq;
 using Wiesend.DataTypes;
@@ -90,7 +90,7 @@ namespace Wiesend.Random
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class RandomExtensions
     {
-        private static Dictionary<Type, IGenerator> Generators = null;
+        private static Dictionary<Type, IGenerator> Generators;
 
         /// <summary>
         /// Randomly generates a value of the specified type
@@ -101,9 +101,9 @@ namespace Wiesend.Random
         /// Generator to be used (if not included, default generator is used)
         /// </param>
         /// <returns>The randomly generated value</returns>
-        public static T Next<T>(this System.Random Random, IGenerator<T> Generator = null)
+        public static T Next<T>([NotNull] this System.Random Random, IGenerator<T> Generator = null)
         {
-            Contract.Requires<ArgumentNullException>(Random != null, "Random");
+            if (Random == null) throw new ArgumentNullException(nameof(Random));
             SetupGenerators();
             if (Generator == null)
             {
@@ -125,9 +125,9 @@ namespace Wiesend.Random
         /// Generator to be used (if not included, default generator is used)
         /// </param>
         /// <returns>The randomly generated value</returns>
-        public static T Next<T>(this System.Random Random, T Min, T Max, IGenerator<T> Generator = null)
+        public static T Next<T>([NotNull] this System.Random Random, T Min, T Max, IGenerator<T> Generator = null)
         {
-            Contract.Requires<ArgumentNullException>(Random != null, "Random");
+            if (Random == null) throw new ArgumentNullException(nameof(Random));
             SetupGenerators();
             if (Generator == null)
             {
@@ -148,9 +148,9 @@ namespace Wiesend.Random
         /// Generator to be used (if not included, default generator is used)
         /// </param>
         /// <returns>The randomly generated value</returns>
-        public static IEnumerable<T> Next<T>(this System.Random Random, int Amount, IGenerator<T> Generator = null)
+        public static IEnumerable<T> Next<T>([NotNull] this System.Random Random, int Amount, IGenerator<T> Generator = null)
         {
-            Contract.Requires<ArgumentNullException>(Random != null, "Random");
+            if (Random == null) throw new ArgumentNullException(nameof(Random));
             SetupGenerators();
             if (Generator == null)
             {
@@ -173,9 +173,9 @@ namespace Wiesend.Random
         /// Generator to be used (if not included, default generator is used)
         /// </param>
         /// <returns>The randomly generated value</returns>
-        public static IEnumerable<T> Next<T>(this System.Random Random, int Amount, T Min, T Max, IGenerator<T> Generator = null)
+        public static IEnumerable<T> Next<T>([NotNull] this System.Random Random, int Amount, T Min, T Max, IGenerator<T> Generator = null)
         {
-            Contract.Requires<ArgumentNullException>(Random != null, "Random");
+            if (Random == null) throw new ArgumentNullException(nameof(Random));
             SetupGenerators();
             if (Generator == null)
             {
@@ -193,11 +193,11 @@ namespace Wiesend.Random
         /// <param name="Random">Random number generator</param>
         /// <param name="List">List to pick from</param>
         /// <returns>Item that is returned</returns>
-        public static T Next<T>(this System.Random Random, IEnumerable<T> List)
+        public static T Next<T>([NotNull] this System.Random Random, IEnumerable<T> List)
         {
-            Contract.Requires<ArgumentNullException>(Random != null, "Random");
+            if (Random == null) throw new ArgumentNullException(nameof(Random));
             if (List == null)
-                return default(T);
+                return default;
             int x = 0;
             var Position = Random.Next(0, List.Count());
             foreach (T Item in List)
@@ -206,7 +206,7 @@ namespace Wiesend.Random
                     return Item;
                 ++x;
             }
-            return default(T);
+            return default;
         }
 
         /// <summary>
@@ -218,15 +218,14 @@ namespace Wiesend.Random
         /// Generator to be used (if not included, default generator is used)
         /// </param>
         /// <returns>The randomly generated value</returns>
-        public static T NextClass<T>(this System.Random Random, IGenerator<T> Generator = null)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
+        public static T NextClass<T>([NotNull] this System.Random Random, IGenerator<T> Generator = null)
             where T : class,new()
         {
-            Contract.Requires<ArgumentNullException>(Random != null, "Random");
+            if (Random == null) throw new ArgumentNullException(nameof(Random));
             SetupGenerators();
             if (Generator == null)
-            {
                 Generator = new ClassGenerator<T>();
-            }
             return Generator.Next(Random);
         }
 
@@ -240,15 +239,14 @@ namespace Wiesend.Random
         /// Generator to be used (if not included, default generator is used)
         /// </param>
         /// <returns>The randomly generated value</returns>
-        public static IEnumerable<T> NextClass<T>(this System.Random Random, int Amount, IGenerator<T> Generator = null)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
+        public static IEnumerable<T> NextClass<T>([NotNull] this System.Random Random, int Amount, IGenerator<T> Generator = null)
             where T : class,new()
         {
-            Contract.Requires<ArgumentNullException>(Random != null, "Random");
+            if (Random == null) throw new ArgumentNullException(nameof(Random));
             SetupGenerators();
             if (Generator == null)
-            {
                 Generator = new ClassGenerator<T>();
-            }
             return Amount.Times(x => Generator.Next(Random));
         }
 
@@ -261,9 +259,9 @@ namespace Wiesend.Random
         /// Generator to be used (if not included, default generator is used)
         /// </param>
         /// <returns>The randomly generated value</returns>
-        public static T NextEnum<T>(this System.Random Random, IGenerator<T> Generator = null)
+        public static T NextEnum<T>([NotNull] this System.Random Random, IGenerator<T> Generator = null)
         {
-            Contract.Requires<ArgumentNullException>(Random != null, "Random");
+            if (Random == null) throw new ArgumentNullException(nameof(Random));
             SetupGenerators();
             Generator = Generator.Check(new EnumGenerator<T>());
             return Generator.Next(Random);
@@ -279,9 +277,9 @@ namespace Wiesend.Random
         /// Generator to be used (if not included, default generator is used)
         /// </param>
         /// <returns>The randomly generated value</returns>
-        public static IEnumerable<T> NextEnum<T>(this System.Random Random, int Amount, IGenerator<T> Generator = null)
+        public static IEnumerable<T> NextEnum<T>([NotNull] this System.Random Random, int Amount, IGenerator<T> Generator = null)
         {
-            Contract.Requires<ArgumentNullException>(Random != null, "Random");
+            if (Random == null) throw new ArgumentNullException(nameof(Random));
             SetupGenerators();
             Generator = Generator.Check(new EnumGenerator<T>());
             return Amount.Times(x => Generator.Next(Random));
@@ -334,6 +332,7 @@ namespace Wiesend.Random
         /// <param name="Random">Random object</param>
         /// <param name="List">List of objects to shuffle</param>
         /// <returns>The shuffled list</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1827:Do not use Count() or LongCount() when Any() can be used", Justification = "<Pending>")]
         public static IEnumerable<T> Shuffle<T>(this System.Random Random, IEnumerable<T> List)
         {
             if (List == null || List.Count() == 0)

@@ -75,10 +75,10 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-#if NETFULL
+#if NETFRAMEWORK
 using System.Data.Entity.Design.PluralizationServices;
 #endif
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -170,6 +170,7 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="str">String</param>
         /// <returns>String as SecureString</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public static SecureString ToSecureString(this string str)
         {
             SecureString secureStr = new SecureString();
@@ -187,11 +188,11 @@ namespace Wiesend.DataTypes
         /// <param name="Format">Format string</param>
         /// <param name="Objects">Objects to format</param>
         /// <returns>The StringBuilder passed in</returns>
-        public static StringBuilder AppendLineFormat(this StringBuilder Builder, string Format, params object[] Objects)
+        public static StringBuilder AppendLineFormat([NotNull] this StringBuilder Builder, [NotNull] string Format, [NotNull] params object[] Objects)
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(Format), "Format");
-            Contract.Requires<ArgumentNullException>(Builder != null, "Builder");
-            Contract.Requires<ArgumentNullException>(Objects != null, "Objects");
+            if (string.IsNullOrEmpty(Format)) throw new ArgumentNullException(nameof(Format));
+            if (Builder == null) throw new ArgumentNullException(nameof(Builder));
+            if (Objects == null) throw new ArgumentNullException(nameof(Objects));
             return Builder.AppendFormat(CultureInfo.InvariantCulture, Format, Objects).AppendLine();
         }
 
@@ -259,6 +260,7 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Input">Input string</param>
         /// <returns>A byte array equivalent of the base 64 string</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public static byte[] FromBase64(this string Input)
         {
             return string.IsNullOrEmpty(Input) ? new byte[0] : Convert.FromBase64String(Input);
@@ -270,6 +272,7 @@ namespace Wiesend.DataTypes
         /// <param name="Value">Value to compare</param>
         /// <param name="ComparisonType">Comparison type</param>
         /// <returns>True if it is of the type specified, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("GeneratedRegex", "SYSLIB1045:Convert to 'GeneratedRegexAttribute'.", Justification = "<Pending>")]
         public static bool Is(this string Value, StringCompare ComparisonType)
         {
             if (ComparisonType == StringCompare.CreditCard)
@@ -316,13 +319,15 @@ namespace Wiesend.DataTypes
         /// <param name="Input">Input text</param>
         /// <param name="Filter">Regex expression of text to keep</param>
         /// <returns>The input text minus everything not in the filter text.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public static string Keep(this string Input, string Filter)
         {
             if (string.IsNullOrEmpty(Input) || string.IsNullOrEmpty(Filter))
                 return "";
             var TempRegex = new Regex(Filter);
             var Collection = TempRegex.Matches(Input);
-            var Builder = new StringBuilder();
+            StringBuilder Builder = new StringBuilder();
             foreach (Match Match in Collection)
                 Builder.Append(Match.Value);
             return Builder.ToString();
@@ -348,6 +353,7 @@ namespace Wiesend.DataTypes
         /// <param name="Input">Input string</param>
         /// <param name="Length">x number of characters to return</param>
         /// <returns>The resulting string</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0057:Use range operator", Justification = "<Pending>")]
         public static string Left(this string Input, int Length)
         {
             if (Length <= 0)
@@ -361,10 +367,10 @@ namespace Wiesend.DataTypes
         /// <param name="Value1">Value 1</param>
         /// <param name="Value2">Value 2</param>
         /// <returns>The Levenshtein distance</returns>
-        public static int LevenshteinDistance(this string Value1, string Value2)
+        public static int LevenshteinDistance([NotNull] this string Value1, [NotNull] string Value2)
         {
-            Contract.Requires<ArgumentNullException>(Value1 != null, "Value1");
-            Contract.Requires<ArgumentNullException>(Value2 != null, "Value2");
+            if (Value1 == null) throw new ArgumentNullException(nameof(Value1));
+            if (Value2 == null) throw new ArgumentNullException(nameof(Value2));
             int[,] Matrix = new int[Value1.Length + 1, Value2.Length + 1];
             for (int x = 0; x <= Value1.Length; ++x)
                 Matrix[x, 0] = x;
@@ -407,9 +413,9 @@ namespace Wiesend.DataTypes
         /// <param name="StartPosition">Start position (counting from the left)</param>
         /// <param name="Mask">Mask character to use</param>
         /// <returns>The masked string</returns>
-        public static string MaskRight(this string Input, int StartPosition = 4, char Mask = '#')
+        public static string MaskRight([NotNull] this string Input, int StartPosition = 4, char Mask = '#')
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(Input), "Input");
+            if (string.IsNullOrEmpty(Input)) throw new ArgumentNullException(nameof(Input));
             if (StartPosition > Input.Length)
                 return Input;
             string Appending = "";
@@ -429,7 +435,7 @@ namespace Wiesend.DataTypes
             return string.IsNullOrEmpty(Input) ? 0 : new Regex(Match).Matches(Input).Count;
         }
 
-#if NETFULL
+#if NETFRAMEWORK
         /// <summary>
         /// Pluralizes a word
         /// </summary>
@@ -494,9 +500,9 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Input">Input string</param>
         /// <returns>The reverse of the input string</returns>
-        public static string Reverse(this string Input)
+        public static string Reverse([NotNull] this string Input)
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(Input), "Input");
+            if (string.IsNullOrEmpty(Input)) throw new ArgumentNullException(nameof(Input));
             return new string(Input.Reverse<char>().ToArray());
         }
 
@@ -516,7 +522,7 @@ namespace Wiesend.DataTypes
             return Input.Substring(Input.Length - Length, Length);
         }
 
-#if NETFULL
+#if NETFRAMEWORK
         /// <summary>
         /// Singularizes a word
         /// </summary>
@@ -610,6 +616,7 @@ namespace Wiesend.DataTypes
         /// <param name="Input">input string</param>
         /// <param name="EncodingUsing">The type of encoding the string is using (defaults to UTF8)</param>
         /// <returns>the byte array representing the string</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public static byte[] ToByteArray(this string Input, Encoding EncodingUsing = null)
         {
             return string.IsNullOrEmpty(Input) ? new byte[0] : EncodingUsing.Check(new UTF8Encoding()).GetBytes(Input);
@@ -714,6 +721,7 @@ namespace Wiesend.DataTypes
         /// Seperator character/string to use to describe the end of the property name
         /// </param>
         /// <returns>The formatted string</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         public static string ToString(this string Input, object Object, string StartSeperator = "{", string EndSeperator = "}")
         {
             if (Object == null)
@@ -753,14 +761,15 @@ namespace Wiesend.DataTypes
         /// <param name="OutputFormat">Output format</param>
         /// <param name="Options">Regex options</param>
         /// <returns>The input string formatted by using the regex string</returns>
-        public static string ToString(this string Input, string Format, string OutputFormat, RegexOptions Options = RegexOptions.None)
+        public static string ToString([NotNull] this string Input, [NotNull] string Format, [NotNull] string OutputFormat, RegexOptions Options = RegexOptions.None)
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(Input), "Input");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(Format), "Format");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(OutputFormat), "OutputFormat");
+            if (string.IsNullOrEmpty(Input)) throw new ArgumentNullException(nameof(Input));
+            if (string.IsNullOrEmpty(Format)) throw new ArgumentNullException(nameof(Format));
+            if (string.IsNullOrEmpty(OutputFormat)) throw new ArgumentNullException(nameof(OutputFormat));
             return Regex.Replace(Input, Format, OutputFormat, Options);
         }
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
         private static string BuildFilter(StringFilter Filter)
         {
             string FilterValue = "";

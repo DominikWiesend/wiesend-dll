@@ -77,7 +77,7 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Dynamic;
 using System.Linq;
 using System.Reflection;
@@ -155,15 +155,16 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="info">Serialization info</param>
         /// <param name="context">Streaming context</param>
-        protected Dynamo(SerializationInfo info, StreamingContext context)
+        protected Dynamo([NotNull] SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
-            Contract.Requires<ArgumentNullException>(info != null, "info");
+            if (info == null) throw new ArgumentNullException(nameof(info));
         }
 
         /// <summary>
         /// Keys to the dynamic type
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0028:Simplify collection initialization", Justification = "<Pending>")]
         public override ICollection<string> Keys
         {
             get
@@ -243,6 +244,7 @@ namespace Wiesend.DataTypes
     /// Dynamic object implementation
     /// </summary>
     [Serializable]
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1710:Identifiers should have correct suffix", Justification = "<Pending>")]
     public class Dynamo : DynamicObject, IDictionary<string, object>, INotifyPropertyChanged, ISerializable, IXmlSerializable
     {
         /// <summary>
@@ -257,12 +259,14 @@ namespace Wiesend.DataTypes
         /// Constructor
         /// </summary>
         /// <param name="item">Item to copy values from</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2214:Do not call overridable methods in constructors", Justification = "<Pending>")]
         public Dynamo(object item)
         {
             InternalValues = new ConcurrentDictionary<string, object>(StringComparer.OrdinalIgnoreCase);
             ChildValues = new ConcurrentDictionary<string, Func<object>>(StringComparer.OrdinalIgnoreCase);
             ChangeLog = new ConcurrentDictionary<string, Change>(StringComparer.OrdinalIgnoreCase);
-            var DictItem = item as IDictionary<string, object>;
+            IDictionary<string, object> DictItem = item as IDictionary<string, object>;
             if (item == null)
                 return;
             if (item is string || item.GetType().IsValueType)
@@ -293,16 +297,15 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="info">Serialization info</param>
         /// <param name="context">Streaming context</param>
-        protected Dynamo(SerializationInfo info, StreamingContext context)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2214:Do not call overridable methods in constructors", Justification = "<Pending>")]
+        protected Dynamo([NotNull] SerializationInfo info, StreamingContext context)
         {
-            Contract.Requires<ArgumentNullException>(info != null, "info");
+            if (info == null) throw new ArgumentNullException(nameof(info));
             InternalValues = new ConcurrentDictionary<string, object>(StringComparer.OrdinalIgnoreCase);
             ChildValues = new ConcurrentDictionary<string, Func<object>>(StringComparer.OrdinalIgnoreCase);
             ChangeLog = new ConcurrentDictionary<string, Change>(StringComparer.OrdinalIgnoreCase);
             foreach (SerializationEntry Item in info)
-            {
                 SetValue(Item.Name, Item.Value);
-            }
         }
 
         /// <summary>
@@ -486,11 +489,12 @@ namespace Wiesend.DataTypes
         /// Copies the properties from an item
         /// </summary>
         /// <param name="Item">Item to copy from</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
         public void Copy(object Item)
         {
             if (Item == null)
                 return;
-            var DictItem = Item as IDictionary<string, object>;
+            IDictionary<string, object> DictItem = Item as IDictionary<string, object>;
             if (Item is string || Item.GetType().IsValueType)
                 SetValue("Value", Item);
             else if (DictItem != null)
@@ -522,9 +526,9 @@ namespace Wiesend.DataTypes
         /// Copies data from here to another object
         /// </summary>
         /// <param name="result">Result</param>
-        public void CopyTo(object result)
+        public void CopyTo([NotNull] object result)
         {
-            Contract.Requires<ArgumentNullException>(result != null, "result");
+            if (result == null) throw new ArgumentNullException(nameof(result));
             DataMapper.Map(GetType(), result.GetType())
                       .AutoMap()
                       .Copy(this, result);
@@ -535,9 +539,10 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="obj">Object to compare to</param>
         /// <returns>True if they're equal, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
         public override bool Equals(object obj)
         {
-            var TempObj = obj as Dynamo;
+            Dynamo TempObj = obj as Dynamo;
             if (TempObj == null)
                 return false;
             return TempObj.GetHashCode() == GetHashCode();
@@ -629,8 +634,7 @@ namespace Wiesend.DataTypes
         public bool Remove(string key)
         {
             RaisePropertyChanged(key, null);
-            object TempObject = null;
-            return InternalValues.TryRemove(key, out TempObject);
+            return InternalValues.TryRemove(key, out _);
         }
 
         /// <summary>
@@ -641,8 +645,7 @@ namespace Wiesend.DataTypes
         public bool Remove(KeyValuePair<string, object> item)
         {
             RaisePropertyChanged(item.Key, null);
-            object TempObject = null;
-            return InternalValues.TryRemove(item.Key, out TempObject);
+            return InternalValues.TryRemove(item.Key, out _);
         }
 
         /// <summary>
@@ -840,6 +843,7 @@ namespace Wiesend.DataTypes
         /// Returns null if the function should continue, any other value should be immediately
         /// returned to the user
         /// </returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1005:Delegate invocation can be simplified.", Justification = "<Pending>")]
         protected object RaiseGetValueEnd(string PropertyName, object Value)
         {
             var End = new EventArgs.OnEndEventArgs { Content = Value };
@@ -857,6 +861,7 @@ namespace Wiesend.DataTypes
         /// Returns null if the function should continue, any other value should be immediately
         /// returned to the user
         /// </returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1005:Delegate invocation can be simplified.", Justification = "<Pending>")]
         protected object RaiseGetValueStart(string PropertyName)
         {
             var Start = new EventArgs.OnStartEventArgs { Content = PropertyName };
@@ -871,9 +876,11 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="PropertyName">Property name</param>
         /// <param name="NewValue">New value for the property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1005:Delegate invocation can be simplified.", Justification = "<Pending>")]
         protected void RaisePropertyChanged(string PropertyName, object NewValue)
         {
-            Contract.Requires<NullReferenceException>(ChangeLog != null, "ChangeLog");
+            if (ChangeLog == null) throw new NullReferenceException("ChangeLog");
             if (ChangeLog.ContainsKey(PropertyName))
                 ChangeLog.SetValue(PropertyName, new Change(this[PropertyName], NewValue));
             else

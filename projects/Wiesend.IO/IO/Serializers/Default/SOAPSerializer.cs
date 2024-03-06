@@ -72,7 +72,7 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-#if NETFULL
+#if NETFRAMEWORK
 using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Soap;
@@ -107,15 +107,14 @@ namespace Wiesend.IO.Serializers.Default
         /// <param name="ObjectType">Object type</param>
         /// <param name="Data">Data to deserialize</param>
         /// <returns>The deserialized data</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public override object Deserialize(Type ObjectType, string Data)
         {
             if (string.IsNullOrEmpty(Data) || ObjectType == null)
                 return null;
-            using (MemoryStream Stream = new MemoryStream(Encoding.UTF8.GetBytes(Data)))
-            {
-                var Formatter = new SoapFormatter();
-                return Formatter.Deserialize(Stream);
-            }
+            using MemoryStream Stream = new MemoryStream(Encoding.UTF8.GetBytes(Data));
+            var Formatter = new SoapFormatter();
+            return Formatter.Deserialize(Stream);
         }
 
         /// <summary>
@@ -124,17 +123,16 @@ namespace Wiesend.IO.Serializers.Default
         /// <param name="ObjectType">Object type</param>
         /// <param name="Data">Data to serialize</param>
         /// <returns>The serialized data</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public override string Serialize(Type ObjectType, object Data)
         {
             if (Data == null || ObjectType == null)
                 return null;
-            using (MemoryStream Stream = new MemoryStream())
-            {
-                var Serializer = new SoapFormatter();
-                Serializer.Serialize(Stream, Data);
-                Stream.Flush();
-                return Encoding.UTF8.GetString(Stream.GetBuffer(), 0, (int)Stream.Position);
-            }
+            using MemoryStream Stream = new MemoryStream();
+            var Serializer = new SoapFormatter();
+            Serializer.Serialize(Stream, Data);
+            Stream.Flush();
+            return Encoding.UTF8.GetString(Stream.GetBuffer(), 0, (int)Stream.Position);
         }
     }
 }

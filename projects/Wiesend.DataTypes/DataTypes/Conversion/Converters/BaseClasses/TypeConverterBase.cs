@@ -123,7 +123,7 @@ namespace Wiesend.DataTypes.Conversion.Converters.BaseClasses
         /// <returns>True if it can convert from it, false otherwise</returns>
         public override bool CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, Type sourceType)
         {
-            return ConvertFromTypes.Keys.Contains(sourceType) || base.CanConvertFrom(context, sourceType);
+            return ConvertFromTypes.ContainsKey(sourceType) || base.CanConvertFrom(context, sourceType);
         }
 
         /// <summary>
@@ -134,7 +134,7 @@ namespace Wiesend.DataTypes.Conversion.Converters.BaseClasses
         /// <returns>True if it can convert from it, false otherwise</returns>
         public override bool CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, Type destinationType)
         {
-            return ConvertToTypes.Keys.Contains(destinationType) || base.CanConvertTo(context, destinationType);
+            return ConvertToTypes.ContainsKey(destinationType) || base.CanConvertTo(context, destinationType);
         }
 
         /// <summary>

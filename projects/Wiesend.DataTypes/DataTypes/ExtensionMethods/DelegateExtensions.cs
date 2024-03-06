@@ -132,7 +132,7 @@ namespace Wiesend.DataTypes
         {
             if (Delegate != null)
                 return Delegate(EventArgs);
-            return default(T2);
+            return default;
         }
     }
 }

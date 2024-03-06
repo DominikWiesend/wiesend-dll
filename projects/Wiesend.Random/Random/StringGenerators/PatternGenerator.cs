@@ -111,17 +111,11 @@ namespace Wiesend.Random.StringGenerators
             for (int x = 0; x < Pattern.Length; ++x)
             {
                 if (Pattern[x] == '#')
-                {
                     TempBuilder.Append(Rand.Next(0, 9));
-                }
                 else if (Pattern[x] == '@')
-                {
                     TempBuilder.Append(Rand.Next<string>(new RegexStringGenerator(1, "[a-zA-Z]", 0)));
-                }
                 else
-                {
                     TempBuilder.Append(Pattern[x]);
-                }
             }
             return TempBuilder.ToString();
         }

@@ -72,8 +72,8 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
-using System.Diagnostics.Contracts;
 using System.IO;
 using System.Text;
 
@@ -82,7 +82,7 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
     /// <summary>
     /// IFile Contract
     /// </summary>
-    [ContractClassFor(typeof(IFile))]
+    //[ContractClassFor(typeof(IFile))]
     internal abstract class IFileContract : IFile
     {
         /// <summary>
@@ -90,7 +90,7 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         /// </summary>
         public DateTime Accessed
         {
-            get { return default(DateTime); }
+            get { return default; }
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         /// </summary>
         public DateTime Created
         {
-            get { return default(DateTime); }
+            get { return default; }
         }
 
         /// <summary>
@@ -131,12 +131,12 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         /// <summary>
         /// Full path to the file
         /// </summary>
+        [NotNull]
         public string FullName
         {
             get
             {
-                Contract.Ensures(Contract.Result<string>() != null);
-                return null;
+                if ((object)null == null) throw new System.InvalidOperationException("Contract assertion not met: result != null");
             }
         }
 
@@ -153,18 +153,18 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         /// </summary>
         public DateTime Modified
         {
-            get { return default(DateTime); }
+            get { return default; }
         }
 
         /// <summary>
         /// File name
         /// </summary>
+        [NotNull]
         public string Name
         {
             get
             {
-                Contract.Ensures(Contract.Result<string>() != null);
-                return null;
+                if ((object)null == null) throw new System.InvalidOperationException("Contract assertion not met: result != null");
             }
         }
 
@@ -264,6 +264,7 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         /// Reads the file to the end as a byte array
         /// </summary>
         /// <returns>A byte array containing the contents of the file</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public byte[] ReadBinary()
         {
             return new byte[0];
@@ -273,9 +274,9 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         /// Renames the file
         /// </summary>
         /// <param name="NewName">New file name</param>
-        public void Rename(string NewName)
+        public void Rename([NotNull] string NewName)
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(NewName));
+            if (string.IsNullOrEmpty(NewName)) throw new ArgumentNullException(nameof(NewName), $"Contract assertion not met: !string.IsNullOrEmpty({nameof(NewName)})");
         }
 
         /// <summary>
@@ -296,6 +297,7 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         /// <param name="Content">Content to write</param>
         /// <param name="Mode">File mode</param>
         /// <returns>The result of the write or original content</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public byte[] Write(byte[] Content, System.IO.FileMode Mode = FileMode.Create)
         {
             return new byte[0];

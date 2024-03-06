@@ -1,7 +1,24 @@
-﻿
-// This file is used by Code Analysis to maintain SuppressMessage 
+﻿// This file is used by Code Analysis to maintain SuppressMessage 
 // attributes that are applied to this project.
 // Project-level suppressions either have no target or are given 
 // a specific target and scoped to a namespace, type, member, etc.
-
-[assembly: System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0018:Inline variable declaration", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IoC.Default.DefaultBootstrapper.Resolve(System.Type,System.String,System.Object)~System.Object")]
+using System.Diagnostics.CodeAnalysis;
+[assembly: SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IoC.Default.DefaultBootstrapper.MELOSHook~System.String")]
+[assembly: SuppressMessage("Globalization", "CA1309:Use ordinal string comparison", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IoC.Manager.LoadAssemblies~System.Collections.Concurrent.ConcurrentBag{System.Reflection.Assembly}")]
+[assembly: SuppressMessage("Globalization", "CA1309:Use ordinal string comparison", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IoC.Manager.AssemblyComparer.Equals(System.Reflection.Assembly,System.Reflection.Assembly)~System.Boolean")]
+[assembly: SuppressMessage("Globalization", "CA1309:Use ordinal string comparison", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IoC.Manager.LoadAssemblies(System.Collections.Generic.List{System.Reflection.Assembly},System.Reflection.AssemblyName[])")]
+[assembly: SuppressMessage("Performance", "CA1829:Use Length/Count property instead of Count() when available", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IoC.Default.DefaultBootstrapper.#ctor(System.Collections.Generic.IEnumerable{System.Reflection.Assembly},System.Collections.Generic.IEnumerable{System.Type})")]
+[assembly: SuppressMessage("Performance", "CA1841:Prefer Dictionary.Contains methods", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IoC.Default.DefaultBootstrapper.FindConstructor(System.Type)~System.Reflection.ConstructorInfo")]
+[assembly: SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IoC.Default.DefaultBootstrapper.MELOSHook~System.String")]
+[assembly: SuppressMessage("Performance", "CA1805:Do not initialize unnecessarily", Justification = "<Pending>", Scope = "member", Target = "~F:Wiesend.IoC.Default.DefaultBootstrapper._AppContainer")]
+[assembly: SuppressMessage("Performance", "CA1852:Seal internal types", Justification = "<Pending>", Scope = "type", Target = "~T:Wiesend.IoC.Manager.AssemblyComparer")]
+[assembly: SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IoC.Default.DefaultBootstrapper.#ctor(System.Collections.Generic.IEnumerable{System.Reflection.Assembly},System.Collections.Generic.IEnumerable{System.Type})")]
+[assembly: SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IoC.Default.DefaultBootstrapper.GetParameters(System.Reflection.ConstructorInfo)~System.Collections.Generic.List{System.Object}")]
+[assembly: SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>", Scope = "type", Target = "~T:Wiesend.IoC.BaseClasses.BootstrapperBase`1")]
+[assembly: SuppressMessage("Naming", "CA1716:Identifiers should not match keywords", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IoC.Interfaces.IBootstrapper.Register``1(``0,System.String)")]
+[assembly: SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IoC.Interfaces.IBootstrapper.Register``1(``0,System.String)")]
+[assembly: SuppressMessage("Naming", "CA1716:Identifiers should not match keywords", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IoC.BaseClasses.BootstrapperBase`1.Register``1(``0,System.String)")]
+[assembly: SuppressMessage("Naming", "CA1716:Identifiers should not match keywords", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IoC.BaseClasses.BootstrapperBase`1.Register``1(System.Func{``0},System.String)")]
+[assembly: SuppressMessage("Naming", "CA1716:Identifiers should not match keywords", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IoC.Interfaces.IBootstrapper.Register``1(System.Func{``0},System.String)")]
+[assembly: SuppressMessage("Naming", "CA1716:Identifiers should not match keywords", Justification = "<Pending>", Scope = "namespace", Target = "~N:Wiesend.IoC.Default")]
+[assembly: SuppressMessage("Naming", "CA1716:Identifiers should not match keywords", Justification = "<Pending>", Scope = "namespace", Target = "~N:Wiesend.IoC.Default.Interfaces")]

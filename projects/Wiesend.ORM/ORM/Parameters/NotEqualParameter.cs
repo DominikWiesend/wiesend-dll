@@ -82,6 +82,7 @@ namespace Wiesend.ORM.Parameters
     /// Parameter class that checks for inequality
     /// </summary>
     /// <typeparam name="DataType">Type of the parameter</typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public class NotEqualParameter<DataType> : ParameterBase<DataType>
     {
         /// <summary>

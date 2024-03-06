@@ -84,6 +84,7 @@ namespace Wiesend.IO.FileSystem.BaseClasses
     /// </summary>
     /// <typeparam name="FileType">File type</typeparam>
     /// <typeparam name="InternalFileType">Internal file type</typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public abstract class FileBase<InternalFileType, FileType> : IFile
         where FileType : FileBase<InternalFileType, FileType>, new()
     {
@@ -189,6 +190,7 @@ namespace Wiesend.IO.FileSystem.BaseClasses
         /// </summary>
         /// <param name="File">File to read</param>
         /// <returns>The file as a byte array</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public static implicit operator byte[](FileBase<InternalFileType, FileType> File)
         {
             if (File == null)
@@ -251,6 +253,7 @@ namespace Wiesend.IO.FileSystem.BaseClasses
         /// <param name="File1">File 1</param>
         /// <param name="File2">File 2</param>
         /// <returns>True if they are, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
         public static bool operator ==(FileBase<InternalFileType, FileType> File1, IFile File2)
         {
             if ((object)File1 == null && (object)File2 == null)
@@ -290,6 +293,7 @@ namespace Wiesend.IO.FileSystem.BaseClasses
         /// Clones the file object
         /// </summary>
         /// <returns>The cloned object</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         public object Clone()
         {
             var Temp = new FileType();

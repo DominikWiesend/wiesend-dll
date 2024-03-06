@@ -75,7 +75,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Linq;
 
 namespace Wiesend.DataTypes
@@ -85,6 +85,7 @@ namespace Wiesend.DataTypes
     /// </summary>
     /// <typeparam name="Key">Key type</typeparam>
     /// <typeparam name="Value">Value type</typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public class TagDictionary<Key, Value> : IDictionary<Key, IEnumerable<Value>>
     {
         /// <summary>
@@ -99,6 +100,7 @@ namespace Wiesend.DataTypes
         /// <summary>
         /// Number of items in the dictionary
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1829:Use Length/Count property instead of Count() when available", Justification = "<Pending>")]
         public int Count
         {
             get { return Items.Count(); }
@@ -171,9 +173,9 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Value">Value to add</param>
         /// <param name="Keys">Keys to associate the value with</param>
-        public void Add(Value Value, params Key[] Keys)
+        public void Add(Value Value, [NotNull] params Key[] Keys)
         {
-            Contract.Requires<ArgumentNullException>(Keys != null, "Keys");
+            if (Keys == null) throw new ArgumentNullException(nameof(Keys));
             Items.Add(new TaggedItem<Key, Value>(Keys, Value));
             Keys.ForEach(x => KeyList.AddIfUnique(x));
         }
@@ -281,6 +283,7 @@ namespace Wiesend.DataTypes
         /// <param name="key">Key</param>
         /// <param name="value">Values associated with a key</param>
         /// <returns>True if something is returned, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1827:Do not use Count() or LongCount() when Any() can be used", Justification = "<Pending>")]
         public bool TryGetValue(Key key, out IEnumerable<Value> value)
         {
             value = new List<Value>();

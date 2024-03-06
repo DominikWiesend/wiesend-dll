@@ -74,7 +74,7 @@
 
 using System;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.Globalization;
 using System.IO.Compression;
 using System.Text;
@@ -100,9 +100,9 @@ namespace Wiesend.Web
         /// <summary>
         /// Returns the absolute root
         /// </summary>
-        public static Uri AbsoluteRoot(this HttpContextBase Context)
+        public static Uri AbsoluteRoot([NotNull] this HttpContextBase Context)
         {
-            Contract.Requires<ArgumentNullException>(Context != null, "Context");
+            if (Context == null) throw new ArgumentNullException(nameof(Context), "Context");
             if (Context.Items["absoluteurl"] == null)
                 Context.Items["absoluteurl"] = new Uri(Context.Request.Url.GetLeftPart(UriPartial.Authority) + Context.RelativeRoot());
             return Context.Items["absoluteurl"] as Uri;
@@ -111,9 +111,9 @@ namespace Wiesend.Web
         /// <summary>
         /// Returns the absolute root
         /// </summary>
-        public static Uri AbsoluteRoot(this HttpContext Context)
+        public static Uri AbsoluteRoot([NotNull] this HttpContext Context)
         {
-            Contract.Requires<ArgumentNullException>(Context != null, "Context");
+            if (Context == null) throw new ArgumentNullException(nameof(Context), "Context");
             if (Context.Items["absoluteurl"] == null)
                 Context.Items["absoluteurl"] = new Uri(Context.Request.Url.GetLeftPart(UriPartial.Authority) + Context.RelativeRoot());
             return Context.Items["absoluteurl"] as Uri;
@@ -124,11 +124,11 @@ namespace Wiesend.Web
         /// </summary>
         /// <param name="File">Script file</param>
         /// <param name="Page">Page to add it to</param>
-        public static void AddScriptFile(this System.Web.UI.Page Page, FileInfo File)
+        public static void AddScriptFile([NotNull] this System.Web.UI.Page Page, [NotNull] FileInfo File)
         {
-            Contract.Requires<ArgumentNullException>(File != null, "File");
-            Contract.Requires<System.IO.FileNotFoundException>(File.Exists, "File does not exist");
-            Contract.Requires<ArgumentNullException>(Page != null, "Page");
+            if (File == null) throw new ArgumentNullException(nameof(File), "File");
+            if (!(File.Exists)) throw new System.IO.FileNotFoundException(nameof(File), "File does not exist");
+            if (Page == null) throw new ArgumentNullException(nameof(Page), "Page");
             if (!Page.ClientScript.IsClientScriptIncludeRegistered(typeof(System.Web.UI.Page), File.FullName))
                 Page.ClientScript.RegisterClientScriptInclude(typeof(System.Web.UI.Page), File.FullName, File.FullName);
         }
@@ -148,9 +148,9 @@ namespace Wiesend.Web
         /// </summary>
         /// <param name="Input">Input file to check</param>
         /// <returns>false if it does not contain HTML, true otherwise</returns>
-        public static bool ContainsHTML(this FileInfo Input)
+        public static bool ContainsHTML([NotNull] this FileInfo Input)
         {
-            Contract.Requires<ArgumentNullException>(Input != null, "Input");
+            if (Input == null) throw new ArgumentNullException(nameof(Input), "Input");
             return Input.Exists && Input.Read().ContainsHTML();
         }
 
@@ -165,9 +165,9 @@ namespace Wiesend.Web
         /// The minification type to use (defaults to HTML if RemovePrettyPrinting is set to true,
         /// but can also deal with CSS and Javascript)
         /// </param>
-        public static void HTTPCompress(this HttpContextBase Context, bool RemovePrettyPrinting = false, MinificationType Type = MinificationType.HTML)
+        public static void HTTPCompress([NotNull] this HttpContextBase Context, bool RemovePrettyPrinting = false, MinificationType Type = MinificationType.HTML)
         {
-            Contract.Requires<ArgumentNullException>(Context != null, "Context");
+            if (Context == null) throw new ArgumentNullException(nameof(Context), "Context");
             if (Context.Request.UserAgent != null && Context.Request.UserAgent.Contains("MSIE 6"))
                 return;
             Context.Response.Filter = RemovePrettyPrinting ? (System.IO.Stream)new UglyStream(Context.Response.Filter, CompressionType.GZip, Type) : new GZipStream(Context.Response.Filter, CompressionMode.Compress);
@@ -184,9 +184,9 @@ namespace Wiesend.Web
         /// The minification type to use (defaults to HTML if RemovePrettyPrinting is set to true,
         /// but can also deal with CSS and Javascript)
         /// </param>
-        public static void HTTPCompress(this HttpContext Context, bool RemovePrettyPrinting = false, MinificationType Type = MinificationType.HTML)
+        public static void HTTPCompress([NotNull] this HttpContext Context, bool RemovePrettyPrinting = false, MinificationType Type = MinificationType.HTML)
         {
-            Contract.Requires<ArgumentNullException>(Context != null, "Context");
+            if (Context == null) throw new ArgumentNullException(nameof(Context), "Context");
             if (Context.Request.UserAgent != null && Context.Request.UserAgent.Contains("MSIE 6"))
                 return;
             Context.Response.Filter = RemovePrettyPrinting ? (System.IO.Stream)new UglyStream(Context.Response.Filter, CompressionType.GZip, Type) : new GZipStream(Context.Response.Filter, CompressionMode.Compress);
@@ -265,9 +265,9 @@ namespace Wiesend.Web
         /// </summary>
         /// <param name="Encoding">Encoding to set</param>
         /// <param name="Context">Context to set the encoding on</param>
-        public static void SetEncoding(this HttpContextBase Context, string Encoding)
+        public static void SetEncoding([NotNull] this HttpContextBase Context, string Encoding)
         {
-            Contract.Requires<ArgumentNullException>(Context != null, "Context");
+            if (Context == null) throw new ArgumentNullException(nameof(Context), "Context");
             Context.Response.AppendHeader("Content-encoding", Encoding);
         }
 
@@ -276,9 +276,9 @@ namespace Wiesend.Web
         /// </summary>
         /// <param name="Encoding">Encoding to set</param>
         /// <param name="Context">Context to set the encoding on</param>
-        public static void SetEncoding(this HttpContext Context, string Encoding)
+        public static void SetEncoding([NotNull] this HttpContext Context, string Encoding)
         {
-            Contract.Requires<ArgumentNullException>(Context != null, "Context");
+            if (Context == null) throw new ArgumentNullException(nameof(Context), "Context");
             Context.Response.AppendHeader("Content-encoding", Encoding);
         }
 
@@ -301,10 +301,10 @@ namespace Wiesend.Web
         /// </summary>
         /// <param name="HTML">HTML laiden file</param>
         /// <returns>HTML-less string</returns>
-        public static string StripHTML(this FileInfo HTML)
+        public static string StripHTML([NotNull] this FileInfo HTML)
         {
-            Contract.Requires<ArgumentNullException>(HTML != null, "HTML");
-            Contract.Requires<System.IO.FileNotFoundException>(HTML.Exists, "File does not exist");
+            if (HTML == null) throw new ArgumentNullException(nameof(HTML), "HTML");
+            if (!(HTML.Exists)) throw new System.IO.FileNotFoundException(nameof(HTML), "File does not exist");
             return HTML.Read().StripHTML();
         }
 

@@ -72,7 +72,6 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-#if NETFULL
 using System;
 using System.Globalization;
 using System.IO;
@@ -107,7 +106,8 @@ namespace Wiesend.IO.Serializers.Default
         /// <summary>
         /// JSONP regex filter
         /// </summary>
-        private static Regex JsonPRegex = new Regex(@"[^\(]+\(([^\)]*)\);", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
+        private static Regex JsonPRegex = new(@"[^\(]+\(([^\)]*)\);", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         /// <summary>
         /// Deserializes the data
@@ -120,11 +120,9 @@ namespace Wiesend.IO.Serializers.Default
             if (string.IsNullOrEmpty(Data) || ObjectType == null)
                 return null;
             Data = JsonPRegex.Replace(Data, "$1");
-            using (MemoryStream Stream = new MemoryStream(Encoding.UTF8.GetBytes(Data)))
-            {
-                var Serializer = new DataContractJsonSerializer(ObjectType);
-                return Serializer.ReadObject(Stream);
-            }
+            using MemoryStream Stream = new(Encoding.UTF8.GetBytes(Data));
+            var Serializer = new DataContractJsonSerializer(ObjectType);
+            return Serializer.ReadObject(Stream);
         }
 
         /// <summary>
@@ -138,12 +136,13 @@ namespace Wiesend.IO.Serializers.Default
             if (Data == null || ObjectType == null)
                 return null;
             string ReturnValue = "";
-            using (MemoryStream Stream = new MemoryStream())
+            using (MemoryStream Stream = new())
             {
                 var Serializer = new DataContractJsonSerializer(Data.GetType());
                 Serializer.WriteObject(Stream, Data);
                 Stream.Flush();
                 ReturnValue = Encoding.UTF8.GetString(Stream.GetBuffer(), 0, (int)Stream.Position);
+#if NETFRAMEWORK
                 if (HttpContext.Current != null)
                 {
                     HttpRequest Request = HttpContext.Current.Request;
@@ -153,9 +152,9 @@ namespace Wiesend.IO.Serializers.Default
                         ReturnValue = string.Format(CultureInfo.InvariantCulture, "{0}({1});", Callback, ReturnValue);
                     }
                 }
+#endif
             }
             return ReturnValue;
         }
     }
 }
-#endif

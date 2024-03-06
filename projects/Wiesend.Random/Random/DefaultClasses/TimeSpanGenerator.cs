@@ -122,7 +122,7 @@ namespace Wiesend.Random.DefaultClasses
         /// <returns>The next object</returns>
         public override object NextObj(System.Random Rand)
         {
-            if ((TimeSpan)Min != default(TimeSpan) || (TimeSpan)Max != default(TimeSpan))
+            if ((TimeSpan)Min != default || (TimeSpan)Max != default)
                 return Next(Rand, (TimeSpan)Min, (TimeSpan)Max);
             return Next(Rand);
         }

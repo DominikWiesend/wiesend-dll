@@ -75,7 +75,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
+using JetBrains.Annotations;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -99,16 +99,16 @@ namespace Wiesend.DataTypes
         /// When true, it looks up the heirarchy chain for the inherited custom attributes
         /// </param>
         /// <returns>Attribute specified if it exists</returns>
-        public static T Attribute<T>(this ICustomAttributeProvider Provider, bool Inherit = true) where T : Attribute
+        public static T Attribute<T>([NotNull] this ICustomAttributeProvider Provider, bool Inherit = true) where T : Attribute
         {
-            Contract.Requires<ArgumentNullException>(Provider != null, "Provider");
+            if (Provider == null) throw new ArgumentNullException(nameof(Provider));
             if (Provider.IsDefined(typeof(T), Inherit))
             {
                 var Attributes = Provider.Attributes<T>(Inherit);
                 if (Attributes.Length > 0)
                     return Attributes[0];
             }
-            return default(T);
+            return default;
         }
 
         /// <summary>
@@ -120,9 +120,10 @@ namespace Wiesend.DataTypes
         /// When true, it looks up the heirarchy chain for the inherited custom attributes
         /// </param>
         /// <returns>Array of attributes</returns>
-        public static T[] Attributes<T>(this ICustomAttributeProvider Provider, bool Inherit = true) where T : Attribute
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
+        public static T[] Attributes<T>([NotNull] this ICustomAttributeProvider Provider, bool Inherit = true) where T : Attribute
         {
-            Contract.Requires<ArgumentNullException>(Provider != null, "Provider");
+            if (Provider == null) throw new ArgumentNullException(nameof(Provider));
             return Provider.IsDefined(typeof(T), Inherit) ? Provider.GetCustomAttributes(typeof(T), Inherit).ToArray(x => (T)x) : new T[0];
         }
 
@@ -134,10 +135,15 @@ namespace Wiesend.DataTypes
         /// <param name="InputVariables">(Optional)input variables for the method</param>
         /// <typeparam name="ReturnType">Return type expected</typeparam>
         /// <returns>The returned value of the method</returns>
-        public static ReturnType Call<ReturnType>(this object Object, string MethodName, params object[] InputVariables)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0270:Use coalesce expression", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
+        public static ReturnType Call<ReturnType>([NotNull] this object Object, [NotNull] string MethodName, params object[] InputVariables)
         {
-            Contract.Requires<ArgumentNullException>(Object != null, "Object");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(MethodName), "MethodName");
+            if (Object == null) throw new ArgumentNullException(nameof(Object));
+            if (string.IsNullOrEmpty(MethodName)) throw new ArgumentNullException(nameof(MethodName));
             if (InputVariables == null)
                 InputVariables = new object[0];
             var ObjectType = Object.GetType();
@@ -159,10 +165,15 @@ namespace Wiesend.DataTypes
         /// <typeparam name="ReturnType">Return type expected</typeparam>
         /// <typeparam name="GenericType1">Generic method type 1</typeparam>
         /// <returns>The returned value of the method</returns>
-        public static ReturnType Call<GenericType1, ReturnType>(this object Object, string MethodName, params object[] InputVariables)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0270:Use coalesce expression", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
+        public static ReturnType Call<GenericType1, ReturnType>([NotNull] this object Object, [NotNull] string MethodName, params object[] InputVariables)
         {
-            Contract.Requires<ArgumentNullException>(Object != null, "Object");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(MethodName), "MethodName");
+            if (Object == null) throw new ArgumentNullException(nameof(Object));
+            if (string.IsNullOrEmpty(MethodName)) throw new ArgumentNullException(nameof(MethodName));
             if (InputVariables == null)
                 InputVariables = new object[0];
             var ObjectType = Object.GetType();
@@ -186,10 +197,15 @@ namespace Wiesend.DataTypes
         /// <typeparam name="GenericType1">Generic method type 1</typeparam>
         /// <typeparam name="GenericType2">Generic method type 2</typeparam>
         /// <returns>The returned value of the method</returns>
-        public static ReturnType Call<GenericType1, GenericType2, ReturnType>(this object Object, string MethodName, params object[] InputVariables)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0270:Use coalesce expression", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
+        public static ReturnType Call<GenericType1, GenericType2, ReturnType>([NotNull] this object Object, [NotNull] string MethodName, params object[] InputVariables)
         {
-            Contract.Requires<ArgumentNullException>(Object != null, "Object");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(MethodName), "MethodName");
+            if (Object == null) throw new ArgumentNullException(nameof(Object));
+            if (string.IsNullOrEmpty(MethodName)) throw new ArgumentNullException(nameof(MethodName));
             if (InputVariables == null)
                 InputVariables = new object[0];
             var ObjectType = Object.GetType();
@@ -214,10 +230,15 @@ namespace Wiesend.DataTypes
         /// <typeparam name="GenericType2">Generic method type 2</typeparam>
         /// <typeparam name="GenericType3">Generic method type 3</typeparam>
         /// <returns>The returned value of the method</returns>
-        public static ReturnType Call<GenericType1, GenericType2, GenericType3, ReturnType>(this object Object, string MethodName, params object[] InputVariables)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0270:Use coalesce expression", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
+        public static ReturnType Call<GenericType1, GenericType2, GenericType3, ReturnType>([NotNull] this object Object, [NotNull] string MethodName, params object[] InputVariables)
         {
-            Contract.Requires<ArgumentNullException>(Object != null, "Object");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(MethodName), "MethodName");
+            if (Object == null) throw new ArgumentNullException(nameof(Object));
+            if (string.IsNullOrEmpty(MethodName)) throw new ArgumentNullException(nameof(MethodName));
             if (InputVariables == null)
                 InputVariables = new object[0];
             var ObjectType = Object.GetType();
@@ -239,10 +260,14 @@ namespace Wiesend.DataTypes
         /// <param name="InputVariables">(Optional)input variables for the method</param>
         /// <typeparam name="ReturnType">Return type expected</typeparam>
         /// <returns>The returned value of the method</returns>
-        public static ReturnType Call<ReturnType>(this object Object, MethodInfo Method, params object[] InputVariables)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
+        public static ReturnType Call<ReturnType>([NotNull] this object Object, [NotNull] MethodInfo Method, params object[] InputVariables)
         {
-            Contract.Requires<ArgumentNullException>(Object != null, "Object");
-            Contract.Requires<ArgumentNullException>(Method != null, "Method");
+            if (Object == null) throw new ArgumentNullException(nameof(Object));
+            if (Method == null) throw new ArgumentNullException(nameof(Method));
             if (InputVariables == null)
                 InputVariables = new object[0];
             return (ReturnType)Method.Invoke(Object, InputVariables);
@@ -255,9 +280,10 @@ namespace Wiesend.DataTypes
         /// <param name="Type">Type to create an instance of</param>
         /// <param name="args">Arguments sent into the constructor</param>
         /// <returns>The newly created instance of the type</returns>
-        public static ClassType Create<ClassType>(this Type Type, params object[] args)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static ClassType Create<ClassType>([NotNull] this Type Type, params object[] args)
         {
-            Contract.Requires<ArgumentNullException>(Type != null, "Type");
+            if (Type == null) throw new ArgumentNullException(nameof(Type));
             return (ClassType)Type.Create(args);
         }
 
@@ -267,9 +293,9 @@ namespace Wiesend.DataTypes
         /// <param name="Type">Type to create an instance of</param>
         /// <param name="args">Arguments sent into the constructor</param>
         /// <returns>The newly created instance of the type</returns>
-        public static object Create(this Type Type, params object[] args)
+        public static object Create([NotNull] this Type Type, params object[] args)
         {
-            Contract.Requires<ArgumentNullException>(Type != null, "Type");
+            if (Type == null) throw new ArgumentNullException(nameof(Type));
             return Activator.CreateInstance(Type, args);
         }
 
@@ -280,9 +306,10 @@ namespace Wiesend.DataTypes
         /// <param name="Types">Types to create an instance of</param>
         /// <param name="args">Arguments sent into the constructor</param>
         /// <returns>The newly created instance of the types</returns>
-        public static IEnumerable<ClassType> Create<ClassType>(this IEnumerable<Type> Types, params object[] args)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static IEnumerable<ClassType> Create<ClassType>([NotNull] this IEnumerable<Type> Types, params object[] args)
         {
-            Contract.Requires<ArgumentNullException>(Types != null, "Type");
+            if (Types == null) throw new ArgumentNullException(nameof(Types));
             return Types.ForEach(x => x.Create<ClassType>(args));
         }
 
@@ -292,9 +319,9 @@ namespace Wiesend.DataTypes
         /// <param name="Types">Types to create an instance of</param>
         /// <param name="args">Arguments sent into the constructor</param>
         /// <returns>The newly created instance of the types</returns>
-        public static IEnumerable<object> Create(this IEnumerable<Type> Types, params object[] args)
+        public static IEnumerable<object> Create([NotNull] this IEnumerable<Type> Types, params object[] args)
         {
-            Contract.Requires<ArgumentNullException>(Types != null, "Type");
+            if (Types == null) throw new ArgumentNullException(nameof(Types));
             return Types.ForEach(x => x.Create(args));
         }
 
@@ -303,9 +330,9 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="ObjectType">Type to get the name of</param>
         /// <returns>string name of the type</returns>
-        public static string GetName(this Type ObjectType)
+        public static string GetName([NotNull] this Type ObjectType)
         {
-            Contract.Requires<ArgumentNullException>(ObjectType != null, "ObjectType");
+            if (ObjectType == null) throw new ArgumentNullException(nameof(ObjectType));
             var Output = new StringBuilder();
             if (ObjectType.Name == "Void")
             {
@@ -314,19 +341,19 @@ namespace Wiesend.DataTypes
             else
             {
                 Output.Append(ObjectType.DeclaringType == null ? ObjectType.Namespace : ObjectType.DeclaringType.GetName())
-                    .Append(".");
-                if (ObjectType.Name.Contains("`"))
+                    .Append('.');
+                if (ObjectType.Name.Contains('`'))
                 {
                     var GenericTypes = ObjectType.GetGenericArguments();
                     Output.Append(ObjectType.Name.Remove(ObjectType.Name.IndexOf("`", StringComparison.OrdinalIgnoreCase)))
-                        .Append("<");
+                        .Append('<');
                     string Seperator = "";
                     foreach (Type GenericType in GenericTypes)
                     {
                         Output.Append(Seperator).Append(GenericType.GetName());
                         Seperator = ",";
                     }
-                    Output.Append(">");
+                    Output.Append('>');
                 }
                 else
                 {
@@ -341,9 +368,9 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Type">Type to check</param>
         /// <returns>True if it does, false otherwise</returns>
-        public static bool HasDefaultConstructor(this Type Type)
+        public static bool HasDefaultConstructor([NotNull] this Type Type)
         {
-            Contract.Requires<ArgumentNullException>(Type != null, "Type");
+            if (Type == null) throw new ArgumentNullException(nameof(Type));
             return Type.GetConstructors(BindingFlags.Public | BindingFlags.Instance)
                         .Any(x => x.GetParameters().Length == 0);
         }
@@ -354,10 +381,11 @@ namespace Wiesend.DataTypes
         /// <param name="Object">Object</param>
         /// <param name="Type">Type</param>
         /// <returns>True if it is, false otherwise</returns>
-        public static bool Is(this object Object, Type Type)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        public static bool Is([NotNull] this object Object, [NotNull] Type Type)
         {
-            Contract.Requires<ArgumentNullException>(Object != null, "Object");
-            Contract.Requires<ArgumentNullException>(Type != null, "Type");
+            if (Object == null) throw new ArgumentNullException(nameof(Object));
+            if (Type == null) throw new ArgumentNullException(nameof(Type));
             return Object.GetType().Is(Type);
         }
 
@@ -367,9 +395,9 @@ namespace Wiesend.DataTypes
         /// <param name="ObjectType">Object type</param>
         /// <param name="Type">Type</param>
         /// <returns>True if it is, false otherwise</returns>
-        public static bool Is(this Type ObjectType, Type Type)
+        public static bool Is(this Type ObjectType, [NotNull] Type Type)
         {
-            Contract.Requires<ArgumentNullException>(Type != null, "Type");
+            if (Type == null) throw new ArgumentNullException(nameof(Type));
             if (ObjectType == null)
                 return false;
             if (Type == typeof(object))
@@ -387,9 +415,11 @@ namespace Wiesend.DataTypes
         /// <param name="Object">Object</param>
         /// <typeparam name="BaseObjectType">Base object type</typeparam>
         /// <returns>True if it is, false otherwise</returns>
-        public static bool Is<BaseObjectType>(this object Object)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        public static bool Is<BaseObjectType>([NotNull] this object Object)
         {
-            Contract.Requires<ArgumentNullException>(Object != null, "Object");
+            if (Object == null) throw new ArgumentNullException(nameof(Object));
             return Object.Is(typeof(BaseObjectType));
         }
 
@@ -399,9 +429,10 @@ namespace Wiesend.DataTypes
         /// <param name="ObjectType">Object type</param>
         /// <typeparam name="BaseObjectType">Base object type</typeparam>
         /// <returns>True if it is, false otherwise</returns>
-        public static bool Is<BaseObjectType>(this Type ObjectType)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static bool Is<BaseObjectType>([NotNull] this Type ObjectType)
         {
-            Contract.Requires<ArgumentNullException>(ObjectType != null, "ObjectType");
+            if (ObjectType == null) throw new ArgumentNullException(nameof(ObjectType));
             return ObjectType.Is(typeof(BaseObjectType));
         }
 
@@ -410,9 +441,9 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Name">Name of the assembly to return</param>
         /// <returns>The assembly specified if it exists</returns>
-        public static System.Reflection.Assembly Load(this AssemblyName Name)
+        public static System.Reflection.Assembly Load([NotNull] this AssemblyName Name)
         {
-            Contract.Requires<ArgumentNullException>(Name != null, "Name");
+            if (Name == null) throw new ArgumentNullException(nameof(Name));
             try
             {
                 return AppDomain.CurrentDomain.Load(Name);
@@ -426,9 +457,9 @@ namespace Wiesend.DataTypes
         /// <param name="Directory">The directory to search in</param>
         /// <param name="Recursive">Determines whether to search recursively or not</param>
         /// <returns>Array of assemblies in the directory</returns>
-        public static IEnumerable<Assembly> LoadAssemblies(this DirectoryInfo Directory, bool Recursive = false)
+        public static IEnumerable<Assembly> LoadAssemblies([NotNull] this DirectoryInfo Directory, bool Recursive = false)
         {
-            Contract.Requires<ArgumentNullException>(Directory != null, "Directory");
+            if (Directory == null) throw new ArgumentNullException(nameof(Directory));
             var Assemblies = new List<Assembly>();
             foreach (FileInfo File in Directory.GetFiles("*.dll", Recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly))
             {
@@ -450,10 +481,11 @@ namespace Wiesend.DataTypes
         /// false copies everything.
         /// </param>
         /// <returns>A copy of the object</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         public static T MakeShallowCopy<T>(this T Object, bool SimpleTypesOnly = false)
         {
             if (Object == null)
-                return default(T);
+                return default;
             var ObjectType = Object.GetType();
             var ClassInstance = ObjectType.Create<T>();
             foreach (PropertyInfo Property in ObjectType.GetProperties())
@@ -513,9 +545,10 @@ namespace Wiesend.DataTypes
         /// <param name="Assembly">Assembly to search within</param>
         /// <param name="Args">Args used to create the object</param>
         /// <returns>A list of objects that are of the type specified</returns>
-        public static IEnumerable<ClassType> Objects<ClassType>(this Assembly Assembly, params object[] Args)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static IEnumerable<ClassType> Objects<ClassType>([NotNull] this Assembly Assembly, params object[] Args)
         {
-            Contract.Requires<ArgumentNullException>(Assembly != null, "Assembly");
+            if (Assembly == null) throw new ArgumentNullException(nameof(Assembly));
             return Assembly.Types<ClassType>().Where(x => !x.ContainsGenericParameters).Create<ClassType>(Args);
         }
 
@@ -527,9 +560,10 @@ namespace Wiesend.DataTypes
         /// <param name="Assemblies">Assemblies to search within</param>
         /// <param name="Args">Args used to create the object</param>
         /// <returns>A list of objects that are of the type specified</returns>
-        public static IEnumerable<ClassType> Objects<ClassType>(this IEnumerable<Assembly> Assemblies, params object[] Args)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static IEnumerable<ClassType> Objects<ClassType>([NotNull] this IEnumerable<Assembly> Assemblies, params object[] Args)
         {
-            Contract.Requires<ArgumentNullException>(Assemblies != null, "Assemblies");
+            if (Assemblies == null) throw new ArgumentNullException(nameof(Assemblies));
             var ReturnValues = new List<ClassType>();
             foreach (Assembly Assembly in Assemblies)
                 ReturnValues.AddRange(Assembly.Objects<ClassType>(Args));
@@ -545,9 +579,10 @@ namespace Wiesend.DataTypes
         /// <param name="Recursive">Should this be recursive</param>
         /// <param name="Args">Args used to create the object</param>
         /// <returns>A list of objects that are of the type specified</returns>
-        public static IEnumerable<ClassType> Objects<ClassType>(this DirectoryInfo Directory, bool Recursive, params object[] Args)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static IEnumerable<ClassType> Objects<ClassType>([NotNull] this DirectoryInfo Directory, bool Recursive, params object[] Args)
         {
-            Contract.Requires<ArgumentNullException>(Directory != null, "Directory");
+            if (Directory == null) throw new ArgumentNullException(nameof(Directory));
             return Directory.LoadAssemblies(Recursive).Objects<ClassType>(Args);
         }
 
@@ -557,10 +592,11 @@ namespace Wiesend.DataTypes
         /// <param name="Object">The object to get the property of</param>
         /// <param name="Property">The property to get</param>
         /// <returns>Returns the property's value</returns>
-        public static object Property(this object Object, PropertyInfo Property)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        public static object Property([NotNull] this object Object, [NotNull] PropertyInfo Property)
         {
-            Contract.Requires<ArgumentNullException>(Object != null, "Object");
-            Contract.Requires<ArgumentNullException>(Property != null, "Property");
+            if (Object == null) throw new ArgumentNullException(nameof(Object));
+            if (Property == null) throw new ArgumentNullException(nameof(Property));
             return Property.GetValue(Object, null);
         }
 
@@ -570,10 +606,14 @@ namespace Wiesend.DataTypes
         /// <param name="Object">The object to get the property of</param>
         /// <param name="Property">The property to get</param>
         /// <returns>Returns the property's value</returns>
-        public static object Property(this object Object, string Property)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0056:Use index operator", Justification = "<Pending>")]
+        public static object Property([NotNull] this object Object, [NotNull] string Property)
         {
-            Contract.Requires<ArgumentNullException>(Object != null, "Object");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(Property), "Property");
+            if (Object == null) throw new ArgumentNullException(nameof(Object));
+            if (string.IsNullOrEmpty(Property)) throw new ArgumentNullException(nameof(Property));
             var Properties = Property.Split(new string[] { "." }, StringSplitOptions.None);
             object TempObject = Object;
             var TempObjectType = TempObject.GetType();
@@ -599,11 +639,12 @@ namespace Wiesend.DataTypes
         /// <param name="Property">The property to set</param>
         /// <param name="Value">Value to set the property to</param>
         /// <param name="Format">Allows for formatting if the destination is a string</param>
-        public static object Property(this object Object, PropertyInfo Property, object Value, string Format = "")
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        public static object Property([NotNull] this object Object, [NotNull] PropertyInfo Property, [NotNull] object Value, string Format = "")
         {
-            Contract.Requires<ArgumentNullException>(Object != null, "Object");
-            Contract.Requires<ArgumentNullException>(Property != null, "Property");
-            Contract.Requires<ArgumentNullException>(Value != null, "Value");
+            if (Object == null) throw new ArgumentNullException(nameof(Object));
+            if (Property == null) throw new ArgumentNullException(nameof(Property));
+            if (Value == null) throw new ArgumentNullException(nameof(Value));
             if (Property.PropertyType == typeof(string))
                 Value = Value.FormatToString(Format);
             Property.SetValue(Object, Value.To(Property.PropertyType, null), null);
@@ -617,11 +658,15 @@ namespace Wiesend.DataTypes
         /// <param name="Property">The property to set</param>
         /// <param name="Value">Value to set the property to</param>
         /// <param name="Format">Allows for formatting if the destination is a string</param>
-        public static object Property(this object Object, string Property, object Value, string Format = "")
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0056:Use index operator", Justification = "<Pending>")]
+        public static object Property([NotNull] this object Object, [NotNull] string Property, [NotNull] object Value, string Format = "")
         {
-            Contract.Requires<ArgumentNullException>(Object != null, "Object");
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(Property), "Property");
-            Contract.Requires<ArgumentNullException>(Value != null, "Value");
+            if (Object == null) throw new ArgumentNullException(nameof(Object));
+            if (string.IsNullOrEmpty(Property)) throw new ArgumentNullException(nameof(Property));
+            if (Value == null) throw new ArgumentNullException(nameof(Value));
             var Properties = Property.Split(new string[] { "." }, StringSplitOptions.None);
             object TempObject = Object;
             var TempObjectType = TempObject.GetType();
@@ -648,9 +693,10 @@ namespace Wiesend.DataTypes
         /// <typeparam name="DataType">Data type expecting</typeparam>
         /// <param name="Property">Property</param>
         /// <returns>A lambda expression that calls a specific property's getter function</returns>
-        public static Expression<Func<ClassType, DataType>> PropertyGetter<ClassType, DataType>(this PropertyInfo Property)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static Expression<Func<ClassType, DataType>> PropertyGetter<ClassType, DataType>([NotNull] this PropertyInfo Property)
         {
-            Contract.Requires<ArgumentNullException>(Property != null, "Property");
+            if (Property == null) throw new ArgumentNullException(nameof(Property));
             if (!Property.PropertyType.Is(typeof(DataType)))
                 throw new ArgumentException("Property is not of the type specified");
             if (!Property.DeclaringType.Is(typeof(ClassType)) && !typeof(ClassType).Is(Property.DeclaringType))
@@ -671,9 +717,10 @@ namespace Wiesend.DataTypes
         /// <typeparam name="ClassType">Class type</typeparam>
         /// <param name="Property">Property</param>
         /// <returns>A lambda expression that calls a specific property's getter function</returns>
-        public static Expression<Func<ClassType, object>> PropertyGetter<ClassType>(this PropertyInfo Property)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static Expression<Func<ClassType, object>> PropertyGetter<ClassType>([NotNull] this PropertyInfo Property)
         {
-            Contract.Requires<ArgumentNullException>(Property != null, "Property");
+            if (Property == null) throw new ArgumentNullException(nameof(Property));
             return Property.PropertyGetter<ClassType, object>();
         }
 
@@ -682,9 +729,11 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Expression">LINQ expression</param>
         /// <returns>The name of the property</returns>
-        public static string PropertyName(this LambdaExpression Expression)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0083:Use pattern matching", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0038:Use pattern matching", Justification = "<Pending>")]
+        public static string PropertyName([NotNull] this LambdaExpression Expression)
         {
-            Contract.Requires<ArgumentNullException>(Expression != null, "Expression");
+            if (Expression == null) throw new ArgumentNullException(nameof(Expression));
             if (Expression.Body is UnaryExpression && Expression.Body.NodeType == ExpressionType.Convert)
             {
                 var Temp = (MemberExpression)((UnaryExpression)Expression.Body).Operand;
@@ -700,9 +749,10 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Expression">LINQ expression</param>
         /// <returns>The name of the property</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
         public static string PropertyName(this Expression Expression)
         {
-            var TempExpression = Expression as MemberExpression;
+            MemberExpression TempExpression = Expression as MemberExpression;
             if (TempExpression == null)
                 return "";
             return TempExpression.Expression.PropertyName() + TempExpression.Member.Name + ".";
@@ -715,9 +765,12 @@ namespace Wiesend.DataTypes
         /// <typeparam name="DataType">Data type expecting</typeparam>
         /// <param name="Property">Property</param>
         /// <returns>A lambda expression that calls a specific property's setter function</returns>
-        public static Expression<Action<ClassType, DataType>> PropertySetter<ClassType, DataType>(this LambdaExpression Property)//Expression<Func<ClassType, DataType>> Property)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0056:Use index operator", Justification = "<Pending>")]
+        public static Expression<Action<ClassType, DataType>> PropertySetter<ClassType, DataType>([NotNull] this LambdaExpression Property)//Expression<Func<ClassType, DataType>> Property)
         {
-            Contract.Requires<ArgumentNullException>(Property != null, "Property");
+            if (Property == null) throw new ArgumentNullException(nameof(Property));
             var PropertyName = Property.PropertyName();
             var SplitName = PropertyName.Split(new string[] { "." }, StringSplitOptions.RemoveEmptyEntries);
             if (SplitName.Length == 0)
@@ -767,9 +820,10 @@ namespace Wiesend.DataTypes
         /// <typeparam name="ClassType">Class type</typeparam>
         /// <param name="Property">Property</param>
         /// <returns>A lambda expression that calls a specific property's setter function</returns>
-        public static Expression<Action<ClassType, object>> PropertySetter<ClassType>(this LambdaExpression Property)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static Expression<Action<ClassType, object>> PropertySetter<ClassType>([NotNull] this LambdaExpression Property)
         {
-            Contract.Requires<ArgumentNullException>(Property != null, "Property");
+            if (Property == null) throw new ArgumentNullException(nameof(Property));
             return Property.PropertySetter<ClassType, object>();
         }
 
@@ -782,6 +836,7 @@ namespace Wiesend.DataTypes
         /// which then has a Prop2 on it, which in turn has a Prop3 on it.)
         /// </param>
         /// <returns>The type of the property specified or null if it can not be reached.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         public static Type PropertyType(this object Object, string PropertyPath)
         {
             if (Object == null || string.IsNullOrEmpty(PropertyPath))
@@ -798,6 +853,7 @@ namespace Wiesend.DataTypes
         /// which then has a Prop2 on it, which in turn has a Prop3 on it.)
         /// </param>
         /// <returns>The type of the property specified or null if it can not be reached.</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
         public static Type PropertyType(this Type ObjectType, string PropertyPath)
         {
             if (ObjectType == null || string.IsNullOrEmpty(PropertyPath))
@@ -818,9 +874,9 @@ namespace Wiesend.DataTypes
         /// <param name="Assembly">Assembly to get version information from</param>
         /// <param name="InfoType">Version info type</param>
         /// <returns>The version information as a string</returns>
-        public static string ToString(this Assembly Assembly, VersionInfo InfoType)
+        public static string ToString([NotNull] this Assembly Assembly, VersionInfo InfoType)
         {
-            Contract.Requires<ArgumentNullException>(Assembly != null, "Assembly");
+            if (Assembly == null) throw new ArgumentNullException(nameof(Assembly));
             if (InfoType.HasFlag(VersionInfo.ShortVersion))
             {
                 Version Version = Assembly.GetName().Version;
@@ -838,9 +894,9 @@ namespace Wiesend.DataTypes
         /// <param name="Assemblies">Assemblies to get version information from</param>
         /// <param name="InfoType">Version info type</param>
         /// <returns>The version information as a string</returns>
-        public static string ToString(this IEnumerable<Assembly> Assemblies, VersionInfo InfoType)
+        public static string ToString([NotNull] this IEnumerable<Assembly> Assemblies, VersionInfo InfoType)
         {
-            Contract.Requires<ArgumentNullException>(Assemblies != null, "Assemblies");
+            if (Assemblies == null) throw new ArgumentNullException(nameof(Assemblies));
             var Builder = new StringBuilder();
             Assemblies.OrderBy(x => x.FullName).ForEach<Assembly>(x => Builder.AppendLine(x.GetName().Name + ": " + x.ToString(InfoType)));
             return Builder.ToString();
@@ -852,9 +908,9 @@ namespace Wiesend.DataTypes
         /// <param name="Assemblies">Assemblies to dump information from</param>
         /// <param name="HTMLOutput">Should HTML output be used</param>
         /// <returns>An HTML formatted string containing the assembly information</returns>
-        public static string ToString(this IEnumerable<Assembly> Assemblies, bool HTMLOutput)
+        public static string ToString([NotNull] this IEnumerable<Assembly> Assemblies, bool HTMLOutput)
         {
-            Contract.Requires<ArgumentNullException>(Assemblies != null, "Assemblies");
+            if (Assemblies == null) throw new ArgumentNullException(nameof(Assemblies));
             var Builder = new StringBuilder();
             Builder.Append(HTMLOutput ? "<strong>Assembly Information</strong><br />" : "Assembly Information\r\n");
             Assemblies.ForEach<Assembly>(x => Builder.Append(x.ToString(HTMLOutput)));
@@ -867,9 +923,10 @@ namespace Wiesend.DataTypes
         /// <param name="Object">Object to dunp</param>
         /// <param name="HTMLOutput">Determines if the output should be HTML or not</param>
         /// <returns>An HTML formatted table containing the information about the object</returns>
-        public static string ToString(this object Object, bool HTMLOutput)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        public static string ToString([NotNull] this object Object, bool HTMLOutput)
         {
-            Contract.Requires<ArgumentNullException>(Object != null, "Object");
+            if (Object == null) throw new ArgumentNullException(nameof(Object));
             var TempValue = new StringBuilder();
             TempValue.Append(HTMLOutput ? "<table><thead><tr><th>Property Name</th><th>Property Value</th></tr></thead><tbody>" : "Property Name\t\t\t\tProperty Value");
             var ObjectType = Object.GetType();
@@ -898,9 +955,9 @@ namespace Wiesend.DataTypes
         /// <param name="ObjectType">Object type to dunp</param>
         /// <param name="HTMLOutput">Should this be output as an HTML string</param>
         /// <returns>An HTML formatted table containing the information about the object type</returns>
-        public static string ToString(this Type ObjectType, bool HTMLOutput)
+        public static string ToString([NotNull] this Type ObjectType, bool HTMLOutput)
         {
-            Contract.Requires<ArgumentNullException>(ObjectType != null, "ObjectType");
+            if (ObjectType == null) throw new ArgumentNullException(nameof(ObjectType));
             var TempValue = new StringBuilder();
             TempValue.Append(HTMLOutput ? "<table><thead><tr><th>Property Name</th><th>Property Value</th></tr></thead><tbody>" : "Property Name\t\t\t\tProperty Value");
             var Properties = ObjectType.GetProperties();
@@ -927,9 +984,10 @@ namespace Wiesend.DataTypes
         /// <param name="Assembly">Assembly to check</param>
         /// <typeparam name="BaseType">Class type to search for</typeparam>
         /// <returns>List of types that use the interface</returns>
-        public static IEnumerable<Type> Types<BaseType>(this Assembly Assembly)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static IEnumerable<Type> Types<BaseType>([NotNull] this Assembly Assembly)
         {
-            Contract.Requires<ArgumentNullException>(Assembly != null, "Assembly");
+            if (Assembly == null) throw new ArgumentNullException(nameof(Assembly));
             return Assembly.Types(typeof(BaseType));
         }
 
@@ -939,10 +997,10 @@ namespace Wiesend.DataTypes
         /// <param name="Assembly">Assembly to check</param>
         /// <param name="BaseType">Base type to look for</param>
         /// <returns>List of types that use the interface</returns>
-        public static IEnumerable<Type> Types(this Assembly Assembly, Type BaseType)
+        public static IEnumerable<Type> Types([NotNull] this Assembly Assembly, [NotNull] Type BaseType)
         {
-            Contract.Requires<ArgumentNullException>(Assembly != null, "Assembly");
-            Contract.Requires<ArgumentNullException>(BaseType != null, "BaseType");
+            if (Assembly == null) throw new ArgumentNullException(nameof(Assembly));
+            if (BaseType == null) throw new ArgumentNullException(nameof(BaseType));
             try
             {
                 return Assembly.GetTypes().Where(x => x.Is(BaseType) && x.IsClass && !x.IsAbstract);
@@ -956,9 +1014,10 @@ namespace Wiesend.DataTypes
         /// <param name="Assemblies">Assemblies to check</param>
         /// <typeparam name="BaseType">Class type to search for</typeparam>
         /// <returns>List of types that use the interface</returns>
-        public static IEnumerable<Type> Types<BaseType>(this IEnumerable<Assembly> Assemblies)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static IEnumerable<Type> Types<BaseType>([NotNull] this IEnumerable<Assembly> Assemblies)
         {
-            Contract.Requires<ArgumentNullException>(Assemblies != null, "Assemblies");
+            if (Assemblies == null) throw new ArgumentNullException(nameof(Assemblies));
             return Assemblies.Types(typeof(BaseType));
         }
 
@@ -968,10 +1027,10 @@ namespace Wiesend.DataTypes
         /// <param name="Assemblies">Assemblies to check</param>
         /// <param name="BaseType">Base type to look for</param>
         /// <returns>List of types that use the interface</returns>
-        public static IEnumerable<Type> Types(this IEnumerable<Assembly> Assemblies, Type BaseType)
+        public static IEnumerable<Type> Types([NotNull] this IEnumerable<Assembly> Assemblies, [NotNull] Type BaseType)
         {
-            Contract.Requires<ArgumentNullException>(Assemblies != null, "Assemblies");
-            Contract.Requires<ArgumentNullException>(BaseType != null, "BaseType");
+            if (Assemblies == null) throw new ArgumentNullException(nameof(Assemblies));
+            if (BaseType == null) throw new ArgumentNullException(nameof(BaseType));
             var ReturnValues = new List<Type>();
             Assemblies.ForEach(y => ReturnValues.AddRange(y.Types(BaseType)));
             return ReturnValues;
@@ -982,9 +1041,9 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Assemblies">Assemblies to check</param>
         /// <returns>List of types</returns>
-        public static IEnumerable<Type> Types(this IEnumerable<Assembly> Assemblies)
+        public static IEnumerable<Type> Types([NotNull] this IEnumerable<Assembly> Assemblies)
         {
-            Contract.Requires<ArgumentNullException>(Assemblies != null, "Assemblies");
+            if (Assemblies == null) throw new ArgumentNullException(nameof(Assemblies));
             var ReturnValues = new List<Type>();
             Assemblies.ForEach(y =>
             {

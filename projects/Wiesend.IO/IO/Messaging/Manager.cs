@@ -72,9 +72,9 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Text;
 using Wiesend.DataTypes;
@@ -93,12 +93,12 @@ namespace Wiesend.IO.Messaging
         /// </summary>
         /// <param name="Formatters">The formatters.</param>
         /// <param name="MessagingSystems">The messaging systems.</param>
-        public Manager(IEnumerable<IFormatter> Formatters, IEnumerable<IMessagingSystem> MessagingSystems)
+        public Manager([NotNull] IEnumerable<IFormatter> Formatters, [NotNull] IEnumerable<IMessagingSystem> MessagingSystems)
         {
-            Contract.Requires<ArgumentNullException>(Formatters != null, "Formatters");
-            Contract.Requires<ArgumentNullException>(MessagingSystems != null, "MessagingSystems");
+            if (Formatters == null) throw new ArgumentNullException(nameof(Formatters));
+            if (MessagingSystems == null) throw new ArgumentNullException(nameof(MessagingSystems));
             this.Formatters = Formatters.Where(x => !x.GetType().Namespace.StartsWith("WIESEND", StringComparison.OrdinalIgnoreCase)).ToList();
-            if (this.Formatters.Count() == 0)
+            if (this.Formatters.Count == 0)
                 this.Formatters = Formatters.Where(x => x.GetType().Namespace.StartsWith("WIESEND", StringComparison.OrdinalIgnoreCase)).ToList();
             this.MessagingSystems = new Dictionary<Type, IMessagingSystem>();
             MessagingSystems.ForEach(x =>

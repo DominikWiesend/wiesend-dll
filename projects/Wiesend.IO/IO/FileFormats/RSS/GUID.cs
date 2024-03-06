@@ -72,8 +72,8 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
-using System.Diagnostics.Contracts;
 using System.Xml.XPath;
 
 namespace Wiesend.IO.FileFormats.RSS
@@ -81,6 +81,7 @@ namespace Wiesend.IO.FileFormats.RSS
     /// <summary>
     /// GUID info holder
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
     public class GUID
     {
         /// <summary>
@@ -94,9 +95,9 @@ namespace Wiesend.IO.FileFormats.RSS
         /// Constructor
         /// </summary>
         /// <param name="Element">XML element holding info for the enclosure</param>
-        public GUID(IXPathNavigable Element)
+        public GUID([NotNull] IXPathNavigable Element)
         {
-            Contract.Requires<ArgumentNullException>(Element != null, "Element");
+            if (Element == null) throw new ArgumentNullException(nameof(Element));
             var Navigator = Element.CreateNavigator();
             if (Navigator.GetAttribute("isPermaLink", "") != null)
             {

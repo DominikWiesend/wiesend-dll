@@ -102,6 +102,7 @@ namespace Wiesend.DataTypes.AOP.Interfaces
         /// Used to hook into the object once it has been created
         /// </summary>
         /// <param name="Object">Object created by the system</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         void Setup(object Object);
 
         /// <summary>

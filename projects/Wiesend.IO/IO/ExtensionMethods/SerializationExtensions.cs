@@ -72,9 +72,9 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.ComponentModel;
-using System.Diagnostics.Contracts;
 using Wiesend.IO.Serializers;
 
 namespace Wiesend.IO
@@ -93,12 +93,13 @@ namespace Wiesend.IO
         /// <param name="Data">Data to deserialize</param>
         /// <param name="ContentType">Content type (MIME type)</param>
         /// <returns>The deserialized object</returns>
-        public static R Deserialize<R, T>(this T Data, string ContentType = "application/json")
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static R Deserialize<R, T>(this T Data, [NotNull] string ContentType = "application/json")
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(ContentType), "ContentType");
+            if (string.IsNullOrEmpty(ContentType)) throw new ArgumentNullException(nameof(ContentType));
             var TempManager = IoC.Manager.Bootstrapper.Resolve<Manager>();
             if (TempManager == null)
-                return default(R);
+                return default;
             return (R)TempManager.Deserialize<T>(Data, typeof(R), ContentType);
         }
 
@@ -110,13 +111,15 @@ namespace Wiesend.IO
         /// <param name="Data">Data to deserialize</param>
         /// <param name="ContentType">Content type</param>
         /// <returns>The deserialized object</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
         public static R Deserialize<R, T>(this T Data, SerializationType ContentType)
         {
             if (ContentType == null)
                 ContentType = SerializationType.JSON;
             var TempManager = IoC.Manager.Bootstrapper.Resolve<Manager>();
             if (TempManager == null)
-                return default(R);
+                return default;
             return (R)TempManager.Deserialize<T>(Data, typeof(R), ContentType);
         }
 
@@ -128,12 +131,14 @@ namespace Wiesend.IO
         /// <param name="Object">Object to serialize</param>
         /// <param name="ContentType">Content type (MIME type)</param>
         /// <returns>The serialized object</returns>
-        public static R Serialize<R, T>(this T Object, string ContentType = "application/json")
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        public static R Serialize<R, T>(this T Object, [NotNull] string ContentType = "application/json")
         {
-            Contract.Requires<ArgumentNullException>(!string.IsNullOrEmpty(ContentType), "ContentType");
+            if (string.IsNullOrEmpty(ContentType)) throw new ArgumentNullException(nameof(ContentType));
             var TempManager = IoC.Manager.Bootstrapper.Resolve<Manager>();
             if (TempManager == null)
-                return default(R);
+                return default;
             return TempManager.Serialize<T, R>(Object, ContentType);
         }
 
@@ -145,13 +150,16 @@ namespace Wiesend.IO
         /// <param name="Object">Object to serialize</param>
         /// <param name="ContentType">Content type</param>
         /// <returns>The serialized object</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
         public static R Serialize<R, T>(this T Object, SerializationType ContentType)
         {
             if (ContentType == null)
                 ContentType = SerializationType.JSON;
             var TempManager = IoC.Manager.Bootstrapper.Resolve<Manager>();
             if (TempManager == null)
-                return default(R);
+                return default;
             return TempManager.Serialize<T, R>(Object, ContentType);
         }
     }
@@ -197,9 +205,11 @@ namespace Wiesend.IO
         /// </summary>
         /// <param name="Object">Object to convert</param>
         /// <returns>The string version of the serialization type</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public static implicit operator string(SerializationType Object)
         {
-            Contract.Requires<ArgumentNullException>(Object != null, "Object");
+            if (Object == null) throw new ArgumentNullException(nameof(Object));
             return Object.ToString();
         }
 
