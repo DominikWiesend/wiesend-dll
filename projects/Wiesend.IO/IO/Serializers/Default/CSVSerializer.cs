@@ -49,7 +49,7 @@
 #endregion of MIT License [James Craig] 
 #region MIT License [Dominik Wiesend]
 // =================================================================================
-//    Copyright(c) 2016 Dominik Wiesend. All rights reserved.
+//    Copyright(c) 2018 Dominik Wiesend. All rights reserved.
 //    
 //    Permission is hereby granted, free of charge, to any person obtaining a copy
 //    of this software and associated documentation files (the "Software"), to deal
@@ -77,7 +77,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Reflection;
 using Wiesend.DataTypes;
 using Wiesend.IO.FileFormats.Delimited;
 using Wiesend.IO.Serializers.BaseClasses;
@@ -131,14 +130,13 @@ namespace Wiesend.IO.Serializers.Default
         /// <param name="ObjectType">Object type</param>
         /// <param name="Data">Data to serialize</param>
         /// <returns>The serialized data</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0028:Simplify collection initialization", Justification = "<Pending>")]
         public override string Serialize(Type ObjectType, object Data)
         {
             if (Data == null || ObjectType == null)
                 return null;
             if (Data.Is<IEnumerable>())
-            {
                 return ((IEnumerable)Data).ToDelimitedFile();
-            }
             else
             {
                 var Temp = new List<object>();

@@ -49,7 +49,7 @@
 #endregion of MIT License [James Craig] 
 #region MIT License [Dominik Wiesend]
 // =================================================================================
-//    Copyright(c) 2016 Dominik Wiesend. All rights reserved.
+//    Copyright(c) 2018 Dominik Wiesend. All rights reserved.
 //    
 //    Permission is hereby granted, free of charge, to any person obtaining a copy
 //    of this software and associated documentation files (the "Software"), to deal
@@ -99,6 +99,7 @@ namespace Wiesend.DataTypes
         /// <typeparam name="T">The type of the event args</typeparam>
         /// <param name="Delegate">The delegate</param>
         /// <param name="EventArgs">The event args</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1005:Delegate invocation can be simplified.", Justification = "<Pending>")]
         public static void Raise<T>(this Action<T> Delegate, T EventArgs)
         {
             if (Delegate != null)
@@ -112,6 +113,7 @@ namespace Wiesend.DataTypes
         /// <param name="Delegate">The delegate</param>
         /// <param name="Sender">The sender</param>
         /// <param name="EventArg">The event args</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1005:Delegate invocation can be simplified.", Justification = "<Pending>")]
         public static void Raise<T>(this EventHandler<T> Delegate, object Sender, T EventArg)
             where T : System.EventArgs
         {

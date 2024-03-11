@@ -24,7 +24,7 @@
 #region Licenses [MIT Licenses]
 #region MIT License [Dominik Wiesend]
 // =================================================================================
-//    Copyright(c) 2016 Dominik Wiesend. All rights reserved.
+//    Copyright(c) 2018 Dominik Wiesend. All rights reserved.
 //    
 //    Permission is hereby granted, free of charge, to any person obtaining a copy
 //    of this software and associated documentation files (the "Software"), to deal
@@ -56,9 +56,9 @@ using System.Runtime.InteropServices;
 // Change these attribute values to modify the information associated with an assembly.
 [assembly: CLSCompliant(true)]
 [assembly: AssemblyTitle("Wiesend.Validation")]
-[assembly: AssemblyDescription("Wiesend's Dynamic Link Library is a collection of reusable code that I've written, or found throughout my programming career. It includes code to help with tasks including code gen, events, validation, various data types, reflection, code profiling, etc.")]
-[assembly: AssemblyCompany("Dominik Wiesend (DWC)")]
+[assembly: AssemblyCompany("Dominik Wiesend Cloud (Solutions)")]
 [assembly: AssemblyProduct("Dominik Wiesend's [Dynamic Link Library] - Wiesend.Validation")]
+[assembly: AssemblyDescription("Wiesend's Dynamic Link Library is a collection of reusable code that I've written, or found throughout my programming career. It includes code to help with tasks including encryption, file management, compression, serialization, email, image manipulation, SQL, various file formats (CSV, iCal, etc.), randomization, validation, various data types, reflection, code gen, events, code profiling, math related classes, etc.")]
 [assembly: AssemblyCopyright("Copyright(c) 2018 Dominik Wiesend. All rights reserved.")]
 [assembly: NeutralResourcesLanguage("en-US")]
 [assembly: AssemblyTrademark("")]

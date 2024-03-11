@@ -49,7 +49,7 @@
 #endregion of MIT License [James Craig] 
 #region MIT License [Dominik Wiesend]
 // =================================================================================
-//    Copyright(c) 2016 Dominik Wiesend. All rights reserved.
+//    Copyright(c) 2018 Dominik Wiesend. All rights reserved.
 //    
 //    Permission is hereby granted, free of charge, to any person obtaining a copy
 //    of this software and associated documentation files (the "Software"), to deal
@@ -72,10 +72,10 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using System.Linq;
 using System.Linq.Expressions;
 using Wiesend.DataTypes;

@@ -49,7 +49,7 @@
 #endregion of MIT License [James Craig] 
 #region MIT License [Dominik Wiesend]
 // =================================================================================
-//    Copyright(c) 2016 Dominik Wiesend. All rights reserved.
+//    Copyright(c) 2018 Dominik Wiesend. All rights reserved.
 //    
 //    Permission is hereby granted, free of charge, to any person obtaining a copy
 //    of this software and associated documentation files (the "Software"), to deal
@@ -121,7 +121,6 @@ namespace Wiesend.Random.StringGenerators
         /// </summary>
         /// <param name="Rand">Random number generator that it can use</param>
         /// <returns>A randomly generated object of the specified type</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("GeneratedRegex", "SYSLIB1045:Convert to 'GeneratedRegexAttribute'.", Justification = "<Pending>")]
         public string Next(System.Random Rand)
         {
             if (Length < 1)

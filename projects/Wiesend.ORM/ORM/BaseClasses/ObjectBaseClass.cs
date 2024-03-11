@@ -49,7 +49,7 @@
 #endregion of MIT License [James Craig] 
 #region MIT License [Dominik Wiesend]
 // =================================================================================
-//    Copyright(c) 2016 Dominik Wiesend. All rights reserved.
+//    Copyright(c) 2018 Dominik Wiesend. All rights reserved.
 //    
 //    Permission is hereby granted, free of charge, to any person obtaining a copy
 //    of this software and associated documentation files (the "Software"), to deal
@@ -215,6 +215,7 @@ namespace Wiesend.ORM
         /// <param name="Params">Parameters used to specify what to load</param>
         /// <returns>The specified item</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1000:Do not declare static members on generic types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         public static ObjectType Any(params IParameter[] Params)
         {
             var instance = new ObjectType();
@@ -238,6 +239,7 @@ namespace Wiesend.ORM
         /// <param name="Params">Parameters used to specify what to load</param>
         /// <returns>The specified item</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1000:Do not declare static members on generic types", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         public static ObjectType Any(string Command, CommandType Type, string ConnectionString, params object[] Params)
         {
             var instance = new ObjectType();

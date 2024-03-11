@@ -49,7 +49,7 @@
 #endregion of MIT License [James Craig] 
 #region MIT License [Dominik Wiesend]
 // =================================================================================
-//    Copyright(c) 2016 Dominik Wiesend. All rights reserved.
+//    Copyright(c) 2018 Dominik Wiesend. All rights reserved.
 //    
 //    Permission is hereby granted, free of charge, to any person obtaining a copy
 //    of this software and associated documentation files (the "Software"), to deal
@@ -112,6 +112,7 @@ namespace Wiesend.IO.Messaging.BaseClasses
         /// Initializes the system
         /// </summary>
         /// <param name="Formatters">Passes in the list of formatters that the system has found</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0016:Use 'throw' expression", Justification = "<Pending>")]
         public void Initialize([NotNull] IEnumerable<IFormatter> Formatters)
         {
             if (Formatters == null) throw new ArgumentNullException(nameof(Formatters));

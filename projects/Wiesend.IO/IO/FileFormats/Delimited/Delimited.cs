@@ -49,7 +49,7 @@
 #endregion of MIT License [James Craig] 
 #region MIT License [Dominik Wiesend]
 // =================================================================================
-//    Copyright(c) 2016 Dominik Wiesend. All rights reserved.
+//    Copyright(c) 2018 Dominik Wiesend. All rights reserved.
 //    
 //    Permission is hereby granted, free of charge, to any person obtaining a copy
 //    of this software and associated documentation files (the "Software"), to deal
@@ -173,6 +173,7 @@ namespace Wiesend.IO.FileFormats.Delimited
         /// </param>
         /// <param name="Headers">Headers for the columns if the first row is not a header</param>
         /// <returns>The delimited file as a DataTable</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         public DataTable ToDataTable(bool FirstRowIsHeader = true, params string[] Headers)
         {
             var ReturnValue = new DataTable();

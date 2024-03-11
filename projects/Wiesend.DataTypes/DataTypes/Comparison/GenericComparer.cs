@@ -49,7 +49,7 @@
 #endregion of MIT License [James Craig] 
 #region MIT License [Dominik Wiesend]
 // =================================================================================
-//    Copyright(c) 2016 Dominik Wiesend. All rights reserved.
+//    Copyright(c) 2018 Dominik Wiesend. All rights reserved.
 //    
 //    Permission is hereby granted, free of charge, to any person obtaining a copy
 //    of this software and associated documentation files (the "Software"), to deal
@@ -89,6 +89,7 @@ namespace Wiesend.DataTypes.Comparison
         /// <param name="x">Object 1</param>
         /// <param name="y">Object 2</param>
         /// <returns>0 if they're equal, any other value they are not</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
         public int Compare(T x, T y)
         {
             if (!typeof(T).IsValueType

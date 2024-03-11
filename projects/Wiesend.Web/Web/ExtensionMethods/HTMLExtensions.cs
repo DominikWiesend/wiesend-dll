@@ -49,7 +49,7 @@
 #endregion of MIT License [James Craig] 
 #region MIT License [Dominik Wiesend]
 // =================================================================================
-//    Copyright(c) 2016 Dominik Wiesend. All rights reserved.
+//    Copyright(c) 2018 Dominik Wiesend. All rights reserved.
 //    
 //    Permission is hereby granted, free of charge, to any person obtaining a copy
 //    of this software and associated documentation files (the "Software"), to deal
@@ -76,11 +76,11 @@ using JetBrains.Annotations;
 using System;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO.Compression;
 using System.Text;
 using System.Text.RegularExpressions;
-using Wiesend.IO;
-using System.IO.Compression;
 using System.Web;
+using Wiesend.IO;
 using Wiesend.Web.Streams;
 
 namespace Wiesend.Web

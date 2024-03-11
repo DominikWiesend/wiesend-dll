@@ -49,7 +49,7 @@
 #endregion of MIT License [James Craig] 
 #region MIT License [Dominik Wiesend]
 // =================================================================================
-//    Copyright(c) 2016 Dominik Wiesend. All rights reserved.
+//    Copyright(c) 2018 Dominik Wiesend. All rights reserved.
 //    
 //    Permission is hereby granted, free of charge, to any person obtaining a copy
 //    of this software and associated documentation files (the "Software"), to deal
@@ -115,6 +115,7 @@ namespace Wiesend.IO.FileSystem
         /// <param name="Password">Password to be used to access the directory (optional)</param>
         /// <param name="UserName">User name to be used to access the directory (optional)</param>
         /// <returns>The directory object</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0031:Use null propagation", Justification = "<Pending>")]
         public IDirectory Directory(string Path, string UserName = "", string Password = "", string Domain = "")
         {
             var FileSystem = FindSystem(Path);
@@ -129,6 +130,7 @@ namespace Wiesend.IO.FileSystem
         /// <param name="Password">Password to be used to access the file (optional)</param>
         /// <param name="UserName">User name to be used to access the file (optional)</param>
         /// <returns>The file object</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0031:Use null propagation", Justification = "<Pending>")]
         public IFile File(string Path, string UserName = "", string Password = "", string Domain = "")
         {
             var FileSystem = FindSystem(Path);

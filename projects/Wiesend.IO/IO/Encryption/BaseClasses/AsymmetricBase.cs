@@ -49,7 +49,7 @@
 #endregion of MIT License [James Craig] 
 #region MIT License [Dominik Wiesend]
 // =================================================================================
-//    Copyright(c) 2016 Dominik Wiesend. All rights reserved.
+//    Copyright(c) 2018 Dominik Wiesend. All rights reserved.
 //    
 //    Permission is hereby granted, free of charge, to any person obtaining a copy
 //    of this software and associated documentation files (the "Software"), to deal
@@ -102,10 +102,8 @@ namespace Wiesend.IO.Encryption.BaseClasses
         /// <returns>XML representation of the key information</returns>
         public string CreateKey(bool PrivatePublic)
         {
-            using (AsymmetricAlgorithm Provider = GetProvider())
-            {
-                return Provider == null ? "" : Provider.ToXmlString(PrivatePublic);
-            }
+            using AsymmetricAlgorithm Provider = GetProvider();
+            return Provider == null ? "" : Provider.ToXmlString(PrivatePublic);
         }
 
         /// <summary>

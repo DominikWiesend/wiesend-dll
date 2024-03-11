@@ -82,9 +82,6 @@ using Wiesend.DataTypes;
 using Wiesend.IO.Enums;
 using Wiesend.IO.FileSystem.BaseClasses;
 using Wiesend.IO.FileSystem.Interfaces;
-#if NET
-using System.Net.Http;
-#endif
 
 namespace Wiesend.IO.FileSystem.Default
 {

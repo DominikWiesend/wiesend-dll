@@ -49,7 +49,7 @@
 #endregion of MIT License [James Craig] 
 #region MIT License [Dominik Wiesend]
 // =================================================================================
-//    Copyright(c) 2016 Dominik Wiesend. All rights reserved.
+//    Copyright(c) 2018 Dominik Wiesend. All rights reserved.
 //    
 //    Permission is hereby granted, free of charge, to any person obtaining a copy
 //    of this software and associated documentation files (the "Software"), to deal
@@ -231,6 +231,7 @@ namespace Wiesend.ORM
         /// <param name="Command">Command object</param>
         /// <param name="Factory">DbProviderFactory being used</param>
         /// <returns>A dataset filled with the results of the query</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         public static DataSet ExecuteDataSet(this DbCommand Command, DbProviderFactory Factory)
         {
             if (Command == null)

@@ -49,7 +49,7 @@
 #endregion of MIT License [James Craig] 
 #region MIT License [Dominik Wiesend]
 // =================================================================================
-//    Copyright(c) 2016 Dominik Wiesend. All rights reserved.
+//    Copyright(c) 2018 Dominik Wiesend. All rights reserved.
 //    
 //    Permission is hereby granted, free of charge, to any person obtaining a copy
 //    of this software and associated documentation files (the "Software"), to deal
@@ -90,14 +90,13 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer.Builders
         /// </summary>
         /// <param name="values">The values.</param>
         /// <param name="database">The database.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
         public void FillDatabase(IEnumerable<dynamic> values, Database database)
         {
             if (database == null)
                 throw new ArgumentNullException(nameof(database));
             foreach (Table Table in database.Tables)
-            {
                 Table.SetupForeignKeys();
-            }
         }
 
         /// <summary>

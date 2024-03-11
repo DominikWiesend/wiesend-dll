@@ -49,7 +49,7 @@
 #endregion of MIT License [James Craig] 
 #region MIT License [Dominik Wiesend]
 // =================================================================================
-//    Copyright(c) 2016 Dominik Wiesend. All rights reserved.
+//    Copyright(c) 2018 Dominik Wiesend. All rights reserved.
 //    
 //    Permission is hereby granted, free of charge, to any person obtaining a copy
 //    of this software and associated documentation files (the "Software"), to deal
@@ -130,7 +130,7 @@ namespace Wiesend.ORM.Manager.Schema.Interfaces
         /// <typeparam name="T">Column type</typeparam>
         IColumn AddColumn<T>(string ColumnName, DbType ColumnType, int Length = 0, bool Nullable = true,
             bool Identity = false, bool Index = false, bool PrimaryKey = false, bool Unique = false,
-            string ForeignKeyTable = "", string ForeignKeyColumn = "", T DefaultValue = default(T),
+            string ForeignKeyTable = "", string ForeignKeyColumn = "", T DefaultValue = default,
             bool OnDeleteCascade = false, bool OnUpdateCascade = false, bool OnDeleteSetNull = false);
 
         /// <summary>

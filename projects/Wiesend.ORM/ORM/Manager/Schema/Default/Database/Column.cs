@@ -49,7 +49,7 @@
 #endregion of MIT License [James Craig] 
 #region MIT License [Dominik Wiesend]
 // =================================================================================
-//    Copyright(c) 2016 Dominik Wiesend. All rights reserved.
+//    Copyright(c) 2018 Dominik Wiesend. All rights reserved.
 //    
 //    Permission is hereby granted, free of charge, to any person obtaining a copy
 //    of this software and associated documentation files (the "Software"), to deal
@@ -130,7 +130,7 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database
             this.Index = Index;
             this.PrimaryKey = PrimaryKey;
             this.Unique = Unique;
-            this.Default = new GenericEqualityComparer<T>().Equals(DefaultValue, default(T)) ? "" : DefaultValue.ToString();
+            this.Default = new GenericEqualityComparer<T>().Equals(DefaultValue, default) ? "" : DefaultValue.ToString();
             this.OnDeleteCascade = OnDeleteCascade;
             this.OnUpdateCascade = OnUpdateCascade;
             this.OnDeleteSetNull = OnDeleteSetNull;
@@ -227,6 +227,7 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database
         /// <summary>
         /// Sets up the foreign key list
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
         public void SetupForeignKeys()
         {
             for (int x = 0; x < ForeignKeyColumns.Count; ++x)

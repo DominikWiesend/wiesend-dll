@@ -27,3 +27,4 @@ using System.Diagnostics.CodeAnalysis;
 [assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IO.FileSystem.Default.ResourceFile.Write(System.Byte[],System.IO.FileMode)~System.Byte[]")]
 [assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>", Scope = "member", Target = "~P:Wiesend.IO.FileFormats.VCard.FullName")]
 [assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IO.FileSystem.Default.WebFile.Write(System.String,System.IO.FileMode,System.Text.Encoding)~System.String")]
+[assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IO.FileSystem.Default.WebDirectory.Create")]

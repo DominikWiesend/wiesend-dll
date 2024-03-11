@@ -49,7 +49,7 @@
 #endregion of MIT License [James Craig] 
 #region MIT License [Dominik Wiesend]
 // =================================================================================
-//    Copyright(c) 2016 Dominik Wiesend. All rights reserved.
+//    Copyright(c) 2018 Dominik Wiesend. All rights reserved.
 //    
 //    Permission is hereby granted, free of charge, to any person obtaining a copy
 //    of this software and associated documentation files (the "Software"), to deal
@@ -99,7 +99,7 @@ namespace Wiesend.IO.Messaging.Interfaces
         /// <param name="Message">Message to send</param>
         /// <param name="Model">Model object</param>
         /// <returns>The async task</returns>
-        Task Send<T>(IMessage Message, T Model = default(T))
+        Task Send<T>(IMessage Message, T Model = default)
             where T : class;
 
         /// <summary>

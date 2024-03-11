@@ -49,7 +49,7 @@
 #endregion of MIT License [James Craig] 
 #region MIT License [Dominik Wiesend]
 // =================================================================================
-//    Copyright(c) 2016 Dominik Wiesend. All rights reserved.
+//    Copyright(c) 2018 Dominik Wiesend. All rights reserved.
 //    
 //    Permission is hereby granted, free of charge, to any person obtaining a copy
 //    of this software and associated documentation files (the "Software"), to deal
@@ -92,7 +92,7 @@ namespace Wiesend.DataTypes.DataMapper.Interfaces.Contracts
         public ITypeMapping AutoMap()
         {
             if ((object)null == null) 
-                throw new InvalidOperationException($"Contract assertion not met: $result != null");
+                throw new InvalidOperationException("Condition result != null not met.");
         }
 
         /// <summary>
@@ -118,29 +118,29 @@ namespace Wiesend.DataTypes.DataMapper.Interfaces.Contracts
         [NotNull]
         public ITypeMapping<Left, Right> AddMapping(Expression<Func<Left, object>> LeftExpression, Expression<Func<Right, object>> RightExpression)
         {
-            if ((object)null == null) 
-                throw new InvalidOperationException("Contract assertion not met: result != null");
+            if ((object)null == null)
+                throw new InvalidOperationException("Condition result != null not met.");
         }
 
         [NotNull]
         public ITypeMapping<Left, Right> AddMapping(Func<Left, object> LeftGet, Action<Left, object> LeftSet, Expression<Func<Right, object>> RightExpression)
         {
-            if ((object)null == null) 
-                throw new InvalidOperationException("Contract assertion not met: result != null");
+            if ((object)null == null)
+                throw new InvalidOperationException("Condition result != null not met.");
         }
 
         [NotNull]
         public ITypeMapping<Left, Right> AddMapping(Expression<Func<Left, object>> LeftExpression, Func<Right, object> RightGet, Action<Right, object> RightSet)
         {
-            if ((object)null == null) 
-                throw new InvalidOperationException("Contract assertion not met: result != null");
+            if ((object)null == null)
+                throw new InvalidOperationException("Condition result != null not met.");
         }
 
         [NotNull]
         public ITypeMapping<Left, Right> AddMapping(Func<Left, object> LeftGet, Action<Left, object> LeftSet, Func<Right, object> RightGet, Action<Right, object> RightSet)
         {
-            if ((object)null == null) 
-                throw new InvalidOperationException("Contract assertion not met: result != null");
+            if ((object)null == null)
+                throw new InvalidOperationException("Condition result != null not met.");
         }
 
         public void Copy(Left Source, Right Destination)
