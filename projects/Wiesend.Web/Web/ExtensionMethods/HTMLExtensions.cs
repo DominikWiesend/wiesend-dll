@@ -72,15 +72,15 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.ComponentModel;
-using JetBrains.Annotations;
 using System.Globalization;
-using System.IO.Compression;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Web;
 using Wiesend.IO;
+using System.IO.Compression;
+using System.Web;
 using Wiesend.Web.Streams;
 
 namespace Wiesend.Web
@@ -91,10 +91,14 @@ namespace Wiesend.Web
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class HTMLExtensions
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "<Pending>")]
         private const string DEFLATE = "deflate";
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "<Pending>")]
         private const string GZIP = "gzip";
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("GeneratedRegex", "SYSLIB1045:Convert to 'GeneratedRegexAttribute'.", Justification = "<Pending>")]
         private static readonly Regex STRIP_HTML_REGEX = new Regex("<[^>]*>", RegexOptions.Compiled);
 
         /// <summary>
@@ -102,7 +106,7 @@ namespace Wiesend.Web
         /// </summary>
         public static Uri AbsoluteRoot([NotNull] this HttpContextBase Context)
         {
-            if (Context == null) throw new ArgumentNullException(nameof(Context), "Context");
+            if (Context == null) throw new ArgumentNullException(nameof(Context));
             if (Context.Items["absoluteurl"] == null)
                 Context.Items["absoluteurl"] = new Uri(Context.Request.Url.GetLeftPart(UriPartial.Authority) + Context.RelativeRoot());
             return Context.Items["absoluteurl"] as Uri;
@@ -113,7 +117,7 @@ namespace Wiesend.Web
         /// </summary>
         public static Uri AbsoluteRoot([NotNull] this HttpContext Context)
         {
-            if (Context == null) throw new ArgumentNullException(nameof(Context), "Context");
+            if (Context == null) throw new ArgumentNullException(nameof(Context));
             if (Context.Items["absoluteurl"] == null)
                 Context.Items["absoluteurl"] = new Uri(Context.Request.Url.GetLeftPart(UriPartial.Authority) + Context.RelativeRoot());
             return Context.Items["absoluteurl"] as Uri;
@@ -126,9 +130,9 @@ namespace Wiesend.Web
         /// <param name="Page">Page to add it to</param>
         public static void AddScriptFile([NotNull] this System.Web.UI.Page Page, [NotNull] FileInfo File)
         {
-            if (File == null) throw new ArgumentNullException(nameof(File), "File");
+            if (File == null) throw new ArgumentNullException(nameof(File));
             if (!(File.Exists)) throw new System.IO.FileNotFoundException(nameof(File), "File does not exist");
-            if (Page == null) throw new ArgumentNullException(nameof(Page), "Page");
+            if (Page == null) throw new ArgumentNullException(nameof(Page));
             if (!Page.ClientScript.IsClientScriptIncludeRegistered(typeof(System.Web.UI.Page), File.FullName))
                 Page.ClientScript.RegisterClientScriptInclude(typeof(System.Web.UI.Page), File.FullName, File.FullName);
         }
@@ -150,7 +154,7 @@ namespace Wiesend.Web
         /// <returns>false if it does not contain HTML, true otherwise</returns>
         public static bool ContainsHTML([NotNull] this FileInfo Input)
         {
-            if (Input == null) throw new ArgumentNullException(nameof(Input), "Input");
+            if (Input == null) throw new ArgumentNullException(nameof(Input));
             return Input.Exists && Input.Read().ContainsHTML();
         }
 
@@ -167,7 +171,7 @@ namespace Wiesend.Web
         /// </param>
         public static void HTTPCompress([NotNull] this HttpContextBase Context, bool RemovePrettyPrinting = false, MinificationType Type = MinificationType.HTML)
         {
-            if (Context == null) throw new ArgumentNullException(nameof(Context), "Context");
+            if (Context == null) throw new ArgumentNullException(nameof(Context));
             if (Context.Request.UserAgent != null && Context.Request.UserAgent.Contains("MSIE 6"))
                 return;
             Context.Response.Filter = RemovePrettyPrinting ? (System.IO.Stream)new UglyStream(Context.Response.Filter, CompressionType.GZip, Type) : new GZipStream(Context.Response.Filter, CompressionMode.Compress);
@@ -186,7 +190,7 @@ namespace Wiesend.Web
         /// </param>
         public static void HTTPCompress([NotNull] this HttpContext Context, bool RemovePrettyPrinting = false, MinificationType Type = MinificationType.HTML)
         {
-            if (Context == null) throw new ArgumentNullException(nameof(Context), "Context");
+            if (Context == null) throw new ArgumentNullException(nameof(Context));
             if (Context.Request.UserAgent != null && Context.Request.UserAgent.Contains("MSIE 6"))
                 return;
             Context.Response.Filter = RemovePrettyPrinting ? (System.IO.Stream)new UglyStream(Context.Response.Filter, CompressionType.GZip, Type) : new GZipStream(Context.Response.Filter, CompressionMode.Compress);
@@ -203,21 +207,11 @@ namespace Wiesend.Web
         }
 
         /// <summary>
-        /// Checks the request headers to see if the specified encoding is accepted by the client.
-        /// </summary>
-        public static bool IsEncodingAccepted(this HttpContext Context, string Encoding)
-        {
-            if (Context == null)
-                return false;
-            return Context.Request.Headers["Accept-encoding"] != null && Context.Request.Headers["Accept-encoding"].Contains(Encoding);
-        }
-
-        /// <summary>
         /// Gets the relative root of the web site
         /// </summary>
         /// <param name="Context">Current context</param>
         /// <returns>The relative root of the web site</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "Context")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         public static string RelativeRoot(this HttpContextBase Context)
         {
             return VirtualPathUtility.ToAbsolute("~/");
@@ -228,7 +222,7 @@ namespace Wiesend.Web
         /// </summary>
         /// <param name="Context">Current context</param>
         /// <returns>The relative root of the web site</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA1801:ReviewUnusedParameters", MessageId = "Context")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0060:Remove unused parameter", Justification = "<Pending>")]
         public static string RelativeRoot(this HttpContext Context)
         {
             return VirtualPathUtility.ToAbsolute("~/");
@@ -267,7 +261,7 @@ namespace Wiesend.Web
         /// <param name="Context">Context to set the encoding on</param>
         public static void SetEncoding([NotNull] this HttpContextBase Context, string Encoding)
         {
-            if (Context == null) throw new ArgumentNullException(nameof(Context), "Context");
+            if (Context == null) throw new ArgumentNullException(nameof(Context));
             Context.Response.AppendHeader("Content-encoding", Encoding);
         }
 
@@ -278,7 +272,7 @@ namespace Wiesend.Web
         /// <param name="Context">Context to set the encoding on</param>
         public static void SetEncoding([NotNull] this HttpContext Context, string Encoding)
         {
-            if (Context == null) throw new ArgumentNullException(nameof(Context), "Context");
+            if (Context == null) throw new ArgumentNullException(nameof(Context));
             Context.Response.AppendHeader("Content-encoding", Encoding);
         }
 
@@ -303,7 +297,7 @@ namespace Wiesend.Web
         /// <returns>HTML-less string</returns>
         public static string StripHTML([NotNull] this FileInfo HTML)
         {
-            if (HTML == null) throw new ArgumentNullException(nameof(HTML), "HTML");
+            if (HTML == null) throw new ArgumentNullException(nameof(HTML));
             if (!(HTML.Exists)) throw new System.IO.FileNotFoundException(nameof(HTML), "File does not exist");
             return HTML.Read().StripHTML();
         }
@@ -357,6 +351,7 @@ namespace Wiesend.Web
         /// </summary>
         /// <param name="Input">string to be stripped</param>
         /// <returns>Stripped string</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("GeneratedRegex", "SYSLIB1045:Convert to 'GeneratedRegexAttribute'.", Justification = "<Pending>")]
         private static string RemoveExtraHyphen(string Input)
         {
             if (string.IsNullOrEmpty(Input))

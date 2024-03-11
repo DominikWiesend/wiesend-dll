@@ -149,7 +149,7 @@ namespace Wiesend.Workflow.Manager
         /// <returns>The workflow that is created</returns>
         public IWorkflow<T> CreateWorkflow<T>([NotNull] string Name)
         {
-            if (string.IsNullOrEmpty(Name)) throw new ArgumentNullException(nameof(Name), "Name");
+            if (string.IsNullOrEmpty(Name)) throw new ArgumentNullException(nameof(Name));
             if (Exists(Name))
                 return (IWorkflow<T>)Workflows[Name];
             var ReturnValue = new Workflow<T>(Name);

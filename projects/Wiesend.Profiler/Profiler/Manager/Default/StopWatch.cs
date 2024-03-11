@@ -82,6 +82,7 @@ namespace Wiesend.Profiler.Manager.Default
         /// <summary>
         /// Constructor
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2214:Do not call overridable methods in constructors", Justification = "<Pending>")]
         public StopWatch()
         {
             Watch = new System.Diagnostics.Stopwatch();

@@ -109,8 +109,8 @@ namespace Wiesend.DataTypes.DataMapper.Interfaces.Contracts
         [NotNull]
         public ITypeMapping Map([NotNull] Type Left, [NotNull] Type Right)
         {
-            if (Left == null) throw new ArgumentNullException(nameof(Left), $"Contract assertion not met: {nameof(Left)} != null");
-            if (Right == null) throw new ArgumentNullException(nameof(Right), $"Contract assertion not met: {nameof(Right)} != null");
+            if (Left == null) throw new ArgumentNullException(nameof(Left));
+            if (Right == null) throw new ArgumentNullException(nameof(Right));
             if ((object)null == null) 
                 throw new InvalidOperationException($"Contract assertion not met: $result != null");
         }

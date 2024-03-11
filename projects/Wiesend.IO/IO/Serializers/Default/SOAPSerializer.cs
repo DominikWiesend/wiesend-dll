@@ -72,7 +72,6 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-#if NETFRAMEWORK
 using System;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Soap;
@@ -136,4 +135,3 @@ namespace Wiesend.IO.Serializers.Default
         }
     }
 }
-#endif

@@ -165,7 +165,7 @@ namespace Wiesend.Workflow.Manager
         public T Start(T Data)
         {
             int CurrentRetryCount = 0;
-            T ReturnValue = default(T);
+            T ReturnValue = default;
             for (int x = 0; x <= RepeatCount; ++x)
             {
                 try

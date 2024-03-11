@@ -79,11 +79,7 @@ using System.Linq;
 using Wiesend.DataTypes.Caching.Default;
 using Wiesend.DataTypes.Caching.Interfaces;
 using Wiesend.DataTypes.Patterns.BaseClasses;
-#if NETFRAMEWORK
 using System.Web;
-#else
-using Microsoft.AspNetCore.Http;
-#endif
 
 namespace Wiesend.DataTypes.Caching
 {
@@ -97,16 +93,11 @@ namespace Wiesend.DataTypes.Caching
         /// </summary>
         public Manager([NotNull] IEnumerable<ICache> Caches)
         {
-#if NETFRAMEWORK
-            HttpContext httpContext = HttpContext.Current;
-#else
-            HttpContext httpContext = Context;
-#endif
             if (Caches == null) throw new ArgumentNullException(nameof(Caches));
             this.Caches = Caches.Where(x => !x.GetType().Namespace.StartsWith("WIESEND", StringComparison.OrdinalIgnoreCase)).ToDictionary(x => x.Name);
             if (!this.Caches.ContainsKey("Default"))
                 this.Caches.Add("Default", new Cache());
-            if (httpContext != null)
+            if (HttpContext.Current != null)
             {
                 if (!this.Caches.ContainsKey("Cache"))
                     this.Caches.Add("Cache", new CacheCache());
@@ -160,13 +151,5 @@ namespace Wiesend.DataTypes.Caching
                 Caches.Clear();
             }
         }
-
-#if NETSTANDARD || NET
-        /// <summary>
-        /// Gets the current <seealso cref="HttpContext"/><br/>
-        /// -> Only used for NETSTANDARD(2.0/2.1) and NET(6.0/7.0)
-        /// </summary>
-        private static HttpContext Context => new HttpContextAccessor().HttpContext;
-#endif
     }
 }

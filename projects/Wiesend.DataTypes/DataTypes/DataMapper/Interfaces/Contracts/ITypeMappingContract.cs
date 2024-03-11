@@ -102,8 +102,8 @@ namespace Wiesend.DataTypes.DataMapper.Interfaces.Contracts
         /// <param name="Destination">Destination object</param>
         public void Copy([NotNull] object Source, [NotNull] object Destination)
         {
-            if (Source == null) throw new ArgumentNullException(nameof(Source), $"Contract assertion not met: {nameof(Source)} != null");
-            if (Destination == null) throw new ArgumentNullException(nameof(Destination), $"Contract assertion not met: {nameof(Destination)} != null");
+            if (Source == null) throw new ArgumentNullException(nameof(Source));
+            if (Destination == null) throw new ArgumentNullException(nameof(Destination));
         }
     }
 
@@ -119,28 +119,28 @@ namespace Wiesend.DataTypes.DataMapper.Interfaces.Contracts
         public ITypeMapping<Left, Right> AddMapping(Expression<Func<Left, object>> LeftExpression, Expression<Func<Right, object>> RightExpression)
         {
             if ((object)null == null) 
-                throw new InvalidOperationException($"Contract assertion not met: $result != null");
+                throw new InvalidOperationException("Contract assertion not met: result != null");
         }
 
         [NotNull]
         public ITypeMapping<Left, Right> AddMapping(Func<Left, object> LeftGet, Action<Left, object> LeftSet, Expression<Func<Right, object>> RightExpression)
         {
             if ((object)null == null) 
-                throw new InvalidOperationException($"Contract assertion not met: $result != null");
+                throw new InvalidOperationException("Contract assertion not met: result != null");
         }
 
         [NotNull]
         public ITypeMapping<Left, Right> AddMapping(Expression<Func<Left, object>> LeftExpression, Func<Right, object> RightGet, Action<Right, object> RightSet)
         {
             if ((object)null == null) 
-                throw new InvalidOperationException($"Contract assertion not met: $result != null");
+                throw new InvalidOperationException("Contract assertion not met: result != null");
         }
 
         [NotNull]
         public ITypeMapping<Left, Right> AddMapping(Func<Left, object> LeftGet, Action<Left, object> LeftSet, Func<Right, object> RightGet, Action<Right, object> RightSet)
         {
             if ((object)null == null) 
-                throw new InvalidOperationException($"Contract assertion not met: $result != null");
+                throw new InvalidOperationException("Contract assertion not met: result != null");
         }
 
         public void Copy(Left Source, Right Destination)

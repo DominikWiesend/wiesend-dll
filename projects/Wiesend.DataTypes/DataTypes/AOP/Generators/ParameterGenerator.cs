@@ -91,7 +91,7 @@ namespace Wiesend.DataTypes.AOP.Generators
         /// <param name="parameter">The parameter.</param>
         public ParameterGenerator([NotNull] ParameterInfo parameter)
         {
-            Parameter = parameter ?? throw new System.ArgumentNullException(nameof(parameter), $"Contract assertion not met: {nameof(parameter)} != null");
+            Parameter = parameter ?? throw new System.ArgumentNullException(nameof(parameter));
         }
 
         /// <summary>

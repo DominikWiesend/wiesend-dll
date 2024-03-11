@@ -204,8 +204,8 @@ namespace Wiesend.DataTypes
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         private void Process()
         {
-            if (CancellationToken == null) throw new NullReferenceException($"Contract assertion not met: {nameof(CancellationToken)} != null");
-            if (ProcessItem == null) throw new NullReferenceException($"Contract assertion not met: {nameof(ProcessItem)} != null");
+            if (CancellationToken == null) throw new NullReferenceException($"Condition {nameof(CancellationToken)} != null not met.");
+            if (ProcessItem == null) throw new NullReferenceException($"Condition {nameof(ProcessItem)} != null not met.");
             while (true)
             {
                 try

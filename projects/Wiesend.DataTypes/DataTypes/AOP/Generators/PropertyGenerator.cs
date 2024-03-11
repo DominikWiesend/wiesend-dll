@@ -94,7 +94,7 @@ namespace Wiesend.DataTypes.AOP.Generators
         /// <param name="propertyInfo">The property information.</param>
         public PropertyGenerator([NotNull] PropertyInfo propertyInfo)
         {
-            PropertyInfo = propertyInfo ?? throw new ArgumentNullException(nameof(propertyInfo), $"Contract assertion not met: {nameof(propertyInfo)} != null");
+            PropertyInfo = propertyInfo ?? throw new ArgumentNullException(nameof(propertyInfo));
             DeclaringType = PropertyInfo.DeclaringType;
         }
 

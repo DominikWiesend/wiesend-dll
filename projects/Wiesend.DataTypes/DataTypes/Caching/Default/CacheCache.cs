@@ -133,9 +133,7 @@ namespace Wiesend.DataTypes.Caching.Default
                     return new List<object>();
                 var Temp = new List<object>();
                 foreach (string Key in Keys)
-                {
                     Temp.Add(HttpContext.Current.Cache[Key]);
-                }
                 return Temp;
             }
         }

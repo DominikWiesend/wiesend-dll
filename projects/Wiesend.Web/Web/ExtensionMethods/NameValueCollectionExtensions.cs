@@ -77,6 +77,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using JetBrains.Annotations;
 using System.Text;
+using System.Globalization;
 
 namespace Wiesend.Web
 {
@@ -93,15 +94,19 @@ namespace Wiesend.Web
         /// <returns>The NameValueCollection expressed as a string</returns>
         public static string ToQueryString([NotNull] this NameValueCollection Input)
         {
-            if (Input == null) throw new ArgumentNullException(nameof(Input), "Input");
+            if (Input == null) throw new ArgumentNullException(nameof(Input));
             if (Input.Count <= 0)
                 return "";
             var Builder = new StringBuilder();
-            Builder.Append("?");
+            Builder.Append('?');
             string Splitter = "";
             foreach (string Key in Input.Keys)
             {
+#if NET45
                 Builder.Append(Splitter).AppendFormat("{0}={1}", Key.URLEncode(), Input[Key].URLEncode());
+#else
+                Builder.Append(Splitter).AppendFormat(CultureInfo.InvariantCulture, "{0}={1}", Key.URLEncode(), Input[Key].URLEncode());
+#endif
                 Splitter = "&";
             }
             return Builder.ToString();

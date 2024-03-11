@@ -72,7 +72,6 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-#if NETFRAMEWORK || NETSTANDARD
 using JetBrains.Annotations;
 using System;
 using System.IO;
@@ -352,4 +351,3 @@ namespace Wiesend.IO.FileSystem.Default
         }
     }
 }
-#endif

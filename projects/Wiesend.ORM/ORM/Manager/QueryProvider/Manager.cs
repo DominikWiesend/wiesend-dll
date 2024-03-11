@@ -72,9 +72,9 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using System.Linq;
 using Wiesend.DataTypes;
 using Wiesend.ORM.Manager.Mapper.Interfaces;
@@ -111,7 +111,7 @@ namespace Wiesend.ORM.Manager.QueryProvider
         public IBatch Batch([NotNull] ISourceInfo Source)
         {
             if (Source == null) throw new ArgumentNullException(nameof(Source));
-            return Providers.ContainsKey(Source.SourceType) ? Providers[Source.SourceType].Batch(Source) : null;
+            return Providers.ContainsKey(Source.SourceType) ? Providers.GetValue(Source.SourceType).Batch(Source) : null;
         }
 
         /// <summary>
@@ -126,7 +126,7 @@ namespace Wiesend.ORM.Manager.QueryProvider
             where T : class
         {
             if (Source == null) throw new ArgumentNullException(nameof(Source));
-            return Providers.ContainsKey(Source.SourceType) ? Providers[Source.SourceType].Generate<T>(Source, Mapping, Structure) : null;
+            return Providers.ContainsKey(Source.SourceType) ? Providers.GetValue(Source.SourceType).Generate<T>(Source, Mapping, Structure) : null;
         }
 
         /// <summary>

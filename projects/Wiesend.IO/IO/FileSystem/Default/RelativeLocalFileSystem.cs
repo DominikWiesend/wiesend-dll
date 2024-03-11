@@ -98,12 +98,12 @@ namespace Wiesend.IO.FileSystem.Default
         /// </summary>
         /// <param name="Path">Path to convert to absolute</param>
         /// <returns>The absolute path of the path passed in</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
         protected override string AbsolutePath(string Path)
         {
             Path = Path.Replace("/", "\\");
             string BaseDirectory = "";
             string ParentDirectory = "";
-#if NETFRAMEWORK
             if (HttpContext.Current == null)
             {
                 BaseDirectory = new System.IO.DirectoryInfo(".").FullName;
@@ -114,10 +114,6 @@ namespace Wiesend.IO.FileSystem.Default
                 BaseDirectory = HttpContext.Current.Server.MapPath("~/");
                 ParentDirectory = new LocalDirectory(BaseDirectory).Parent.FullName;
             }
-#else
-            BaseDirectory = new System.IO.DirectoryInfo(".").FullName;
-            ParentDirectory = new LocalDirectory(BaseDirectory).Parent.FullName;
-#endif
             if (Path.StartsWith("..\\", StringComparison.OrdinalIgnoreCase))
             {
                 Path = ParentDirectory + Path.Remove(0, 2);

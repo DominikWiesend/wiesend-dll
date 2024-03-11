@@ -180,7 +180,7 @@ namespace Wiesend.IoC
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         private static List<Type> GetTypes([NotNull] ref ConcurrentBag<Assembly> LoadedAssemblies)
         {
-            if (LoadedAssemblies == null) throw new ArgumentNullException(nameof(LoadedAssemblies), $"Contract assertion not met: {nameof(LoadedAssemblies)} != null");
+            if (LoadedAssemblies == null) throw new ArgumentNullException(nameof(LoadedAssemblies));
             List<Type> TempTypes = new List<Type>();
             LoadedAssemblies = new ConcurrentBag<Assembly>(LoadedAssemblies.Where(x =>
             {

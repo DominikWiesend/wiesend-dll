@@ -90,26 +90,19 @@ namespace Wiesend.IO.Encryption.Default
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA5351:Do Not Use Broken Cryptographic Algorithms", Justification = "<Pending>")]
         public Hash()
         {
-            ImplementedAlgorithms.Add("SHA1", () => SHA1.Create());
-            ImplementedAlgorithms.Add("SHA256", () => SHA256.Create());
-            ImplementedAlgorithms.Add("SHA384", () => SHA384.Create());
-            ImplementedAlgorithms.Add("SHA512", () => SHA512.Create());
+            ImplementedAlgorithms.Add("SHA1", () => new SHA1CryptoServiceProvider());
+            ImplementedAlgorithms.Add("SHA256", () => new SHA256CryptoServiceProvider());
+            ImplementedAlgorithms.Add("SHA384", () => new SHA384CryptoServiceProvider());
+            ImplementedAlgorithms.Add("SHA512", () => new SHA512CryptoServiceProvider());
             ImplementedAlgorithms.Add("HMACSHA1", () => new HMACSHA1());
             ImplementedAlgorithms.Add("HMACSHA256", () => new HMACSHA256());
             ImplementedAlgorithms.Add("HMACSHA384", () => new HMACSHA384());
             ImplementedAlgorithms.Add("HMACSHA512", () => new HMACSHA512());
-#if NETFRAMEWORK || NETSTANDARD || NET60
-            ImplementedAlgorithms.Add("HMACMD5", () => HMAC.Create("MD5"));
-#endif
-#if NET70
-            ImplementedAlgorithms.Add("HMACMD5", () => (HMACMD5)CryptoConfig.CreateFromName("HMACMD5"));
-#endif
-            ImplementedAlgorithms.Add("MD5", () =>  MD5.Create());
-#if NETFRAMEWORK
+            ImplementedAlgorithms.Add("HMACMD5", () => new HMACMD5());
             ImplementedAlgorithms.Add("HMACRIPEMD160", () => new HMACRIPEMD160());
             ImplementedAlgorithms.Add("MACTRIPLEDES", () => new MACTripleDES());
+            ImplementedAlgorithms.Add("MD5", () => new MD5CryptoServiceProvider());
             ImplementedAlgorithms.Add("RIPEMD160", () => new RIPEMD160Managed());
-#endif
         }
 
         /// <summary>

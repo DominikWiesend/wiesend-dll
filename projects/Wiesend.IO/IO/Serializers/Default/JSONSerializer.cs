@@ -142,7 +142,6 @@ namespace Wiesend.IO.Serializers.Default
                 Serializer.WriteObject(Stream, Data);
                 Stream.Flush();
                 ReturnValue = Encoding.UTF8.GetString(Stream.GetBuffer(), 0, (int)Stream.Position);
-#if NETFRAMEWORK
                 if (HttpContext.Current != null)
                 {
                     HttpRequest Request = HttpContext.Current.Request;
@@ -152,7 +151,6 @@ namespace Wiesend.IO.Serializers.Default
                         ReturnValue = string.Format(CultureInfo.InvariantCulture, "{0}({1});", Callback, ReturnValue);
                     }
                 }
-#endif
             }
             return ReturnValue;
         }

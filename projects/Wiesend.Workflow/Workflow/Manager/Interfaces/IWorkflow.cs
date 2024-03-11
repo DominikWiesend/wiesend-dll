@@ -113,6 +113,7 @@ namespace Wiesend.Workflow.Manager.Interfaces
         /// Determines if the operation should be run or if it should be skipped
         /// </param>
         /// <returns>The workflow object</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         IWorkflow<T> And<OperationType>(params IConstraint<T>[] Constraints)
             where OperationType : IOperation<T>, new();
 
@@ -154,6 +155,7 @@ namespace Wiesend.Workflow.Manager.Interfaces
         /// Determines if the operation should be run or if it should be skipped
         /// </param>
         /// <returns>The workflow object</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         IWorkflow<T> Do<OperationType>(params IConstraint<T>[] Constraints)
             where OperationType : IOperation<T>, new();
 
@@ -193,6 +195,7 @@ namespace Wiesend.Workflow.Manager.Interfaces
         /// <typeparam name="ExceptionType">The exception type.</typeparam>
         /// <param name="Operation">The operation to run.</param>
         /// <returns>The resulting workflow object</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         IWorkflow<T> On<ExceptionType>(Action<T> Operation)
             where ExceptionType : Exception;
 

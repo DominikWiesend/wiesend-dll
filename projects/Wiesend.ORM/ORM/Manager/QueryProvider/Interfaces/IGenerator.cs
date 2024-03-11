@@ -237,6 +237,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Interfaces
         /// </summary>
         /// <typeparam name="D">Data type</typeparam>
         /// <param name="Property">ListManyToMany property</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         void SetupLoadCommands<D>(ListManyToMany<T, D> Property)
             where D : class;
 

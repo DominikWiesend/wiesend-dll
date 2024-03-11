@@ -90,9 +90,10 @@ namespace Wiesend.Profiler.Manager
         /// Constructor
         /// </summary>
         /// <param name="Profilers">The profilers.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
         public Manager([NotNull] IEnumerable<IProfiler> Profilers)
         {
-            if (Profilers == null) throw new ArgumentNullException(nameof(Profilers), "Profilers");
+            if (Profilers == null) throw new ArgumentNullException(nameof(Profilers));
             Profiler = Profilers.FirstOrDefault(x => !x.GetType().Namespace.StartsWith("WIESEND", StringComparison.OrdinalIgnoreCase));
             if (Profiler == null)
                 Profiler = Profilers.FirstOrDefault(x => x.GetType().Namespace.StartsWith("WIESEND", StringComparison.OrdinalIgnoreCase));

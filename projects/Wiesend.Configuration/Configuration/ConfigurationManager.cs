@@ -72,8 +72,8 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-using System;
 using JetBrains.Annotations;
+using System;
 using Wiesend.Configuration.Manager.Interfaces;
 
 namespace Wiesend.Configuration

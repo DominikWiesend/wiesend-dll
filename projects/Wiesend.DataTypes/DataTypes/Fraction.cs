@@ -138,7 +138,7 @@ namespace Wiesend.DataTypes
         /// <param name="Denominator">Denominator</param>
         public Fraction(float Numerator, float Denominator)
         {
-            if (!(Denominator != Int32.MinValue)) throw new ArgumentException($"Contract assertion not met: {nameof(Denominator)} != Int32.MinValue", nameof(Denominator));
+            if (!(Denominator != Int32.MinValue)) throw new ArgumentException($"Condition {nameof(Denominator)} != Int32.MinValue not met.", nameof(Denominator));
             while (Numerator != System.Math.Round(Numerator, MidpointRounding.AwayFromZero)
                 || Denominator != System.Math.Round(Denominator, MidpointRounding.AwayFromZero))
             {

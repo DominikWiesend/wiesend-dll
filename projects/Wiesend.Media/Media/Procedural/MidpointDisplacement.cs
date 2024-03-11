@@ -117,7 +117,7 @@ namespace Wiesend.Media.Procedural
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0028:Simplify collection initialization", Justification = "<Pending>")]
         private static List<Line> GenerateLines(int Width, int Height, int NumberOfCracks, int Iterations, int MaxChange, int MaxLength, int Seed)
         {
-            if (!(NumberOfCracks >= 0 && Width >= 0)) throw new ArgumentException($"Contract assertion not met: {nameof(NumberOfCracks)} >= 0 && Width >= 0", nameof(NumberOfCracks));
+            if (!(NumberOfCracks >= 0 && Width >= 0)) throw new ArgumentException($"Condition {nameof(NumberOfCracks)} >= 0 && Width >= 0 not met.", nameof(NumberOfCracks));
             var Lines = new List<Line>();
             var Generator = new System.Random(Seed);
             for (int x = 0; x < NumberOfCracks; ++x)

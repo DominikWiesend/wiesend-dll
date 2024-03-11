@@ -72,11 +72,11 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using JetBrains.Annotations;
 using System.Text;
 using System.Web;
 using Wiesend.DataTypes;
@@ -120,7 +120,7 @@ namespace Wiesend.Web
         /// <returns>A string containing the application state information</returns>
         public static string DumpApplicationState([NotNull] this System.Web.UI.Page Page, bool HTMLOutput = false)
         {
-            if (Page == null) throw new ArgumentNullException(nameof(Page), "Page");
+            if (Page == null) throw new ArgumentNullException(nameof(Page));
             return Page.Application.DumpApplicationState(HTMLOutput);
         }
 
@@ -154,7 +154,7 @@ namespace Wiesend.Web
         /// <returns>A string containing the cache information</returns>
         public static string DumpCache([NotNull] this System.Web.UI.Page Page, bool HTMLOutput = false)
         {
-            if (Page == null) throw new ArgumentNullException(nameof(Page), "Page");
+            if (Page == null) throw new ArgumentNullException(nameof(Page));
             return Page.Cache.DumpCache(HTMLOutput);
         }
 
@@ -188,7 +188,7 @@ namespace Wiesend.Web
         /// <returns>A string containing the cookie information</returns>
         public static string DumpCookies([NotNull] this System.Web.UI.Page Page, bool HTMLOutput = false)
         {
-            if (Page == null) throw new ArgumentNullException(nameof(Page), "Page");
+            if (Page == null) throw new ArgumentNullException(nameof(Page));
             return Page.Request.Cookies.DumpCookies(HTMLOutput);
         }
 
@@ -200,7 +200,7 @@ namespace Wiesend.Web
         /// <returns>A string containing the cookie information</returns>
         public static string DumpCookies([NotNull] this HttpCookieCollection Input, bool HTMLOutput = false)
         {
-            if (Input == null) throw new ArgumentNullException(nameof(Input), "Input");
+            if (Input == null) throw new ArgumentNullException(nameof(Input));
             var String = new StringBuilder();
             String.Append(HTMLOutput ? "<table><thead><tr><th>Name</th><th>Sub Name</th><th>Value</th></tr></thead><tbody>" : "Name\t\tSub Name\t\tValue\r\n");
             foreach (string Key in Input.Keys)
@@ -251,7 +251,7 @@ namespace Wiesend.Web
         /// <returns>a string containing the information</returns>
         public static string DumpRequestVariable([NotNull] this System.Web.UI.Page Page, bool HTMLOutput = false)
         {
-            if (Page == null) throw new ArgumentNullException(nameof(Page), "Page");
+            if (Page == null) throw new ArgumentNullException(nameof(Page));
             return Page.Request.ToString(HTMLOutput);
         }
 
@@ -276,7 +276,7 @@ namespace Wiesend.Web
         /// <returns>a string containing the information</returns>
         public static string DumpResponseVariable([NotNull] this System.Web.UI.Page Page, bool HTMLOutput = false)
         {
-            if (Page == null) throw new ArgumentNullException(nameof(Page), "Page");
+            if (Page == null) throw new ArgumentNullException(nameof(Page));
             return Page.Response.DumpResponseVariable(HTMLOutput);
         }
 
@@ -310,7 +310,7 @@ namespace Wiesend.Web
         /// <returns>A string containing an HTML formatted list of the server variables</returns>
         public static string DumpServerVars([NotNull] this System.Web.UI.Page Page, bool HTMLOutput = false)
         {
-            if (Page == null) throw new ArgumentNullException(nameof(Page), "Page");
+            if (Page == null) throw new ArgumentNullException(nameof(Page));
             return Page.Request.DumpServerVars(HTMLOutput);
         }
 
@@ -322,7 +322,7 @@ namespace Wiesend.Web
         /// <returns>A string containing the session information</returns>
         public static string DumpSession([NotNull] this System.Web.UI.Page Page, bool HTMLOutput = false)
         {
-            if (Page == null) throw new ArgumentNullException(nameof(Page), "Page");
+            if (Page == null) throw new ArgumentNullException(nameof(Page));
             return Page.Session.DumpSession(HTMLOutput);
         }
 

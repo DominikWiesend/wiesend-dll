@@ -234,7 +234,7 @@ namespace Wiesend.DataTypes.AOP
         /// <returns>The types that can be set up</returns>
         private static Type[] FilterTypesToSetup([NotNull] IEnumerable<Type> enumerable)
         {
-            if (enumerable == null) throw new ArgumentNullException(nameof(enumerable), $"Contract assertion not met: {nameof(enumerable)} != null");
+            if (enumerable == null) throw new ArgumentNullException(nameof(enumerable));
             return enumerable.Where(x => !Classes.ContainsKey(x)
                                 && !x.ContainsGenericParameters
                                 && (x.IsPublic || x.IsNestedPublic)

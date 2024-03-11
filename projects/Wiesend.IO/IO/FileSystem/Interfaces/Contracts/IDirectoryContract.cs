@@ -256,7 +256,7 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         [NotNull]
         public IEnumerable<IDirectory> EnumerateDirectories([NotNull] Predicate<IDirectory> Predicate, System.IO.SearchOption Options = SearchOption.TopDirectoryOnly)
         {
-            if (Predicate == null) throw new ArgumentNullException(nameof(Predicate), $"Contract assertion not met: {nameof(Predicate)} != null");
+            if (Predicate == null) throw new ArgumentNullException(nameof(Predicate));
             if ((object)null == null) throw new InvalidOperationException("Contract assertion not met: result != null");
         }
 
@@ -281,7 +281,7 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         [NotNull]
         public IEnumerable<IFile> EnumerateFiles([NotNull] Predicate<IFile> Predicate, System.IO.SearchOption Options = SearchOption.TopDirectoryOnly)
         {
-            if (Predicate == null) throw new ArgumentNullException(nameof(Predicate), $"Contract assertion not met: {nameof(Predicate)} != null");
+            if (Predicate == null) throw new ArgumentNullException(nameof(Predicate));
             if ((object)null == null) throw new InvalidOperationException("Contract assertion not met: result != null");
         }
 

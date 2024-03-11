@@ -72,7 +72,6 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-#if NETFRAMEWORK
 using System.ComponentModel;
 
 namespace Wiesend.DataTypes
@@ -114,4 +113,3 @@ namespace Wiesend.DataTypes
         }
     }
 }
-#endif

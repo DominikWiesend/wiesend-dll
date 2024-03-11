@@ -72,7 +72,6 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-#if NETFRAMEWORK || NETSTANDARD
 using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
@@ -294,7 +293,6 @@ namespace Wiesend.IO.FileSystem.Default
         /// <param name="Name"></param>
         public override void Rename(string Name)
         {
-#if NETFRAMEWORK || NETSTANDARD
             var Request = WebRequest.Create(InternalDirectory) as FtpWebRequest;
             Request.Method = WebRequestMethods.Ftp.Rename;
             Request.RenameTo = Name;
@@ -302,10 +300,6 @@ namespace Wiesend.IO.FileSystem.Default
             SetupCredentials(Request);
             SendRequest(Request);
             InternalDirectory = new Uri(FullName + "/" + Name);
-#endif
-#if NET
-
-#endif
         }
 
         /// <summary>
@@ -359,4 +353,3 @@ namespace Wiesend.IO.FileSystem.Default
         }
     }
 }
-#endif

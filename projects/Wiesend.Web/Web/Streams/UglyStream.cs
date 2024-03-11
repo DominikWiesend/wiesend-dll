@@ -72,8 +72,8 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-using System;
 using JetBrains.Annotations;
+using System;
 using System.IO;
 using System.Text.RegularExpressions;
 using Wiesend.DataTypes;
@@ -126,6 +126,7 @@ namespace Wiesend.Web.Streams
         /// <summary>
         /// Don't worry about
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public override long Length
         {
             get { throw new NotImplementedException(); }
@@ -134,6 +135,7 @@ namespace Wiesend.Web.Streams
         /// <summary>
         /// No position to take care of
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1065:Do not raise exceptions in unexpected locations", Justification = "<Pending>")]
         public override long Position
         {
             get
@@ -149,6 +151,7 @@ namespace Wiesend.Web.Streams
         /// <summary>
         /// Compression using
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
         private CompressionType Compression;
 
         /// <summary>
@@ -159,8 +162,11 @@ namespace Wiesend.Web.Streams
         /// <summary>
         /// Stream using
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2213:Disposable fields should be disposed", Justification = "<Pending>")]
         private Stream StreamUsing;
 
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
         private MinificationType Type;
 
         /// <summary>
@@ -230,7 +236,7 @@ namespace Wiesend.Web.Streams
         /// <returns>The string minus any extra white space</returns>
         protected static string Evaluate([NotNull] Match Matcher)
         {
-            if (Matcher == null) throw new ArgumentNullException(nameof(Matcher), "Matcher");
+            if (Matcher == null) throw new ArgumentNullException(nameof(Matcher));
             var MyString = Matcher.ToString();
             MyString = Regex.Replace(MyString, @"\r\n\s*", "");
             return MyString;

@@ -112,7 +112,7 @@ namespace Wiesend.Random
         /// <returns>A randomly generated value</returns>
         public static int ThreadSafeNext(int Min = int.MinValue, int Max = int.MaxValue)
         {
-            if (!(Min <= Max)) throw new ArgumentException($"Contract assertion not met: {nameof(Min)} <= Max", nameof(Min));
+            if (!(Min <= Max)) throw new ArgumentException($"Condition {nameof(Min)} <= {nameof(Max)} not met,", nameof(Min));
             if (Local == null)
             {
                 int Seed;

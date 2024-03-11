@@ -75,10 +75,8 @@
 using System.Collections.Generic;
 using System.Configuration;
 using Wiesend.Configuration.Manager.Interfaces;
-#if NETFRAMEWORK
 using System.Web;
 using System.Web.Configuration;
-#endif
 
 namespace Wiesend.Configuration.Manager.Default
 {
@@ -110,7 +108,6 @@ namespace Wiesend.Configuration.Manager.Default
         {
             AppSettings = new Dictionary<string, string>();
             ConnectionStrings = new Dictionary<string, ConnectionString>();
-#if NETFRAMEWORK
             if (HttpContext.Current == null)
             {
                 foreach (ConnectionStringSettings Connection in System.Configuration.ConfigurationManager.ConnectionStrings)
@@ -125,12 +122,6 @@ namespace Wiesend.Configuration.Manager.Default
                 foreach (string Key in WebConfigurationManager.AppSettings.Keys)
                     AppSettings.Add(Key, WebConfigurationManager.AppSettings[Key]);
             }
-#else
-            foreach (ConnectionStringSettings Connection in System.Configuration.ConfigurationManager.ConnectionStrings)
-                ConnectionStrings.Add(Connection.Name, new ConnectionString { Connection = Connection.ConnectionString, ProviderName = Connection.ProviderName });
-            foreach (string Key in System.Configuration.ConfigurationManager.AppSettings.Keys)
-                AppSettings.Add(Key, System.Configuration.ConfigurationManager.AppSettings[Key]);
-#endif
         }
 
         /// <summary>
@@ -157,14 +148,10 @@ namespace Wiesend.Configuration.Manager.Default
         {
             get
             {
-#if NETFRAMEWORK
                 if (HttpContext.Current == null)
                     return System.Configuration.ConfigurationManager.GetSection(SectionName);
                 else
                     return WebConfigurationManager.GetSection(SectionName);
-#else
-                return System.Configuration.ConfigurationManager.GetSection(SectionName);
-#endif
             }
         }
 

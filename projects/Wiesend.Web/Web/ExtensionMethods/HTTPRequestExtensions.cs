@@ -72,9 +72,9 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.ComponentModel;
-using JetBrains.Annotations;
 using System.Globalization;
 using System.Net;
 using System.Text.RegularExpressions;
@@ -93,6 +93,7 @@ namespace Wiesend.Web
         /// </summary>
         /// <param name="Request">Request</param>
         /// <returns>The If-Modified-Since header value expressed as a DateTime object</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
         public static DateTime IfModifiedSince(this HttpRequestBase Request)
         {
             if (Request == null)
@@ -106,6 +107,7 @@ namespace Wiesend.Web
         /// </summary>
         /// <param name="Request">Request</param>
         /// <returns>The If-Modified-Since header value expressed as a DateTime object</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
         public static DateTime IfModifiedSince(this HttpRequest Request)
         {
             if (Request == null)
@@ -119,11 +121,10 @@ namespace Wiesend.Web
         /// </summary>
         /// <param name="Request">Request object</param>
         /// <returns>True if it is, false otherwise</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
         public static bool IsMobile([NotNull] this HttpRequestBase Request)
         {
-            if (Request == null) throw new ArgumentNullException(nameof(Request), "Request");
-            if (!(Request.Browser != null)) throw new ArgumentNullException(nameof(Request), "Browser");
+            if (Request == null) throw new ArgumentNullException(nameof(Request));
+            if (!(Request.Browser != null)) throw new ArgumentNullException(nameof(Request));
             if (Request.Browser.IsMobileDevice
                 || !string.IsNullOrEmpty(Request.ServerVariables["HTTP_X_WAP_PROFILE"])
                 || (!string.IsNullOrEmpty(Request.ServerVariables["HTTP_ACCEPT"])
@@ -142,11 +143,10 @@ namespace Wiesend.Web
         /// </summary>
         /// <param name="Request">Request object</param>
         /// <returns>True if it is, false otherwise</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1308:NormalizeStringsToUppercase")]
         public static bool IsMobile([NotNull] this HttpRequest Request)
         {
-            if (Request == null) throw new ArgumentNullException(nameof(Request), "Request");
-            if (!(Request.Browser != null)) throw new ArgumentNullException(nameof(Request), "Browser");
+            if (Request == null) throw new ArgumentNullException(nameof(Request));
+            if (!(Request.Browser != null)) throw new ArgumentNullException(nameof(Request));
             if (Request.Browser.IsMobileDevice
                 || !string.IsNullOrEmpty(Request.ServerVariables["HTTP_X_WAP_PROFILE"])
                 || (!string.IsNullOrEmpty(Request.ServerVariables["HTTP_ACCEPT"])
@@ -165,9 +165,11 @@ namespace Wiesend.Web
         /// </summary>
         /// <param name="Request">Request</param>
         /// <returns>The IPAddress object if it exists, null otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0018:Inline variable declaration", Justification = "<Pending>")]
         public static IPAddress UserIPAddress([NotNull] this HttpRequestBase Request)
         {
-            if (Request == null) throw new ArgumentNullException(nameof(Request), "Request");
+            if (Request == null) throw new ArgumentNullException(nameof(Request));
             IPAddress Address = null;
             if (!IPAddress.TryParse(Request.UserHostAddress, out Address))
                 Address = null;
@@ -179,9 +181,11 @@ namespace Wiesend.Web
         /// </summary>
         /// <param name="Request">Request</param>
         /// <returns>The IPAddress object if it exists, null otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0018:Inline variable declaration", Justification = "<Pending>")]
         public static IPAddress UserIPAddress([NotNull] this HttpRequest Request)
         {
-            if (Request == null) throw new ArgumentNullException(nameof(Request), "Request");
+            if (Request == null) throw new ArgumentNullException(nameof(Request));
             IPAddress Address = null;
             if (!IPAddress.TryParse(Request.UserHostAddress, out Address))
                 Address = null;

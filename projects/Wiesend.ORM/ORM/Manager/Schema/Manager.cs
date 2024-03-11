@@ -116,7 +116,7 @@ namespace Wiesend.ORM.Manager.Schema
         {
             if (Source == null) throw new ArgumentNullException(nameof(Source));
             return SchemaGenerators.ContainsKey(Source.SourceType) ?
-                SchemaGenerators[Source.SourceType].GenerateSchema(DesiredStructure, Source) :
+                SchemaGenerators.GetValue(Source.SourceType).GenerateSchema(DesiredStructure, Source) :
                 new List<string>();
         }
 

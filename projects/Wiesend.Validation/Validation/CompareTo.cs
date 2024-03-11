@@ -76,18 +76,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
-#if NETFRAMEWORK
 using System.Web.Mvc;
-#else
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-#endif
 using Wiesend.DataTypes;
 using Wiesend.DataTypes.Comparison;
-using Wiesend.Validation;
 
 namespace Wiesend.Validation
 {
-#if NETFRAMEWORK
     /// <summary>
     /// CompareTo attribute
     /// </summary>
@@ -200,128 +194,4 @@ namespace Wiesend.Validation
             }
         }
     }
-#else
-    /// <summary>
-    /// CompareTo attribute
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
-    public class CompareToAttribute : ValidationAttribute, IClientModelValidator
-    {
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="PropertyName">Property to compare to</param>
-        /// <param name="Type">Comparison type to use</param>
-        /// <param name="ErrorMessage">Error message</param>
-        public CompareToAttribute(string PropertyName, ComparisonType Type, string ErrorMessage = "")
-            : base(string.IsNullOrEmpty(ErrorMessage) ? "{0} is not {1} {2}" : ErrorMessage)
-        {
-            this.PropertyName = PropertyName;
-            this.Type = Type;
-        }
-
-        /// <summary>
-        /// Property to compare to
-        /// </summary>
-        public string PropertyName { get; private set; }
-
-        /// <summary>
-        /// Comparison type
-        /// </summary>
-        public ComparisonType Type { get; private set; }
-
-        /// <summary>
-        /// Formats the error message
-        /// </summary>
-        /// <param name="name">Property name</param>
-        /// <returns>The formatted string</returns>
-        public override string FormatErrorMessage(string name)
-        {
-            string ComparisonTypeString = "";
-            switch (Type)
-            {
-                case ComparisonType.Equal:
-                    ComparisonTypeString = "equal";
-                    break;
-                case ComparisonType.GreaterThan:
-                    ComparisonTypeString = "greater than";
-                    break;
-                case ComparisonType.GreaterThanOrEqual:
-                    ComparisonTypeString = "greater than or equal";
-                    break;
-                case ComparisonType.LessThan:
-                    ComparisonTypeString = "less than";
-                    break;
-                case ComparisonType.LessThanOrEqual:
-                    ComparisonTypeString = "less than or equal";
-                    break;
-                case ComparisonType.NotEqual:
-                    ComparisonTypeString = "not equal";
-                    break;
-            }
-
-            return string.Format(CultureInfo.InvariantCulture, ErrorMessageString, name, ComparisonTypeString, PropertyName);
-        }
-
-        /// <summary>
-        /// Determines if the property is valid
-        /// </summary>
-        /// <param name="value">Value to check</param>
-        /// <param name="validationContext">Validation context</param>
-        /// <returns>The validation result</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0066:Convert switch statement to expression", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
-        {
-            IComparable Tempvalue = value as IComparable;
-            GenericComparer<IComparable> Comparer = new GenericComparer<IComparable>();
-            IComparable ComparisonValue = (IComparable)validationContext.ObjectType.GetProperty(PropertyName).GetValue(validationContext.ObjectInstance, null).To<object>(value.GetType());
-            switch (Type)
-            {
-                case ComparisonType.Equal:
-                    return Comparer.Compare(Tempvalue, ComparisonValue) == 0 ? ValidationResult.Success : new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
-                case ComparisonType.NotEqual:
-                    return Comparer.Compare(Tempvalue, ComparisonValue) != 0 ? ValidationResult.Success : new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
-                case ComparisonType.GreaterThan:
-                    return Comparer.Compare(Tempvalue, ComparisonValue) > 0 ? ValidationResult.Success : new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
-                case ComparisonType.GreaterThanOrEqual:
-                    return Comparer.Compare(Tempvalue, ComparisonValue) >= 0 ? ValidationResult.Success : new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
-                case ComparisonType.LessThan:
-                    return Comparer.Compare(Tempvalue, ComparisonValue) < 0 ? ValidationResult.Success : new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
-                case ComparisonType.LessThanOrEqual:
-                    return Comparer.Compare(Tempvalue, ComparisonValue) <= 0 ? ValidationResult.Success : new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
-                default:
-                    return ValidationResult.Success;
-            }
-        }
-
-        /// <summary>
-        /// Add a client side validation rule
-        /// </summary>
-        /// <param name="context">Controller context</param>
-        [CLSCompliant(false)]
-        public void AddValidation(ClientModelValidationContext context)
-        {
-            MergeAttribute(context.Attributes, "data-val", "true");
-            string errorMessage = FormatErrorMessage(context.ModelMetadata.GetDisplayName());
-            MergeAttribute(context.Attributes, "data-val-compareto", errorMessage);
-        }
-
-        /// <summary>
-        /// Merge the attribute
-        /// </summary>
-        /// <param name="attributes">Attributes to merge</param>
-        /// <param name="key">Key</param>
-        /// <param name="value">Value</param>
-        /// <returns></returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "<Pending>")]
-        private bool MergeAttribute(IDictionary<string, string> attributes, string key, string value)
-        {
-            if (attributes.ContainsKey(key))
-                return false;
-            attributes.Add(key, value);
-            return true;
-        }
-    }
-#endif
 }

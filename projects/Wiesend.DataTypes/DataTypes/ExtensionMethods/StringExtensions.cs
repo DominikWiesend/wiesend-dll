@@ -72,13 +72,10 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-#if NETFRAMEWORK
-using System.Data.Entity.Design.PluralizationServices;
-#endif
-using JetBrains.Annotations;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -87,6 +84,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Wiesend.DataTypes.Formatters;
 using Wiesend.DataTypes.Formatters.Interfaces;
+using System.Data.Entity.Design.PluralizationServices;
 
 namespace Wiesend.DataTypes
 {
@@ -435,7 +433,6 @@ namespace Wiesend.DataTypes
             return string.IsNullOrEmpty(Input) ? 0 : new Regex(Match).Matches(Input).Count;
         }
 
-#if NETFRAMEWORK
         /// <summary>
         /// Pluralizes a word
         /// </summary>
@@ -451,7 +448,6 @@ namespace Wiesend.DataTypes
             Culture = Culture.Check(CultureInfo.CurrentCulture);
             return PluralizationService.CreateService(Culture).Pluralize(Word);
         }
-#endif
 
         /// <summary>
         /// Removes everything that is in the filter text from the input.
@@ -522,7 +518,6 @@ namespace Wiesend.DataTypes
             return Input.Substring(Input.Length - Length, Length);
         }
 
-#if NETFRAMEWORK
         /// <summary>
         /// Singularizes a word
         /// </summary>
@@ -538,7 +533,6 @@ namespace Wiesend.DataTypes
             Culture = Culture.Check(CultureInfo.CurrentCulture);
             return PluralizationService.CreateService(Culture).Singularize(Word);
         }
-#endif
 
         /// <summary>
         /// Strips illegal characters for XML content

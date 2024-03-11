@@ -313,7 +313,7 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
         {
             if (Function == null) throw new ArgumentNullException(nameof(Function));
             if (CurrentFunction == null) throw new ArgumentNullException(nameof(CurrentFunction));
-            if (!(Function.Definition == CurrentFunction.Definition || !string.IsNullOrEmpty(Function.Definition))) throw new ArgumentException($"Contract assertion not met: {nameof(Function)}.Definition == Current{nameof(Function)}.Definition || !string.IsNullOrEmpty({nameof(Function)}.Definition)", nameof(Function));
+            if (!(Function.Definition == CurrentFunction.Definition || !string.IsNullOrEmpty(Function.Definition))) throw new ArgumentException($"Condition {nameof(Function)}.Definition == Current{nameof(Function)}.Definition || !string.IsNullOrEmpty({nameof(Function)}.Definition) not met.", nameof(Function));
             var ReturnValue = new List<string>();
             if (Function.Definition != CurrentFunction.Definition)
             {
@@ -329,7 +329,7 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
         {
             if (StoredProcedure == null) throw new ArgumentNullException(nameof(StoredProcedure));
             if (CurrentStoredProcedure == null) throw new ArgumentNullException(nameof(CurrentStoredProcedure));
-            if (!(StoredProcedure.Definition == CurrentStoredProcedure.Definition || !string.IsNullOrEmpty(StoredProcedure.Definition))) throw new ArgumentException($"Contract assertion not met: {nameof(StoredProcedure)}.Definition == Current{nameof(StoredProcedure)}.Definition || !string.IsNullOrEmpty({nameof(StoredProcedure)}.Definition)", nameof(StoredProcedure));
+            if (!(StoredProcedure.Definition == CurrentStoredProcedure.Definition || !string.IsNullOrEmpty(StoredProcedure.Definition))) throw new ArgumentException($"Condition {nameof(StoredProcedure)}.Definition == Current{nameof(StoredProcedure)}.Definition || !string.IsNullOrEmpty({nameof(StoredProcedure)}.Definition) not met.", nameof(StoredProcedure));
             var ReturnValue = new List<string>();
             if (StoredProcedure.Definition != CurrentStoredProcedure.Definition)
             {
@@ -450,7 +450,7 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
         {
             if (View == null) throw new ArgumentNullException(nameof(View));
             if (CurrentView == null) throw new ArgumentNullException(nameof(CurrentView));
-            if (!(View.Definition == CurrentView.Definition || !string.IsNullOrEmpty(View.Definition))) throw new ArgumentException($"Contract assertion not met: {nameof(View)}.Definition == Current{nameof(View)}.Definition || !string.IsNullOrEmpty({nameof(View)}.Definition)", nameof(View));
+            if (!(View.Definition == CurrentView.Definition || !string.IsNullOrEmpty(View.Definition))) throw new ArgumentException($"Condition {nameof(View)}.Definition == Current{nameof(View)}.Definition || !string.IsNullOrEmpty({nameof(View)}.Definition) not met.", nameof(View));
             var ReturnValue = new List<string>();
             if (View.Definition != CurrentView.Definition)
             {

@@ -234,7 +234,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1829:Use Length/Count property instead of Count() when available", Justification = "<Pending>")]
         private IList<IList<dynamic>> ExecuteCommands()
         {
-            if (Source == null) throw new ArgumentNullException("Source", $"Contract assertion not met: {nameof(Source)} != null");
+            if (Source == null) throw new ArgumentNullException(nameof(Source));
             if (Commands == null)
                 return new List<IList<dynamic>>();
             var ReturnValue = new List<IList<dynamic>>();

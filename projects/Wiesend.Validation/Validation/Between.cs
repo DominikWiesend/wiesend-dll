@@ -76,17 +76,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
-#if NETFRAMEWORK
 using System.Web.Mvc;
-#else
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-#endif
 using Wiesend.DataTypes;
 using Wiesend.DataTypes.Comparison;
 
 namespace Wiesend.Validation
 {
-#if NETFRAMEWORK
     /// <summary>
     /// Between attribute
     /// </summary>
@@ -163,92 +158,4 @@ namespace Wiesend.Validation
                 ValidationResult.Success;
         }
     }
-#else
-    /// <summary>
-    /// Between attribute
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
-    public class BetweenAttribute : ValidationAttribute, IClientModelValidator
-    {
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="Max">Max value</param>
-        /// <param name="Min">Min value</param>
-        /// <param name="ErrorMessage">Error message</param>
-        public BetweenAttribute(object Min, object Max, string ErrorMessage = "")
-            : base(string.IsNullOrEmpty(ErrorMessage) ? "{0} is not between {1} and {2}" : ErrorMessage)
-        {
-            this.Min = Min;
-            this.Max = Max;
-        }
-
-        /// <summary>
-        /// Max value to compare to
-        /// </summary>
-        public object Max { get; private set; }
-
-        /// <summary>
-        /// Min value to compare to
-        /// </summary>
-        public object Min { get; private set; }
-
-        /// <summary>
-        /// Determines if the property is valid
-        /// </summary>
-        /// <param name="value">Value to check</param>
-        /// <param name="validationContext">Validation context</param>
-        /// <returns>The validation result</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
-        {
-            GenericComparer<IComparable> Comparer = new GenericComparer<IComparable>();
-            IComparable MaxValue = (IComparable)Max.To<object>(value.GetType());
-            IComparable MinValue = (IComparable)Min.To<object>(value.GetType());
-            IComparable TempValue = value as IComparable;
-            return (Comparer.Compare(MaxValue, TempValue) < 0
-                    || Comparer.Compare(TempValue, MinValue) < 0) ?
-                new ValidationResult(FormatErrorMessage(validationContext.DisplayName)) :
-                ValidationResult.Success;
-        }
-
-        /// <summary>
-        /// Formats the error message
-        /// </summary>
-        /// <param name="name">Property name</param>
-        /// <returns>The formatted string</returns>
-        public override string FormatErrorMessage(string name)
-        {
-            return string.Format(CultureInfo.InvariantCulture, ErrorMessageString, name, Min.ToString(), Max.ToString());
-        }
-
-        /// <summary>
-        /// Add a client side validation rule
-        /// </summary>
-        /// <param name="context">Controller context</param>
-        [CLSCompliant(false)]
-        public void AddValidation(ClientModelValidationContext context)
-        {
-            MergeAttribute(context.Attributes, "data-val", "true");
-            string errorMessage = FormatErrorMessage(context.ModelMetadata.GetDisplayName());
-            MergeAttribute(context.Attributes, "data-val-between", errorMessage);
-        }
-
-        /// <summary>
-        /// Merge the attribute
-        /// </summary>
-        /// <param name="attributes">Attributes to merge</param>
-        /// <param name="key">Key</param>
-        /// <param name="value">Value</param>
-        /// <returns></returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "<Pending>")]
-        private bool MergeAttribute(IDictionary<string, string> attributes, string key, string value)
-        {
-            if (attributes.ContainsKey(key))
-                return false;
-            attributes.Add(key, value);
-            return true;
-        }
-    }
-#endif
 }

@@ -133,7 +133,7 @@ namespace Wiesend.DataTypes
         /// <returns>The absolute value</returns>
         public static long Absolute(this long Value)
         {
-            if (Value == -9223372036854775808) throw new ArgumentException($"Contract assertion not met: {nameof(Value)} != -9223372036854775808", nameof(Value));
+            if (Value == -9223372036854775808) throw new ArgumentException($"Condition {nameof(Value)} != -9223372036854775808 not met.", nameof(Value));
             return System.Math.Abs(Value);
         }
 
@@ -144,7 +144,7 @@ namespace Wiesend.DataTypes
         /// <returns>The absolute value</returns>
         public static short Absolute(this short Value)
         {
-            if (Value == -32768) throw new ArgumentException($"Contract assertion not met: {nameof(Value)} != -32768", nameof(Value));
+            if (Value == -32768) throw new ArgumentException($"Condition {nameof(Value)} != -32768 not met.", nameof(Value));
             return System.Math.Abs(Value);
         }
 
@@ -204,7 +204,7 @@ namespace Wiesend.DataTypes
         public static int GreatestCommonDenominator(this int Value1, uint Value2)
         {
             if (Value1 == Int32.MinValue) throw new ArgumentOutOfRangeException(nameof(Value1), "Value1 can not be Int32.MinValue");
-            if (Value2 == 2147483648) throw new ArgumentException($"Contract assertion not met: {nameof(Value2)} != 2147483648", nameof(Value2));
+            if (Value2 == 2147483648) throw new ArgumentException($"Condition {nameof(Value2)} != 2147483648 not met.", nameof(Value2));
             return Value1.GreatestCommonDenominator((int)Value2);
         }
 
@@ -217,8 +217,8 @@ namespace Wiesend.DataTypes
         [CLSCompliant(false)]
         public static int GreatestCommonDenominator(this uint Value1, uint Value2)
         {
-            if (Value1 == 2147483648) throw new ArgumentException($"Contract assertion not met: {nameof(Value1)} != 2147483648", nameof(Value1));
-            if (Value2 == 2147483648) throw new ArgumentException($"Contract assertion not met: {nameof(Value2)} != 2147483648", nameof(Value2));
+            if (Value1 == 2147483648) throw new ArgumentException($"Condition {nameof(Value1)} != 2147483648 not met.", nameof(Value1));
+            if (Value2 == 2147483648) throw new ArgumentException($"Condition {nameof(Value2)} != 2147483648 not met.", nameof(Value2));
             return ((int)Value1).GreatestCommonDenominator((int)Value2);
         }
 
@@ -337,8 +337,8 @@ namespace Wiesend.DataTypes
         /// <returns></returns>
         public static double Round(this double Value, int Digits = 2, MidpointRounding Rounding = MidpointRounding.AwayFromZero)
         {
-            if (!(Digits >= 0)) throw new ArgumentException($"Contract assertion not met: {nameof(Digits)} >= 0", nameof(Digits));
-            if (!(Digits <= 15)) throw new ArgumentException($"Contract assertion not met: {nameof(Digits)} <= 15", nameof(Digits));
+            if (!(Digits >= 0)) throw new ArgumentException($"Condition {nameof(Digits)} >= 0 not met.", nameof(Digits));
+            if (!(Digits <= 15)) throw new ArgumentException($"Condition {nameof(Digits)} <= 15 not met.", nameof(Digits));
             return System.Math.Round(Value, Digits, Rounding);
         }
 

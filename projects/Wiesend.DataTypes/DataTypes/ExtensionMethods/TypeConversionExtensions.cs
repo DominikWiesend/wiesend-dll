@@ -110,8 +110,8 @@ namespace Wiesend.DataTypes
         /// <returns>The type mapping</returns>
         public static ITypeMapping MapTo([NotNull] this Type LeftType, [NotNull] Type RightType)
         {
-            if (LeftType == null) throw new ArgumentNullException(nameof(LeftType), $"Contract assertion not met: {nameof(LeftType)} != null");
-            if (RightType == null) throw new ArgumentNullException(nameof(RightType), $"Contract assertion not met: {nameof(RightType)} != null");
+            if (LeftType == null) throw new ArgumentNullException(nameof(LeftType));
+            if (RightType == null) throw new ArgumentNullException(nameof(RightType));
             var TempManager = IoC.Manager.Bootstrapper.Resolve<DataTypes.DataMapper.Manager>();
             if (TempManager == null)
                 return null;

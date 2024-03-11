@@ -77,16 +77,11 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Text.RegularExpressions;
-#if NETFRAMEWORK
 using System.Web.Mvc;
-#else
-using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
-#endif
 using Wiesend.DataTypes;
 
 namespace Wiesend.Validation
 {
-#if NETFRAMEWORK
     /// <summary>
     /// Is attribute
     /// </summary>
@@ -178,109 +173,4 @@ namespace Wiesend.Validation
             return ValidationResult.Success;
         }
     }
-#else
-    /// <summary>
-    /// Is attribute
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = false)]
-    [CLSCompliant(true)]
-    public class IsAttribute : ValidationAttribute, IClientModelValidator
-    {
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="Type">Validation type enum</param>
-        /// <param name="ErrorMessage">Error message</param>
-        public IsAttribute(IsValid Type, string ErrorMessage = "")
-            : base(string.IsNullOrEmpty(ErrorMessage) ? "{0} is not {1}" : ErrorMessage)
-        {
-            this.Type = Type;
-        }
-
-        /// <summary>
-        /// Type of validation to do
-        /// </summary>
-        public IsValid Type { get; private set; }
-
-        /// <summary>
-        /// Determines if the property is valid
-        /// </summary>
-        /// <param name="value">Value to check</param>
-        /// <param name="validationContext">Validation context</param>
-        /// <returns>The validation result</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0066:Convert switch statement to expression", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("GeneratedRegex", "SYSLIB1045:Convert to 'GeneratedRegexAttribute'.", Justification = "<Pending>")]
-        protected override ValidationResult IsValid(object value, ValidationContext validationContext)
-        {
-            string Tempvalue = value as string;
-            switch (Type)
-            {
-                case Validation.IsValid.CreditCard:
-                    return Tempvalue.Is(StringCompare.CreditCard) ? ValidationResult.Success : new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
-                case Validation.IsValid.Decimal:
-                    return Regex.IsMatch(Tempvalue, @"^(\d+)+(\.\d+)?$|^(\d+)?(\.\d+)+$") ? ValidationResult.Success : new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
-                case Validation.IsValid.Domain:
-                    return Regex.IsMatch(Tempvalue, @"^(http|https|ftp)://([a-zA-Z0-9_-]*(?:\.[a-zA-Z0-9_-]*)+):?([0-9]+)?/?") ? ValidationResult.Success : new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
-                case Validation.IsValid.Integer:
-                    return Regex.IsMatch(Tempvalue, @"^\d+$") ? ValidationResult.Success : new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
-            }
-
-            return ValidationResult.Success;
-        }
-
-        /// <summary>
-        /// Formats the error message
-        /// </summary>
-        /// <param name="name">Property name</param>
-        /// <returns>The formatted string</returns>
-        public override string FormatErrorMessage(string name)
-        {
-            string ComparisonString = "";
-            switch (Type)
-            {
-                case Validation.IsValid.CreditCard:
-                    ComparisonString = "a credit card";
-                    break;
-                case Validation.IsValid.Decimal:
-                    ComparisonString = "a decimal";
-                    break;
-                case Validation.IsValid.Domain:
-                    ComparisonString = "a domain";
-                    break;
-                case Validation.IsValid.Integer:
-                    ComparisonString = "an integer";
-                    break;
-            }
-            return string.Format(CultureInfo.InvariantCulture, ErrorMessageString, name, ComparisonString);
-        }
-
-        /// <summary>
-        /// Add a client side validation rule
-        /// </summary>
-        /// <param name="context">Controller context</param>
-        [CLSCompliantAttribute(false)]
-        public void AddValidation(ClientModelValidationContext context)
-        {
-            MergeAttribute(context.Attributes, "data-val", "true");
-            string errorMessage = FormatErrorMessage(context.ModelMetadata.GetDisplayName());
-            MergeAttribute(context.Attributes, "data-val-is", errorMessage);
-        }
-
-        /// <summary>
-        /// Merge the attribute
-        /// </summary>
-        /// <param name="attributes">Attributes to merge</param>
-        /// <param name="key">Key</param>
-        /// <param name="value">Value</param>
-        /// <returns></returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1822:Mark members as static", Justification = "<Pending>")]
-        private bool MergeAttribute(IDictionary<string, string> attributes, string key, string value)
-        {
-            if (attributes.ContainsKey(key))
-                return false;
-            attributes.Add(key, value);
-            return true;
-        }
-    }
-#endif
 }

@@ -72,10 +72,11 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
+using JetBrains.Annotations;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using JetBrains.Annotations;
+using System.Globalization;
 using System.Text;
 
 namespace Wiesend.Web
@@ -93,15 +94,19 @@ namespace Wiesend.Web
         /// <returns>The IDictionary expressed as a string</returns>
         public static string ToQueryString([NotNull] this IDictionary<string, string> Input)
         {
-            if (Input == null) throw new ArgumentNullException(nameof(Input), "Input");
+            if (Input == null) throw new ArgumentNullException(nameof(Input));
             if (Input.Count <= 0)
                 return "";
             var Builder = new StringBuilder();
-            Builder.Append("?");
+            Builder.Append('?');
             string Splitter = "";
             foreach (string Key in Input.Keys)
             {
+#if NET45
                 Builder.Append(Splitter).AppendFormat("{0}={1}", Key.URLEncode(), Input[Key].URLEncode());
+#else
+                Builder.Append(Splitter).AppendFormat(CultureInfo.InvariantCulture, "{0}={1}", Key.URLEncode(), Input[Key].URLEncode());
+#endif
                 Splitter = "&";
             }
             return Builder.ToString();

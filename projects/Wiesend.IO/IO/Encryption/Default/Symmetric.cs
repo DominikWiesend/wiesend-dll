@@ -90,18 +90,11 @@ namespace Wiesend.IO.Encryption.Default
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA5351:Do Not Use Broken Cryptographic Algorithms", Justification = "<Pending>")]
         public Symmetric()
         {
-#if NETFRAMEWORK || NETSTANDARD
             ImplementedAlgorithms.Add("RIJNDAEL", () => new RijndaelManaged());
-#endif
-            ImplementedAlgorithms.Add("TRIPLEDES", () => TripleDES.Create());
-            ImplementedAlgorithms.Add("DES", () => DES.Create());
-            ImplementedAlgorithms.Add("RC2", () => RC2.Create());
-#if NET60
-            ImplementedAlgorithms.Add("AES", () => Aes.Create("AesManaged"));
-#endif
-#if NET70
-            ImplementedAlgorithms.Add("AES", () => (Aes)CryptoConfig.CreateFromName("AesManaged"));
-#endif
+            ImplementedAlgorithms.Add("TRIPLEDES", () => new TripleDESCryptoServiceProvider());
+            ImplementedAlgorithms.Add("DES", () => new DESCryptoServiceProvider());
+            ImplementedAlgorithms.Add("AES", () => new AesManaged());
+            ImplementedAlgorithms.Add("RC2", () => new RC2CryptoServiceProvider());
         }
 
         /// <summary>

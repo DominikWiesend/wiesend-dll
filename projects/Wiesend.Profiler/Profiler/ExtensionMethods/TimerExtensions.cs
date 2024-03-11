@@ -154,10 +154,11 @@ namespace Wiesend.Profiler
         /// <param name="FunctionName">Name to associate with the action</param>
         /// <typeparam name="R">Type of the value to return</typeparam>
         /// <returns>The value returned by the Func</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public static R Time<R>(this Func<R> FuncToTime, string FunctionName = "")
         {
             if (FuncToTime == null)
-                return default(R);
+                return default;
             using (new Profiler(FunctionName))
                 return FuncToTime();
         }
@@ -171,10 +172,11 @@ namespace Wiesend.Profiler
         /// <typeparam name="T1">Object type 1</typeparam>
         /// <typeparam name="R">Type of the value to return</typeparam>
         /// <returns>The value returned by the Func</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public static R Time<T1, R>(this Func<T1, R> FuncToTime, T1 Object1, string FunctionName = "")
         {
             if (FuncToTime == null)
-                return default(R);
+                return default;
             using (new Profiler(FunctionName))
                 return FuncToTime(Object1);
         }
@@ -190,10 +192,11 @@ namespace Wiesend.Profiler
         /// <typeparam name="T2">Object type 2</typeparam>
         /// <typeparam name="R">Type of the value to return</typeparam>
         /// <returns>The value returned by the Func</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public static R Time<T1, T2, R>(this Func<T1, T2, R> FuncToTime, T1 Object1, T2 Object2, string FunctionName = "")
         {
             if (FuncToTime == null)
-                return default(R);
+                return default;
             using (new Profiler(FunctionName))
                 return FuncToTime(Object1, Object2);
         }
@@ -211,10 +214,11 @@ namespace Wiesend.Profiler
         /// <typeparam name="T3">Object type 3</typeparam>
         /// <typeparam name="R">Type of the value to return</typeparam>
         /// <returns>The value returned by the Func</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public static R Time<T1, T2, T3, R>(this Func<T1, T2, T3, R> FuncToTime, T1 Object1, T2 Object2, T3 Object3, string FunctionName = "")
         {
             if (FuncToTime == null)
-                return default(R);
+                return default;
             using (new Profiler(FunctionName))
                 return FuncToTime(Object1, Object2, Object3);
         }

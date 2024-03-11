@@ -276,7 +276,7 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         /// <param name="NewName">New file name</param>
         public void Rename([NotNull] string NewName)
         {
-            if (string.IsNullOrEmpty(NewName)) throw new ArgumentNullException(nameof(NewName), $"Contract assertion not met: !string.IsNullOrEmpty({nameof(NewName)})");
+            if (string.IsNullOrEmpty(NewName)) throw new ArgumentNullException(nameof(NewName));
         }
 
         /// <summary>

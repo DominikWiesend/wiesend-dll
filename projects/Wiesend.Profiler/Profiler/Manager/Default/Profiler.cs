@@ -104,14 +104,15 @@ namespace Wiesend.Profiler.Manager.Default
         /// Constructor
         /// </summary>
         /// <param name="FunctionName">Function/identifier</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         public Profiler(string FunctionName)
         {
             this.Parent = Current;
-            Profiler Child = Parent != null && Parent.InternalChildren.ContainsKey(FunctionName) ? Parent.InternalChildren[FunctionName] : null;
+            Profiler Child = Parent != null && Parent.InternalChildren.ContainsKey(FunctionName) ? Parent.InternalChildren.GetValue(FunctionName) : null;
             if (Child == null)
             {
-                if (Parent != null)
-                    Parent.InternalChildren.Add(FunctionName, this);
+                Parent?.InternalChildren.Add(FunctionName, this);
                 this.Function = FunctionName;
                 this.InternalChildren = new Dictionary<string, Profiler>();
                 this.Entries = new List<IResultEntry>();
@@ -140,12 +141,12 @@ namespace Wiesend.Profiler.Manager.Default
         /// <summary>
         /// The _ cpu value
         /// </summary>
-        private static float _CPUValue = 0;
+        private static float _CPUValue;
 
         /// <summary>
         /// The _ memory value
         /// </summary>
-        private static float _MemValue = 0;
+        private static float _MemValue;
 
         /// <summary>
         /// Contains the current profiler
@@ -251,6 +252,7 @@ namespace Wiesend.Profiler.Manager.Default
         /// Gets the cpu value.
         /// </summary>
         /// <value>The cpu value.</value>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         private static float CPUValue
         {
             get
@@ -275,6 +277,7 @@ namespace Wiesend.Profiler.Manager.Default
         /// Gets the memory value.
         /// </summary>
         /// <value>The memory value.</value>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         private static float MemValue
         {
             get
@@ -306,6 +309,7 @@ namespace Wiesend.Profiler.Manager.Default
         /// <param name="First">First</param>
         /// <param name="Second">Second</param>
         /// <returns>True if they are equal, false otherwise</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
         public static bool operator ==(Profiler First, Profiler Second)
         {
             if ((object)First == null && (object)Second == null)
@@ -429,7 +433,7 @@ namespace Wiesend.Profiler.Manager.Default
         public override string ToString()
         {
             var Builder = new StringBuilder();
-            Level.Times(x => { Builder.Append("\t"); });
+            Level.Times(x => { Builder.Append('\t'); });
             Builder.AppendLineFormat("{0} ({1} ms)", Function, Entries.Sum(x => x.Time));
             foreach (string Key in Children.Keys)
             {

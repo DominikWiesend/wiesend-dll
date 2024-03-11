@@ -132,16 +132,16 @@ namespace Wiesend.DataTypes
         {
             get
             {
-                if (!(X >= 0 && X <= Width)) throw new ArgumentOutOfRangeException(nameof(X), $"Contract assertion not met: {nameof(X)} >= 0 && {nameof(X)} <= Width");
-                if (!(Y >= 0 && Y <= Height)) throw new ArgumentOutOfRangeException(nameof(Y), $"Contract assertion not met: {nameof(Y)} >= 0 && {nameof(Y)} <= Height");
+                if (!(X >= 0 && X <= Width)) throw new ArgumentOutOfRangeException(nameof(X), $"Condition {nameof(X)} >= 0 && {nameof(X)} <= Width not met.");
+                if (!(Y >= 0 && Y <= Height)) throw new ArgumentOutOfRangeException(nameof(Y), $"Condition {nameof(Y)} >= 0 && {nameof(Y)} <= Height not met.");
                 if (Values == null) throw new NullReferenceException("Values");
                 return Values[X, Y];
             }
 
             set
             {
-                if (!(X >= 0 && X <= Width)) throw new ArgumentOutOfRangeException(nameof(X), $"Contract assertion not met: {nameof(X)} >= 0 && {nameof(X)} <= Width");
-                if (!(Y >= 0 && Y <= Height)) throw new ArgumentOutOfRangeException(nameof(Y), $"Contract assertion not met: {nameof(Y)} >= 0 && {nameof(Y)} <= Height");
+                if (!(X >= 0 && X <= Width)) throw new ArgumentOutOfRangeException(nameof(X), $"Condition {nameof(X)} >= 0 && {nameof(X)} <= Width not met.");
+                if (!(Y >= 0 && Y <= Height)) throw new ArgumentOutOfRangeException(nameof(Y), $"Condition {nameof(Y)} >= 0 && {nameof(Y)} <= Height not met.");
                 if (Values == null) throw new NullReferenceException("Values");
                 Values[X, Y] = value;
             }

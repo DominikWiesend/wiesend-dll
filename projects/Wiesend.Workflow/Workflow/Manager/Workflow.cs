@@ -121,6 +121,7 @@ namespace Wiesend.Workflow.Manager
         /// Gets the bootstrapper.
         /// </summary>
         /// <value>The bootstrapper.</value>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "<Pending>")]
         private IBootstrapper Bootstrapper { get; set; }
 
         /// <summary>
@@ -137,6 +138,7 @@ namespace Wiesend.Workflow.Manager
         /// Determines if the operation should be run or if it should be skipped
         /// </param>
         /// <returns>The workflow object</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public IWorkflow<T> And<OperationType>(params IConstraint<T>[] Constraints)
             where OperationType : IOperation<T>, new()
         {
@@ -153,9 +155,7 @@ namespace Wiesend.Workflow.Manager
         /// <returns>The workflow object</returns>
         public IWorkflow<T> And(IOperation<T> Operation, params IConstraint<T>[] Constraints)
         {
-            var Node = Nodes.LastOrDefault();
-            if (Node == null)
-                Node = Nodes.AddAndReturn(new WorkflowNode<T>());
+            var Node = Nodes.LastOrDefault() ?? Nodes.AddAndReturn(new WorkflowNode<T>());
             Node.AddOperation(Operation, Constraints);
             return this;
         }
@@ -183,9 +183,7 @@ namespace Wiesend.Workflow.Manager
         /// <returns>The resulting workflow object</returns>
         public IWorkflow<T> And(IWorkflow<T> Workflow, params IConstraint<T>[] Constraints)
         {
-            var Node = Nodes.LastOrDefault();
-            if (Node == null)
-                Node = Nodes.AddAndReturn(new WorkflowNode<T>());
+            var Node = Nodes.LastOrDefault() ?? Nodes.AddAndReturn(new WorkflowNode<T>());
             Node.AddOperation(Workflow, Constraints);
             return this;
         }
@@ -198,6 +196,7 @@ namespace Wiesend.Workflow.Manager
         /// Determines if the operation should be run or if it should be skipped
         /// </param>
         /// <returns>The workflow object</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public IWorkflow<T> Do<OperationType>(params IConstraint<T>[] Constraints)
             where OperationType : IOperation<T>, new()
         {
@@ -253,6 +252,7 @@ namespace Wiesend.Workflow.Manager
         /// <typeparam name="ExceptionType">The exception type.</typeparam>
         /// <param name="Operation">The operation to run.</param>
         /// <returns>The resulting workflow object</returns>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         public IWorkflow<T> On<ExceptionType>(Action<T> Operation)
             where ExceptionType : Exception
         {
@@ -299,12 +299,12 @@ namespace Wiesend.Workflow.Manager
             catch (Exception e)
             {
                 var ExceptionType = e.GetType();
-                while (ExceptionType != null && !ExceptionActions.Keys.Contains(ExceptionType))
+                while (ExceptionType != null && !ExceptionActions.ContainsKey(ExceptionType))
                 {
                     ExceptionType = ExceptionType.BaseType;
                 }
                 if (ExceptionType != null)
-                    ExceptionActions[ExceptionType].ForEach(x => x(Data));
+                    ExceptionActions.GetValue(ExceptionType).ForEach(x => x(Data));
                 throw;
             }
             return Data;

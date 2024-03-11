@@ -215,9 +215,7 @@ namespace Wiesend.DataTypes.Caching.Default
             if (InternalCache != null)
             {
                 foreach (IDisposable Item in InternalCache.Values.OfType<IDisposable>())
-                {
                     Item.Dispose();
-                }
                 InternalCache.Clear();
                 InternalCache = null;
             }

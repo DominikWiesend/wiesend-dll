@@ -94,7 +94,7 @@ namespace Wiesend.DataTypes.AOP.Generators
         /// <param name="methodInfo">The method information.</param>
         public MethodGenerator([NotNull] MethodInfo methodInfo)
         {
-            MethodInfo = methodInfo ?? throw new ArgumentNullException(nameof(methodInfo), $"Contract assertion not met: {nameof(methodInfo)} != null");
+            MethodInfo = methodInfo ?? throw new ArgumentNullException(nameof(methodInfo));
             DeclaringType = MethodInfo.DeclaringType;
         }
 

@@ -351,9 +351,7 @@ namespace Wiesend.ORM.Manager
             string KeyName = typeof(ObjectType).GetName() + "_PageCount_" + PageSize.ToString(CultureInfo.InvariantCulture) + "_" + Parameters.ToString(x => x.ToString(), "_");
             Parameters.ForEach(x => { KeyName = x.AddParameter(KeyName); });
             if (Cache.ContainsKey(KeyName))
-            {
-                return (int)Cache[KeyName];
-            }
+                return (int)Cache.GetValue(KeyName);
             foreach (ISourceInfo Source in SourceProvider.Where(x => x.Readable).OrderBy(x => x.Order))
             {
                 IMapping Mapping = MapperProvider[typeof(ObjectType), Source];
@@ -477,7 +475,7 @@ namespace Wiesend.ORM.Manager
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
         private static void CopyOrAdd(List<Dynamo> ReturnValue, [NotNull] IProperty IDProperty, Dynamo Item)
         {
-            if (IDProperty == null) throw new ArgumentNullException(nameof(IDProperty), $"Contract assertion not met: {nameof(IDProperty)} != null");
+            if (IDProperty == null) throw new ArgumentNullException(nameof(IDProperty));
             if (Item == null)
                 return;
             if (ReturnValue == null)
@@ -559,14 +557,14 @@ namespace Wiesend.ORM.Manager
 
         private ObjectType GetCached<ObjectType>(ref Dynamo ReturnValue, string KeyName) where ObjectType : class
         {
-            if (!(this.Cache != null)) throw new ArgumentNullException("Cache", $"Contract assertion not met: this.{nameof(Cache)} != null");
+            if (!(this.Cache != null)) throw new ArgumentNullException("Cache", $"Condition this.{nameof(Cache)} != null not met.");
             ReturnValue = (Dynamo)Cache[KeyName];
             return ConvertValue<ObjectType>(ReturnValue);
         }
 
         private IEnumerable<ObjectType> GetListCached<ObjectType>(ref List<Dynamo> ReturnValue, string KeyName) where ObjectType : class
         {
-            if (!(this.Cache != null)) throw new ArgumentNullException("Cache", $"Contract assertion not met: this.{nameof(Cache)} != null");
+            if (!(this.Cache != null)) throw new ArgumentNullException("Cache", $"Condition this.{nameof(Cache)} != null not met.");
             ReturnValue = (List<Dynamo>)Cache[KeyName];
             return ConvertValues<ObjectType>(ReturnValue);
         }
