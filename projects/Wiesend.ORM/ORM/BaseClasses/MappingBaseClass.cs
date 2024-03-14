@@ -232,12 +232,9 @@ namespace Wiesend.ORM.BaseClasses
         /// </summary>
         /// <param name="obj"></param>
         /// <returns></returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
         public override bool Equals(object obj)
         {
-            MappingBaseClass<ClassType, DatabaseType> Object2 = obj as MappingBaseClass<ClassType, DatabaseType>;
-            if ((object)Object2 == null)
+            if (obj is not MappingBaseClass<ClassType, DatabaseType> Object2)
                 return false;
             return string.Equals(TableName, Object2.TableName, StringComparison.Ordinal)
                 && DatabaseConfigType == Object2.DatabaseConfigType;

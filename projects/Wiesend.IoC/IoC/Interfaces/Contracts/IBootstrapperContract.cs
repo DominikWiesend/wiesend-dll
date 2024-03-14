@@ -82,7 +82,6 @@ namespace Wiesend.IoC.Interfaces.Contracts
     /// <summary>
     /// IBootstrapper contract class
     /// </summary>
-    //[ContractClassFor(typeof(IBootstrapper))]
     internal abstract class IBootstrapperContract : IBootstrapper
     {
         /// <summary>
@@ -94,7 +93,7 @@ namespace Wiesend.IoC.Interfaces.Contracts
             get
             {
                 var result = "";
-                if (string.IsNullOrEmpty(result)) throw new System.InvalidOperationException("Contract assertion not met: !string.IsNullOrEmpty(result)");
+                if (string.IsNullOrEmpty(result)) throw new System.InvalidOperationException("Condition not met: [!string.IsNullOrEmpty(result)]");
                 return result;
             }
         }
@@ -236,7 +235,7 @@ namespace Wiesend.IoC.Interfaces.Contracts
         [NotNull]
         public IEnumerable<T> ResolveAll<T>() where T : class
         {
-            var result = new List<T>() ?? throw new InvalidOperationException("Contract assertion not met: result != null");
+            var result = new List<T>() ?? throw new InvalidOperationException("Condition not met: [result != null]");
             return result;
         }
 
@@ -251,7 +250,7 @@ namespace Wiesend.IoC.Interfaces.Contracts
         public IEnumerable<object> ResolveAll([NotNull] Type ObjectType)
         {
             if (ObjectType == null) throw new ArgumentNullException(nameof(ObjectType));
-            var result = new List<object>() ?? throw new InvalidOperationException("Contract assertion not met: result != null");
+            var result = new List<object>() ?? throw new InvalidOperationException("Condition not met: [result != null]");
             return result;
         }
     }

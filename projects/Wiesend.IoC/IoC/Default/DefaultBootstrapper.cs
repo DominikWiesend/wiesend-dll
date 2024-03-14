@@ -94,13 +94,18 @@ namespace Wiesend.IoC.Default
         /// </summary>
         /// <param name="assemblies">The assemblies.</param>
         /// <param name="types">The types.</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1829:Use Length/Count property instead of Count() when available", Justification = "<Pending>")]
         public DefaultBootstrapper(IEnumerable<Assembly> assemblies, IEnumerable<Type> types)
             : base(assemblies, types)
         {
             _AppContainer = new ConcurrentDictionary<Tuple<Type, string>, ITypeBuilder>();
             GenericRegisterMethod = GetType().GetMethods().First(x => x.Name == "Register" && x.GetGenericArguments().Count() == 2);
             GenericResolveMethod = GetType().GetMethods().First(x => x.Name == "Resolve" && x.IsGenericMethod && x.GetParameters().Length == 1);
+#if NET45
             GenericResolveAllMethod = GetType().GetMethod("ResolveAll", new Type[] { });
+#else
+            GenericResolveAllMethod = GetType().GetMethod("ResolveAll", Array.Empty<Type>());
+#endif
         }
 
         /// <summary>
@@ -137,7 +142,7 @@ namespace Wiesend.IoC.Default
         /// <value>The generic resolve method.</value>
         private MethodInfo GenericResolveMethod { get; set; }
 
-        private ConcurrentDictionary<Tuple<Type, string>, ITypeBuilder> _AppContainer = null;
+        private ConcurrentDictionary<Tuple<Type, string>, ITypeBuilder> _AppContainer;
 
         /// <summary>
         /// Registers an object
@@ -173,9 +178,7 @@ namespace Wiesend.IoC.Default
             {
                 var Constructor = FindConstructor(Type);
                 if (Constructor != null)
-                {
                     return (T1)Activator.CreateInstance(Type, GetParameters(Constructor).ToArray());
-                }
                 return null;
             }, Name);
         }
@@ -282,9 +285,7 @@ namespace Wiesend.IoC.Default
         {
             var ReturnValues = new ConcurrentBag<object>();
             foreach (Tuple<Type, string> Key in _AppContainer.Keys.Where(x => x.Item1 == ObjectType))
-            {
                 ReturnValues.Add(Resolve(Key.Item1, Key.Item2, null));
-            }
             return ReturnValues;
         }
 
@@ -296,9 +297,7 @@ namespace Wiesend.IoC.Default
         {
             var Builder = new StringBuilder();
             foreach (Tuple<Type, string> Key in AppContainer.Keys)
-            {
                 Builder.Append(AppContainer[Key].ToString());
-            }
             return Builder.ToString();
         }
 
@@ -306,12 +305,11 @@ namespace Wiesend.IoC.Default
         /// Disposes of the object
         /// </summary>
         /// <param name="Managed">Not used</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
         protected override void Dispose(bool Managed)
         {
             if (_AppContainer != null)
             {
-                foreach (IDisposable Item in _AppContainer.Values.Where(x => IsOfType(x.ReturnType, typeof(IDisposable))).Reverse().Select(x => x.Create()))
+                foreach (IDisposable Item in _AppContainer.Values.Where(x => IsOfType(x.ReturnType, typeof(IDisposable))).Reverse().Select(x => x.Create()).Cast<IDisposable>())
                     Item.Dispose();
                 _AppContainer.Clear();
                 _AppContainer = null;
@@ -346,7 +344,7 @@ namespace Wiesend.IoC.Default
                             break;
                         }
                     }
-                    else if (!this.AppContainer.Keys.Contains(new Tuple<Type, string>(ParameterType, "")))
+                    else if (!this.AppContainer.ContainsKey(new Tuple<Type, string>(ParameterType, "")))
                     {
                         Found = false;
                         break;
@@ -377,7 +375,11 @@ namespace Wiesend.IoC.Default
                 if (Parameter.ParameterType.GetInterfaces().Contains(typeof(IEnumerable)) && Parameter.ParameterType.IsGenericType)
                 {
                     var GenericParamType = Parameter.ParameterType.GetGenericArguments().First();
+#if NET45
                     Params.Add(GenericResolveAllMethod.MakeGenericMethod(GenericParamType).Invoke(this, new object[] { }));
+#else
+                    Params.Add(GenericResolveAllMethod.MakeGenericMethod(GenericParamType).Invoke(this, Array.Empty<object>()));
+#endif
                 }
                 else
                 {
@@ -397,15 +399,6 @@ namespace Wiesend.IoC.Default
             if (x == type || x.GetInterfaces().Any(y => y == type))
                 return true;
             return IsOfType(x.BaseType, type);
-        }
-
-        /// <summary>
-        /// Important hook for MEL-OS. Because I'm bored in a meeting: http://cube-drone.com/comics/c/the-long-game
-        /// </summary>
-        /// <returns>Revenge</returns>
-        private string MELOSHook()
-        {
-            return "I slept with your wife.\r\nCall me.\r\nI fight you.\r\n1-788-555-1021.";
         }
     }
 }

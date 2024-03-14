@@ -150,12 +150,9 @@ namespace Wiesend.Validation
         /// <param name="metadata">Model meta data</param>
         /// <param name="context">Controller context</param>
         /// <returns>The list of client side validation rules</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public IEnumerable<ModelClientValidationRule> GetClientValidationRules(ModelMetadata metadata, ControllerContext context)
         {
-            ModelClientValidationRule Rule = new ModelClientValidationRule();
-            Rule.ErrorMessage = FormatErrorMessage(metadata.GetDisplayName());
+            ModelClientValidationRule Rule = new() { ErrorMessage = FormatErrorMessage(metadata.GetDisplayName()) };
             Rule.ValidationParameters.Add("Type", Type);
             Rule.ValidationParameters.Add("PropertyName", PropertyName);
             Rule.ValidationType = "CompareTo";
@@ -169,11 +166,10 @@ namespace Wiesend.Validation
         /// <param name="validationContext">Validation context</param>
         /// <returns>The validation result</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0066:Convert switch statement to expression", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             IComparable Tempvalue = value as IComparable;
-            GenericComparer<IComparable> Comparer = new GenericComparer<IComparable>();
+            GenericComparer<IComparable> Comparer = new();
             IComparable ComparisonValue = (IComparable)validationContext.ObjectType.GetProperty(PropertyName).GetValue(validationContext.ObjectInstance, null).To<object>(value.GetType());
             switch (Type)
             {

@@ -74,6 +74,7 @@
 
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using Wiesend.DataTypes.Comparison;
 using Wiesend.ORM.Manager.Schema.Interfaces;
 
@@ -227,7 +228,6 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database
         /// <summary>
         /// Sets up the foreign key list
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
         public void SetupForeignKeys()
         {
             for (int x = 0; x < ForeignKeyColumns.Count; ++x)
@@ -235,7 +235,7 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database
                 ISource TempDatabase = ParentTable.Source;
                 if (TempDatabase != null)
                 {
-                    foreach (Table Table in TempDatabase.Tables)
+                    foreach (Table Table in TempDatabase.Tables.Cast<Table>())
                     {
                         if (Table.Name == ForeignKeyTables[x])
                         {

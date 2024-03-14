@@ -173,11 +173,9 @@ namespace Wiesend.IO.FileFormats.Delimited
         /// </param>
         /// <param name="Headers">Headers for the columns if the first row is not a header</param>
         /// <returns>The delimited file as a DataTable</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         public DataTable ToDataTable(bool FirstRowIsHeader = true, params string[] Headers)
         {
-            var ReturnValue = new DataTable();
-            ReturnValue.Locale = CultureInfo.CurrentCulture;
+            var ReturnValue = new DataTable { Locale = CultureInfo.CurrentCulture };
             if (FirstRowIsHeader)
             {
                 if (Records.Count > 0)
@@ -193,9 +191,7 @@ namespace Wiesend.IO.FileFormats.Delimited
             {
                 object[] TempRow = new object[ReturnValue.Columns.Count];
                 for (int x = 0; x < Records[y].Count; ++x)
-                {
                     TempRow[x] = Records[y][x].Value;
-                }
                 ReturnValue.Rows.Add(TempRow);
             }
             return ReturnValue;

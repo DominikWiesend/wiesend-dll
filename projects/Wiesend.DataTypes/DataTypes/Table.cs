@@ -127,9 +127,9 @@ namespace Wiesend.DataTypes
             get
             {
                 if (string.IsNullOrEmpty(ColumnName)) throw new ArgumentNullException(nameof(ColumnName));
-                if (ColumnNameHash == null) throw new NullReferenceException($"Condition {nameof(ColumnNameHash)} != null not met.");
-                if (ColumnValues == null) throw new NullReferenceException($"Condition {nameof(ColumnValues)} != null not met.");
-                var Column = (int)ColumnNameHash[ColumnName];//.PositionOf(ColumnName);
+                if (ColumnNameHash == null) throw new NullReferenceException($"Condition not met: [{nameof(ColumnNameHash)} != null]");
+                if (ColumnValues == null) throw new NullReferenceException($"Condition not met: [{nameof(ColumnValues)} != null]");
+                var Column = (int)ColumnNameHash[ColumnName];
                 if (Column <= -1)
                     throw new ArgumentOutOfRangeException(ColumnName + " is not present in the row");
                 return this[Column];
@@ -147,8 +147,8 @@ namespace Wiesend.DataTypes
         {
             get
             {
-                if (!(Column >= 0)) throw new ArgumentOutOfRangeException(nameof(Column), $"Condition {nameof(Column)} >= 0 not met.");
-                if (ColumnValues == null) throw new NullReferenceException($"Condition {nameof(ColumnValues)} != null not met.");
+                if (!(Column >= 0)) throw new ArgumentOutOfRangeException(nameof(Column), $"Condition not met: [{nameof(Column)} >= 0]");
+                if (ColumnValues == null) throw new NullReferenceException($"Condition not met: [{nameof(ColumnValues)} != null]");
                 if (ColumnValues.Length <= Column)
                     return null;
                 return ColumnValues[Column];
@@ -237,7 +237,7 @@ namespace Wiesend.DataTypes
         {
             get
             {
-                if (Rows == null) throw new NullReferenceException($"Condition {nameof(Rows)} != null not met.");
+                if (Rows == null) throw new NullReferenceException($"Condition not met: [{nameof(Rows)} != null]");
                 return Rows.Count > RowNumber ? Rows.ElementAt(RowNumber) : null;
             }
         }
@@ -251,7 +251,7 @@ namespace Wiesend.DataTypes
         public virtual Table AddRow([NotNull] params object[] Objects)
         {
             if (Objects == null) throw new ArgumentNullException(nameof(Objects));
-            if (Rows == null) throw new NullReferenceException($"Contract assertion not met: {nameof(Rows)} != null");
+            if (Rows == null) throw new NullReferenceException($"Condition not met: [{nameof(Rows)} != null]");
             this.Rows.Add(new Row(ColumnNameHash, ColumnNames, Objects));
             return this;
         }

@@ -216,7 +216,7 @@ namespace Wiesend.DataTypes
         /// <returns>The equivalent byte array in a base 64 string</returns>
         public static string ToString(this byte[] Input, Base64FormattingOptions Options, int Index = 0, int Count = -1)
         {
-            if (!(Index >= 0)) throw new ArgumentException($"Contract assertion not met: {nameof(Index)} >= 0)", nameof(Index));
+            if (!(Index >= 0)) throw new ArgumentException($"Condition not met: [{nameof(Index)} >= 0)]", nameof(Index));
             if (Count == -1)
                 Count = Input.Length - Index;
             return Input == null ? "" : Convert.ToBase64String(Input, Index, Count, Options);

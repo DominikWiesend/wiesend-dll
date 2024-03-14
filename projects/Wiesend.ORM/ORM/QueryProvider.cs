@@ -118,12 +118,10 @@ namespace Wiesend.ORM
         /// <param name="ConnectionString">Connection string</param>
         /// <param name="Type">Command type</param>
         /// <returns>The list of objects requested</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
         public static IEnumerable<dynamic> All(string Command, CommandType Type, string ConnectionString, params object[] Parameters)
         {
-            var TempParameters = Parameters as IParameter[];
             var TempBatch = Batch(ConnectionString);
-            if (TempParameters == null)
+            if (Parameters is not IParameter[] TempParameters)
                 TempBatch.AddCommand(null, null, Command, Type, Parameters);
             else
                 TempBatch.AddCommand(null, null, Command, Type, TempParameters);

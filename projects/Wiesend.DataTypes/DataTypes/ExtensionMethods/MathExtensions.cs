@@ -133,7 +133,7 @@ namespace Wiesend.DataTypes
         /// <returns>The absolute value</returns>
         public static long Absolute(this long Value)
         {
-            if (Value == -9223372036854775808) throw new ArgumentException($"Condition {nameof(Value)} != -9223372036854775808 not met.", nameof(Value));
+            if (Value == -9223372036854775808) throw new ArgumentException($"Condition not met: [{nameof(Value)} != -9223372036854775808]", nameof(Value));
             return System.Math.Abs(Value);
         }
 
@@ -144,7 +144,7 @@ namespace Wiesend.DataTypes
         /// <returns>The absolute value</returns>
         public static short Absolute(this short Value)
         {
-            if (Value == -32768) throw new ArgumentException($"Condition {nameof(Value)} != -32768 not met.", nameof(Value));
+            if (Value == -32768) throw new ArgumentException($"Condition not met: [{nameof(Value)} != -32768]", nameof(Value));
             return System.Math.Abs(Value);
         }
 
@@ -163,12 +163,11 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Input">Input value (N!)</param>
         /// <returns>The factorial specified</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0054:Use compound assignment", Justification = "<Pending>")]
         public static int Factorial(this int Input)
         {
             int Value1 = 1;
             for (int x = 2; x <= Input; ++x)
-                Value1 = Value1 * x;
+                Value1 *= x;
             return Value1;
         }
 
@@ -204,7 +203,7 @@ namespace Wiesend.DataTypes
         public static int GreatestCommonDenominator(this int Value1, uint Value2)
         {
             if (Value1 == Int32.MinValue) throw new ArgumentOutOfRangeException(nameof(Value1), "Value1 can not be Int32.MinValue");
-            if (Value2 == 2147483648) throw new ArgumentException($"Condition {nameof(Value2)} != 2147483648 not met.", nameof(Value2));
+            if (Value2 == 2147483648) throw new ArgumentException($"Condition not met: [{nameof(Value2)} != 2147483648]", nameof(Value2));
             return Value1.GreatestCommonDenominator((int)Value2);
         }
 
@@ -217,8 +216,8 @@ namespace Wiesend.DataTypes
         [CLSCompliant(false)]
         public static int GreatestCommonDenominator(this uint Value1, uint Value2)
         {
-            if (Value1 == 2147483648) throw new ArgumentException($"Condition {nameof(Value1)} != 2147483648 not met.", nameof(Value1));
-            if (Value2 == 2147483648) throw new ArgumentException($"Condition {nameof(Value2)} != 2147483648 not met.", nameof(Value2));
+            if (Value1 == 2147483648) throw new ArgumentException($"Condition not met: [{nameof(Value1)} != 2147483648]", nameof(Value1));
+            if (Value2 == 2147483648) throw new ArgumentException($"Condition not met: [{nameof(Value2)} != 2147483648]", nameof(Value2));
             return ((int)Value1).GreatestCommonDenominator((int)Value2);
         }
 
@@ -262,7 +261,6 @@ namespace Wiesend.DataTypes
         /// <returns>
         /// The median value
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0054:Use compound assignment", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1827:Do not use Count() or LongCount() when Any() can be used", Justification = "<Pending>")]
         public static T Median<T>(this IEnumerable<T> Values, Func<T, T> OrderBy = null)
         {
@@ -270,7 +268,7 @@ namespace Wiesend.DataTypes
                 return default;
             if (Values.Count() == 0)
                 return default;
-            OrderBy = OrderBy ?? (x => x);
+            OrderBy ??= (x => x);
             Values = Values.OrderBy(OrderBy);
             return Values.ElementAt((Values.Count() / 2));
         }
@@ -337,8 +335,8 @@ namespace Wiesend.DataTypes
         /// <returns></returns>
         public static double Round(this double Value, int Digits = 2, MidpointRounding Rounding = MidpointRounding.AwayFromZero)
         {
-            if (!(Digits >= 0)) throw new ArgumentException($"Condition {nameof(Digits)} >= 0 not met.", nameof(Digits));
-            if (!(Digits <= 15)) throw new ArgumentException($"Condition {nameof(Digits)} <= 15 not met.", nameof(Digits));
+            if (!(Digits >= 0)) throw new ArgumentException($"Condition not met: [{nameof(Digits)} >= 0]", nameof(Digits));
+            if (!(Digits <= 15)) throw new ArgumentException($"Condition not met: [{nameof(Digits)} <= 15]", nameof(Digits));
             return System.Math.Round(Value, Digits, Rounding);
         }
 

@@ -87,8 +87,7 @@ namespace Wiesend.IO.FileFormats
     /// </summary>
     public class VCalendar : StringFormatBase<VCalendar>
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
-        private static readonly Regex STRIP_HTML_REGEX = new Regex("<[^>]*>", RegexOptions.Compiled);
+        private static readonly Regex STRIP_HTML_REGEX = new("<[^>]*>", RegexOptions.Compiled);
 
         /// <summary>
         /// Constructor
@@ -165,21 +164,13 @@ namespace Wiesend.IO.FileFormats
                   .Append("<abbr class=\"dtend\" title=\"").Append(EndTime.ToString("MM-dd-yyyy hh:mm tt", CultureInfo.InvariantCulture))
                   .Append("\">");
             if (EndTime.Year != StartTime.Year)
-            {
                 Output.Append(EndTime.ToString("MMMM dd, yyyy hh:mm tt", CultureInfo.CurrentCulture));
-            }
             else if (EndTime.Month != StartTime.Month)
-            {
                 Output.Append(EndTime.ToString("MMMM dd hh:mm tt", CultureInfo.CurrentCulture));
-            }
             else if (EndTime.Day != StartTime.Day)
-            {
                 Output.Append(EndTime.ToString("dd hh:mm tt", CultureInfo.CurrentCulture));
-            }
             else
-            {
                 Output.Append(EndTime.ToString("hh:mm tt", CultureInfo.CurrentCulture));
-            }
             return Output.Append("</abbr></div>")
                          .Append("<div>Location: <span class=\"location\">").Append(Location).Append("</span></div>")
                          .Append("<div class=\"description\">").Append(Description).Append("</div>")
@@ -215,13 +206,9 @@ namespace Wiesend.IO.FileFormats
             if (Organizer != null)
                 FileOutput.AppendLineFormat("ACTION;RSVP=TRUE;CN=\"{0}\":MAILTO:{0}\r\nORGANIZER;CN=\"{1}\":mailto:{0}", Organizer.Address, Organizer.DisplayName);
             if (ContainsHTML(Description))
-            {
                 FileOutput.AppendLineFormat("X-ALT-DESC;FMTTYPE=text/html:{0}", Description.Replace("\n", ""));
-            }
             else
-            {
                 FileOutput.AppendLineFormat("DESCRIPTION:{0}", Description);
-            }
             return FileOutput.AppendLine("SEQUENCE:1")
                              .AppendLine("PRIORITY:5")
                              .AppendLine("CLASS:")
@@ -303,25 +290,15 @@ namespace Wiesend.IO.FileFormats
             foreach (Match TempMatch in Regex.Matches(Data, "(?<Title>[^\r\n:]+):(?<Value>[^\r\n]*)"))
             {
                 if (TempMatch.Groups["Title"].Value.ToUpperInvariant() == "DTSTART")
-                {
                     StartTime = TimeZoneInfo.ConvertTime(DateTime.Parse(TempMatch.Groups["Value"].Value.ToString(@"####/##/## ##:##"), CultureInfo.CurrentCulture), this.CurrentTimeZone);
-                }
                 else if (TempMatch.Groups["Title"].Value.ToUpperInvariant() == "DTEND")
-                {
                     EndTime = TimeZoneInfo.ConvertTime(DateTime.Parse(TempMatch.Groups["Value"].Value.ToString(@"####/##/## ##:##"), CultureInfo.CurrentCulture), this.CurrentTimeZone);
-                }
                 else if (TempMatch.Groups["Title"].Value.ToUpperInvariant() == "LOCATION")
-                {
                     this.Location = TempMatch.Groups["Value"].Value;
-                }
                 else if (TempMatch.Groups["Title"].Value.ToUpperInvariant() == "SUMMARY;LANGUAGE=EN-US")
-                {
                     Subject = TempMatch.Groups["Value"].Value;
-                }
                 else if (TempMatch.Groups["Title"].Value.ToUpperInvariant() == "DESCRIPTION" && string.IsNullOrEmpty(Description))
-                {
                     Description = TempMatch.Groups["Value"].Value;
-                }
             }
         }
 

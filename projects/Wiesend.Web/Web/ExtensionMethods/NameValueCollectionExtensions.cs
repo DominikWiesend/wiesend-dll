@@ -102,11 +102,7 @@ namespace Wiesend.Web
             string Splitter = "";
             foreach (string Key in Input.Keys)
             {
-#if NET45
-                Builder.Append(Splitter).AppendFormat("{0}={1}", Key.URLEncode(), Input[Key].URLEncode());
-#else
                 Builder.Append(Splitter).AppendFormat(CultureInfo.InvariantCulture, "{0}={1}", Key.URLEncode(), Input[Key].URLEncode());
-#endif
                 Splitter = "&";
             }
             return Builder.ToString();

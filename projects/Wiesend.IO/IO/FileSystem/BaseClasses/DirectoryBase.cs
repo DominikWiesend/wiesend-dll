@@ -222,12 +222,11 @@ namespace Wiesend.IO.FileSystem.BaseClasses
         /// <param name="Directory1">Directory 1</param>
         /// <param name="Directory2">Directory 2</param>
         /// <returns>True if they are, false otherwise</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
         public static bool operator ==(DirectoryBase<InternalDirectoryType, DirectoryType> Directory1, IDirectory Directory2)
         {
-            if ((object)Directory1 == null && (object)Directory2 == null)
+            if (Directory1 is null && Directory2 is null)
                 return true;
-            if ((object)Directory1 == null || (object)Directory2 == null)
+            if (Directory1 is null || Directory2 is null)
                 return false;
             return Directory1.FullName == Directory2.FullName;
         }
@@ -262,14 +261,15 @@ namespace Wiesend.IO.FileSystem.BaseClasses
         /// Clones the directory object
         /// </summary>
         /// <returns>The cloned object</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         public object Clone()
         {
-            var Temp = new DirectoryType();
-            Temp.InternalDirectory = InternalDirectory;
-            Temp.UserName = UserName;
-            Temp.Password = Password;
-            Temp.Domain = Domain;
+            var Temp = new DirectoryType
+            {
+                InternalDirectory = InternalDirectory,
+                UserName = UserName,
+                Password = Password,
+                Domain = Domain
+            };
             return Temp;
         }
 
@@ -292,11 +292,9 @@ namespace Wiesend.IO.FileSystem.BaseClasses
         /// </summary>
         /// <param name="obj">Object to compare it to</param>
         /// <returns></returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
         public int CompareTo(object obj)
         {
-            IDirectory Temp = obj as IDirectory;
-            if (Temp == null)
+            if (obj is not IDirectory Temp)
                 return 1;
             return CompareTo(Temp);
         }
@@ -311,6 +309,7 @@ namespace Wiesend.IO.FileSystem.BaseClasses
         {
             if (InternalDirectory == null || Directory == null)
                 return this;
+
             Directory.Create();
             foreach (IFile TempFile in EnumerateFiles())
             {
@@ -319,6 +318,11 @@ namespace Wiesend.IO.FileSystem.BaseClasses
                     case CopyOptions.CopyAlways:
                         TempFile.CopyTo(Directory, true);
                         break;
+
+                    case CopyOptions.DoNotOverwrite:
+                        TempFile.CopyTo(Directory, false);
+                        break;
+
                     case CopyOptions.CopyIfNewer:
                         if (new FileInfo(Directory.FullName + "\\" + TempFile.Name.Replace("/", "").Replace("\\", ""), UserName, Password, Domain).Exists)
                         {
@@ -330,13 +334,10 @@ namespace Wiesend.IO.FileSystem.BaseClasses
                         {
                             TempFile.CopyTo(Directory, true);
                         }
-
-                        break;
-                    case CopyOptions.DoNotOverwrite:
-                        TempFile.CopyTo(Directory, false);
                         break;
                 }
             }
+
             foreach (IDirectory SubDirectory in EnumerateDirectories())
                 SubDirectory.CopyTo(new DirectoryInfo(Directory.FullName + "\\" + SubDirectory.Name.Replace("/", "").Replace("\\", ""), UserName, Password, Domain), Options);
             return Directory;

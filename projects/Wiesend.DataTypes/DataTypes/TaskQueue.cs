@@ -87,7 +87,6 @@ namespace Wiesend.DataTypes
     /// <typeparam name="T">Object type to process</typeparam>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1063:Implement IDisposable Correctly", Justification = "<Pending>")]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1711:Identifiers should not have incorrect suffix", Justification = "<Pending>")]
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1010:Generic interface should also be implemented", Justification = "<Pending>")]
     public class TaskQueue<T> : BlockingCollection<T>, IDisposable
     {
         /// <summary>
@@ -203,8 +202,8 @@ namespace Wiesend.DataTypes
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         private void Process()
         {
-            if (CancellationToken == null) throw new NullReferenceException($"Condition {nameof(CancellationToken)} != null not met.");
-            if (ProcessItem == null) throw new NullReferenceException($"Condition {nameof(ProcessItem)} != null not met.");
+            if (CancellationToken == null) throw new NullReferenceException($"Condition not met: [{nameof(CancellationToken)} != null]");
+            if (ProcessItem == null) throw new NullReferenceException($"Condition not met: [{nameof(ProcessItem)} != null]");
             while (true)
             {
                 try

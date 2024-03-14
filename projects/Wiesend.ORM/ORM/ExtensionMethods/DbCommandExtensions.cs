@@ -231,7 +231,6 @@ namespace Wiesend.ORM
         /// <param name="Command">Command object</param>
         /// <param name="Factory">DbProviderFactory being used</param>
         /// <returns>A dataset filled with the results of the query</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         public static DataSet ExecuteDataSet(this DbCommand Command, DbProviderFactory Factory)
         {
             if (Command == null)
@@ -239,8 +238,7 @@ namespace Wiesend.ORM
             Command.Open();
             using DbDataAdapter Adapter = Factory.CreateDataAdapter();
             Adapter.SelectCommand = Command;
-            var ReturnSet = new DataSet();
-            ReturnSet.Locale = CultureInfo.CurrentCulture;
+            var ReturnSet = new DataSet { Locale = CultureInfo.CurrentCulture };
             Adapter.Fill(ReturnSet);
             return ReturnSet;
         }

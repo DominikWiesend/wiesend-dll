@@ -86,8 +86,7 @@ namespace Wiesend.DataTypes.Patterns.BaseClasses
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1805:Do not initialize unnecessarily", Justification = "<Pending>")]
         private static T _Instance = null;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
-        private static object Temp = 1;
+        private static readonly object Temp = 1;
 
         /// <summary>
         /// Constructor
@@ -100,7 +99,6 @@ namespace Wiesend.DataTypes.Patterns.BaseClasses
         /// Gets the instance of the singleton
         /// </summary>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1000:Do not declare static members on generic types", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public static T Instance
         {
             get
@@ -111,8 +109,11 @@ namespace Wiesend.DataTypes.Patterns.BaseClasses
                     {
                         if (_Instance == null)
                         {
-                            var Constructor = typeof(T).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic,
-                                null, new Type[0], null);
+#if NET45
+                            var Constructor = typeof(T).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null, new Type[0], null);
+#else
+                            var Constructor = typeof(T).GetConstructor(BindingFlags.Instance | BindingFlags.NonPublic, null, Array.Empty<Type>(), null);
+#endif
                             if (Constructor == null || Constructor.IsAssembly)
                                 throw new InvalidOperationException("Constructor is not private or protected for type " + typeof(T).Name);
                             _Instance = (T)Constructor.Invoke(null);

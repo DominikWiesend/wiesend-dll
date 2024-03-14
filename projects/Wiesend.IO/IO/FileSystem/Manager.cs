@@ -115,11 +115,10 @@ namespace Wiesend.IO.FileSystem
         /// <param name="Password">Password to be used to access the directory (optional)</param>
         /// <param name="UserName">User name to be used to access the directory (optional)</param>
         /// <returns>The directory object</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0031:Use null propagation", Justification = "<Pending>")]
         public IDirectory Directory(string Path, string UserName = "", string Password = "", string Domain = "")
         {
             var FileSystem = FindSystem(Path);
-            return FileSystem == null ? null : FileSystem.Directory(Path, UserName, Password, Domain);
+            return FileSystem?.Directory(Path, UserName, Password, Domain);
         }
 
         /// <summary>
@@ -130,11 +129,10 @@ namespace Wiesend.IO.FileSystem
         /// <param name="Password">Password to be used to access the file (optional)</param>
         /// <param name="UserName">User name to be used to access the file (optional)</param>
         /// <returns>The file object</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0031:Use null propagation", Justification = "<Pending>")]
         public IFile File(string Path, string UserName = "", string Password = "", string Domain = "")
         {
             var FileSystem = FindSystem(Path);
-            return FileSystem == null ? null : FileSystem.File(Path, UserName, Password, Domain);
+            return FileSystem?.File(Path, UserName, Password, Domain);
         }
 
         /// <summary>
@@ -152,12 +150,11 @@ namespace Wiesend.IO.FileSystem
         /// <param name="Managed">
         /// Determines if all objects should be disposed or just managed objects
         /// </param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
         protected override void Dispose(bool Managed)
         {
             if (FileSystems != null)
             {
-                foreach (IDisposable FileSystem in FileSystems)
+                foreach (IDisposable FileSystem in FileSystems.Cast<IDisposable>())
                     FileSystem.Dispose();
                 FileSystems = null;
             }

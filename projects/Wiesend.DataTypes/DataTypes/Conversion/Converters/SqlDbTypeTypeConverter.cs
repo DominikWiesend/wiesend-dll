@@ -142,40 +142,31 @@ namespace Wiesend.DataTypes.Conversion.Converters
         /// </summary>
         protected override TypeConverter InternalConverter { get { return new EnumConverter(typeof(SqlDbType)); } }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0083:Use pattern matching", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         private static object DbTypeToSqlDbType(object value)
         {
-            if (!(value is DbType))
+            if (value is not DbType)
                 return SqlDbType.Int;
             var TempValue = (DbType)value;
-            var Parameter = new SqlParameter();
-            Parameter.DbType = TempValue;
+            var Parameter = new SqlParameter { DbType = TempValue };
             return Parameter.SqlDbType;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0083:Use pattern matching", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         private static object SqlDbTypeToDbType(object sqlDbType)
         {
-            if (!(sqlDbType is SqlDbType))
+            if (sqlDbType is not SqlDbType)
                 return DbType.Int32;
             var Temp = (SqlDbType)sqlDbType;
-            var Parameter = new SqlParameter();
-            Parameter.SqlDbType = Temp;
+            var Parameter = new SqlParameter { SqlDbType = Temp };
             return Parameter.DbType;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0083:Use pattern matching", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0066:Convert switch statement to expression", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         private static object SqlDbTypeToType(object arg)
         {
-            if (!(arg is SqlDbType))
+            if (arg is not SqlDbType)
                 return typeof(int);
             var Item = (SqlDbType)arg;
-            var Parameter = new SqlParameter();
-            Parameter.SqlDbType = Item;
+            var Parameter = new SqlParameter { SqlDbType = Item };
             switch (Parameter.DbType)
             {
                 case DbType.Byte:
@@ -222,7 +213,6 @@ namespace Wiesend.DataTypes.Conversion.Converters
         }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         private static object TypeToSqlDbType(object arg)
         {
             var TempValue = arg as Type;
@@ -232,8 +222,7 @@ namespace Wiesend.DataTypes.Conversion.Converters
             if (TempValue.IsEnum)
                 TempValue = Enum.GetUnderlyingType(TempValue);
             Item = Conversions.GetValue(TempValue, DbType.Int32);
-            var Parameter = new SqlParameter();
-            Parameter.DbType = Item;
+            var Parameter = new SqlParameter { DbType = Item };
             return Parameter.SqlDbType;
         }
     }

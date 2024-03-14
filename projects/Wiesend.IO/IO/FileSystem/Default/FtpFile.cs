@@ -305,12 +305,11 @@ namespace Wiesend.IO.FileSystem.Default
         /// </summary>
         /// <param name="Request">The web request object</param>
         /// <returns>The string returned by the service</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         private static string SendRequest([NotNull] FtpWebRequest Request)
         {
             if (Request == null) throw new ArgumentNullException(nameof(Request));
             using FtpWebResponse Response = Request.GetResponse() as FtpWebResponse;
-            using StreamReader Reader = new StreamReader(Response.GetResponseStream());
+            using StreamReader Reader = new(Response.GetResponseStream());
             return Reader.ReadToEnd();
         }
 

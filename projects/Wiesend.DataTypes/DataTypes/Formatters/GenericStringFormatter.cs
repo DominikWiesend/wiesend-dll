@@ -132,7 +132,7 @@ namespace Wiesend.DataTypes.Formatters
         {
             if (!IsValid(FormatPattern))
                 throw new ArgumentException("FormatPattern is not valid");
-            var ReturnValue = new StringBuilder();
+            StringBuilder ReturnValue = new();
             for (int x = 0; x < FormatPattern.Length; ++x)
             {
                 if (FormatPattern[x] == EscapeChar)

@@ -259,11 +259,16 @@ namespace Wiesend.IO.FileSystem.Default
         /// Reads the web page
         /// </summary>
         /// <returns>The content as a byte array</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public override byte[] ReadBinary()
         {
             if (InternalFile == null)
+            {
+#if NET45
                 return new byte[0];
+#else
+                return Array.Empty<byte>();
+#endif
+            }
             return Read().ToByteArray();
         }
 
@@ -282,11 +287,9 @@ namespace Wiesend.IO.FileSystem.Default
         /// <param name="Mode">Not used</param>
         /// <param name="Encoding">Not used</param>
         /// <returns>The result of the write or original content</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
         public override string Write(string Content, System.IO.FileMode Mode = FileMode.Create, Encoding Encoding = null)
         {
-            HttpWebRequest Request = WebRequest.Create(InternalFile) as HttpWebRequest;
-            if (Request == null)
+            if (WebRequest.Create(InternalFile) is not HttpWebRequest Request)
                 return "";
             if (Mode.HasFlag(FileMode.Append) || Mode.HasFlag(FileMode.Open))
                 Request.Method = "PUT";
@@ -314,14 +317,13 @@ namespace Wiesend.IO.FileSystem.Default
         /// </summary>
         /// <param name="Request">The web request object</param>
         /// <returns>The string returned by the service</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         private static string SendRequest([NotNull] HttpWebRequest Request)
         {
             if (Request == null) throw new ArgumentNullException(nameof(Request));
             using HttpWebResponse Response = Request.GetResponse() as HttpWebResponse;
             if (Response.StatusCode != HttpStatusCode.OK)
                 return "";
-            using StreamReader Reader = new StreamReader(Response.GetResponseStream());
+            using StreamReader Reader = new(Response.GetResponseStream());
             return Reader.ReadToEnd();
         }
 

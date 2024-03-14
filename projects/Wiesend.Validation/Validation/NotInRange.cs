@@ -125,10 +125,9 @@ namespace Wiesend.Validation
         /// <param name="value">Value to check</param>
         /// <param name="validationContext">Validation context</param>
         /// <returns>The validation result</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            GenericComparer<IComparable> Comparer = new GenericComparer<IComparable>();
+            GenericComparer<IComparable> Comparer = new();
             IComparable MaxValue = (IComparable)Max.To<object>(value.GetType());
             IComparable MinValue = (IComparable)Min.To<object>(value.GetType());
             IComparable TempValue = value as IComparable;

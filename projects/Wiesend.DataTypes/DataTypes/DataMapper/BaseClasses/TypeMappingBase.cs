@@ -143,10 +143,9 @@ namespace Wiesend.DataTypes.DataMapper.BaseClasses
         /// Automatically maps properties that are named the same thing
         /// </summary>
         /// <returns>This</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1836:Prefer IsEmpty over Count", Justification = "<Pending>")]
         public virtual ITypeMapping AutoMap()
         {
-            if (Mappings.Count > 0)
+            if (!Mappings.IsEmpty)
                 return this;
             Type LeftType = typeof(Left);
             Type RightType = typeof(Right);

@@ -192,13 +192,12 @@ namespace Wiesend.ORM.Manager.QueryProvider.BaseClasses
         /// <param name="first">First item</param>
         /// <param name="second">Second item</param>
         /// <returns>true if the first and second item are the same, false otherwise</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
         public static bool operator ==(ParameterBase<DataType> first, ParameterBase<DataType> second)
         {
             if (ReferenceEquals(first, second))
                 return true;
 
-            if ((object)first == null || (object)second == null)
+            if (first is null || second is null)
                 return false;
 
             return first.GetHashCode() == second.GetHashCode();

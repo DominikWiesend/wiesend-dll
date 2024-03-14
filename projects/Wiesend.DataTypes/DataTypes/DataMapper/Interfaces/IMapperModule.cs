@@ -77,7 +77,6 @@ namespace Wiesend.DataTypes.DataMapper.Interfaces
     /// <summary>
     /// Mapping interface
     /// </summary>
-    //[ContractClass(typeof(IMapperModuleContract))]
     public interface IMapperModule
     {
         /// <summary>

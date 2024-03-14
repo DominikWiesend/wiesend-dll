@@ -109,49 +109,31 @@ namespace Wiesend.IO.FileFormats.RSS
             NamespaceManager.AddNamespace("media", "http://search.yahoo.com/mrss/");
             var Node = Element.SelectSingleNode("./title", NamespaceManager);
             if (Node != null)
-            {
                 Title = Node.Value;
-            }
             Node = Element.SelectSingleNode("./link", NamespaceManager);
             if (Node != null)
-            {
                 Link = Node.Value;
-            }
             Node = Element.SelectSingleNode("./description", NamespaceManager);
             if (Node != null)
-            {
                 Description = Node.Value;
-            }
             Node = Element.SelectSingleNode("./author", NamespaceManager);
             if (Node != null)
-            {
                 Author = Node.Value;
-            }
             var Nodes = Element.Select("./category", NamespaceManager);
             foreach (XmlNode TempNode in Nodes)
-            {
                 Categories.Add(Utils.StripIllegalCharacters(TempNode.Value));
-            }
             Node = Element.SelectSingleNode("./enclosure", NamespaceManager);
             if (Node != null)
-            {
                 Enclosure = new Enclosure(Node);
-            }
             Node = Element.SelectSingleNode("./pubdate", NamespaceManager);
             if (Node != null)
-            {
                 PubDate = DateTime.Parse(Node.Value, CultureInfo.InvariantCulture);
-            }
             Node = Element.SelectSingleNode("./media:thumbnail", NamespaceManager);
             if (Node != null)
-            {
                 Thumbnail = new Thumbnail(Node);
-            }
             Node = Element.SelectSingleNode("./guid", NamespaceManager);
             if (Node != null)
-            {
                 GUID = new GUID(Node);
-            }
         }
 
         /// <summary>
@@ -211,9 +193,7 @@ namespace Wiesend.IO.FileFormats.RSS
                 .Append(Link).Append("</link>\r\n<author>").Append(Author)
                 .Append("</author>\r\n");
             foreach (string Category in Categories)
-            {
                 ItemString.Append("<category>").Append(Category).Append("</category>\r\n");
-            }
             ItemString.Append("<pubDate>").Append(PubDate.ToString("r", CultureInfo.InvariantCulture)).Append("</pubDate>\r\n");
             if (Enclosure != null)
                 ItemString.Append(Enclosure.ToString());

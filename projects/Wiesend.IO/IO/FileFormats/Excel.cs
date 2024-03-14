@@ -175,7 +175,6 @@ namespace Wiesend.IO.FileFormats
         /// </summary>
         /// <param name="FilePath">File path</param>
         /// <param name="Sheet">Sheet to parse</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA2100:Review SQL queries for security vulnerabilities", Justification = "<Pending>")]
         protected void Parse(string FilePath, string Sheet)
         {

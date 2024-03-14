@@ -271,11 +271,16 @@ namespace Wiesend.IO.FileSystem.Default
         /// Reads the Resource page
         /// </summary>
         /// <returns>The content as a byte array</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public override byte[] ReadBinary()
         {
             if (InternalFile == null)
+            {
+#if NET45
                 return new byte[0];
+#else
+                return Array.Empty<byte>();
+#endif
+            }
             using Stream TempStream = AssemblyFrom.GetManifestResourceStream(Resource);
             return TempStream.ReadAllBinary();
         }
@@ -306,10 +311,13 @@ namespace Wiesend.IO.FileSystem.Default
         /// <param name="Content">Not used</param>
         /// <param name="Mode">Not used</param>
         /// <returns>The result of the write or original content</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public override byte[] Write(byte[] Content, System.IO.FileMode Mode = FileMode.Create)
         {
+#if NET45
             return new byte[0];
+#else
+            return Array.Empty<byte>();
+#endif
         }
     }
 }

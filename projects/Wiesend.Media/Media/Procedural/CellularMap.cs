@@ -89,7 +89,6 @@ namespace Wiesend.Media.Procedural
         /// <param name="Width">Width of the image</param>
         /// <param name="Height">Height of the image</param>
         /// <param name="NumberOfPoints">Number of cells</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         public CellularMap(int Seed, int Width, int Height, int NumberOfPoints)
         {
             _Width = Width;
@@ -101,9 +100,11 @@ namespace Wiesend.Media.Procedural
             ClosestPoint = new int[Width, Height];
             for (int x = 0; x < NumberOfPoints; ++x)
             {
-                var TempPoint = new Point();
-                TempPoint.X = Rand.Next(0, Width);
-                TempPoint.Y = Rand.Next(0, Height);
+                var TempPoint = new Point
+                {
+                    X = Rand.Next(0, Width),
+                    Y = Rand.Next(0, Height)
+                };
                 Points.Add(TempPoint);
             }
             CalculateDistances();
@@ -129,14 +130,9 @@ namespace Wiesend.Media.Procedural
         /// </summary>
         public virtual float MinDistance { get; set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
-        private int _Height = 0;
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
-        private int _Width = 0;
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
-        private readonly List<Point> Points = new List<Point>();
+        private readonly int _Height;
+        private readonly int _Width;
+        private readonly List<Point> Points = new();
 
         /// <summary>
         /// Calculate the distance between the points

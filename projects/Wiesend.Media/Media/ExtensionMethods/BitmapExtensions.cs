@@ -154,8 +154,7 @@ namespace Wiesend.Media
         /// <summary>
         /// Characters used for ASCII art
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
-        private static string[] _ASCIICharacters = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", " " };
+        private static readonly string[] _ASCIICharacters = { "#", "#", "@", "%", "=", "+", "*", ":", "-", ".", " " };
 
         /// <summary>
         /// adds noise to the image
@@ -188,7 +187,6 @@ namespace Wiesend.Media
         /// <param name="Image">Image to change</param>
         /// <param name="Value">The value.</param>
         /// <returns>Modified Image object</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         public static SwiftBitmap AdjustBrightness([NotNull] this SwiftBitmap Image, int Value = 0)
         {
             if (Image == null) throw new ArgumentNullException(nameof(Image));
@@ -268,7 +266,6 @@ namespace Wiesend.Media
         /// </summary>
         /// <param name="Image">Image to change</param>
         /// <returns>A SwiftBitmap object of the black and white image</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         public static SwiftBitmap BlackAndWhite([NotNull] this SwiftBitmap Image)
         {
             if (Image == null) throw new ArgumentNullException(nameof(Image));
@@ -286,7 +283,6 @@ namespace Wiesend.Media
         /// </summary>
         /// <param name="Image">Image to change</param>
         /// <returns>A SwiftBitmap object</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         public static SwiftBitmap BlueFilter([NotNull] this SwiftBitmap Image)
         {
             if (Image == null) throw new ArgumentNullException(nameof(Image));
@@ -327,11 +323,10 @@ namespace Wiesend.Media
         /// <param name="Image">Image to create a bump map from</param>
         /// <param name="Invert">Inverts the direction of the bump map</param>
         /// <returns>The resulting bump map</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
         public static SwiftBitmap BumpMap([NotNull] this SwiftBitmap Image, Direction Direction = Direction.TopBottom, bool Invert = false)
         {
             if (Image == null) throw new ArgumentNullException(nameof(Image));
-            int[][] EdgeDetectionFilter = null;
+            int[][] EdgeDetectionFilter;
             if (Direction == Direction.TopBottom)
             {
                 if (!Invert)
@@ -454,15 +449,13 @@ namespace Wiesend.Media
         /// <param name="Width">Width of the box</param>
         /// <param name="CornerRadius">Radius of the corners</param>
         /// <returns>The SwiftBitmap with the rounded box on it</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         public static SwiftBitmap DrawRoundedRectangle([NotNull] this SwiftBitmap Image, Color BoxColor, int XPosition, int YPosition,
             int Height, int Width, int CornerRadius)
         {
             if (Image == null) throw new ArgumentNullException(nameof(Image));
-            using (Pen BoxPen = new Pen(BoxColor))
+            using (Pen BoxPen = new(BoxColor))
             {
-                using GraphicsPath Path = new GraphicsPath();
+                using GraphicsPath Path = new();
                 Path.AddLine(XPosition + CornerRadius, YPosition, XPosition + Width - (CornerRadius * 2), YPosition);
                 Path.AddArc(XPosition + Width - (CornerRadius * 2), YPosition, CornerRadius * 2, CornerRadius * 2, 270, 90);
                 Path.AddLine(XPosition + Width, YPosition + CornerRadius, XPosition + Width, YPosition + Height - (CornerRadius * 2));
@@ -539,11 +532,10 @@ namespace Wiesend.Media
         /// </summary>
         /// <param name="OriginalImage">Image to manipulate</param>
         /// <returns>The resulting SwiftBitmap image</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public static SwiftBitmap Equalize([NotNull] this SwiftBitmap OriginalImage)
         {
             if (OriginalImage == null) throw new ArgumentNullException(nameof(OriginalImage));
-            using SwiftBitmap NewSwiftBitmap = new SwiftBitmap(OriginalImage.Width, OriginalImage.Height);
+            using SwiftBitmap NewSwiftBitmap = new(OriginalImage.Width, OriginalImage.Height);
             var TempHistogram = new RGBHistogram(OriginalImage);
             TempHistogram.Equalize();
             NewSwiftBitmap.Lock();
@@ -583,7 +575,6 @@ namespace Wiesend.Media
         /// </summary>
         /// <param name="Image">Image to change</param>
         /// <returns>A SwiftBitmap object</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         public static SwiftBitmap GreenFilter([NotNull] this SwiftBitmap Image)
         {
             if (Image == null) throw new ArgumentNullException(nameof(Image));
@@ -602,11 +593,10 @@ namespace Wiesend.Media
         /// <param name="OriginalImage">Image to manipulate</param>
         /// <param name="MaxJitter">Maximum number of pixels the item can move</param>
         /// <returns>A SwiftBitmap object</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public static SwiftBitmap Jitter([NotNull] this SwiftBitmap OriginalImage, int MaxJitter = 5)
         {
             if (OriginalImage == null) throw new ArgumentNullException(nameof(OriginalImage));
-            using SwiftBitmap NewSwiftBitmap = new SwiftBitmap(OriginalImage.Width, OriginalImage.Height);
+            using SwiftBitmap NewSwiftBitmap = new(OriginalImage.Width, OriginalImage.Height);
             NewSwiftBitmap.Lock();
             OriginalImage.Lock();
             Parallel.For(0, OriginalImage.Width, x =>
@@ -633,11 +623,10 @@ namespace Wiesend.Media
         /// <param name="OriginalImage">Image to manipulate</param>
         /// <param name="Size">Size of the aperture</param>
         /// <returns>A SwiftBitmap object</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public static SwiftBitmap KuwaharaBlur([NotNull] this SwiftBitmap OriginalImage, int Size = 3)
         {
             if (OriginalImage == null) throw new ArgumentNullException(nameof(OriginalImage));
-            using SwiftBitmap NewSwiftBitmap = new SwiftBitmap(OriginalImage.Width, OriginalImage.Height);
+            using SwiftBitmap NewSwiftBitmap = new(OriginalImage.Width, OriginalImage.Height);
             NewSwiftBitmap.Lock();
             OriginalImage.Lock();
             int[] ApetureMinX = { -(Size / 2), 0, -(Size / 2), 0 };
@@ -742,11 +731,10 @@ namespace Wiesend.Media
         /// <param name="OriginalImage">Image to manipulate</param>
         /// <param name="Size">Size of the aperture</param>
         /// <returns>A SwiftBitmap image</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public static SwiftBitmap MedianFilter([NotNull] this SwiftBitmap OriginalImage, int Size = 3)
         {
             if (OriginalImage == null) throw new ArgumentNullException(nameof(OriginalImage));
-            using SwiftBitmap NewSwiftBitmap = new SwiftBitmap(OriginalImage.Width, OriginalImage.Height);
+            using SwiftBitmap NewSwiftBitmap = new(OriginalImage.Width, OriginalImage.Height);
             NewSwiftBitmap.Lock();
             OriginalImage.Lock();
             int ApetureMin = -(Size / 2);
@@ -793,11 +781,10 @@ namespace Wiesend.Media
         /// </summary>
         /// <param name="OriginalImage">Image to manipulate</param>
         /// <returns>A SwiftBitmap image</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public static SwiftBitmap Negative([NotNull] this SwiftBitmap OriginalImage)
         {
             if (OriginalImage == null) throw new ArgumentNullException(nameof(OriginalImage));
-            using SwiftBitmap NewSwiftBitmap = new SwiftBitmap(OriginalImage.Width, OriginalImage.Height);
+            using SwiftBitmap NewSwiftBitmap = new(OriginalImage.Width, OriginalImage.Height);
             NewSwiftBitmap.Lock();
             OriginalImage.Lock();
             int Width = NewSwiftBitmap.Width;
@@ -822,13 +809,12 @@ namespace Wiesend.Media
         /// <param name="InvertX">Invert the X direction</param>
         /// <param name="InvertY">Invert the Y direction</param>
         /// <returns>Returns the resulting normal map</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public static SwiftBitmap NormalMap([NotNull] this SwiftBitmap ImageUsing, bool InvertX = false, bool InvertY = false)
         {
             if (ImageUsing == null) throw new ArgumentNullException(nameof(ImageUsing));
             using SwiftBitmap TempImageX = ((SwiftBitmap)ImageUsing.Clone()).BumpMap(Direction.LeftRight, InvertX);
             using SwiftBitmap TempImageY = ((SwiftBitmap)ImageUsing.Clone()).BumpMap(Direction.TopBottom, InvertY);
-            using SwiftBitmap ReturnImage = new SwiftBitmap(TempImageX.Width, TempImageX.Height);
+            using SwiftBitmap ReturnImage = new(TempImageX.Width, TempImageX.Height);
             TempImageX.Lock();
             TempImageY.Lock();
             ReturnImage.Lock();
@@ -866,12 +852,10 @@ namespace Wiesend.Media
         /// <param name="OriginalImage">Image to pixelate</param>
         /// <param name="PixelSize">Size of the "pixels" in pixels</param>
         /// <returns>A SwiftBitmap image</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0054:Use compound assignment", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public static SwiftBitmap Pixelate([NotNull] this SwiftBitmap OriginalImage, int PixelSize = 5)
         {
             if (OriginalImage == null) throw new ArgumentNullException(nameof(OriginalImage));
-            using SwiftBitmap NewSwiftBitmap = new SwiftBitmap(OriginalImage.Width, OriginalImage.Height);
+            using SwiftBitmap NewSwiftBitmap = new(OriginalImage.Width, OriginalImage.Height);
             NewSwiftBitmap.Lock();
             OriginalImage.Lock();
             for (int x = 0; x < NewSwiftBitmap.Width; x += (PixelSize / 2))
@@ -895,9 +879,9 @@ namespace Wiesend.Media
                             BValue += Pixel.B;
                         }
                     }
-                    RValue = RValue / (PixelSize * PixelSize);
-                    GValue = GValue / (PixelSize * PixelSize);
-                    BValue = BValue / (PixelSize * PixelSize);
+                    RValue /= (PixelSize * PixelSize);
+                    GValue /= (PixelSize * PixelSize);
+                    BValue /= (PixelSize * PixelSize);
                     var TempPixel = Color.FromArgb(RValue.Clamp(255, 0), GValue.Clamp(255, 0), BValue.Clamp(255, 0));
                     Parallel.For(MinX, MaxX, x2 =>
                     {
@@ -917,7 +901,6 @@ namespace Wiesend.Media
         /// </summary>
         /// <param name="Image">Image to change</param>
         /// <returns>A SwiftBitmap image</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         public static SwiftBitmap RedFilter([NotNull] this SwiftBitmap Image)
         {
             if (Image == null) throw new ArgumentNullException(nameof(Image));
@@ -935,7 +918,6 @@ namespace Wiesend.Media
         /// </summary>
         /// <param name="Image">Image to change</param>
         /// <returns>A SwiftBitmap object of the sepia tone image</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         public static SwiftBitmap SepiaTone([NotNull] this SwiftBitmap Image)
         {
             if (Image == null) throw new ArgumentNullException(nameof(Image));
@@ -987,11 +969,10 @@ namespace Wiesend.Media
         /// <param name="XDirection">Determines if this should be done in the X direction</param>
         /// <param name="YDirection">Determines if this should be done in the Y direction</param>
         /// <returns>A SwiftBitmap which has been modified</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public static SwiftBitmap SinWave([NotNull] this SwiftBitmap OriginalImage, float Amplitude, float Frequency, bool XDirection, bool YDirection)
         {
             if (OriginalImage == null) throw new ArgumentNullException(nameof(OriginalImage));
-            using SwiftBitmap NewSwiftBitmap = new SwiftBitmap(OriginalImage.Width, OriginalImage.Height);
+            using SwiftBitmap NewSwiftBitmap = new(OriginalImage.Width, OriginalImage.Height);
             NewSwiftBitmap.Lock();
             OriginalImage.Lock();
             int Width = NewSwiftBitmap.Width;
@@ -1029,11 +1010,10 @@ namespace Wiesend.Media
         /// <param name="OriginalImage">Image to manipulate</param>
         /// <param name="Size">Size of the aperture</param>
         /// <returns>The resulting SwiftBitmap</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public static SwiftBitmap SNNBlur([NotNull] this SwiftBitmap OriginalImage, int Size = 3)
         {
             if (OriginalImage == null) throw new ArgumentNullException(nameof(OriginalImage));
-            using SwiftBitmap NewSwiftBitmap = new SwiftBitmap(OriginalImage.Width, OriginalImage.Height);
+            using SwiftBitmap NewSwiftBitmap = new(OriginalImage.Width, OriginalImage.Height);
             NewSwiftBitmap.Lock();
             OriginalImage.Lock();
             int ApetureMinX = -(Size / 2);
@@ -1098,7 +1078,6 @@ namespace Wiesend.Media
         /// </summary>
         /// <param name="Input">Image to manipulate</param>
         /// <returns>A SwiftBitmap image</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public static SwiftBitmap SobelEdgeDetection([NotNull] this SwiftBitmap Input)
         {
             if (Input == null) throw new ArgumentNullException(nameof(Input));
@@ -1113,7 +1092,7 @@ namespace Wiesend.Media
                 new int[] {0, 0, 0},
                 new int[] {-1, -2, -1}
                 }, true);
-            using SwiftBitmap NewBitmap = new SwiftBitmap(Input.Width, Input.Height);
+            using SwiftBitmap NewBitmap = new(Input.Width, Input.Height);
             NewBitmap.Lock();
             TempImageX.Lock();
             TempImageY.Lock();
@@ -1157,11 +1136,10 @@ namespace Wiesend.Media
         /// </summary>
         /// <param name="OriginalImage">Image to manipulate</param>
         /// <returns>A SwiftBitmap image</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public static SwiftBitmap StretchContrast([NotNull] this SwiftBitmap OriginalImage)
         {
             if (OriginalImage == null) throw new ArgumentNullException(nameof(OriginalImage));
-            using SwiftBitmap NewBitmap = new SwiftBitmap(OriginalImage.Width, OriginalImage.Height);
+            using SwiftBitmap NewBitmap = new(OriginalImage.Width, OriginalImage.Height);
             NewBitmap.Lock();
             OriginalImage.Lock();
             GetMinMaxPixel(out Color MinValue, out Color MaxValue, OriginalImage);
@@ -1190,11 +1168,10 @@ namespace Wiesend.Media
         /// Float defining the threshold at which to set the pixel to black vs white.
         /// </param>
         /// <returns>A SwiftBitmap object containing the new image</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public static SwiftBitmap Threshold([NotNull] this SwiftBitmap OriginalImage, float Threshold = 0.5f)
         {
             if (OriginalImage == null) throw new ArgumentNullException(nameof(OriginalImage));
-            using SwiftBitmap NewSwiftBitmap = new SwiftBitmap(OriginalImage.Width, OriginalImage.Height);
+            using SwiftBitmap NewSwiftBitmap = new(OriginalImage.Width, OriginalImage.Height);
             NewSwiftBitmap.Lock();
             OriginalImage.Lock();
             int Width = NewSwiftBitmap.Width;
@@ -1257,14 +1234,13 @@ namespace Wiesend.Media
         /// <param name="Power">How strong the movement is</param>
         /// <param name="Seed">Random seed</param>
         /// <returns>A SwiftBitmap object containing the new image</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public static SwiftBitmap Turbulence([NotNull] this SwiftBitmap OriginalImage, int Roughness = 8, float Power = 5.0f, int Seed = 25123864)
         {
             if (OriginalImage == null) throw new ArgumentNullException(nameof(OriginalImage));
             int Width = OriginalImage.Width;
             int Height = OriginalImage.Height;
             OriginalImage.Lock();
-            using SwiftBitmap NewSwiftBitmap = new SwiftBitmap(Width, Height);
+            using SwiftBitmap NewSwiftBitmap = new(Width, Height);
             NewSwiftBitmap.Lock();
             using (SwiftBitmap XNoise = PerlinNoise.Generate(Width, Height, 255, 0, 0.0625f, 1.0f, 0.5f, Roughness, Seed))
             {
@@ -1305,8 +1281,6 @@ namespace Wiesend.Media
         /// Transparent color used in watermark image, set to null if not used
         /// </param>
         /// <returns>The results in the form of a SwiftBitmap object</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         public static SwiftBitmap Watermark([NotNull] this SwiftBitmap Image, [NotNull] SwiftBitmap WatermarkImage, float Opacity, int X, int Y, Color KeyColor)
         {
             if (Image == null) throw new ArgumentNullException(nameof(Image));
@@ -1323,7 +1297,7 @@ namespace Wiesend.Media
                         };
 
                 var NewColorMatrix = new ColorMatrix(FloatColorMatrix);
-                using ImageAttributes Attributes = new ImageAttributes();
+                using ImageAttributes Attributes = new();
                 Attributes.SetColorMatrix(NewColorMatrix);
                 Attributes.SetColorKey(KeyColor, KeyColor);
                 NewGraphics.DrawImage(WatermarkImage.InternalBitmap,

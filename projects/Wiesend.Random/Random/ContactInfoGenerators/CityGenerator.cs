@@ -83,18 +83,15 @@ namespace Wiesend.Random.ContactInfoGenerators
     /// </summary>
     public class CityGenerator : GeneratorAttributeBase, IGenerator<string>
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
-        private string[] CityEndings = { "deen", "town", "ville", "berg", "view", "bury", "ton", "land", "mouth", "haven",
-                                           "shire", "don", "creek", "worth", "son", "mont", "wood", "dale","cliff","bridge" };
+        private readonly string[] CityEndings = { "deen", "town", "ville", "berg", "view", "bury", "ton", "land", "mouth", "haven",
+                                                  "shire", "don", "creek", "worth", "son", "mont", "wood", "dale","cliff","bridge" };
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
-        private string[] CityPrefix = { "North", "South", "East", "West", "New", "Lake", "Old", "Port", "Fort", "Mount" };
+        private readonly string[] CityPrefix = { "North", "South", "East", "West", "New", "Lake", "Old", "Port", "Fort", "Mount" };
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
-        private string[] CitySuffix = { "Cove", "Manor", "City", "Park", "Springs", "Canyon", "Fork", "Center", "Mill",
-                                          "Beach","Glen", "Valley","Heights", "Harbor","Grove","Haven","Island", "Pass",
-                                          "Hills", "Creek", "Crest", "Dale", "Falls","Flats","Gardens","Landing","Meadows",
-                                          "Pines" };
+        private readonly string[] CitySuffix = { "Cove", "Manor", "City", "Park", "Springs", "Canyon", "Fork", "Center", "Mill",
+                                                 "Beach","Glen", "Valley","Heights", "Harbor","Grove","Haven","Island", "Pass",
+                                                 "Hills", "Creek", "Crest", "Dale", "Falls","Flats","Gardens","Landing","Meadows",
+                                                 "Pines" };
 
         /// <summary>
         /// Constructor

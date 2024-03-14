@@ -84,16 +84,11 @@ namespace Wiesend.Random.ContactInfoGenerators
     /// </summary>
     public class StreetAddressGenerator : GeneratorAttributeBase, IGenerator<string>
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
-        private string[] AddressFormats = { "#####", "####", "###" };
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
-        private string[] SecondLineAddressFormat = { "Apt. #", "Apt. ##", "Apt. ###", "Apt. @", "Apt. @#", "Suite ###" };
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
-        private string[] StreetSuffix = { "Avenue", "Bypass", "Center", "Circle", "Corner", "Court", "Cove", "Creek", "Crossing",
-                                            "Drive", "Estates", "Expressway", "Freeway", "Highway", "Junction", "Lane", "Loop",
-                                            "Park", "Parkway", "Pass", "Plaza", "Road", "Route", "Street", "Turnpike" };
+        private readonly string[] AddressFormats = { "#####", "####", "###" };
+        private readonly string[] SecondLineAddressFormat = { "Apt. #", "Apt. ##", "Apt. ###", "Apt. @", "Apt. @#", "Suite ###" };
+        private readonly string[] StreetSuffix = { "Avenue", "Bypass", "Center", "Circle", "Corner", "Court", "Cove", "Creek", "Crossing",
+                                                   "Drive", "Estates", "Expressway", "Freeway", "Highway", "Junction", "Lane", "Loop",
+                                                   "Park", "Parkway", "Pass", "Plaza", "Road", "Route", "Street", "Turnpike" };
 
         /// <summary>
         /// Constructor

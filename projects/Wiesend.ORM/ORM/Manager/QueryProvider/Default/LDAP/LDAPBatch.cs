@@ -179,11 +179,9 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.LDAP
         /// <returns>
         /// This
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
         public IBatch AddCommand(IBatch Batch)
         {
-            var TempValue = Batch as LDAPBatch;
-            if (TempValue == null)
+            if (Batch is not LDAPBatch TempValue)
                 return this;
             Commands.Add(TempValue.Commands);
             return this;
@@ -195,7 +193,6 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.LDAP
         /// <returns>
         /// The results of the batched commands
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1829:Use Length/Count property instead of Count() when available", Justification = "<Pending>")]
         public IList<IList<dynamic>> Execute()
         {
@@ -205,9 +202,9 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.LDAP
                 ReturnValue.Add(new List<dynamic>());
                 return ReturnValue;
             }
-            using (DirectoryEntry Entry = new DirectoryEntry(Source.Server, Source.UserName, Source.Password, AuthenticationTypes.Secure))
+            using (DirectoryEntry Entry = new(Source.Server, Source.UserName, Source.Password, AuthenticationTypes.Secure))
             {
-                using (DirectorySearcher Searcher = new DirectorySearcher(Entry))
+                using (DirectorySearcher Searcher = new(Entry))
                 {
                     Searcher.PageSize = 1000;
                     foreach (Command Command in Commands)

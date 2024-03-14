@@ -296,26 +296,18 @@ namespace Wiesend.IO.FileFormats.RSS
             var NamespaceManager = new XmlNamespaceManager(Navigator.NameTable);
             var Nodes = Navigator.Select("./channel", NamespaceManager);
             foreach (XmlNode Element in Nodes)
-            {
                 Channels.Add(new Channel((XmlElement)Element));
-            }
             if (Channels.Count == 0)
             {
                 Nodes = Navigator.Select(".//channel", NamespaceManager);
                 foreach (XmlNode Element in Nodes)
-                {
                     Channels.Add(new Channel((XmlElement)Element));
-                }
                 var Items = new List<Item>();
                 Nodes = Navigator.Select(".//item", NamespaceManager);
                 foreach (XmlNode Element in Nodes)
-                {
                     Items.Add(new Item((XmlElement)Element));
-                }
                 if (Channels.Count > 0)
-                {
                     Channels.FirstOrDefault().Add(Items);
-                }
             }
         }
     }

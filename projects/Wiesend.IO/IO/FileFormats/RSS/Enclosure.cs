@@ -99,17 +99,11 @@ namespace Wiesend.IO.FileFormats.RSS
             if (Doc == null) throw new ArgumentNullException(nameof(Doc));
             var Element = Doc.CreateNavigator();
             if (string.IsNullOrEmpty(Element.GetAttribute("url", "")))
-            {
                 Url = Element.GetAttribute("url", "");
-            }
             if (string.IsNullOrEmpty(Element.GetAttribute("length", "")))
-            {
                 Length = Element.GetAttribute("length", "");
-            }
             if (string.IsNullOrEmpty(Element.GetAttribute("type", "")))
-            {
                 Type = Element.GetAttribute("type", "");
-            }
         }
 
         /// <summary>

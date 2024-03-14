@@ -218,14 +218,12 @@ namespace Wiesend.Random
         /// Generator to be used (if not included, default generator is used)
         /// </param>
         /// <returns>The randomly generated value</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
         public static T NextClass<T>([NotNull] this System.Random Random, IGenerator<T> Generator = null)
             where T : class,new()
         {
             if (Random == null) throw new ArgumentNullException(nameof(Random));
             SetupGenerators();
-            if (Generator == null)
-                Generator = new ClassGenerator<T>();
+            Generator ??= new ClassGenerator<T>();
             return Generator.Next(Random);
         }
 
@@ -239,14 +237,12 @@ namespace Wiesend.Random
         /// Generator to be used (if not included, default generator is used)
         /// </param>
         /// <returns>The randomly generated value</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
         public static IEnumerable<T> NextClass<T>([NotNull] this System.Random Random, int Amount, IGenerator<T> Generator = null)
             where T : class,new()
         {
             if (Random == null) throw new ArgumentNullException(nameof(Random));
             SetupGenerators();
-            if (Generator == null)
-                Generator = new ClassGenerator<T>();
+            Generator ??= new ClassGenerator<T>();
             return Amount.Times(x => Generator.Next(Random));
         }
 
@@ -340,30 +336,31 @@ namespace Wiesend.Random
             return List.OrderBy(x => Random.Next());
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0028:Simplify collection initialization", Justification = "<Pending>")]
         private static void SetupGenerators()
         {
             if (Generators != null)
                 return;
-            Generators = new Dictionary<Type, IGenerator>();
-            Generators.Add(typeof(bool), new BoolGenerator());
-            Generators.Add(typeof(decimal), new DecimalGenerator<decimal>());
-            Generators.Add(typeof(double), new DecimalGenerator<double>());
-            Generators.Add(typeof(float), new DecimalGenerator<float>());
-            Generators.Add(typeof(byte), new IntegerGenerator<byte>());
-            Generators.Add(typeof(char), new IntegerGenerator<char>());
-            Generators.Add(typeof(int), new IntegerGenerator<int>());
-            Generators.Add(typeof(long), new IntegerGenerator<long>());
-            Generators.Add(typeof(sbyte), new IntegerGenerator<sbyte>());
-            Generators.Add(typeof(short), new IntegerGenerator<short>());
-            Generators.Add(typeof(uint), new IntegerGenerator<uint>());
-            Generators.Add(typeof(ulong), new IntegerGenerator<ulong>());
-            Generators.Add(typeof(ushort), new IntegerGenerator<ushort>());
-            Generators.Add(typeof(DateTime), new DateTimeGenerator());
-            Generators.Add(typeof(TimeSpan), new TimeSpanGenerator());
-            Generators.Add(typeof(Color), new ColorGenerator());
-            Generators.Add(typeof(string), new StringGenerator());
-            Generators.Add(typeof(Guid), new GuidGenerator());
+            Generators = new Dictionary<Type, IGenerator>
+            {
+                { typeof(bool), new BoolGenerator() },
+                { typeof(decimal), new DecimalGenerator<decimal>() },
+                { typeof(double), new DecimalGenerator<double>() },
+                { typeof(float), new DecimalGenerator<float>() },
+                { typeof(byte), new IntegerGenerator<byte>() },
+                { typeof(char), new IntegerGenerator<char>() },
+                { typeof(int), new IntegerGenerator<int>() },
+                { typeof(long), new IntegerGenerator<long>() },
+                { typeof(sbyte), new IntegerGenerator<sbyte>() },
+                { typeof(short), new IntegerGenerator<short>() },
+                { typeof(uint), new IntegerGenerator<uint>() },
+                { typeof(ulong), new IntegerGenerator<ulong>() },
+                { typeof(ushort), new IntegerGenerator<ushort>() },
+                { typeof(DateTime), new DateTimeGenerator() },
+                { typeof(TimeSpan), new TimeSpanGenerator() },
+                { typeof(Color), new ColorGenerator() },
+                { typeof(string), new StringGenerator() },
+                { typeof(Guid), new GuidGenerator() }
+            };
         }
     }
 }

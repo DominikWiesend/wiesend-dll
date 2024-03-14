@@ -202,13 +202,9 @@ namespace Wiesend.IO.FileSystem.Default
             if (!Exists)
                 return;
             foreach (IFile File in EnumerateFiles())
-            {
                 File.Delete();
-            }
             foreach (IDirectory Directory in EnumerateDirectories())
-            {
                 Directory.Delete();
-            }
             InternalDirectory.Delete(true);
             InternalDirectory.Refresh();
         }
@@ -222,12 +218,8 @@ namespace Wiesend.IO.FileSystem.Default
         public override IEnumerable<IDirectory> EnumerateDirectories(string SearchPattern = "*", SearchOption Options = SearchOption.TopDirectoryOnly)
         {
             if (InternalDirectory != null)
-            {
                 foreach (System.IO.DirectoryInfo SubDirectory in InternalDirectory.EnumerateDirectories(SearchPattern, Options))
-                {
                     yield return new LocalDirectory(SubDirectory);
-                }
-            }
         }
 
         /// <summary>
@@ -239,12 +231,8 @@ namespace Wiesend.IO.FileSystem.Default
         public override IEnumerable<IFile> EnumerateFiles(string SearchPattern = "*", SearchOption Options = SearchOption.TopDirectoryOnly)
         {
             if (InternalDirectory != null)
-            {
                 foreach (System.IO.FileInfo File in InternalDirectory.EnumerateFiles(SearchPattern, Options))
-                {
                     yield return new LocalFile(File);
-                }
-            }
         }
 
         /// <summary>

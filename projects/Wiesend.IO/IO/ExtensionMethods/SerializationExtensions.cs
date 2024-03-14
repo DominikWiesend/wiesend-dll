@@ -112,11 +112,9 @@ namespace Wiesend.IO
         /// <param name="ContentType">Content type</param>
         /// <returns>The deserialized object</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
         public static R Deserialize<R, T>(this T Data, SerializationType ContentType)
         {
-            if (ContentType == null)
-                ContentType = SerializationType.JSON;
+            ContentType ??= SerializationType.JSON;
             var TempManager = IoC.Manager.Bootstrapper.Resolve<Manager>();
             if (TempManager == null)
                 return default;
@@ -152,11 +150,9 @@ namespace Wiesend.IO
         /// <returns>The serialized object</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
         public static R Serialize<R, T>(this T Object, SerializationType ContentType)
         {
-            if (ContentType == null)
-                ContentType = SerializationType.JSON;
+            ContentType ??= SerializationType.JSON;
             var TempManager = IoC.Manager.Bootstrapper.Resolve<Manager>();
             if (TempManager == null)
                 return default;

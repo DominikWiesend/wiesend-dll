@@ -131,16 +131,16 @@ namespace Wiesend.DataTypes
         {
             get
             {
-                if (!(X >= 0 && X <= Width)) throw new ArgumentOutOfRangeException(nameof(X), $"Condition {nameof(X)} >= 0 && {nameof(X)} <= Width not met.");
-                if (!(Y >= 0 && Y <= Height)) throw new ArgumentOutOfRangeException(nameof(Y), $"Condition {nameof(Y)} >= 0 && {nameof(Y)} <= Height not met.");
+                if (!(X >= 0 && X <= Width)) throw new ArgumentOutOfRangeException(nameof(X), $"Condition not met: [{nameof(X)} >= 0 && {nameof(X)} <= Width]");
+                if (!(Y >= 0 && Y <= Height)) throw new ArgumentOutOfRangeException(nameof(Y), $"Condition not met: [{nameof(Y)} >= 0 && {nameof(Y)} <= Height]");
                 if (Values == null) throw new NullReferenceException("Values");
                 return Values[X, Y];
             }
 
             set
             {
-                if (!(X >= 0 && X <= Width)) throw new ArgumentOutOfRangeException(nameof(X), $"Condition {nameof(X)} >= 0 && {nameof(X)} <= Width not met.");
-                if (!(Y >= 0 && Y <= Height)) throw new ArgumentOutOfRangeException(nameof(Y), $"Condition {nameof(Y)} >= 0 && {nameof(Y)} <= Height not met.");
+                if (!(X >= 0 && X <= Width)) throw new ArgumentOutOfRangeException(nameof(X), $"Condition not met: [{nameof(X)} >= 0 && {nameof(X)} <= Width]");
+                if (!(Y >= 0 && Y <= Height)) throw new ArgumentOutOfRangeException(nameof(Y), $"Condition not met: [{nameof(Y)} >= 0 && {nameof(Y)} <= Height]");
                 if (Values == null) throw new NullReferenceException("Values");
                 Values[X, Y] = value;
             }
@@ -299,14 +299,13 @@ namespace Wiesend.DataTypes
         /// <param name="M1">Matrix 1</param>
         /// <param name="M2">Matrix 2</param>
         /// <returns>True if they are equal, false otherwise</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
         public static bool operator ==(Matrix M1, Matrix M2)
         {
-            if ((object)M1 == null && (object)M2 == null)
+            if (M1 is null && M2 is null)
                 return true;
-            if ((object)M1 == null)
+            if (M1 is null)
                 return false;
-            if ((object)M2 == null)
+            if (M2 is null)
                 return false;
             if (M1.Width != M2.Width || M1.Height != M2.Height)
                 return false;

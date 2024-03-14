@@ -80,7 +80,6 @@ namespace Wiesend.IoC.Interfaces.Contracts
     /// <summary>
     /// IModule contract class
     /// </summary>
-    //[ContractClassFor(typeof(IModule))]
     internal abstract class IModuleContract : IModule
     {
         /// <summary>
@@ -98,7 +97,7 @@ namespace Wiesend.IoC.Interfaces.Contracts
         public void Load([NotNull] IBootstrapper Bootstrapper)
         {
             if (Bootstrapper == null) 
-                throw new ArgumentNullException(nameof(Bootstrapper), $"Contract assertion not met: {nameof(Bootstrapper)} != null");
+                throw new ArgumentNullException(nameof(Bootstrapper), $"Condition not met: [{nameof(Bootstrapper)} != null]");
         }
     }
 }

@@ -96,7 +96,6 @@ namespace Wiesend.DataTypes.AOP
         /// <param name="Compiler">The compiler.</param>
         /// <param name="Aspects">The aspects.</param>
         /// <param name="Modules">The modules.</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1836:Prefer IsEmpty over Count", Justification = "<Pending>")]
         public Manager([NotNull] Compiler Compiler, [NotNull] IEnumerable<IAspect> Aspects, [NotNull] IEnumerable<IAOPModule> Modules)
         {
             if (Compiler == null) throw new ArgumentNullException(nameof(Compiler));
@@ -104,7 +103,7 @@ namespace Wiesend.DataTypes.AOP
             if (Aspects == null) throw new ArgumentNullException(nameof(Aspects));
             if (Modules == null) throw new ArgumentNullException(nameof(Modules));
             Manager.Compiler = Compiler;
-            if (Manager.Aspects.Count == 0)
+            if (Manager.Aspects.IsEmpty)
                 Manager.Aspects.Add(Aspects);
             Compiler.Classes.ForEachParallel(x => Classes.AddOrUpdate(x.BaseType, y => x, (y, z) => x));
             Modules.ForEachParallel(x => x.Setup(this));
@@ -118,15 +117,12 @@ namespace Wiesend.DataTypes.AOP
         /// <summary>
         /// The list of aspects that are being used
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
-        private static readonly ConcurrentBag<IAspect> Aspects = new ConcurrentBag<IAspect>();
+        private static readonly ConcurrentBag<IAspect> Aspects = new();
 
         /// <summary>
         /// Dictionary containing generated types and associates it with original type
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
-        private static ConcurrentDictionary<Type, Type> Classes = new ConcurrentDictionary<Type, Type>();
+        private static readonly ConcurrentDictionary<Type, Type> Classes = new();
 
         /// <summary>
         /// Creates an object of the specified base type, registering the type if necessary
@@ -167,20 +163,20 @@ namespace Wiesend.DataTypes.AOP
         /// Sets up a type so it can be used in the system later
         /// </summary>
         /// <param name="types">The types.</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0028:Simplify collection initialization", Justification = "<Pending>")]
         public virtual void Setup(params Type[] types)
         {
             IEnumerable<Type> TempTypes = FilterTypesToSetup(types);
-            var AssembliesUsing = new List<Assembly>();
-            AssembliesUsing.Add(typeof(object).Assembly, typeof(System.Linq.Enumerable).Assembly);
+            var AssembliesUsing = new List<Assembly> { { typeof(object).Assembly, typeof(System.Linq.Enumerable).Assembly } };
             Aspects.ForEach(x => AssembliesUsing.AddIfUnique(x.AssembliesUsing));
 
-            var Usings = new List<string>();
-            Usings.Add("System");
-            Usings.Add("System.Collections.Generic");
-            Usings.Add("System.Linq");
-            Usings.Add("System.Text");
-            Usings.Add("System.Threading.Tasks");
+            var Usings = new List<string>
+            {
+                "System",
+                "System.Collections.Generic",
+                "System.Linq",
+                "System.Text",
+                "System.Threading.Tasks"
+            };
             Aspects.ForEach(x => Usings.AddIfUnique(x.Usings));
 
             var Interfaces = new List<Type>();
@@ -251,17 +247,7 @@ namespace Wiesend.DataTypes.AOP
             Type TempType = Type;
             while (TempType != null)
             {
-                Types.AddIfUnique(TempType.Assembly.GetReferencedAssemblies().ForEach(x =>
-                {
-                    try
-                    {
-                        return Assembly.Load(x);
-                    }
-                    catch
-                    {
-                        return null;
-                    }
-                }).Where(x => x != null));
+                Types.AddIfUnique(TempType.Assembly.GetReferencedAssemblies().ForEach(x => { try { return Assembly.Load(x); } catch { return null; } }).Where(x => x != null));
                 Types.AddIfUnique(TempType.Assembly);
                 TempType.GetInterfaces().ForEach(x => Types.AddIfUnique(GetAssembliesSimple(x)));
                 TempType.GetEvents().ForEach(x => Types.AddIfUnique(GetAssembliesSimple(x.EventHandlerType)));

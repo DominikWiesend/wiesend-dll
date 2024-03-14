@@ -172,9 +172,7 @@ namespace Wiesend.DataTypes
         {
             var Result = new Graph<T>();
             foreach (var Vertex in Vertices)
-            {
                 Result.AddVertex(Vertex.Data);
-            }
             foreach (var Vertex in Vertices)
             {
                 var TempSource = Result.Vertices.First(x => x.Data.Equals(Vertex.Data));

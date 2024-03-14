@@ -77,7 +77,6 @@ namespace Wiesend.IO.FileSystem.Interfaces
     /// <summary>
     /// Interface for the file system
     /// </summary>
-    //[ContractClass(typeof(IFileSystemContract))]
     public interface IFileSystem
     {
         /// <summary>

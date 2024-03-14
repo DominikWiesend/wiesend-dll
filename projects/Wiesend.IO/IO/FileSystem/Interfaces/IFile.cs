@@ -81,7 +81,6 @@ namespace Wiesend.IO.FileSystem.Interfaces
     /// <summary>
     /// Represents an individual file
     /// </summary>
-    //[ContractClass(typeof(IFileContract))]
     public interface IFile : IComparable<IFile>, IComparable, IEquatable<IFile>, ICloneable
     {
         /// <summary>

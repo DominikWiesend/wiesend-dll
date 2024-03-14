@@ -83,7 +83,6 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
     /// <summary>
     /// IDirectory contract class
     /// </summary>
-    //[ContractClassFor(typeof(IDirectory))]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1036:Override methods on comparable types", Justification = "<Pending>")]
     public abstract class IDirectoryContract : IDirectory
     {
@@ -119,7 +118,7 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         {
             get
             {
-                if ((object)null == null) throw new System.InvalidOperationException("Contract assertion not met: result != null");
+                if ((object)null == null) throw new System.InvalidOperationException("Condition not met: [result != null]");
             }
         }
 
@@ -139,7 +138,7 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         {
             get
             {
-                if ((object)null == null) throw new System.InvalidOperationException("Contract assertion not met: result != null");
+                if ((object)null == null) throw new System.InvalidOperationException("Condition not met: [result != null]");
             }
         }
 
@@ -218,7 +217,7 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         [NotNull]
         public IDirectory CopyTo(IDirectory Directory, Enums.CopyOptions Options = CopyOptions.CopyAlways)
         {
-            if ((object)null == null) throw new InvalidOperationException("Contract assertion not met: result != null");
+            if ((object)null == null) throw new System.InvalidOperationException("Condition not met: [result != null]");
         }
 
         /// <summary>
@@ -244,7 +243,7 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         [NotNull]
         public IEnumerable<IDirectory> EnumerateDirectories(string SearchPattern = "*", System.IO.SearchOption Options = SearchOption.TopDirectoryOnly)
         {
-            if ((object)null == null) throw new InvalidOperationException("Contract assertion not met: result != null");
+            if ((object)null == null) throw new System.InvalidOperationException("Condition not met: [result != null]");
         }
 
         /// <summary>
@@ -257,7 +256,7 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         public IEnumerable<IDirectory> EnumerateDirectories([NotNull] Predicate<IDirectory> Predicate, System.IO.SearchOption Options = SearchOption.TopDirectoryOnly)
         {
             if (Predicate == null) throw new ArgumentNullException(nameof(Predicate));
-            if ((object)null == null) throw new InvalidOperationException("Contract assertion not met: result != null");
+            if ((object)null == null) throw new System.InvalidOperationException("Condition not met: [result != null]");
         }
 
         /// <summary>
@@ -269,7 +268,7 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         [NotNull]
         public IEnumerable<IFile> EnumerateFiles(string SearchPattern = "*", System.IO.SearchOption Options = SearchOption.TopDirectoryOnly)
         {
-            if ((object)null == null) throw new InvalidOperationException($"Contract assertion not met: result != null");
+            if ((object)null == null) throw new System.InvalidOperationException("Condition not met: [result != null]");
         }
 
         /// <summary>
@@ -282,7 +281,7 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         public IEnumerable<IFile> EnumerateFiles([NotNull] Predicate<IFile> Predicate, System.IO.SearchOption Options = SearchOption.TopDirectoryOnly)
         {
             if (Predicate == null) throw new ArgumentNullException(nameof(Predicate));
-            if ((object)null == null) throw new InvalidOperationException("Contract assertion not met: result != null");
+            if ((object)null == null) throw new System.InvalidOperationException("Condition not met: [result != null]");
         }
 
         /// <summary>
@@ -318,7 +317,7 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         [NotNull]
         public IDirectory MoveTo(IDirectory Directory)
         {
-            if ((object)null == null) throw new InvalidOperationException("Contract assertion not met: result != null");
+            if ((object)null == null) throw new System.InvalidOperationException("Condition not met: [result != null]");
         }
 
         /// <summary>

@@ -126,22 +126,24 @@ namespace Wiesend.IO.Encryption.BaseClasses
         /// Can be 64 (DES only), 128 (AES), 192 (AES and Triple DES), or 256 (AES)
         /// </param>
         /// <returns>A decrypted byte array</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public byte[] Decrypt(byte[] Data, DeriveBytes Key, string Algorithm = "AES", string InitialVector = "OFRna73m*aze01xY", int KeySize = 256)
         {
             if (string.IsNullOrEmpty(InitialVector)) throw new ArgumentNullException(nameof(InitialVector));
             if (Data == null)
                 return null;
             using SymmetricAlgorithm SymmetricKey = GetProvider(Algorithm);
+#if NET45
             byte[] PlainTextBytes = new byte[0];
+#else
+            byte[] PlainTextBytes = Array.Empty<byte>();
+#endif
             if (SymmetricKey != null)
             {
                 SymmetricKey.Mode = CipherMode.CBC;
                 using (ICryptoTransform Decryptor = SymmetricKey.CreateDecryptor(Key.GetBytes(KeySize / 8), InitialVector.ToByteArray()))
                 {
-                    using MemoryStream MemStream = new MemoryStream(Data);
-                    using CryptoStream CryptoStream = new CryptoStream(MemStream, Decryptor, CryptoStreamMode.Read);
+                    using MemoryStream MemStream = new(Data);
+                    using CryptoStream CryptoStream = new(MemStream, Decryptor, CryptoStreamMode.Read);
                     PlainTextBytes = CryptoStream.ReadAllBinary();
                 }
                 SymmetricKey.Clear();
@@ -163,10 +165,9 @@ namespace Wiesend.IO.Encryption.BaseClasses
         /// Can be 64 (DES only), 128 (AES), 192 (AES and Triple DES), or 256 (AES)
         /// </param>
         /// <returns>A decrypted byte array</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public byte[] Decrypt(byte[] Data, string Key, string Algorithm, string Salt = "Kosher", string HashAlgorithm = "SHA1", int PasswordIterations = 2, string InitialVector = "OFRna73m*aze01xY", int KeySize = 256)
         {
-            using PasswordDeriveBytes TempKey = new PasswordDeriveBytes(Key, Salt.ToByteArray(), HashAlgorithm, PasswordIterations);
+            using PasswordDeriveBytes TempKey = new(Key, Salt.ToByteArray(), HashAlgorithm, PasswordIterations);
             return Decrypt(Data, TempKey, Algorithm, InitialVector, KeySize);
         }
 
@@ -184,10 +185,9 @@ namespace Wiesend.IO.Encryption.BaseClasses
         /// </param>
         /// <param name="Algorithm">Algorithm to use</param>
         /// <returns>The encrypted byte array</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public byte[] Encrypt(byte[] Data, string Key, string Algorithm, string Salt = "Kosher", string HashAlgorithm = "SHA1", int PasswordIterations = 2, string InitialVector = "OFRna73m*aze01xY", int KeySize = 256)
         {
-            using PasswordDeriveBytes TempKey = new PasswordDeriveBytes(Key, Salt.ToByteArray(), HashAlgorithm, PasswordIterations);
+            using PasswordDeriveBytes TempKey = new(Key, Salt.ToByteArray(), HashAlgorithm, PasswordIterations);
             return Encrypt(Data, TempKey, Algorithm, InitialVector, KeySize);
         }
 
@@ -202,22 +202,24 @@ namespace Wiesend.IO.Encryption.BaseClasses
         /// </param>
         /// <param name="Algorithm">Algorithm to use</param>
         /// <returns>The encrypted byte array</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public byte[] Encrypt(byte[] Data, DeriveBytes Key, string Algorithm = "AES", string InitialVector = "OFRna73m*aze01xY", int KeySize = 256)
         {
             if (string.IsNullOrEmpty(InitialVector)) throw new ArgumentNullException(nameof(InitialVector));
             if (Data == null)
                 return null;
             using SymmetricAlgorithm SymmetricKey = GetProvider(Algorithm);
+#if NET45
             byte[] CipherTextBytes = new byte[0];
+#else
+            byte[] CipherTextBytes = Array.Empty<byte>();
+#endif
             if (SymmetricKey != null)
             {
                 SymmetricKey.Mode = CipherMode.CBC;
                 using (ICryptoTransform Encryptor = SymmetricKey.CreateEncryptor(Key.GetBytes(KeySize / 8), InitialVector.ToByteArray()))
                 {
-                    using MemoryStream MemStream = new MemoryStream();
-                    using CryptoStream CryptoStream = new CryptoStream(MemStream, Encryptor, CryptoStreamMode.Write);
+                    using MemoryStream MemStream = new();
+                    using CryptoStream CryptoStream = new(MemStream, Encryptor, CryptoStreamMode.Write);
                     CryptoStream.Write(Data, 0, Data.Length);
                     CryptoStream.FlushFinalBlock();
                     CipherTextBytes = MemStream.ToArray();

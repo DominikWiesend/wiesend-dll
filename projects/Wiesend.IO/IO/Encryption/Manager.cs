@@ -146,7 +146,6 @@ namespace Wiesend.IO.Encryption
         /// Can be 64 (DES only), 128 (AES), 192 (AES and Triple DES), or 256 (AES)
         /// </param>
         /// <returns>A decrypted byte array</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0270:Use coalesce expression", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
         public byte[] Decrypt(byte[] Data, DeriveBytes Key,
             string Algorithm = "AES",
@@ -154,9 +153,7 @@ namespace Wiesend.IO.Encryption
             int KeySize = 256)
         {
             if (SymmetricAlgorithms == null) throw new NullReferenceException("SymmetricAlgorithms");
-            var Found = SymmetricAlgorithms.FirstOrDefault(x => x.CanHandle(Algorithm));
-            if (Found == null)
-                throw new ArgumentException(Algorithm + " not found");
+            var Found = SymmetricAlgorithms.FirstOrDefault(x => x.CanHandle(Algorithm)) ?? throw new ArgumentException(Algorithm + " not found");
             return Found.Decrypt(Data, Key, Algorithm, InitialVector, KeySize);
         }
 

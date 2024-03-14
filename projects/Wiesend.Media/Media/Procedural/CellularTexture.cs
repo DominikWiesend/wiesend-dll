@@ -73,7 +73,6 @@
 #endregion of Licenses [MIT Licenses]
 
 using System.Drawing;
-using System.Drawing.Imaging;
 using Wiesend.DataTypes;
 
 namespace Wiesend.Media.Procedural

@@ -119,12 +119,11 @@ namespace Wiesend.Validation
         /// <param name="value">Value to check</param>
         /// <param name="validationContext">Validation context</param>
         /// <returns>The validation result</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
             if (value == null)
                 return new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
-            GenericEqualityComparer<IComparable> Comparer = new GenericEqualityComparer<IComparable>();
+            GenericEqualityComparer<IComparable> Comparer = new();
             IEnumerable ValueList = value as IEnumerable;
             IComparable ValueTemp = 0;
             foreach (IComparable Item in ValueList)

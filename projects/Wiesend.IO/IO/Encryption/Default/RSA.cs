@@ -99,12 +99,11 @@ namespace Wiesend.IO.Encryption.Default
         /// </param>
         /// <param name="Key">Key to use for decryption</param>
         /// <returns>A decrypted byte array</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public override byte[] Decrypt([NotNull] byte[] Input, [NotNull] string Key)
         {
             if (string.IsNullOrEmpty(Key)) throw new ArgumentNullException(nameof(Key));
             if (Input == null) throw new ArgumentNullException(nameof(Input));
-            using RSACryptoServiceProvider RSA = new RSACryptoServiceProvider();
+            using RSACryptoServiceProvider RSA = new();
             RSA.FromXmlString(Key);
             var EncryptedBytes = RSA.Decrypt(Input, true);
             RSA.Clear();
@@ -119,12 +118,11 @@ namespace Wiesend.IO.Encryption.Default
         /// </param>
         /// <param name="Key">Key to use for encryption</param>
         /// <returns>An encrypted byte array (64bit string)</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public override byte[] Encrypt([NotNull] byte[] Input, [NotNull] string Key)
         {
             if (string.IsNullOrEmpty(Key)) throw new ArgumentNullException(nameof(Key));
             if (Input == null) throw new ArgumentNullException(nameof(Input));
-            using RSACryptoServiceProvider RSA = new RSACryptoServiceProvider();
+            using RSACryptoServiceProvider RSA = new();
             RSA.FromXmlString(Key);
             var EncryptedBytes = RSA.Encrypt(Input, true);
             RSA.Clear();
@@ -139,12 +137,11 @@ namespace Wiesend.IO.Encryption.Default
         /// <param name="Hash">This will be filled with the unsigned hash</param>
         /// <param name="EncodingUsing">Encoding that the input is using (defaults to UTF8)</param>
         /// <returns>A signed hash of the input (64bit string)</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public override string SignHash([NotNull] string Input, [NotNull] string Key, out string Hash, Encoding EncodingUsing = null)
         {
             if (string.IsNullOrEmpty(Key)) throw new ArgumentNullException(nameof(Key));
             if (string.IsNullOrEmpty(Input)) throw new ArgumentNullException(nameof(Input));
-            using RSACryptoServiceProvider RSA = new RSACryptoServiceProvider();
+            using RSACryptoServiceProvider RSA = new();
             RSA.FromXmlString(Key);
             var HashBytes = Input.ToByteArray(EncodingUsing).Hash();
             var SignedHash = RSA.SignHash(HashBytes, CryptoConfig.MapNameToOID("SHA1"));
@@ -160,13 +157,12 @@ namespace Wiesend.IO.Encryption.Default
         /// <param name="SignedHash">The signed hash (should be 64bit string)</param>
         /// <param name="Key">The key to use in decryption</param>
         /// <returns>True if it is verified, false otherwise</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public override bool VerifyHash([NotNull] string Hash, [NotNull] string SignedHash, [NotNull] string Key)
         {
             if (string.IsNullOrEmpty(Key)) throw new ArgumentNullException(nameof(Key));
             if (string.IsNullOrEmpty(Hash)) throw new ArgumentNullException(nameof(Hash));
             if (string.IsNullOrEmpty(SignedHash)) throw new ArgumentNullException(nameof(SignedHash));
-            using RSACryptoServiceProvider RSA = new RSACryptoServiceProvider();
+            using RSACryptoServiceProvider RSA = new();
             RSA.FromXmlString(Key);
             var InputArray = SignedHash.FromBase64();
             var HashArray = Hash.FromBase64();

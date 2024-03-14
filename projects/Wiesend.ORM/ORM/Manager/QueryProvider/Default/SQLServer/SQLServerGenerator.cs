@@ -135,12 +135,15 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
         /// </summary>
         /// <param name="Parameters">Parameters</param>
         /// <returns>Batch with the appropriate commands</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public IBatch All(params IParameter[] Parameters)
         {
             if (Mapping == null)
                 return QueryProvider.Batch(Source);
+#if NET45
             Parameters = Parameters.Check(new IParameter[] { });
+#else
+            Parameters = Parameters.Check(Array.Empty<IParameter>());
+#endif
             return QueryProvider.Batch(Source)
                 .AddCommand(null,
                     null, string.Format(CultureInfo.InvariantCulture,
@@ -157,14 +160,17 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
         /// <param name="Parameters">Parameters</param>
         /// <param name="Limit">Max number of items to return</param>
         /// <returns>Batch with the appropriate commands</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public IBatch All(int Limit, params IParameter[] Parameters)
         {
             if (Limit < 1)
                 return All(Parameters);
             if (Mapping == null)
                 return QueryProvider.Batch(Source);
+#if NET45
             Parameters = Parameters.Check(new IParameter[] { });
+#else
+            Parameters = Parameters.Check(Array.Empty<IParameter>());
+#endif
             return QueryProvider.Batch(Source)
                 .AddCommand(null,
                     null, string.Format(CultureInfo.InvariantCulture,
@@ -182,12 +188,15 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
         /// </summary>
         /// <param name="Parameters">Parameters</param>
         /// <returns>Batch with the appropriate commands</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public IBatch Any(params IParameter[] Parameters)
         {
             if (Mapping == null)
                 return QueryProvider.Batch(Source);
+#if NET45
             Parameters = Parameters.Check(new IParameter[] { });
+#else
+            Parameters = Parameters.Check(Array.Empty<IParameter>());
+#endif
             return QueryProvider.Batch(Source)
                 .AddCommand(null,
                     null, string.Format(CultureInfo.InvariantCulture,
@@ -223,9 +232,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
         {
             var TempBatch = QueryProvider.Batch(Source);
             foreach (T Object in Objects)
-            {
                 TempBatch.AddCommand(Delete(Object));
-            }
             return TempBatch;
         }
 
@@ -257,9 +264,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
         {
             var TempBatch = QueryProvider.Batch(Source);
             foreach (T Object in Objects)
-            {
                 TempBatch.AddCommand(Insert(Object));
-            }
             return TempBatch;
         }
 
@@ -314,7 +319,6 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
         /// <returns>The batch with the appropriate commands</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2251:Use 'string.Equals'", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
         public IBatch JoinsSave<P, ItemType>(IProperty<T, P> Property, T Object)
         {
             var ReturnValue = QueryProvider.Batch(Source);
@@ -330,7 +334,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
                 var CurrentID = ((IProperty<T>)Mapping.IDProperties.FirstOrDefault()).GetValue(Object);
                 IMapping ForeignMapping = Property.ForeignMapping;
                 var ForeignID = ForeignMapping.IDProperties.FirstOrDefault().GetValue(Item);
-                string Parameters = "";
+                string Parameters;
                 object[] Values = new object[2];
                 if (string.Compare(Mapping.TableName, ForeignMapping.TableName, StringComparison.Ordinal) == 0)
                 {
@@ -366,7 +370,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
                     var CurrentID = Mapping.IDProperties.FirstOrDefault().GetValue(Object);
                     IMapping ForeignMapping = Property.ForeignMapping;
                     var ForeignID = ForeignMapping.IDProperties.FirstOrDefault().GetValue(Item);
-                    string Parameters = "";
+                    string Parameters;
                     object[] Values = new object[2];
                     if (string.Compare(Mapping.TableName, ForeignMapping.TableName, StringComparison.Ordinal) < 0)
                     {
@@ -474,7 +478,6 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
         /// <typeparam name="PrimaryKeyType">Primary key type</typeparam>
         /// <param name="Object">Object to save</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
         public IBatch Save<PrimaryKeyType>(T Object)
         {
             var TempBatch = QueryProvider.Batch(Source);
@@ -482,7 +485,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
             var IDValue = IDProperty.GetValue(Object).To(default(PrimaryKeyType));
 
             var Comparer = new GenericEqualityComparer<PrimaryKeyType>();
-            IParameter Param1 = null;
+            IParameter Param1;
             if (Comparer.Equals(IDValue, default))
                 return TempBatch.AddCommand(Insert(Object));
 
@@ -811,12 +814,11 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.SQLServer
             return ResultList;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "<Pending>")]
         private static string GetColumns([NotNull] IMapping Mapping)
         {
             if (Mapping == null) throw new ArgumentNullException(nameof(Mapping));
-            if (!(Mapping.Properties != null)) throw new ArgumentNullException("Mapping.Properties");
-            if (!(Mapping.IDProperties != null)) throw new ArgumentNullException("Mapping.IDProperties");
+            if (!(Mapping.Properties != null)) throw new ArgumentNullException(nameof(Mapping), $"Condition not met: [{nameof(Mapping)}.Properties != null]");
+            if (!(Mapping.IDProperties != null)) throw new ArgumentNullException(nameof(Mapping), $"Condition not met: [{nameof(Mapping)}.IDProperties != null]");
             return Mapping.Properties
                           .Where(x => (x as IReference) != null)
                           .Concat(Mapping.IDProperties)

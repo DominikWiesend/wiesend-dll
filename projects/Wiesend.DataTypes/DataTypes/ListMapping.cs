@@ -158,10 +158,7 @@ namespace Wiesend.DataTypes
         /// <param name="Value">The value to add</param>
         public virtual void Add(T1 Key, T2 Value)
         {
-            Items.AddOrUpdate(Key,
-                              x => new ConcurrentBag<T2>(),
-                              (x, y) => y)
-                 .Add(Value);
+            Items.AddOrUpdate(Key, x => new ConcurrentBag<T2>(), (x, y) => y).Add(Value);
         }
 
         /// <summary>
@@ -181,10 +178,7 @@ namespace Wiesend.DataTypes
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1725:Parameter names should match base declaration", Justification = "<Pending>")]
         public virtual void Add(T1 Key, IEnumerable<T2> Value)
         {
-            Items.AddOrUpdate(Key,
-                              x => new ConcurrentBag<T2>(),
-                              (x, y) => y)
-                 .Add(Value);
+            Items.AddOrUpdate(Key, x => new ConcurrentBag<T2>(), (x, y) => y).Add(Value);
         }
 
         /// <summary>

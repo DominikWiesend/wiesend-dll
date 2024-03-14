@@ -148,7 +148,6 @@ namespace Wiesend.IO
         /// Can be 64 (DES only), 128 (AES), 192 (AES and Triple DES), or 256 (AES)
         /// </param>
         /// <returns>An encrypted byte array</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public static byte[] Decrypt(this byte[] Data,
             DeriveBytes Key,
             string AlgorithmUsing = "AES",
@@ -157,7 +156,13 @@ namespace Wiesend.IO
         {
             var TempManager = IoC.Manager.Bootstrapper.Resolve<Manager>();
             if (TempManager == null)
+            {
+#if NET45
                 return new byte[0];
+#else
+                return Array.Empty<byte>();
+#endif
+            }
             return TempManager.Decrypt(Data, Key, AlgorithmUsing, InitialVector, KeySize);
         }
 
@@ -167,7 +172,6 @@ namespace Wiesend.IO
         /// <param name="Data">Data to encrypt</param>
         /// <param name="Key">Key to use</param>
         /// <returns>The decrypted data</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public static byte[] Decrypt(this byte[] Data, [NotNull] byte[] Key)
         {
             if (Key == null) throw new ArgumentNullException(nameof(Key));
@@ -175,7 +179,13 @@ namespace Wiesend.IO
                 return null;
             var TempManager = IoC.Manager.Bootstrapper.Resolve<Manager>();
             if (TempManager == null)
+            {
+#if NET45
                 return new byte[0];
+#else
+                return Array.Empty<byte>();
+#endif
+            }
             return TempManager.Decrypt(Data, Key);
         }
 
@@ -216,12 +226,17 @@ namespace Wiesend.IO
         /// <param name="Data">Data to encrypt</param>
         /// <param name="Key">Key to use</param>
         /// <returns>The encrypted data</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public static byte[] Encrypt(this byte[] Data, byte[] Key)
         {
             var TempManager = IoC.Manager.Bootstrapper.Resolve<Manager>();
             if (TempManager == null)
+            {
+#if NET45
                 return new byte[0];
+#else
+                return Array.Empty<byte>();
+#endif
+            }
             return TempManager.Encrypt(Data, Key);
         }
 
@@ -270,7 +285,6 @@ namespace Wiesend.IO
         /// Can be 64 (DES only), 128 (AES), 192 (AES and Triple DES), or 256 (AES)
         /// </param>
         /// <returns>An encrypted byte array</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public static byte[] Encrypt(this byte[] Data,
             DeriveBytes Key,
             string AlgorithmUsing = "AES",
@@ -279,7 +293,13 @@ namespace Wiesend.IO
         {
             var TempManager = IoC.Manager.Bootstrapper.Resolve<Manager>();
             if (TempManager == null)
+            {
+#if NET45
                 return new byte[0];
+#else
+                return Array.Empty<byte>();
+#endif
+            }
             return TempManager.Encrypt(Data, Key, AlgorithmUsing, InitialVector, KeySize);
         }
 
@@ -305,12 +325,17 @@ namespace Wiesend.IO
         /// <param name="Data">Byte array to hash</param>
         /// <param name="Algorithm">Hash algorithm to use (defaults to SHA1)</param>
         /// <returns>The hash of the byte array</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public static byte[] Hash(this byte[] Data, string Algorithm = "SHA1")
         {
             var TempManager = IoC.Manager.Bootstrapper.Resolve<Manager>();
             if (TempManager == null)
+            {
+#if NET45
                 return new byte[0];
+#else
+                return Array.Empty<byte>();
+#endif
+            }
             return TempManager.Hash(Data, Algorithm);
         }
 

@@ -193,9 +193,7 @@ namespace Wiesend.IO.FileFormats
             {
                 Builder.Append("<section name=\"" + Header + "\">\r\n");
                 foreach (string Key in FileContents[Header].Keys)
-                {
                     Builder.Append("<key name=\"" + Key + "\">" + FileContents[Header][Key] + "</key>\r\n");
-                }
                 Builder.Append("</section>\r\n");
             }
             Builder.Append("</INI>");

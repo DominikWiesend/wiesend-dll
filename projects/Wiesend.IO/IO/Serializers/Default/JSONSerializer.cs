@@ -106,8 +106,7 @@ namespace Wiesend.IO.Serializers.Default
         /// <summary>
         /// JSONP regex filter
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
-        private static Regex JsonPRegex = new(@"[^\(]+\(([^\)]*)\);", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex JsonPRegex = new(@"[^\(]+\(([^\)]*)\);", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         /// <summary>
         /// Deserializes the data

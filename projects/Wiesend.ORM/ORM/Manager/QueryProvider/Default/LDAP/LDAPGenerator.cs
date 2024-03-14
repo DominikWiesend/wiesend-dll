@@ -125,12 +125,15 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default.LDAP
         /// </summary>
         /// <param name="Parameters">Parameters</param>
         /// <returns>Batch with the appropriate commands</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public IBatch All(params IParameter[] Parameters)
         {
             if (Mapping == null)
                 return QueryProvider.Batch(Source);
+#if NET45
             Parameters = Parameters.Check(new IParameter[] { });
+#else
+            Parameters = Parameters.Check(System.Array.Empty<IParameter>());
+#endif
             string Command = "(*)";
             Parameters.ForEach(x =>
             {

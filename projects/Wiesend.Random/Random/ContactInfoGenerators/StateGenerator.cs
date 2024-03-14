@@ -82,16 +82,15 @@ namespace Wiesend.Random.ContactInfoGenerators
     /// </summary>
     public class StateGenerator : GeneratorAttributeBase, IGenerator<string>
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
-        private string[] StatesAndDistricts = { "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
-                                                  "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho",
-                                                  "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine",
-                                                  "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi",
-                                                  "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey",
-                                                  "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma",
-                                                  "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota",
-                                                  "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia",
-                                                  "Wisconsin", "Wyoming", "District of Columbia" };
+        private readonly string[] StatesAndDistricts = { "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
+                                                         "Connecticut", "Delaware", "Florida", "Georgia", "Hawaii", "Idaho",
+                                                         "Illinois", "Indiana", "Iowa", "Kansas", "Kentucky", "Louisiana", "Maine",
+                                                         "Maryland", "Massachusetts", "Michigan", "Minnesota", "Mississippi",
+                                                         "Missouri", "Montana", "Nebraska", "Nevada", "New Hampshire", "New Jersey",
+                                                         "New Mexico", "New York", "North Carolina", "North Dakota", "Ohio", "Oklahoma",
+                                                         "Oregon", "Pennsylvania", "Rhode Island", "South Carolina", "South Dakota",
+                                                         "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington", "West Virginia",
+                                                         "Wisconsin", "Wyoming", "District of Columbia" };
 
         /// <summary>
         /// Constructor

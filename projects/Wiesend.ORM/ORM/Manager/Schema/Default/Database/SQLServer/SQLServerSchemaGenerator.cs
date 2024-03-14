@@ -312,7 +312,7 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
         {
             if (Function == null) throw new ArgumentNullException(nameof(Function));
             if (CurrentFunction == null) throw new ArgumentNullException(nameof(CurrentFunction));
-            if (!(Function.Definition == CurrentFunction.Definition || !string.IsNullOrEmpty(Function.Definition))) throw new ArgumentException($"Condition {nameof(Function)}.Definition == Current{nameof(Function)}.Definition || !string.IsNullOrEmpty({nameof(Function)}.Definition) not met.", nameof(Function));
+            if (!(Function.Definition == CurrentFunction.Definition || !string.IsNullOrEmpty(Function.Definition))) throw new ArgumentException($"Condition not met: [{nameof(Function)}.Definition == Current{nameof(Function)}.Definition || !string.IsNullOrEmpty({nameof(Function)}.Definition)]", nameof(Function));
             var ReturnValue = new List<string>();
             if (Function.Definition != CurrentFunction.Definition)
             {
@@ -328,7 +328,7 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
         {
             if (StoredProcedure == null) throw new ArgumentNullException(nameof(StoredProcedure));
             if (CurrentStoredProcedure == null) throw new ArgumentNullException(nameof(CurrentStoredProcedure));
-            if (!(StoredProcedure.Definition == CurrentStoredProcedure.Definition || !string.IsNullOrEmpty(StoredProcedure.Definition))) throw new ArgumentException($"Condition {nameof(StoredProcedure)}.Definition == Current{nameof(StoredProcedure)}.Definition || !string.IsNullOrEmpty({nameof(StoredProcedure)}.Definition) not met.", nameof(StoredProcedure));
+            if (!(StoredProcedure.Definition == CurrentStoredProcedure.Definition || !string.IsNullOrEmpty(StoredProcedure.Definition))) throw new ArgumentException($"Condition not met: [{nameof(StoredProcedure)}.Definition == Current{nameof(StoredProcedure)}.Definition || !string.IsNullOrEmpty({nameof(StoredProcedure)}.Definition)]", nameof(StoredProcedure));
             var ReturnValue = new List<string>();
             if (StoredProcedure.Definition != CurrentStoredProcedure.Definition)
             {
@@ -449,7 +449,7 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
         {
             if (View == null) throw new ArgumentNullException(nameof(View));
             if (CurrentView == null) throw new ArgumentNullException(nameof(CurrentView));
-            if (!(View.Definition == CurrentView.Definition || !string.IsNullOrEmpty(View.Definition))) throw new ArgumentException($"Condition {nameof(View)}.Definition == Current{nameof(View)}.Definition || !string.IsNullOrEmpty({nameof(View)}.Definition) not met.", nameof(View));
+            if (!(View.Definition == CurrentView.Definition || !string.IsNullOrEmpty(View.Definition))) throw new ArgumentException($"Condition not met: [{nameof(View)}.Definition == Current{nameof(View)}.Definition || !string.IsNullOrEmpty({nameof(View)}.Definition)]", nameof(View));
             var ReturnValue = new List<string>();
             if (View.Definition != CurrentView.Definition)
             {
@@ -461,11 +461,10 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
             return ReturnValue;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "<Pending>")]
         private static IEnumerable<string> GetForeignKeyCommand([NotNull] Table Table, ITable CurrentTable)
         {
             if (Table == null) throw new ArgumentNullException(nameof(Table));
-            if (!(Table.Columns != null)) throw new ArgumentNullException("Table.Columns");
+            if (!(Table.Columns != null)) throw new ArgumentNullException(nameof(Table), $"Condition not met: [{nameof(Table)}.Columns != null]");
             var ReturnValue = new List<string>();
             foreach (IColumn Column in Table.Columns)
             {
@@ -495,11 +494,10 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
             return ReturnValue;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "<Pending>")]
         private static IEnumerable<string> GetForeignKeyCommand([NotNull] Table Table)
         {
             if (Table == null) throw new ArgumentNullException(nameof(Table));
-            if (!(Table.Columns != null)) throw new ArgumentNullException("Table.Columns");
+            if (!(Table.Columns != null)) throw new ArgumentNullException(nameof(Table), $"Condition not met: [{nameof(Table)}.Columns != null]");
             var ReturnValue = new List<string>();
             foreach (IColumn Column in Table.Columns)
             {
@@ -527,20 +525,18 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
             return ReturnValue;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "<Pending>")]
         private static IEnumerable<string> GetFunctionCommand([NotNull] Function Function)
         {
             if (Function == null) throw new ArgumentNullException(nameof(Function));
-            if (!(Function.Definition != null)) throw new ArgumentNullException("Function.Definition");
+            if (!(Function.Definition != null)) throw new ArgumentNullException(nameof(Function), $"Condition not met: [{nameof(Function)}.Definition != null]");
             var Definition = Regex.Replace(Function.Definition, "-- (.*)", "");
             return new string[] { Definition.Replace("\n", " ").Replace("\r", " ") };
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "<Pending>")]
         private static IEnumerable<string> GetStoredProcedure([NotNull] StoredProcedure StoredProcedure)
         {
             if (StoredProcedure == null) throw new ArgumentNullException(nameof(StoredProcedure));
-            if (string.IsNullOrEmpty(StoredProcedure.Definition)) throw new ArgumentNullException("StoredProcedure.Definition");
+            if (string.IsNullOrEmpty(StoredProcedure.Definition)) throw new ArgumentNullException(nameof(StoredProcedure), $"Condition not met: [!string.IsNullOrEmpty({nameof(StoredProcedure)}.Definition)]");
             var Definition = Regex.Replace(StoredProcedure.Definition, "-- (.*)", "");
             return new string[] { Definition.Replace("\n", " ").Replace("\r", " ") };
         }
@@ -620,13 +616,12 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer
             return ReturnValue;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
         private static IEnumerable<string> GetTriggerCommand([NotNull] Table Table)
         {
             if (Table == null) throw new ArgumentNullException(nameof(Table));
             if (!(Table.Triggers != null)) throw new ArgumentNullException(nameof(Table));
             var ReturnValue = new List<string>();
-            foreach (Trigger Trigger in Table.Triggers)
+            foreach (Trigger Trigger in Table.Triggers.Cast<Trigger>())
             {
                 var Definition = Regex.Replace(Trigger.Definition, "-- (.*)", "");
                 ReturnValue.Add(Definition.Replace("\n", " ").Replace("\r", " "));

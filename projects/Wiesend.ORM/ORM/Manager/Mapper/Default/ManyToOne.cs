@@ -130,7 +130,6 @@ namespace Wiesend.ORM.Manager.Mapper.Default
         /// <param name="Source">Source info</param>
         /// <param name="ObjectsSeen">Objects seen thus far</param>
         /// <returns>Batch object with the appropriate commands</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
         public override IBatch CascadeDelete(ClassType Object, ISourceInfo Source, IList<object> ObjectsSeen)
         {
             var Provider = IoC.Manager.Bootstrapper.Resolve<QueryProvider.Manager>();
@@ -145,7 +144,7 @@ namespace Wiesend.ORM.Manager.Mapper.Default
             var Item = CompiledExpression(Object);
             if (Item == null)
                 return Batch;
-            foreach (IProperty<DataType> Property in PropertyMapping.Properties.Where(x => x.Cascade))
+            foreach (IProperty<DataType> Property in PropertyMapping.Properties.Where(x => x.Cascade).Cast<IProperty<DataType>>())
                 Batch.AddCommand(Property.CascadeDelete(Item, Source, ObjectsSeen.ToList()));
             Batch.AddCommand(Provider.Generate<DataType>(Source, PropertyMapping, Structure).Delete(Item));
             IoC.Manager.Bootstrapper.Resolve<DataTypes.Caching.Manager>().Cache().RemoveByTag(typeof(DataType).GetName());
@@ -159,7 +158,6 @@ namespace Wiesend.ORM.Manager.Mapper.Default
         /// <param name="Source">Source info</param>
         /// <param name="ObjectsSeen">Objects seen thus far</param>
         /// <returns>Batch object with the appropriate commands</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
         public override IBatch CascadeJoinsDelete(ClassType Object, ISourceInfo Source, IList<object> ObjectsSeen)
         {
             var Provider = IoC.Manager.Bootstrapper.Resolve<QueryProvider.Manager>();
@@ -174,7 +172,7 @@ namespace Wiesend.ORM.Manager.Mapper.Default
             var Item = CompiledExpression(Object);
             if (Item == null)
                 return Batch;
-            foreach (IProperty<DataType> Property in PropertyMapping.Properties)
+            foreach (IProperty<DataType> Property in PropertyMapping.Properties.Cast<IProperty<DataType>>())
             {
                 if (!Property.Cascade && (Property is IMultiMapping || Property is ISingleMapping))
                     Batch.AddCommand(Property.JoinsDelete(Item, Source, ObjectsSeen.ToList()));
@@ -192,7 +190,6 @@ namespace Wiesend.ORM.Manager.Mapper.Default
         /// <param name="Source">Source info</param>
         /// <param name="ObjectsSeen">Objects seen thus far</param>
         /// <returns>Batch object with the appropriate commands</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
         public override IBatch CascadeJoinsSave(ClassType Object, ISourceInfo Source, IList<object> ObjectsSeen)
         {
             var Provider = IoC.Manager.Bootstrapper.Resolve<QueryProvider.Manager>();
@@ -207,7 +204,7 @@ namespace Wiesend.ORM.Manager.Mapper.Default
             var Item = CompiledExpression(Object);
             if (Item == null)
                 return Batch;
-            foreach (IProperty<DataType> Property in PropertyMapping.Properties)
+            foreach (IProperty<DataType> Property in PropertyMapping.Properties.Cast<IProperty<DataType>>())
             {
                 if (!Property.Cascade && (Property is IMultiMapping || Property is ISingleMapping))
                     Batch.AddCommand(Property.JoinsSave(Item, Source, ObjectsSeen.ToList()));
@@ -225,7 +222,6 @@ namespace Wiesend.ORM.Manager.Mapper.Default
         /// <param name="Source">Source info</param>
         /// <param name="ObjectsSeen">Objects seen thus far</param>
         /// <returns>Batch object with the appropriate commands</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
         public override IBatch CascadeSave(ClassType Object, ISourceInfo Source, IList<object> ObjectsSeen)
         {
             var Provider = IoC.Manager.Bootstrapper.Resolve<QueryProvider.Manager>();
@@ -240,7 +236,7 @@ namespace Wiesend.ORM.Manager.Mapper.Default
             var Item = CompiledExpression(Object);
             if (Item == null)
                 return Batch;
-            foreach (IProperty<DataType> Property in PropertyMapping.Properties.Where(x => x.Cascade))
+            foreach (IProperty<DataType> Property in PropertyMapping.Properties.Where(x => x.Cascade).Cast<IProperty<DataType>>())
                 Batch.AddCommand(Property.CascadeSave(Item, Source, ObjectsSeen.ToList()));
             Batch.AddCommand(((IProperty<DataType>)PropertyMapping.IDProperties.FirstOrDefault()).CascadeSave(Item, Source, ObjectsSeen.ToList()));
             IoC.Manager.Bootstrapper.Resolve<DataTypes.Caching.Manager>().Cache().RemoveByTag(typeof(DataType).GetName());

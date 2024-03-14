@@ -165,13 +165,10 @@ namespace Wiesend.Web
         /// </summary>
         /// <param name="Request">Request</param>
         /// <returns>The IPAddress object if it exists, null otherwise</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0018:Inline variable declaration", Justification = "<Pending>")]
         public static IPAddress UserIPAddress([NotNull] this HttpRequestBase Request)
         {
             if (Request == null) throw new ArgumentNullException(nameof(Request));
-            IPAddress Address = null;
-            if (!IPAddress.TryParse(Request.UserHostAddress, out Address))
+            if (!IPAddress.TryParse(Request.UserHostAddress, out IPAddress Address))
                 Address = null;
             return Address;
         }
@@ -181,13 +178,10 @@ namespace Wiesend.Web
         /// </summary>
         /// <param name="Request">Request</param>
         /// <returns>The IPAddress object if it exists, null otherwise</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0018:Inline variable declaration", Justification = "<Pending>")]
         public static IPAddress UserIPAddress([NotNull] this HttpRequest Request)
         {
             if (Request == null) throw new ArgumentNullException(nameof(Request));
-            IPAddress Address = null;
-            if (!IPAddress.TryParse(Request.UserHostAddress, out Address))
+            if (!IPAddress.TryParse(Request.UserHostAddress, out IPAddress Address))
                 Address = null;
             return Address;
         }

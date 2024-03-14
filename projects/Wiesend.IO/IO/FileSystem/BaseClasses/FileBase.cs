@@ -190,11 +190,16 @@ namespace Wiesend.IO.FileSystem.BaseClasses
         /// </summary>
         /// <param name="File">File to read</param>
         /// <returns>The file as a byte array</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public static implicit operator byte[](FileBase<InternalFileType, FileType> File)
         {
             if (File == null)
+            {
+#if NET45
                 return new byte[0];
+#else
+                return Array.Empty<byte>();
+#endif
+            }
             return File.ReadBinary();
         }
 
@@ -253,12 +258,11 @@ namespace Wiesend.IO.FileSystem.BaseClasses
         /// <param name="File1">File 1</param>
         /// <param name="File2">File 2</param>
         /// <returns>True if they are, false otherwise</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
         public static bool operator ==(FileBase<InternalFileType, FileType> File1, IFile File2)
         {
-            if ((object)File1 == null && (object)File2 == null)
+            if (File1 is null && File2 is null)
                 return true;
-            if ((object)File1 == null || (object)File2 == null)
+            if (File1 is null || File2 is null)
                 return false;
             return File1.FullName == File2.FullName;
         }
@@ -293,14 +297,15 @@ namespace Wiesend.IO.FileSystem.BaseClasses
         /// Clones the file object
         /// </summary>
         /// <returns>The cloned object</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         public object Clone()
         {
-            var Temp = new FileType();
-            Temp.InternalFile = InternalFile;
-            Temp.Password = Password;
-            Temp.UserName = UserName;
-            Temp.Domain = Domain;
+            var Temp = new FileType
+            {
+                InternalFile = InternalFile,
+                Password = Password,
+                UserName = UserName,
+                Domain = Domain
+            };
             return Temp;
         }
 

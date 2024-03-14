@@ -49,7 +49,7 @@
 #endregion of MIT License [James Craig] 
 #region MIT License [Dominik Wiesend]
 // =================================================================================
-//    Copyright(c) 2016 Dominik Wiesend. All rights reserved.
+//    Copyright(c) 2018 Dominik Wiesend. All rights reserved.
 //    
 //    Permission is hereby granted, free of charge, to any person obtaining a copy
 //    of this software and associated documentation files (the "Software"), to deal
@@ -215,7 +215,6 @@ namespace Wiesend.IO.FileSystem.Default
         /// <summary>
         /// Not used
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public override void Create()
         {
             HttpWebRequest Request = WebRequest.Create(InternalDirectory) as HttpWebRequest;
@@ -276,14 +275,13 @@ namespace Wiesend.IO.FileSystem.Default
         /// </summary>
         /// <param name="Request">The web request object</param>
         /// <returns>The string returned by the service</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         private static string SendRequest([NotNull] HttpWebRequest Request)
         {
             if (Request == null) throw new ArgumentNullException(nameof(Request));
             using HttpWebResponse Response = Request.GetResponse() as HttpWebResponse;
             if (Response.StatusCode != HttpStatusCode.OK)
                 return "";
-            using StreamReader Reader = new StreamReader(Response.GetResponseStream());
+            using StreamReader Reader = new(Response.GetResponseStream());
             return Reader.ReadToEnd();
         }
 

@@ -99,13 +99,11 @@ namespace Wiesend.Configuration
         /// if using the default config system)
         /// </param>
         /// <returns>The config file specified</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
         public static T Get<T>([NotNull] ConfigurationSystem System, string Name = "Default")
             where T : IConfig, new()
         {
             if (System == null) throw new ArgumentNullException(nameof(System), "The config system can not be null.");
-            if (ConfigManager == null)
-                ConfigManager = IoC.Manager.Bootstrapper.Resolve<Configuration.Manager.Manager>();
+            ConfigManager ??= IoC.Manager.Bootstrapper.Resolve<Configuration.Manager.Manager>();
             return ConfigManager.Get(System).Config<T>(Name);
         }
 

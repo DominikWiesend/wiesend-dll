@@ -269,15 +269,16 @@ namespace Wiesend.DataTypes
         /// <param name="V1">Item 1</param>
         /// <param name="V2">Item 2</param>
         /// <returns>The resulting vector</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         public static Vector3 operator *(Vector3 V1, Vector3 V2)
         {
             if (V1 == null) throw new ArgumentNullException(nameof(V1));
             if (V2 == null) throw new ArgumentNullException(nameof(V2));
-            var TempVector = new Vector3(0.0, 0.0, 0.0);
-            TempVector.X = (V1.Y * V2.Z) - (V1.Z * V2.Y);
-            TempVector.Y = (V1.Z * V2.X) - (V1.X * V2.Z);
-            TempVector.Z = (V1.X * V2.Y) - (V1.Y * V2.X);
+            var TempVector = new Vector3(0.0, 0.0, 0.0)
+            {
+                X = (V1.Y * V2.Z) - (V1.Z * V2.Y),
+                Y = (V1.Z * V2.X) - (V1.X * V2.Z),
+                Z = (V1.X * V2.Y) - (V1.Y * V2.X)
+            };
             return TempVector;
         }
 

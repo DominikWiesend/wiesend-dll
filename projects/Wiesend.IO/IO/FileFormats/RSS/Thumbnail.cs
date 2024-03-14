@@ -100,17 +100,11 @@ namespace Wiesend.IO.FileFormats.RSS
             if (Doc == null) throw new ArgumentNullException(nameof(Doc));
             var Element = Doc.CreateNavigator();
             if (Element.GetAttribute("url", "") != null)
-            {
                 Url = Element.GetAttribute("url", "");
-            }
             if (Element.GetAttribute("width", "") != null)
-            {
                 Width = int.Parse(Element.GetAttribute("width", ""), CultureInfo.InvariantCulture);
-            }
             if (Element.GetAttribute("height", "") != null)
-            {
                 Height = int.Parse(Element.GetAttribute("height", ""), CultureInfo.InvariantCulture);
-            }
         }
 
         /// <summary>
@@ -135,9 +129,7 @@ namespace Wiesend.IO.FileFormats.RSS
         public override string ToString()
         {
             if (!string.IsNullOrEmpty(Url))
-            {
                 return "<media:thumbnail url=\"" + Url + "\" width=\"" + Width.ToString(CultureInfo.InvariantCulture) + "\" height=\"" + Height + "\" />\r\n";
-            }
             return string.Empty;
         }
     }

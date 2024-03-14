@@ -96,14 +96,17 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default
         /// <param name="CallBack">Called when command has been executed</param>
         /// <param name="Object">Object</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public Command(Action<Command, IList<dynamic>> CallBack, object Object, string SQLCommand, CommandType CommandType, IParameter[] Parameters)
         {
             this.SQLCommand = SQLCommand;
             this.CommandType = CommandType;
             this.CallBack = CallBack ?? ((x, y) => { });
             this.Object = Object;
+#if NET45
             this.Parameters = Parameters.Check(new IParameter[0]);
+#else
+            this.Parameters = Parameters.Check(Array.Empty<IParameter>());
+#endif
             this.Finalizable = SQLCommand.Check("").ToUpperInvariant().Contains("SELECT");
         }
 
@@ -116,8 +119,8 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default
         /// <param name="ParameterStarter">Parameter starter</param>
         /// <param name="CallBack">Called when command has been executed</param>
         /// <param name="Object">Object</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1829:Use Length/Count property instead of Count() when available", Justification = "<Pending>")]
         public Command(Action<Command, IList<dynamic>> CallBack, object Object, string SQLCommand, CommandType CommandType, string ParameterStarter, object[] Parameters)
         {
@@ -178,11 +181,9 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default
         /// </summary>
         /// <param name="obj">Object to compare to</param>
         /// <returns>Determines if the commands are equal</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
         public override bool Equals(object obj)
         {
-            var OtherCommand = obj as Command;
-            if (OtherCommand == null)
+            if (obj is not Command OtherCommand)
                 return false;
 
             if (OtherCommand.SQLCommand != SQLCommand

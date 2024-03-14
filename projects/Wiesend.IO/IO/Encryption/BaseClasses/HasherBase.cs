@@ -119,13 +119,16 @@ namespace Wiesend.IO.Encryption.BaseClasses
         /// <param name="Data">Data to hash</param>
         /// <param name="Algorithm">Algorithm to use</param>
         /// <returns>The hashed version of the data</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public byte[] Hash(byte[] Data, string Algorithm)
         {
             if (Data == null)
                 return null;
             using HashAlgorithm Hasher = GetAlgorithm(Algorithm);
+#if NET45
             byte[] HashedArray = new byte[0];
+#else
+            byte[] HashedArray = Array.Empty<byte>();
+#endif
             if (Hasher != null)
             {
                 HashedArray = Hasher.ComputeHash(Data);

@@ -138,7 +138,7 @@ namespace Wiesend.DataTypes
         /// <param name="Denominator">Denominator</param>
         public Fraction(float Numerator, float Denominator)
         {
-            if (!(Denominator != Int32.MinValue)) throw new ArgumentException($"Condition {nameof(Denominator)} != Int32.MinValue not met.", nameof(Denominator));
+            if (!(Denominator != Int32.MinValue)) throw new ArgumentException($"Condition not met: [{nameof(Denominator)} != Int32.MinValue]", nameof(Denominator));
             while (Numerator != System.Math.Round(Numerator, MidpointRounding.AwayFromZero)
                 || Denominator != System.Math.Round(Denominator, MidpointRounding.AwayFromZero))
             {
@@ -405,11 +405,9 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="obj">object to check</param>
         /// <returns>True if they are, false otherwise</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
         public override bool Equals(object obj)
         {
-            Fraction Other = obj as Fraction;
-            if (((object)Other) == null)
+            if (obj is not Fraction Other)
                 return false;
             decimal Value1 = this;
             decimal Value2 = Other;

@@ -115,17 +115,11 @@ namespace Wiesend.IO.FileSystem.Default
                 ParentDirectory = new LocalDirectory(BaseDirectory).Parent.FullName;
             }
             if (Path.StartsWith("..\\", StringComparison.OrdinalIgnoreCase))
-            {
                 Path = ParentDirectory + Path.Remove(0, 2);
-            }
             else if (Path.StartsWith(".\\", StringComparison.OrdinalIgnoreCase))
-            {
                 Path = BaseDirectory + Path.Remove(0, 1);
-            }
             else if (Path.StartsWith("~\\", StringComparison.OrdinalIgnoreCase))
-            {
                 Path = BaseDirectory + Path.Remove(0, 1);
-            }
             return Path;
         }
 

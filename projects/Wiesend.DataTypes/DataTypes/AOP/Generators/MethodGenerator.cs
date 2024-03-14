@@ -116,14 +116,11 @@ namespace Wiesend.DataTypes.AOP.Generators
         /// <param name="assembliesUsing">The assemblies using.</param>
         /// <param name="aspects">The aspects.</param>
         /// <returns>The generated string of the method</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0054:Use compound assignment", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0031:Use null propagation", Justification = "<Pending>")]
         public string Generate(List<Assembly> assembliesUsing, IEnumerable<IAspect> aspects)
         {
-            aspects = aspects ?? new List<IAspect>();
+            aspects ??= new List<IAspect>();
             var Builder = new StringBuilder();
-            if (assembliesUsing != null)
-                assembliesUsing.AddIfUnique(GetAssemblies(MethodInfo.ReturnType));
+            assembliesUsing?.AddIfUnique(GetAssemblies(MethodInfo.ReturnType));
             Builder.AppendLineFormat(@"
         {0}
         {{

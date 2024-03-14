@@ -131,18 +131,19 @@ namespace Wiesend.ORM.Manager
         /// <returns>All items that match the criteria</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public IEnumerable<ObjectType> All<ObjectType>(params IParameter[] Parameters)
             where ObjectType : class
         {
+#if NET45
             Parameters = Parameters.Check(new IParameter[] { });
+#else
+            Parameters = Parameters.Check(Array.Empty<IParameter>());
+#endif
             var ReturnValue = new List<Dynamo>();
             string KeyName = typeof(ObjectType).GetName() + "_All_" + Parameters.ToString(x => x.ToString(), "_");
             Parameters.ForEach(x => { KeyName = x.AddParameter(KeyName); });
             if (Cache.ContainsKey(KeyName))
-            {
                 return GetListCached<ObjectType>(ref ReturnValue, KeyName);
-            }
             foreach (ISourceInfo Source in SourceProvider.Where(x => x.Readable).OrderBy(x => x.Order))
             {
                 IMapping Mapping = MapperProvider[typeof(ObjectType), Source];
@@ -166,11 +167,14 @@ namespace Wiesend.ORM.Manager
         /// <param name="Parameters">Parameters used in the where clause</param>
         /// <returns>A single object matching the criteria</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public ObjectType Any<ObjectType>(params IParameter[] Parameters)
             where ObjectType : class
         {
+#if NET45
             Parameters = Parameters.Check(new IParameter[] { });
+#else
+            Parameters = Parameters.Check(Array.Empty<IParameter>());
+#endif
             Dynamo ReturnValue = null;
             string KeyName = typeof(ObjectType).GetName() + "_Any_" + Parameters.ToString(x => x.ToString(), "_");
             Parameters.ForEach(x => { KeyName = x.AddParameter(KeyName); });
@@ -343,11 +347,14 @@ namespace Wiesend.ORM.Manager
         /// <typeparam name="ObjectType">Object type to get the page count of</typeparam>
         /// <returns>The number of pages that the table contains for the specified page size</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public int PageCount<ObjectType>(int PageSize = 25, params IParameter[] Parameters)
             where ObjectType : class
         {
+#if NET45
             Parameters = Parameters.Check(new IParameter[] { });
+#else
+            Parameters = Parameters.Check(Array.Empty<IParameter>());
+#endif
             string KeyName = typeof(ObjectType).GetName() + "_PageCount_" + PageSize.ToString(CultureInfo.InvariantCulture) + "_" + Parameters.ToString(x => x.ToString(), "_");
             Parameters.ForEach(x => { KeyName = x.AddParameter(KeyName); });
             if (Cache.ContainsKey(KeyName))
@@ -384,11 +391,14 @@ namespace Wiesend.ORM.Manager
         /// <returns>A paged list of items that match the criteria</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public IEnumerable<ObjectType> Paged<ObjectType>(int PageSize = 25, int CurrentPage = 0, string OrderBy = "", params IParameter[] Parameters)
             where ObjectType : class
         {
+#if NET45
             Parameters = Parameters.Check(new IParameter[] { });
+#else
+            Parameters = Parameters.Check(Array.Empty<IParameter>());
+#endif
             string KeyName = typeof(ObjectType).GetName() + "_Paged_" + PageSize.ToString(CultureInfo.InvariantCulture) + "_" + CurrentPage.ToString(CultureInfo.InvariantCulture) + "_" + Parameters.ToString(x => x.ToString(), "_");
             Parameters.ForEach(x => { KeyName = x.AddParameter(KeyName); });
             var ReturnValue = new System.Collections.Generic.List<Dynamo>();
@@ -447,39 +457,33 @@ namespace Wiesend.ORM.Manager
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
         private static void CascadeDelete<ObjectType>(ObjectType Object, ISourceInfo Source, [NotNull] IMapping Mapping, IBatch TempBatch, List<object> ObjectsSeen)
             where ObjectType : class
         {
             if (Mapping == null) throw new ArgumentNullException(nameof(Mapping));
-            if (!(Mapping.Properties != null)) throw new ArgumentNullException("Mapping.Properties");
-            foreach (IProperty<ObjectType> Property in Mapping.Properties.Where(x => x.Cascade))
+            if (!(Mapping.Properties != null)) throw new ArgumentNullException(nameof(Mapping), $"Condition not met: [{nameof(Mapping)}.Properties != null]");
+            foreach (IProperty<ObjectType> Property in Mapping.Properties.Where(x => x.Cascade).Cast<IProperty<ObjectType>>())
                 TempBatch.AddCommand(Property.CascadeDelete(Object, Source, ObjectsSeen.ToList()));
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
         private static void CascadeSave<ObjectType>(ObjectType Object, ISourceInfo Source, [NotNull] IMapping Mapping, IBatch TempBatch, List<object> ObjectsSeen)
             where ObjectType : class
         {
             if (Mapping == null) throw new ArgumentNullException(nameof(Mapping));
-            if (!(Mapping.Properties != null)) throw new ArgumentNullException("Mapping.Properties");
+            if (!(Mapping.Properties != null)) throw new ArgumentNullException(nameof(Mapping), $"Condition not met: [{nameof(Mapping)}.Properties != null]");
             var ORMObject = Object as IORMObject;
-            foreach (IProperty<ObjectType> Property in Mapping.Properties.Where(x => x.Cascade))
+            foreach (IProperty<ObjectType> Property in Mapping.Properties.Where(x => x.Cascade).Cast<IProperty<ObjectType>>())
                 if (ORMObject == null || ORMObject.PropertiesChanged0.Contains(Property.Name))
                     TempBatch.AddCommand(Property.CascadeSave(Object, Source, ObjectsSeen.ToList()));
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
         private static void CopyOrAdd(List<Dynamo> ReturnValue, [NotNull] IProperty IDProperty, Dynamo Item)
         {
             if (IDProperty == null) throw new ArgumentNullException(nameof(IDProperty));
             if (Item == null)
                 return;
-            if (ReturnValue == null)
-                ReturnValue = new List<Dynamo>();
+            ReturnValue ??= new List<Dynamo>();
             var IDValue = IDProperty.GetValue(Item);
             var Value = ReturnValue.FirstOrDefault(x => IDProperty.GetValue(x).Equals(IDValue));
             if (Value == null)
@@ -498,16 +502,14 @@ namespace Wiesend.ORM.Manager
             return ReturnValue;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
         private static void JoinsDelete<ObjectType>(ObjectType Object, ISourceInfo Source, [NotNull] IMapping Mapping, IBatch TempBatch, List<object> ObjectsSeen)
             where ObjectType : class
         {
             if (Mapping == null) throw new ArgumentNullException(nameof(Mapping));
-            if (!(Mapping.Properties != null)) throw new ArgumentNullException("Mapping.Properties");
+            if (!(Mapping.Properties != null)) throw new ArgumentNullException(nameof(Mapping), $"Condition not met: [{nameof(Mapping)}.Properties != null]");
             var ORMObject = Object as IORMObject;
-            foreach (IProperty<ObjectType> Property in Mapping.Properties)
+            foreach (IProperty<ObjectType> Property in Mapping.Properties.Cast<IProperty<ObjectType>>())
             {
                 if (ORMObject == null || ORMObject.PropertiesChanged0.Contains(Property.Name))
                 {
@@ -519,16 +521,14 @@ namespace Wiesend.ORM.Manager
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
         private static void JoinsSave<ObjectType>(ObjectType Object, ISourceInfo Source, [NotNull] IMapping Mapping, IBatch TempBatch, List<object> ObjectsSeen)
             where ObjectType : class
         {
             if (Mapping == null) throw new ArgumentNullException(nameof(Mapping));
-            if (!(Mapping.Properties != null)) throw new ArgumentNullException("Mapping.Properties");
+            if (!(Mapping.Properties != null)) throw new ArgumentNullException(nameof(Mapping), $"Condition not met: [{nameof(Mapping)}.Properties != null]");
             var ORMObject = Object as IORMObject;
-            foreach (IProperty<ObjectType> Property in Mapping.Properties)
+            foreach (IProperty<ObjectType> Property in Mapping.Properties.Cast<IProperty<ObjectType>>())
             {
                 if (ORMObject == null || ORMObject.PropertiesChanged0.Contains(Property.Name))
                 {
@@ -547,24 +547,22 @@ namespace Wiesend.ORM.Manager
             return ReturnValue.To<ObjectType>().Chain(x => { ((IORMObject)x).Session0 = this; });
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
         private IEnumerable<ObjectType> ConvertValues<ObjectType>(List<Dynamo> ReturnValue) where ObjectType : class
         {
-            if (ReturnValue == null)
-                ReturnValue = new List<Dynamo>();
+            ReturnValue ??= new List<Dynamo>();
             return ReturnValue.ForEachParallel(x => ConvertValue<ObjectType>(x));
         }
 
         private ObjectType GetCached<ObjectType>(ref Dynamo ReturnValue, string KeyName) where ObjectType : class
         {
-            if (!(this.Cache != null)) throw new ArgumentNullException("Cache", $"Condition this.{nameof(Cache)} != null not met.");
+            if (!(this.Cache != null)) throw new ArgumentNullException("Cache", $"Condition not met: [this.{nameof(Cache)} != null]");
             ReturnValue = (Dynamo)Cache[KeyName];
             return ConvertValue<ObjectType>(ReturnValue);
         }
 
         private IEnumerable<ObjectType> GetListCached<ObjectType>(ref List<Dynamo> ReturnValue, string KeyName) where ObjectType : class
         {
-            if (!(this.Cache != null)) throw new ArgumentNullException("Cache", $"Condition this.{nameof(Cache)} != null not met.");
+            if (!(this.Cache != null)) throw new ArgumentNullException("Cache", $"Condition not met: [this.{nameof(Cache)} != null]");
             ReturnValue = (List<Dynamo>)Cache[KeyName];
             return ConvertValues<ObjectType>(ReturnValue);
         }

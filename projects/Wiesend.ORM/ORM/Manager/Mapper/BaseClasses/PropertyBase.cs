@@ -230,12 +230,11 @@ namespace Wiesend.ORM.Manager.Mapper.BaseClasses
         /// <param name="first">First item</param>
         /// <param name="second">Second item</param>
         /// <returns>True if the first item is less than the second, false otherwise</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
         public static bool operator <(PropertyBase<ClassType, DataType, ReturnType> first, PropertyBase<ClassType, DataType, ReturnType> second)
         {
             if (ReferenceEquals(first, second))
                 return false;
-            if ((object)first == null || (object)second == null)
+            if (first is null || second is null)
                 return false;
             return first.GetHashCode() < second.GetHashCode();
         }
@@ -246,13 +245,12 @@ namespace Wiesend.ORM.Manager.Mapper.BaseClasses
         /// <param name="first">First item</param>
         /// <param name="second">Second item</param>
         /// <returns>true if the first and second item are the same, false otherwise</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
         public static bool operator ==(PropertyBase<ClassType, DataType, ReturnType> first, PropertyBase<ClassType, DataType, ReturnType> second)
         {
             if (ReferenceEquals(first, second))
                 return true;
 
-            if ((object)first == null || (object)second == null)
+            if (first is null || second is null)
                 return false;
 
             return first.GetHashCode() == second.GetHashCode();
@@ -264,12 +262,11 @@ namespace Wiesend.ORM.Manager.Mapper.BaseClasses
         /// <param name="first">First item</param>
         /// <param name="second">Second item</param>
         /// <returns>True if the first item is greater than the second, false otherwise</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
         public static bool operator >(PropertyBase<ClassType, DataType, ReturnType> first, PropertyBase<ClassType, DataType, ReturnType> second)
         {
             if (ReferenceEquals(first, second))
                 return false;
-            if ((object)first == null || (object)second == null)
+            if (first is null || second is null)
                 return false;
             return first.GetHashCode() > second.GetHashCode();
         }
@@ -315,11 +312,9 @@ namespace Wiesend.ORM.Manager.Mapper.BaseClasses
         /// </summary>
         /// <param name="obj">Object to compare to</param>
         /// <returns>True if they are equal, false otherwise</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
         public override bool Equals(object obj)
         {
-            var SecondObj = obj as PropertyBase<ClassType, DataType, ReturnType>;
-            if (((object)SecondObj) == null)
+            if (obj is not PropertyBase<ClassType, DataType, ReturnType> SecondObj)
                 return false;
             return this == SecondObj;
         }

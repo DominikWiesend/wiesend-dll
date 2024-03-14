@@ -81,7 +81,6 @@ namespace Wiesend.IoC.Interfaces
     /// <summary>
     /// Bootstrapper interface
     /// </summary>
-    //[ContractClass(typeof(IBootstrapperContract))]
     public interface IBootstrapper : IDisposable
     {
         /// <summary>
@@ -101,6 +100,7 @@ namespace Wiesend.IoC.Interfaces
         /// <typeparam name="T">Object type</typeparam>
         /// <param name="Object">Object to register</param>
         /// <param name="Name">Name associated with the object</param>
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         void Register<T>(T Object, string Name = "")
             where T : class;
 

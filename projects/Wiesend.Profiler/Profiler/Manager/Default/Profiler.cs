@@ -104,8 +104,6 @@ namespace Wiesend.Profiler.Manager.Default
         /// Constructor
         /// </summary>
         /// <param name="FunctionName">Function/identifier</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         public Profiler(string FunctionName)
         {
             this.Parent = Current;
@@ -122,8 +120,7 @@ namespace Wiesend.Profiler.Manager.Default
                 Running = false;
                 Current = this;
                 Child = this;
-                if (CPUCounter == null)
-                    CPUCounter = new PerformanceCounter("Processor Information", "% Processor Time", "_Total");
+                CPUCounter ??= new PerformanceCounter("Processor Information", "% Processor Time", "_Total");
                 if (CounterStopWatch == null)
                 {
                     CounterStopWatch = new StopWatch();
@@ -252,7 +249,6 @@ namespace Wiesend.Profiler.Manager.Default
         /// Gets the cpu value.
         /// </summary>
         /// <value>The cpu value.</value>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         private static float CPUValue
         {
             get
@@ -277,7 +273,6 @@ namespace Wiesend.Profiler.Manager.Default
         /// Gets the memory value.
         /// </summary>
         /// <value>The memory value.</value>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         private static float MemValue
         {
             get
@@ -309,14 +304,13 @@ namespace Wiesend.Profiler.Manager.Default
         /// <param name="First">First</param>
         /// <param name="Second">Second</param>
         /// <returns>True if they are equal, false otherwise</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
         public static bool operator ==(Profiler First, Profiler Second)
         {
-            if ((object)First == null && (object)Second == null)
+            if (First is null && Second is null)
                 return true;
-            if ((object)First == null)
+            if (First is null)
                 return false;
-            if ((object)Second == null)
+            if (Second is null)
                 return false;
             return First.Function == Second.Function;
         }

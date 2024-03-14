@@ -80,7 +80,6 @@ namespace Wiesend.DataTypes.DataMapper.Interfaces.Contracts
     /// <summary>
     /// IMapperModule contract class
     /// </summary>
-    //[ContractClassFor(typeof(IMapperModule))]
     internal abstract class IMapperModuleContract : IMapperModule
     {
         /// <summary>

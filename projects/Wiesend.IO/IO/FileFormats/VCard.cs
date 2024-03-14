@@ -181,8 +181,7 @@ namespace Wiesend.IO.FileFormats
     /// </summary>
     public class VCard : StringFormatBase<VCard>
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
-        private static readonly Regex STRIP_HTML_REGEX = new Regex("<[^>]*>", RegexOptions.Compiled);
+        private static readonly Regex STRIP_HTML_REGEX = new("<[^>]*>", RegexOptions.Compiled);
 
         /// <summary>
         /// Constructor
@@ -257,19 +256,13 @@ namespace Wiesend.IO.FileFormats
             {
                 var Builder = new StringBuilder();
                 if (!string.IsNullOrEmpty(Prefix))
-                {
                     Builder.AppendFormat("{0} ", Prefix);
-                }
                 Builder.AppendFormat("{0} ", FirstName);
                 if (!string.IsNullOrEmpty(MiddleName))
-                {
                     Builder.AppendFormat("{0} ", MiddleName);
-                }
                 Builder.Append(LastName);
                 if (!string.IsNullOrEmpty(Suffix))
-                {
                     Builder.AppendFormat(" {0}", Suffix);
-                }
                 return Builder.ToString();
             }
         }
@@ -295,9 +288,7 @@ namespace Wiesend.IO.FileFormats
             var Builder = new StringBuilder();
             Builder.Append("<div class=\"vcard\">");
             if (string.IsNullOrEmpty(Url))
-            {
                 Builder.AppendFormat("<div class=\"fn\">{0}</div>", FullName);
-            }
             else
             {
                 Builder.AppendFormat("<a class=\"fn url\" href=\"{0}\"", Url);
@@ -305,30 +296,20 @@ namespace Wiesend.IO.FileFormats
                 {
                     Builder.Append(" rel=\"");
                     foreach (Relationship Relationship in Relationships)
-                    {
                         Builder.Append(Relationship.ToString()).Append(' ');
-                    }
                     Builder.Append('\"');
                 }
                 Builder.AppendFormat(">{0}</a>", FullName);
             }
             Builder.AppendFormat("<span class=\"n\" style=\"display:none;\"><span class=\"family-name\">{0}</span><span class=\"given-name\">{1}</span></span>", LastName, FirstName);
             if (!string.IsNullOrEmpty(DirectDial))
-            {
                 Builder.AppendFormat("<div class=\"tel\"><span class=\"type\">Work</span> {0}</div>", DirectDial);
-            }
             if (!string.IsNullOrEmpty(Email))
-            {
                 Builder.AppendFormat("<div>Email: <a class=\"email\" href=\"mailto:{0}\">{0}</a></div>", StripHTML(Email));
-            }
             if (!string.IsNullOrEmpty(Organization))
-            {
                 Builder.AppendFormat("<div>Organization: <span class=\"org\">{0}</span></div>", Organization);
-            }
             if (!string.IsNullOrEmpty(Title))
-            {
                 Builder.AppendFormat("<div>Title: <span class=\"title\">{0}</span></div>", Title);
-            }
             Builder.Append("</div>");
             return Builder.ToString();
         }

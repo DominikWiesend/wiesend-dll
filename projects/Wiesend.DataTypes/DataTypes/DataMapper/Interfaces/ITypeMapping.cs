@@ -80,7 +80,6 @@ namespace Wiesend.DataTypes.DataMapper.Interfaces
     /// <summary>
     /// Type mapping interface
     /// </summary>
-    //[ContractClass(typeof(ITypeMappingContract))]
     public interface ITypeMapping
     {
         /// <summary>
@@ -101,7 +100,6 @@ namespace Wiesend.DataTypes.DataMapper.Interfaces
     /// </summary>
     /// <typeparam name="Left">Left type</typeparam>
     /// <typeparam name="Right">Right type</typeparam>
-    //ContractClass(typeof(ITypeMappingContract<,>))]
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public interface ITypeMapping<Left, Right> : ITypeMapping
     {

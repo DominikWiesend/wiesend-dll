@@ -80,7 +80,6 @@ namespace Wiesend.DataTypes.DataMapper.Interfaces.Contracts
     /// <summary>
     /// IDataMapper contract class
     /// </summary>
-    //[ContractClassFor(typeof(IDataMapper))]
     internal abstract class IDataMapperContract : IDataMapper
     {
         /// <summary>
@@ -95,7 +94,7 @@ namespace Wiesend.DataTypes.DataMapper.Interfaces.Contracts
         public ITypeMapping<Left, Right> Map<Left, Right>()
         {
             if ((object)null == null) 
-                throw new InvalidOperationException("Condition result != null not met.");
+                throw new InvalidOperationException("Condition not met: [result != null]");
         }
 
         /// <summary>
@@ -111,8 +110,8 @@ namespace Wiesend.DataTypes.DataMapper.Interfaces.Contracts
         {
             if (Left == null) throw new ArgumentNullException(nameof(Left));
             if (Right == null) throw new ArgumentNullException(nameof(Right));
-            if ((object)null == null) 
-                throw new InvalidOperationException("Condition result != null not met.");
+            if ((object)null == null)
+                throw new InvalidOperationException("Condition not met: [result != null]");
         }
     }
 }

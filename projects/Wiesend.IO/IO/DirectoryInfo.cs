@@ -201,12 +201,11 @@ namespace Wiesend.IO
         /// <param name="Directory1">Directory 1</param>
         /// <param name="Directory2">Directory 2</param>
         /// <returns>True if they are, false otherwise</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
         public static bool operator ==(DirectoryInfo Directory1, DirectoryInfo Directory2)
         {
-            if ((object)Directory1 == null && (object)Directory2 == null)
+            if (Directory1 is null && Directory2 is null)
                 return true;
-            if ((object)Directory1 == null || (object)Directory2 == null)
+            if (Directory1 is null || Directory2 is null)
                 return false;
             return Directory1.FullName == Directory2.FullName;
         }
@@ -386,10 +385,9 @@ namespace Wiesend.IO
         /// Enumerates the files in the directory
         /// </summary>
         /// <returns>The files in the directory</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
         public IEnumerator<IFile> GetEnumerator()
         {
-            foreach (FileInfo File in EnumerateFiles())
+            foreach (FileInfo File in EnumerateFiles().Cast<FileInfo>())
                 yield return File;
         }
 
@@ -428,10 +426,9 @@ namespace Wiesend.IO
         /// Enumerates the files and directories in the directory
         /// </summary>
         /// <returns>The files and directories</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
         System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
         {
-            foreach (FileInfo File in EnumerateFiles())
+            foreach (FileInfo File in EnumerateFiles().Cast<FileInfo>())
                 yield return File;
         }
 

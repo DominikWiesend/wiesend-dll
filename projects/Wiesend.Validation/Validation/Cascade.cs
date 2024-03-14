@@ -101,10 +101,9 @@ namespace Wiesend.Validation
         /// <param name="value">Value to check</param>
         /// <param name="validationContext">Validation context</param>
         /// <returns>The validation result</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         protected override ValidationResult IsValid(object value, ValidationContext validationContext)
         {
-            List<ValidationResult> Results = new List<ValidationResult>();
+            List<ValidationResult> Results = new();
             if (!value.TryValidate(Results))
                 return new ValidationResult(string.Format(CultureInfo.InvariantCulture, ErrorMessageString, validationContext.DisplayName, Results.ForEach(x => x.ErrorMessage).ToString(x => x, System.Environment.NewLine)));
             return ValidationResult.Success;

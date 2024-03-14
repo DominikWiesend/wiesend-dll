@@ -82,8 +82,7 @@ namespace Wiesend.Random.NameGenerators
     /// </summary>
     public class NameSuffixGenerator : GeneratorAttributeBase, IGenerator<string>
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
-        private string[] NameSuffixes = { "Jr.", "Sr.", "II", "III", "IV", "M.D.", "Ph.D." };
+        private readonly string[] NameSuffixes = { "Jr.", "Sr.", "II", "III", "IV", "M.D.", "Ph.D." };
 
         /// <summary>
         /// Constructor

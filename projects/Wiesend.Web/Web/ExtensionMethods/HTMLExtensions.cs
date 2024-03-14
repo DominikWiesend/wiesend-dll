@@ -97,9 +97,7 @@ namespace Wiesend.Web
         [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051:Remove unused private members", Justification = "<Pending>")]
         private const string GZIP = "gzip";
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("GeneratedRegex", "SYSLIB1045:Convert to 'GeneratedRegexAttribute'.", Justification = "<Pending>")]
-        private static readonly Regex STRIP_HTML_REGEX = new Regex("<[^>]*>", RegexOptions.Compiled);
+        private static readonly Regex STRIP_HTML_REGEX = new("<[^>]*>", RegexOptions.Compiled);
 
         /// <summary>
         /// Returns the absolute root
@@ -351,7 +349,6 @@ namespace Wiesend.Web
         /// </summary>
         /// <param name="Input">string to be stripped</param>
         /// <returns>Stripped string</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("GeneratedRegex", "SYSLIB1045:Convert to 'GeneratedRegexAttribute'.", Justification = "<Pending>")]
         private static string RemoveExtraHyphen(string Input)
         {
             if (string.IsNullOrEmpty(Input))

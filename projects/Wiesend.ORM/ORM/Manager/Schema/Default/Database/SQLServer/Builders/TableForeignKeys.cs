@@ -75,6 +75,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using Wiesend.ORM.Manager.QueryProvider.Interfaces;
 using Wiesend.ORM.Manager.Schema.Default.Database.SQLServer.Builders.Interfaces;
 
@@ -90,12 +91,11 @@ namespace Wiesend.ORM.Manager.Schema.Default.Database.SQLServer.Builders
         /// </summary>
         /// <param name="values">The values.</param>
         /// <param name="database">The database.</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
         public void FillDatabase(IEnumerable<dynamic> values, Database database)
         {
             if (database == null)
                 throw new ArgumentNullException(nameof(database));
-            foreach (Table Table in database.Tables)
+            foreach (Table Table in database.Tables.Cast<Table>())
                 Table.SetupForeignKeys();
         }
 

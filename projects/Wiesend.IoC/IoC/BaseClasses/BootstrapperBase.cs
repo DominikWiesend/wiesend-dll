@@ -84,6 +84,7 @@ namespace Wiesend.IoC.BaseClasses
     /// Bootstrapper base class
     /// </summary>
     /// <typeparam name="Container">The actual IoC object</typeparam>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
     public abstract class BootstrapperBase<Container> : IBootstrapper
     {
         /// <summary>

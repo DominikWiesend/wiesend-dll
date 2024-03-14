@@ -115,64 +115,40 @@ namespace Wiesend.IO.FileFormats.RSS
             var NamespaceManager = new XmlNamespaceManager(Element.NameTable);
             var Node = Element.SelectSingleNode("./title", NamespaceManager);
             if (Node != null)
-            {
                 Title = Node.Value;
-            }
             Node = Element.SelectSingleNode("./link", NamespaceManager);
             if (Node != null)
-            {
                 Link = Node.Value;
-            }
             Node = Element.SelectSingleNode("./description", NamespaceManager);
             if (Node != null)
-            {
                 Description = Node.Value;
-            }
             Node = Element.SelectSingleNode("./copyright", NamespaceManager);
             if (Node != null)
-            {
                 Copyright = Node.Value;
-            }
             Node = Element.SelectSingleNode("./language", NamespaceManager);
             if (Node != null)
-            {
                 Language = Node.Value;
-            }
             Node = Element.SelectSingleNode("./webmaster", NamespaceManager);
             if (Node != null)
-            {
                 WebMaster = Node.Value;
-            }
             Node = Element.SelectSingleNode("./pubdate", NamespaceManager);
             if (Node != null)
-            {
                 PubDate = DateTime.Parse(Node.Value, CultureInfo.InvariantCulture);
-            }
             var Nodes = Element.Select("./category", NamespaceManager);
             foreach (XmlNode TempNode in Nodes)
-            {
                 Categories.Add(Utils.StripIllegalCharacters(TempNode.Value));
-            }
             Node = Element.SelectSingleNode("./docs", NamespaceManager);
             if (Node != null)
-            {
                 Docs = Node.Value;
-            }
             Node = Element.SelectSingleNode("./ttl", NamespaceManager);
             if (Node != null)
-            {
                 TTL = int.Parse(Node.Value, CultureInfo.InvariantCulture);
-            }
             Node = Element.SelectSingleNode("./image/url", NamespaceManager);
             if (Node != null)
-            {
                 ImageUrl = Node.Value;
-            }
             Nodes = Element.Select("./item", NamespaceManager);
             foreach (XmlNode TempNode in Nodes)
-            {
                 Items.Add(new Item((XmlElement)TempNode));
-            }
         }
 
         /// <summary>
@@ -401,13 +377,9 @@ namespace Wiesend.IO.FileFormats.RSS
             ChannelString.Append("<docs>").Append(Docs).Append("</docs>\r\n");
             ChannelString.Append("<ttl>").Append(TTL.ToString(CultureInfo.InvariantCulture)).Append("</ttl>\r\n");
             if (!string.IsNullOrEmpty(ImageUrl))
-            {
                 ChannelString.Append("<image><url>").Append(ImageUrl).Append("</url>\r\n<title>").Append(Title).Append("</title>\r\n<link>").Append(Link).Append("</link>\r\n</image>\r\n");
-            }
             foreach (Item CurrentItem in Items)
-            {
                 ChannelString.Append(CurrentItem.ToString());
-            }
             ChannelString.Append("</channel>\r\n");
             return ChannelString.ToString();
         }

@@ -94,8 +94,7 @@ namespace Wiesend.IO.Serializers
         public Manager([NotNull] IEnumerable<ISerializer> Serializers)
         {
             if (Serializers == null) throw new ArgumentNullException(nameof(Serializers));
-            this.Serializers = Serializers.Where(x => !x.GetType().Namespace.StartsWith("WIESEND", StringComparison.OrdinalIgnoreCase))
-                                          .ToDictionary(x => x.ContentType);
+            this.Serializers = Serializers.Where(x => !x.GetType().Namespace.StartsWith("WIESEND", StringComparison.OrdinalIgnoreCase)).ToDictionary(x => x.ContentType);
             Serializers.Where(x => x.GetType().Namespace.StartsWith("WIESEND", StringComparison.OrdinalIgnoreCase))
                        .ForEach(x =>
                        {

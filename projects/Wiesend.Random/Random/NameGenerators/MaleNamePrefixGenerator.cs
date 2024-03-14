@@ -82,8 +82,7 @@ namespace Wiesend.Random.NameGenerators
     /// </summary>
     public class MaleNamePrefixGenerator : GeneratorAttributeBase, IGenerator<string>
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
-        private string[] MaleNamePrefixes = { "Mr.", "Dr.", "Prof.", "Rev." };
+        private readonly string[] MaleNamePrefixes = { "Mr.", "Dr.", "Prof.", "Rev." };
 
         /// <summary>
         /// Constructor

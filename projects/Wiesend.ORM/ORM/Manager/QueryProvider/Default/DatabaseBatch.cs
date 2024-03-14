@@ -119,8 +119,7 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default
         /// <summary>
         /// Used to parse SQL commands to find parameters (when batching)
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
-        private static readonly Regex ParameterRegex = new Regex(@"[^@](?<ParamStart>[:@?])(?<ParamName>\w+)", RegexOptions.Compiled);
+        private static readonly Regex ParameterRegex = new(@"[^@](?<ParamStart>[:@?])(?<ParamName>\w+)", RegexOptions.Compiled);
 
         /// <summary>
         /// Adds a command to be batched
@@ -171,11 +170,9 @@ namespace Wiesend.ORM.Manager.QueryProvider.Default
         /// </summary>
         /// <param name="Batch">Batch to add</param>
         /// <returns>This</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
         public IBatch AddCommand(IBatch Batch)
         {
-            var TempValue = Batch as DatabaseBatch;
-            if (TempValue == null)
+            if (Batch is not DatabaseBatch TempValue)
                 return this;
             Commands.Add(TempValue.Commands);
             return this;

@@ -238,7 +238,7 @@ namespace Wiesend.DataTypes
         public virtual void Add([NotNull] T[] buffer, int offset, int count)
         {
             if (buffer == null) throw new ArgumentNullException(nameof(buffer));
-            if (!(count <= buffer.Length - offset)) throw new ArgumentOutOfRangeException(nameof(count), $"Condition {nameof(count)} <= {nameof(buffer.Length)} - {nameof(offset)} not met.");
+            if (!(count <= buffer.Length - offset)) throw new ArgumentOutOfRangeException(nameof(count), $"Condition not met: [{nameof(count)} <= {nameof(buffer.Length)} - {nameof(offset)}]");
             for (int x = offset; x < offset + count; ++x)
                 Add(buffer[x]);
         }
@@ -404,7 +404,7 @@ namespace Wiesend.DataTypes
         public virtual int Remove([NotNull] T[] array, int offset, int count)
         {
             if (array == null) throw new ArgumentNullException(nameof(array));
-            if (!(Count <= array.Length - offset)) throw new ArgumentOutOfRangeException(nameof(count), $"Condition {nameof(count)} <= {nameof(array.Length)} - {nameof(offset)} not met.");
+            if (!(Count <= array.Length - offset)) throw new ArgumentOutOfRangeException(nameof(count), $"Condition not met: [{nameof(count)} <= {nameof(array.Length)} - {nameof(offset)}]");
             if (Count == 0)
                 return 0;
             int y = ReadPosition;

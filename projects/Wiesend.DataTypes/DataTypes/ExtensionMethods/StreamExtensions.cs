@@ -105,17 +105,14 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Input">Input stream</param>
         /// <returns>A byte array</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
         public static byte[] ReadAllBinary([NotNull] this Stream Input)
         {
             if (Input == null) throw new ArgumentNullException(nameof(Input));
-            var TempInput = Input as MemoryStream;
-            if (TempInput != null)
+            if (Input is MemoryStream TempInput)
                 return TempInput.ToArray();
             byte[] Buffer = new byte[1024];
             byte[] ReturnValue = null;
-            using (MemoryStream Temp = new MemoryStream())
+            using (MemoryStream Temp = new())
             {
                 while (true)
                 {

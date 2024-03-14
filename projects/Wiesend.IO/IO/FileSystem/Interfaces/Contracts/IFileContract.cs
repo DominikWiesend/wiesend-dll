@@ -82,7 +82,6 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
     /// <summary>
     /// IFile Contract
     /// </summary>
-    //[ContractClassFor(typeof(IFile))]
     internal abstract class IFileContract : IFile
     {
         /// <summary>
@@ -136,7 +135,7 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         {
             get
             {
-                if ((object)null == null) throw new System.InvalidOperationException("Contract assertion not met: result != null");
+                if ((object)null == null) throw new System.InvalidOperationException("Condition not met: [result != null]");
             }
         }
 
@@ -164,7 +163,7 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         {
             get
             {
-                if ((object)null == null) throw new System.InvalidOperationException("Contract assertion not met: result != null");
+                if ((object)null == null) throw new System.InvalidOperationException("Condition not met: [result != null]");
             }
         }
 
@@ -264,10 +263,13 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         /// Reads the file to the end as a byte array
         /// </summary>
         /// <returns>A byte array containing the contents of the file</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public byte[] ReadBinary()
         {
+#if NET45
             return new byte[0];
+#else
+            return Array.Empty<byte>();
+#endif
         }
 
         /// <summary>
@@ -297,10 +299,13 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         /// <param name="Content">Content to write</param>
         /// <param name="Mode">File mode</param>
         /// <returns>The result of the write or original content</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public byte[] Write(byte[] Content, System.IO.FileMode Mode = FileMode.Create)
         {
+#if NET45
             return new byte[0];
+#else
+            return Array.Empty<byte>();
+#endif
         }
     }
 }

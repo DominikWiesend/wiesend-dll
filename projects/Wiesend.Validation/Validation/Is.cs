@@ -127,7 +127,6 @@ namespace Wiesend.Validation
                     ComparisonString = "an integer";
                     break;
             }
-
             return string.Format(CultureInfo.InvariantCulture, ErrorMessageString, name, ComparisonString);
         }
 
@@ -137,12 +136,9 @@ namespace Wiesend.Validation
         /// <param name="metadata">Model meta data</param>
         /// <param name="context">Controller context</param>
         /// <returns>The list of client side validation rules</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public IEnumerable<ModelClientValidationRule> GetClientValidationRules(ModelMetadata metadata, ControllerContext context)
         {
-            ModelClientValidationRule Rule = new ModelClientValidationRule();
-            Rule.ErrorMessage = FormatErrorMessage(metadata.GetDisplayName());
+            ModelClientValidationRule Rule = new() { ErrorMessage = FormatErrorMessage(metadata.GetDisplayName()) };
             Rule.ValidationParameters.Add("Type", Type.ToString());
             Rule.ValidationType = "Is";
             return new ModelClientValidationRule[] { Rule };
@@ -169,7 +165,6 @@ namespace Wiesend.Validation
                 case Validation.IsValid.Integer:
                     return Regex.IsMatch(Tempvalue, @"^\d+$") ? ValidationResult.Success : new ValidationResult(FormatErrorMessage(validationContext.DisplayName));
             }
-
             return ValidationResult.Success;
         }
     }

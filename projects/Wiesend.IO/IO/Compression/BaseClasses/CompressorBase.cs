@@ -102,11 +102,10 @@ namespace Wiesend.IO.Compression.BaseClasses
         /// </summary>
         /// <param name="Data">Data to compress</param>
         /// <returns>Compressed data</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public byte[] Compress([NotNull]byte[] Data)
         {
             if (Data == null) throw new ArgumentNullException(nameof(Data));
-            using MemoryStream Stream = new MemoryStream();
+            using MemoryStream Stream = new();
             using Stream ZipStream = GetStream(Stream, CompressionMode.Compress);
             if (ZipStream != null)
             {
@@ -121,12 +120,11 @@ namespace Wiesend.IO.Compression.BaseClasses
         /// </summary>
         /// <param name="Data">Data to decompress</param>
         /// <returns>The decompressed data</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public byte[] Decompress([NotNull] byte[] Data)
         {
             if (Data == null) throw new ArgumentNullException(nameof(Data));
-            using MemoryStream Stream = new MemoryStream();
-            using MemoryStream DataStream = new MemoryStream(Data);
+            using MemoryStream Stream = new();
+            using MemoryStream DataStream = new(Data);
             using Stream ZipStream = GetStream(DataStream, CompressionMode.Decompress);
             if (ZipStream != null)
             {

@@ -245,15 +245,19 @@ namespace Wiesend.IO.FileSystem.Default
         /// Reads a file as binary
         /// </summary>
         /// <returns>The file contents as a byte array</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public override byte[] ReadBinary()
         {
             if (!Exists)
+            {
+#if NET45
                 return new byte[0];
+#else
+                return Array.Empty<byte>();
+#endif
+            }
             using FileStream Reader = InternalFile.OpenRead();
             byte[] Buffer = new byte[1024];
-            using MemoryStream Temp = new MemoryStream();
+            using MemoryStream Temp = new();
             while (true)
             {
                 var Count = Reader.Read(Buffer, 0, Buffer.Length);
@@ -282,13 +286,10 @@ namespace Wiesend.IO.FileSystem.Default
         /// <param name="Mode">Mode to open the file as</param>
         /// <param name="Encoding">Encoding to use for the content</param>
         /// <returns>The result of the write or original content</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
         public override string Write(string Content, System.IO.FileMode Mode = FileMode.Create, Encoding Encoding = null)
         {
-            if (Content == null)
-                Content = "";
-            if (Encoding == null)
-                Encoding = new ASCIIEncoding();
+            Content ??= "";
+            Encoding ??= new ASCIIEncoding();
             return Write(Encoding.GetBytes(Content), Mode).ToString(Encoding);
         }
 
@@ -298,18 +299,19 @@ namespace Wiesend.IO.FileSystem.Default
         /// <param name="Content">Content to write</param>
         /// <param name="Mode">Mode to open the file as</param>
         /// <returns>The result of the write or original content</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
         public override byte[] Write(byte[] Content, System.IO.FileMode Mode = FileMode.Create)
         {
             if (Content == null)
+            {
+#if NET45
                 Content = new byte[0];
-
+#else
+                Content = Array.Empty<byte>();
+#endif
+            }
             Directory.Create();
             using (FileStream Writer = InternalFile.Open(Mode, FileAccess.Write))
-            {
                 Writer.Write(Content, 0, Content.Length);
-            }
             InternalFile.Refresh();
             return Content;
         }

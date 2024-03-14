@@ -178,10 +178,9 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="item">Item to remove</param>
         /// <returns>True if it is removed, false otherwise</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
         public virtual bool Remove(T item)
         {
-            return Items.TryRemove(item, out int Value);
+            return Items.TryRemove(item, out _);
         }
 
         /// <summary>

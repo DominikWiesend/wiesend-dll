@@ -215,12 +215,10 @@ namespace Wiesend.ORM
         /// <param name="Params">Parameters used to specify what to load</param>
         /// <returns>The specified item</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1000:Do not declare static members on generic types", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         public static ObjectType Any(params IParameter[] Params)
         {
             var instance = new ObjectType();
-            var E = new LoadingEventArgs();
-            E.Content = Params;
+            var E = new LoadingEventArgs { Content = Params };
             instance.OnLoading(E);
             if (!E.Stop)
             {
@@ -239,12 +237,10 @@ namespace Wiesend.ORM
         /// <param name="Params">Parameters used to specify what to load</param>
         /// <returns>The specified item</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Design", "CA1000:Do not declare static members on generic types", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         public static ObjectType Any(string Command, CommandType Type, string ConnectionString, params object[] Params)
         {
             var instance = new ObjectType();
-            var E = new LoadingEventArgs();
-            E.Content = Params;
+            var E = new LoadingEventArgs { Content = Params };
             instance.OnLoading(E);
             if (!E.Stop)
             {
@@ -271,12 +267,11 @@ namespace Wiesend.ORM
         /// <param name="first">First item</param>
         /// <param name="second">Second item</param>
         /// <returns>True if the first item is less than the second, false otherwise</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
         public static bool operator <(ObjectBaseClass<ObjectType, IDType> first, ObjectBaseClass<ObjectType, IDType> second)
         {
             if (ReferenceEquals(first, second))
                 return false;
-            if ((object)first == null || (object)second == null)
+            if (first is null || second is null)
                 return false;
             return first.GetHashCode() < second.GetHashCode();
         }
@@ -287,15 +282,12 @@ namespace Wiesend.ORM
         /// <param name="first">First item</param>
         /// <param name="second">Second item</param>
         /// <returns>true if the first and second item are the same, false otherwise</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
         public static bool operator ==(ObjectBaseClass<ObjectType, IDType> first, ObjectBaseClass<ObjectType, IDType> second)
         {
             if (ReferenceEquals(first, second))
                 return true;
-
-            if ((object)first == null || (object)second == null)
+            if (first is null || second is null)
                 return false;
-
             return first.GetHashCode() == second.GetHashCode();
         }
 
@@ -305,12 +297,11 @@ namespace Wiesend.ORM
         /// <param name="first">First item</param>
         /// <param name="second">Second item</param>
         /// <returns>True if the first item is greater than the second, false otherwise</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
         public static bool operator >(ObjectBaseClass<ObjectType, IDType> first, ObjectBaseClass<ObjectType, IDType> second)
         {
             if (ReferenceEquals(first, second))
                 return false;
-            if ((object)first == null || (object)second == null)
+            if (first is null || second is null)
                 return false;
             return first.GetHashCode() > second.GetHashCode();
         }

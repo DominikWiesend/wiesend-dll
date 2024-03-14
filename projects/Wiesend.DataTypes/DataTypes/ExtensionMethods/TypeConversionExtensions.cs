@@ -160,7 +160,6 @@ namespace Wiesend.DataTypes
         /// <param name="Data">DataTable to convert</param>
         /// <param name="Creator">Function used to create each object</param>
         /// <returns>The DataTable converted to a list of objects</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public static List<T> To<T>(this DataTable Data, Func<T> Creator)
             where T : class,new()
         {
@@ -176,7 +175,11 @@ namespace Wiesend.DataTypes
                 for (int y = 0; y < Data.Columns.Count; ++y)
                 {
                     var Property = Properties.FirstOrDefault(z => z.Name == Data.Columns[y].ColumnName);
+#if NET45
                     Property?.SetValue(RowObject, Data.Rows[x][Data.Columns[y]].To(Property.PropertyType, null), new object[] { });
+#else
+                    Property?.SetValue(RowObject, Data.Rows[x][Data.Columns[y]].To(Property.PropertyType, null), Array.Empty<object>());
+#endif
                 }
                 Results.Add(RowObject);
             }

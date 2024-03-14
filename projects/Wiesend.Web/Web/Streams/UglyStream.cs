@@ -151,8 +151,7 @@ namespace Wiesend.Web.Streams
         /// <summary>
         /// Compression using
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
-        private CompressionType Compression;
+        private readonly CompressionType Compression;
 
         /// <summary>
         /// Final output string
@@ -162,12 +161,10 @@ namespace Wiesend.Web.Streams
         /// <summary>
         /// Stream using
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2213:Disposable fields should be disposed", Justification = "<Pending>")]
-        private Stream StreamUsing;
+        private readonly Stream StreamUsing;
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
-        private MinificationType Type;
+        private readonly MinificationType Type;
 
         /// <summary>
         /// Nothing to flush

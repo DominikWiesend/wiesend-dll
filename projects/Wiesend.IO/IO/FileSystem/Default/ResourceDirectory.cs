@@ -231,12 +231,15 @@ namespace Wiesend.IO.FileSystem.Default
         /// <param name="SearchPattern"></param>
         /// <param name="Options"></param>
         /// <returns></returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public override IEnumerable<IFile> EnumerateFiles(string SearchPattern = "*", SearchOption Options = SearchOption.TopDirectoryOnly)
         {
             if (AssemblyFrom == null)
                 return new List<IFile>();
+#if NET45
             var Data = AssemblyFrom.GetManifestResourceNames() ?? new string[0];
+#else
+            var Data = AssemblyFrom.GetManifestResourceNames() ?? Array.Empty<string>();
+#endif
             return Data.Select(x => new ResourceFile(FullName + x, UserName, Password, Domain));
         }
 

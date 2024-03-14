@@ -175,12 +175,11 @@ namespace Wiesend.DataTypes
         /// <param name="Span1">Span 1</param>
         /// <param name="Span2">Span 2</param>
         /// <returns>True if they are, false otherwise</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
         public static bool operator ==(DateSpan Span1, DateSpan Span2)
         {
-            if ((object)Span1 == null && (object)Span2 == null)
+            if (Span1 is null && Span2 is null)
                 return true;
-            if ((object)Span1 == null || (object)Span2 == null)
+            if (Span1 is null || Span2 is null)
                 return false;
             return Span1.Start == Span2.Start && Span1.End == Span2.End;
         }

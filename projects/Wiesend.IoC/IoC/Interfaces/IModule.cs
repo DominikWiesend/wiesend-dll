@@ -77,7 +77,6 @@ namespace Wiesend.IoC.Interfaces
     /// <summary>
     /// IoC module base class
     /// </summary>
-    //[ContractClass(typeof(IModuleContract))]
     public interface IModule
     {
         /// <summary>

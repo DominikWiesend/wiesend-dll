@@ -99,11 +99,9 @@ namespace Wiesend.DataTypes
         /// <typeparam name="T">The type of the event args</typeparam>
         /// <param name="Delegate">The delegate</param>
         /// <param name="EventArgs">The event args</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1005:Delegate invocation can be simplified.", Justification = "<Pending>")]
         public static void Raise<T>(this Action<T> Delegate, T EventArgs)
         {
-            if (Delegate != null)
-                Delegate(EventArgs);
+            Delegate?.Invoke(EventArgs);
         }
 
         /// <summary>
@@ -113,13 +111,10 @@ namespace Wiesend.DataTypes
         /// <param name="Delegate">The delegate</param>
         /// <param name="Sender">The sender</param>
         /// <param name="EventArg">The event args</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1005:Delegate invocation can be simplified.", Justification = "<Pending>")]
         public static void Raise<T>(this EventHandler<T> Delegate, object Sender, T EventArg)
             where T : System.EventArgs
         {
-            EventHandler<T> TempDelegate = Delegate;
-            if (TempDelegate != null)
-                TempDelegate(Sender, EventArg);
+            Delegate?.Invoke(Sender, EventArg);
         }
 
         /// <summary>

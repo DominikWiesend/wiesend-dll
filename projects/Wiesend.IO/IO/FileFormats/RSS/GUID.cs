@@ -100,9 +100,7 @@ namespace Wiesend.IO.FileFormats.RSS
             if (Element == null) throw new ArgumentNullException(nameof(Element));
             var Navigator = Element.CreateNavigator();
             if (Navigator.GetAttribute("isPermaLink", "") != null)
-            {
                 PermaLink = Navigator.GetAttribute("isPermaLink", "");
-            }
             GUIDText = Navigator.Value;
         }
 
@@ -123,9 +121,7 @@ namespace Wiesend.IO.FileFormats.RSS
         public override string ToString()
         {
             if (!string.IsNullOrEmpty(GUIDText))
-            {
                 return "<guid" + (string.IsNullOrEmpty(PermaLink) ? " IsPermaLink=" + PermaLink : " IsPermaLink='False'") + ">" + GUIDText + "</guid>\r\n";
-            }
             return string.Empty;
         }
     }

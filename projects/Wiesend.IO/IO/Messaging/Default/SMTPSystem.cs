@@ -101,40 +101,31 @@ namespace Wiesend.IO.Messaging.Default
         /// Internal send message
         /// </summary>
         /// <param name="message">The message.</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         protected override void InternalSend(Interfaces.IMessage message)
         {
-            var Message = message as EmailMessage;
-            if (Message == null)
+            if (message is not EmailMessage Message)
                 return;
             if (string.IsNullOrEmpty(Message.Body))
                 Message.Body = " ";
-            using MailMessage TempMailMessage = new MailMessage();
+            using MailMessage TempMailMessage = new();
             char[] Splitter = { ',', ';' };
             var AddressCollection = Message.To.Split(Splitter);
             for (int x = 0; x < AddressCollection.Length; ++x)
-            {
                 if (!string.IsNullOrEmpty(AddressCollection[x].Trim()))
                     TempMailMessage.To.Add(AddressCollection[x]);
-            }
             if (!string.IsNullOrEmpty(Message.CC))
             {
                 AddressCollection = Message.CC.Split(Splitter);
                 for (int x = 0; x < AddressCollection.Length; ++x)
-                {
                     if (!string.IsNullOrEmpty(AddressCollection[x].Trim()))
                         TempMailMessage.CC.Add(AddressCollection[x]);
-                }
             }
             if (!string.IsNullOrEmpty(Message.Bcc))
             {
                 AddressCollection = Message.Bcc.Split(Splitter);
                 for (int x = 0; x < AddressCollection.Length; ++x)
-                {
                     if (!string.IsNullOrEmpty(AddressCollection[x].Trim()))
                         TempMailMessage.Bcc.Add(AddressCollection[x]);
-                }
             }
             TempMailMessage.Subject = Message.Subject;
             if (!string.IsNullOrEmpty(Message.From))

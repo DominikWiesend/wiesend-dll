@@ -158,22 +158,20 @@ namespace Wiesend.Configuration.Manager.BaseClasses
             Decrypt();
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         private void Decrypt()
         {
             if (string.IsNullOrEmpty(EncryptionPassword))
                 return;
-            using PasswordDeriveBytes Temp = new PasswordDeriveBytes(EncryptionPassword, "Kosher".ToByteArray(), "SHA1", 2);
+            using PasswordDeriveBytes Temp = new(EncryptionPassword, "Kosher".ToByteArray(), "SHA1", 2);
             foreach (KeyValuePair<string, object> Item in this.Where(x => x.Value.GetType() == typeof(string)))
                 SetValue(Item.Key, ((string)Item.Value).Decrypt(Temp));
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         private void Encrypt()
         {
             if (string.IsNullOrEmpty(EncryptionPassword))
                 return;
-            using PasswordDeriveBytes Temp = new PasswordDeriveBytes(EncryptionPassword, "Kosher".ToByteArray(), "SHA1", 2);
+            using PasswordDeriveBytes Temp = new(EncryptionPassword, "Kosher".ToByteArray(), "SHA1", 2);
             foreach (KeyValuePair<string, object> Item in this.Where(x => x.Value.GetType() == typeof(string)))
                 SetValue(Item.Key, ((string)Item.Value).Encrypt(Temp));
         }

@@ -79,7 +79,6 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
     /// <summary>
     /// IFileSystem contract
     /// </summary>
-    //[ContractClassFor(typeof(IFileSystem))]
     public abstract class IFileSystemContract : IFileSystem
     {
         /// <summary>
@@ -90,7 +89,7 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         {
             get
             {
-                if (string.IsNullOrEmpty((string)(object)null)) throw new System.InvalidOperationException("Contract assertion not met: !string.IsNullOrEmpty(result)");
+                if (string.IsNullOrEmpty((string)(object)null)) throw new System.InvalidOperationException("Condition not met: [!string.IsNullOrEmpty(result)]");
                 return null;
             }
         }
@@ -116,7 +115,7 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         [NotNull]
         public IDirectory Directory(string Path, string UserName = "", string Password = "", string Domain = "")
         {
-            if ((object)null == null) throw new System.InvalidOperationException("Contract assertion not met: result != null");
+            if ((object)null == null) throw new System.InvalidOperationException("Condition not met: [result != null]");
         }
 
         /// <summary>
@@ -130,7 +129,7 @@ namespace Wiesend.IO.FileSystem.Interfaces.Contracts
         [NotNull]
         public IFile File(string Path, string UserName = "", string Password = "", string Domain = "")
         {
-            if ((object)null == null) throw new System.InvalidOperationException("Contract assertion not met: result != null");
+            if ((object)null == null) throw new System.InvalidOperationException("Condition not met: [result != null]");
         }
     }
 }

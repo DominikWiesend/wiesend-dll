@@ -665,7 +665,6 @@ namespace Wiesend.DataTypes
         /// <param name="Columns">Column names (if empty, uses property names)</param>
         /// <returns>The list as a DataTable</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1827:Do not use Count() or LongCount() when Any() can be used", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         public static DataTable To<T>(this IEnumerable<T> List, params string[] Columns)
         {
@@ -682,7 +681,11 @@ namespace Wiesend.DataTypes
             {
                 for (int x = 0; x < Row.Length; ++x)
                 {
+#if NET45
                     Row[x] = Properties.FirstOrDefault(z => z.Name == Columns[x]).GetValue(Item, new object[] { });
+#else
+                    Row[x] = Properties.FirstOrDefault(z => z.Name == Columns[x]).GetValue(Item, Array.Empty<object>());
+#endif
                 }
                 ReturnValue.Rows.Add(Row);
             }
@@ -695,13 +698,10 @@ namespace Wiesend.DataTypes
         /// <param name="List">List to convert</param>
         /// <param name="Columns">Column names (if empty, uses property names)</param>
         /// <returns>The list as a DataTable</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         public static DataTable To([NotNull] this IEnumerable List, params string[] Columns)
         {
             if (List == null) throw new ArgumentNullException(nameof(List));
-            var ReturnValue = new DataTable();
-            ReturnValue.Locale = CultureInfo.CurrentCulture;
+            var ReturnValue = new DataTable { Locale = CultureInfo.CurrentCulture };
             int Count = 0;
             var i = List.GetEnumerator();
             while (i.MoveNext())
@@ -719,7 +719,11 @@ namespace Wiesend.DataTypes
             {
                 for (int x = 0; x < Row.Length; ++x)
                 {
+#if NET45
                     Row[x] = Properties.FirstOrDefault(z => z.Name == Columns[x]).GetValue(Item, new object[] { });
+#else
+                    Row[x] = Properties.FirstOrDefault(z => z.Name == Columns[x]).GetValue(Item, Array.Empty<object>());
+#endif
                 }
                 ReturnValue.Rows.Add(Row);
             }

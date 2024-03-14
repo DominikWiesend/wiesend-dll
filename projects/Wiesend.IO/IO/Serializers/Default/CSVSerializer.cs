@@ -130,7 +130,6 @@ namespace Wiesend.IO.Serializers.Default
         /// <param name="ObjectType">Object type</param>
         /// <param name="Data">Data to serialize</param>
         /// <returns>The serialized data</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0028:Simplify collection initialization", Justification = "<Pending>")]
         public override string Serialize(Type ObjectType, object Data)
         {
             if (Data == null || ObjectType == null)
@@ -139,8 +138,7 @@ namespace Wiesend.IO.Serializers.Default
                 return ((IEnumerable)Data).ToDelimitedFile();
             else
             {
-                var Temp = new List<object>();
-                Temp.Add(Data);
+                var Temp = new List<object> { Data };
                 return ((IEnumerable)Temp).ToDelimitedFile();
             }
         }

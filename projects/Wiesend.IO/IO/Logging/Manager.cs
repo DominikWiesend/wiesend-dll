@@ -91,13 +91,11 @@ namespace Wiesend.IO.Logging
         /// Constructor
         /// </summary>
         /// <param name="Loggers">The loggers.</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
         public Manager([NotNull] IEnumerable<ILogger> Loggers)
         {
             if (Loggers == null) throw new ArgumentNullException(nameof(Loggers));
             LoggerUsing = Loggers.FirstOrDefault(x => !x.GetType().Namespace.StartsWith("WIESEND", StringComparison.OrdinalIgnoreCase));
-            if (LoggerUsing == null)
-                LoggerUsing = new DefaultLogger();
+            LoggerUsing ??= new DefaultLogger();
         }
 
         /// <summary>

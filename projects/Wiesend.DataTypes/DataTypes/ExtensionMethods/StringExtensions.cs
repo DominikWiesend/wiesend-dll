@@ -168,14 +168,11 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="str">String</param>
         /// <returns>String as SecureString</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public static SecureString ToSecureString(this string str)
         {
-            SecureString secureStr = new SecureString();
+            SecureString secureStr = new();
             if (str.Length > 0)
-            {
                 foreach (var c in str.ToCharArray()) secureStr.AppendChar(c);
-            }
             return secureStr;
         }
 
@@ -258,10 +255,13 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Input">Input string</param>
         /// <returns>A byte array equivalent of the base 64 string</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public static byte[] FromBase64(this string Input)
         {
+#if NET45
             return string.IsNullOrEmpty(Input) ? new byte[0] : Convert.FromBase64String(Input);
+#else
+            return string.IsNullOrEmpty(Input) ? Array.Empty<byte>() : Convert.FromBase64String(Input);
+#endif
         }
 
         /// <summary>
@@ -270,7 +270,6 @@ namespace Wiesend.DataTypes
         /// <param name="Value">Value to compare</param>
         /// <param name="ComparisonType">Comparison type</param>
         /// <returns>True if it is of the type specified, false otherwise</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("GeneratedRegex", "SYSLIB1045:Convert to 'GeneratedRegexAttribute'.", Justification = "<Pending>")]
         public static bool Is(this string Value, StringCompare ComparisonType)
         {
             if (ComparisonType == StringCompare.CreditCard)
@@ -317,15 +316,13 @@ namespace Wiesend.DataTypes
         /// <param name="Input">Input text</param>
         /// <param name="Filter">Regex expression of text to keep</param>
         /// <returns>The input text minus everything not in the filter text.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0220:Add explicit cast", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         public static string Keep(this string Input, string Filter)
         {
             if (string.IsNullOrEmpty(Input) || string.IsNullOrEmpty(Filter))
                 return "";
             var TempRegex = new Regex(Filter);
             var Collection = TempRegex.Matches(Input);
-            StringBuilder Builder = new StringBuilder();
+            StringBuilder Builder = new();
             foreach (Match Match in Collection)
                 Builder.Append(Match.Value);
             return Builder.ToString();
@@ -351,7 +348,6 @@ namespace Wiesend.DataTypes
         /// <param name="Input">Input string</param>
         /// <param name="Length">x number of characters to return</param>
         /// <returns>The resulting string</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0057:Use range operator", Justification = "<Pending>")]
         public static string Left(this string Input, int Length)
         {
             if (Length <= 0)
@@ -610,10 +606,13 @@ namespace Wiesend.DataTypes
         /// <param name="Input">input string</param>
         /// <param name="EncodingUsing">The type of encoding the string is using (defaults to UTF8)</param>
         /// <returns>the byte array representing the string</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public static byte[] ToByteArray(this string Input, Encoding EncodingUsing = null)
         {
+#if NET45
             return string.IsNullOrEmpty(Input) ? new byte[0] : EncodingUsing.Check(new UTF8Encoding()).GetBytes(Input);
+#else
+            return string.IsNullOrEmpty(Input) ? Array.Empty<byte>() : EncodingUsing.Check(new UTF8Encoding()).GetBytes(Input);
+#endif
         }
 
         /// <summary>

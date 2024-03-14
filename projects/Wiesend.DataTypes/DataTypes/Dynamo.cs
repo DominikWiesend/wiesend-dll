@@ -164,18 +164,14 @@ namespace Wiesend.DataTypes
         /// <summary>
         /// Keys to the dynamic type
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0028:Simplify collection initialization", Justification = "<Pending>")]
         public override ICollection<string> Keys
         {
             get
             {
-                var Temp = new List<string>();
-                Temp.Add(base.Keys);
+                var Temp = new List<string> { base.Keys };
                 var ObjectType = GetType();
                 foreach (PropertyInfo Property in ObjectType.GetProperties().Where(x => x.DeclaringType != typeof(Dynamo<T>) && x.DeclaringType != typeof(Dynamo)))
-                {
                     Temp.Add(Property.Name);
-                }
                 return Temp;
             }
         }
@@ -189,9 +185,7 @@ namespace Wiesend.DataTypes
             {
                 var Temp = new List<object>();
                 foreach (string Key in Keys)
-                {
                     Temp.Add(GetValue(Key, typeof(object)));
-                }
                 return Temp;
             }
         }
@@ -259,8 +253,8 @@ namespace Wiesend.DataTypes
         /// Constructor
         /// </summary>
         /// <param name="item">Item to copy values from</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2214:Do not call overridable methods in constructors", Justification = "<Pending>")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
         public Dynamo(object item)
         {
             InternalValues = new ConcurrentDictionary<string, object>(StringComparer.OrdinalIgnoreCase);
@@ -500,9 +494,7 @@ namespace Wiesend.DataTypes
             else if (DictItem != null)
             {
                 foreach (string Key in DictItem.Keys)
-                {
                     InternalValues.AddOrUpdate(Key, x => DictItem[Key], (x, y) => DictItem[Key]);
-                }
             }
             else if (Item is IEnumerable)
                 SetValue("Items", Item);
@@ -564,9 +556,7 @@ namespace Wiesend.DataTypes
         public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
         {
             foreach (string Key in Keys)
-            {
                 yield return new KeyValuePair<string, object>(Key, this[Key]);
-            }
         }
 
         /// <summary>
@@ -582,9 +572,7 @@ namespace Wiesend.DataTypes
                 {
                     var TempValue = GetValue(Key, typeof(object));
                     if (TempValue != null && !TempValue.GetType().Is<Delegate>())
-                    {
                         Value = (Value * TempValue.GetHashCode()) % int.MaxValue;
-                    }
                 }
             }
             return Value;
@@ -599,9 +587,7 @@ namespace Wiesend.DataTypes
         public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             foreach (string Key in Keys)
-            {
                 info.AddValue(Key, GetValue(Key, typeof(object)));
-            }
         }
 
         /// <summary>
@@ -660,9 +646,7 @@ namespace Wiesend.DataTypes
             var ReturnValue = new Dynamo();
             ReturnValue.Clear();
             foreach (string Key in Keys)
-            {
                 ReturnValue.Add(Key, this[Key]);
-            }
             return ReturnValue;
         }
 
@@ -796,9 +780,7 @@ namespace Wiesend.DataTypes
         public virtual void WriteXml(System.Xml.XmlWriter writer)
         {
             foreach (string Key in Keys)
-            {
                 writer.WriteElementString(Key, (string)GetValue(Key, typeof(string)));
-            }
         }
 
         /// <summary>
@@ -843,13 +825,10 @@ namespace Wiesend.DataTypes
         /// Returns null if the function should continue, any other value should be immediately
         /// returned to the user
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1005:Delegate invocation can be simplified.", Justification = "<Pending>")]
         protected object RaiseGetValueEnd(string PropertyName, object Value)
         {
             var End = new EventArgs.OnEndEventArgs { Content = Value };
-            var Handler = getValueEnd_;
-            if (Handler != null)
-                Handler(this, PropertyName, End);
+            getValueEnd_?.Invoke(this, PropertyName, End);
             return End.Stop ? End.Content : null;
         }
 
@@ -861,13 +840,10 @@ namespace Wiesend.DataTypes
         /// Returns null if the function should continue, any other value should be immediately
         /// returned to the user
         /// </returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1005:Delegate invocation can be simplified.", Justification = "<Pending>")]
         protected object RaiseGetValueStart(string PropertyName)
         {
             var Start = new EventArgs.OnStartEventArgs { Content = PropertyName };
-            var Handler = getValueStart_;
-            if (Handler != null)
-                Handler(this, Start);
+            getValueStart_?.Invoke(this, Start);
             return Start.Stop ? Start.Content : null;
         }
 
@@ -877,7 +853,6 @@ namespace Wiesend.DataTypes
         /// <param name="PropertyName">Property name</param>
         /// <param name="NewValue">New value for the property</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1005:Delegate invocation can be simplified.", Justification = "<Pending>")]
         protected void RaisePropertyChanged(string PropertyName, object NewValue)
         {
             if (ChangeLog == null) throw new NullReferenceException("ChangeLog");
@@ -885,9 +860,7 @@ namespace Wiesend.DataTypes
                 ChangeLog.SetValue(PropertyName, new Change(this[PropertyName], NewValue));
             else
                 ChangeLog.SetValue(PropertyName, new Change(NewValue, NewValue));
-            var Handler = propertyChanged_;
-            if (Handler != null)
-                Handler(this, new PropertyChangedEventArgs(PropertyName));
+            propertyChanged_?.Invoke(this, new PropertyChangedEventArgs(PropertyName));
         }
 
         /// <summary>

@@ -122,8 +122,7 @@ namespace Wiesend.IO
         /// <summary>
         /// Directory the file is within
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0031:Use null propagation", Justification = "<Pending>")]
-        public IDirectory Directory { get { return InternalFile == null ? null : InternalFile.Directory; } }
+        public IDirectory Directory { get { return InternalFile?.Directory; } }
 
         /// <summary>
         /// Does the file exist?
@@ -203,12 +202,11 @@ namespace Wiesend.IO
         /// <param name="File1">File 1</param>
         /// <param name="File2">File 2</param>
         /// <returns>True if they are, false otherwise</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0041:Use 'is null' check", Justification = "<Pending>")]
         public static bool operator ==(FileInfo File1, FileInfo File2)
         {
-            if ((object)File1 == null && (object)File2 == null)
+            if (File1 is null && File2 is null)
                 return true;
-            if ((object)File1 == null || (object)File2 == null)
+            if (File1 is null || File2 is null)
                 return false;
             return File1.FullName == File2.FullName;
         }
@@ -244,11 +242,16 @@ namespace Wiesend.IO
         /// </summary>
         /// <param name="File">File to read</param>
         /// <returns>The file as a byte array</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public static implicit operator byte[] (FileInfo File)
         {
             if (File == null)
+            {
+#if NET45
                 return new byte[0];
+#else
+                return Array.Empty<byte>();
+#endif
+            }
             return File.ReadBinary();
         }
 
@@ -353,12 +356,11 @@ namespace Wiesend.IO
         /// </summary>
         /// <param name="Info">Info used to execute the file</param>
         /// <returns>The process object created when the executable is started</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0054:Use compound assignment", Justification = "<Pending>")]
         public Process Execute(ProcessStartInfo Info = null)
         {
             if (InternalFile == null)
                 return null;
-            Info = Info ?? new ProcessStartInfo();
+            Info ??= new ProcessStartInfo();
             Info.FileName = FullName;
             return Process.Start(Info);
         }

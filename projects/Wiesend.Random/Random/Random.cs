@@ -81,8 +81,7 @@ namespace Wiesend.Random
     /// </summary>
     public class Random : System.Random
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
-        private static readonly Random GlobalSeed = new Random();
+        private static readonly Random GlobalSeed = new();
 
         [ThreadStatic]
         private static Random Local;
@@ -111,7 +110,7 @@ namespace Wiesend.Random
         /// <returns>A randomly generated value</returns>
         public static int ThreadSafeNext(int Min = int.MinValue, int Max = int.MaxValue)
         {
-            if (!(Min <= Max)) throw new ArgumentException($"Condition {nameof(Min)} <= {nameof(Max)} not met,", nameof(Min));
+            if (!(Min <= Max)) throw new ArgumentException($"Condition not met: [{nameof(Min)} <= {nameof(Max)}]", nameof(Min));
             if (Local == null)
             {
                 int Seed;

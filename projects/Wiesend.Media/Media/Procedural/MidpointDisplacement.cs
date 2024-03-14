@@ -94,7 +94,6 @@ namespace Wiesend.Media.Procedural
         /// <param name="MaxLength">Maximum length of the cracks</param>
         /// <param name="Seed">Random seed</param>
         /// <returns>An image containing "cracks"</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "<Pending>")]
         public static SwiftBitmap Generate(int Width, int Height, int NumberOfCracks, int Iterations,
             int MaxChange, int MaxLength, int Seed)
         {
@@ -112,17 +111,15 @@ namespace Wiesend.Media.Procedural
             return ReturnValue;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0028:Simplify collection initialization", Justification = "<Pending>")]
         private static List<Line> GenerateLines(int Width, int Height, int NumberOfCracks, int Iterations, int MaxChange, int MaxLength, int Seed)
         {
-            if (!(NumberOfCracks >= 0 && Width >= 0)) throw new ArgumentException($"Condition {nameof(NumberOfCracks)} >= 0 && Width >= 0 not met.", nameof(NumberOfCracks));
+            if (!(NumberOfCracks >= 0 && Width >= 0)) throw new ArgumentException($"Condition not met: [{nameof(NumberOfCracks)} >= 0 && Width >= 0]", nameof(NumberOfCracks));
             var Lines = new List<Line>();
             var Generator = new System.Random(Seed);
             for (int x = 0; x < NumberOfCracks; ++x)
             {
-                Line TempLine = null;
-                int LineLength = 0;
+                int LineLength;
+                Line TempLine;
                 do
                 {
                     TempLine = new Line(Generator.Next(0, Width), Generator.Next(0, Width),
@@ -131,13 +128,12 @@ namespace Wiesend.Media.Procedural
                         + ((TempLine.Y1 - TempLine.Y2) * (TempLine.Y1 - TempLine.Y2)));
                 } while (LineLength > MaxLength && LineLength <= 0);
                 Lines.Add(TempLine);
-                var TempLineList = new List<Line>();
-                TempLineList.Add(TempLine);
+                var TempLineList = new List<Line> { TempLine };
                 for (int y = 0; y < Iterations; ++y)
                 {
                     Line LineUsing = TempLineList[Generator.Next(0, TempLineList.Count)];
                     int XBreak = Generator.Next(LineUsing.X1, LineUsing.X2) + Generator.Next(-MaxChange, MaxChange);
-                    int YBreak = 0;
+                    int YBreak;
                     if (LineUsing.Y1 > LineUsing.Y2)
                         YBreak = Generator.Next(LineUsing.Y2, LineUsing.Y1) + Generator.Next(-MaxChange, MaxChange);
                     else
@@ -157,15 +153,10 @@ namespace Wiesend.Media.Procedural
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1852:Seal internal types", Justification = "<Pending>")]
     internal class Line
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
-        public List<Line> SubLines = new List<Line>();
-
+        public List<Line> SubLines = new();
         public int X1;
-
         public int X2;
-
         public int Y1;
-
         public int Y2;
 
         public Line()

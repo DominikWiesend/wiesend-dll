@@ -106,7 +106,6 @@ namespace Wiesend.DataTypes
         /// <param name="Frames">Frames to get the methods from</param>
         /// <param name="ExcludedAssemblies">Excludes methods from the specified assemblies</param>
         /// <returns>The list of methods involved</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Globalization", "CA1309:UseOrdinalStringComparison", MessageId = "System.String.StartsWith(System.String,System.StringComparison)")]
         public static IEnumerable<MethodBase> GetMethods(this IEnumerable<StackFrame> Frames, params Assembly[] ExcludedAssemblies)
         {
             var Methods = new List<MethodBase>();

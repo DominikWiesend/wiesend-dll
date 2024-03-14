@@ -96,12 +96,7 @@ namespace Wiesend.IoC
         {
             var LoadedAssemblies = LoadAssemblies();
             var LoadedTypes = GetTypes(ref LoadedAssemblies);
-            var Bootstrappers = LoadedTypes.Where(x => x.GetInterfaces().Contains(typeof(IBootstrapper))
-                                                                    && x.IsClass
-                                                                    && !x.IsAbstract
-                                                                    && !x.ContainsGenericParameters
-                                                                    && !x.Namespace.StartsWith("WIESEND", StringComparison.OrdinalIgnoreCase))
-                                                   .ToList();
+            var Bootstrappers = LoadedTypes.Where(x => x.GetInterfaces().Contains(typeof(IBootstrapper)) && x.IsClass && !x.IsAbstract && !x.ContainsGenericParameters && !x.Namespace.StartsWith("WIESEND", StringComparison.OrdinalIgnoreCase)).ToList();
             if (Bootstrappers.Count == 0)
                 Bootstrappers.Add(typeof(DefaultBootstrapper));
             InternalBootstrapper = (IBootstrapper)Activator.CreateInstance(Bootstrappers[0], LoadedAssemblies, LoadedTypes);
@@ -118,12 +113,8 @@ namespace Wiesend.IoC
             get
             {
                 if (_Instance == null)
-                {
                     lock (Temp)
-                    {
                         _Instance ??= new Manager();
-                    }
-                }
                 return _Instance.InternalBootstrapper;
             }
         }
@@ -133,11 +124,9 @@ namespace Wiesend.IoC
         /// </summary>
         protected IBootstrapper InternalBootstrapper { get; private set; }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
-        private static Manager _Instance = new Manager();
+        private static Manager _Instance = new();
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0044:Add readonly modifier", Justification = "<Pending>")]
-        private static object Temp = 1;
+        private static readonly object Temp = 1;
 
         /// <summary>
         /// Disposes of the object
@@ -177,17 +166,13 @@ namespace Wiesend.IoC
         /// </summary>
         /// <param name="LoadedAssemblies">The loaded assemblies.</param>
         /// <returns>The list of</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0090:Use 'new(...)'", Justification = "<Pending>")]
         private static List<Type> GetTypes([NotNull] ref ConcurrentBag<Assembly> LoadedAssemblies)
         {
             if (LoadedAssemblies == null) throw new ArgumentNullException(nameof(LoadedAssemblies));
-            List<Type> TempTypes = new List<Type>();
+            List<Type> TempTypes = new();
             LoadedAssemblies = new ConcurrentBag<Assembly>(LoadedAssemblies.Where(x =>
             {
-                try
-                {
-                    TempTypes.AddRange(x.GetTypes());
-                }
+                try { TempTypes.AddRange(x.GetTypes()); }
                 catch (ReflectionTypeLoadException) { return false; }
                 return true;
             }));
@@ -201,7 +186,7 @@ namespace Wiesend.IoC
         private static ConcurrentBag<Assembly> LoadAssemblies()
         {
             List<FileInfo> Files = new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory).GetFiles("*.dll", SearchOption.TopDirectoryOnly)
-                                                                                              .Where(x => !x.Name.Equals("CULGeneratedTypes.dll", StringComparison.InvariantCultureIgnoreCase))
+                                                                                              .Where(x => !x.Name.Equals("CULGeneratedTypes.dll", StringComparison.OrdinalIgnoreCase))
                                                                                               .Where(x => !x.FullName.StartsWith(@"C:\Windows\system32\WindowsPowerShell", StringComparison.InvariantCultureIgnoreCase))
                                                                                               .ToList();
             if (!new DirectoryInfo(".").FullName.Contains(System.Environment.GetFolderPath(Environment.SpecialFolder.SystemX86))
@@ -210,7 +195,7 @@ namespace Wiesend.IoC
                     && !new DirectoryInfo(".").FullName.Contains(System.Environment.GetFolderPath(Environment.SpecialFolder.System)))
             {
                 Files.AddRange(new DirectoryInfo(".").GetFiles("*.dll", SearchOption.TopDirectoryOnly)
-                                                     .Where(x => !x.Name.Equals("CULGeneratedTypes.dll", StringComparison.InvariantCultureIgnoreCase)));
+                                                     .Where(x => !x.Name.Equals("CULGeneratedTypes.dll", StringComparison.OrdinalIgnoreCase)));
             }
             Files = Files.Distinct().ToList();
             var LoadedAssemblies = new List<Assembly>(AppDomain.CurrentDomain.GetAssemblies());
@@ -238,7 +223,7 @@ namespace Wiesend.IoC
             foreach (var Name in assemblyName.Where(x => x != null
                                                       && !x.FullName.StartsWith("System.", StringComparison.InvariantCultureIgnoreCase)
                                                       && !x.FullName.StartsWith("Microsoft.", StringComparison.InvariantCultureIgnoreCase)
-                                                      && !Assemblies.Any(y => string.Equals(y.FullName, x.FullName, StringComparison.InvariantCultureIgnoreCase))))
+                                                      && !Assemblies.Any(y => string.Equals(y.FullName, x.FullName, StringComparison.OrdinalIgnoreCase))))
             {
                 try
                 {
@@ -271,7 +256,7 @@ namespace Wiesend.IoC
             /// <returns>true if the specified objects are equal; otherwise, false.</returns>
             public bool Equals(Assembly x, Assembly y)
             {
-                return string.Equals(x.FullName, y.FullName, StringComparison.InvariantCultureIgnoreCase);
+                return string.Equals(x.FullName, y.FullName, StringComparison.OrdinalIgnoreCase);
             }
 
             /// <summary>

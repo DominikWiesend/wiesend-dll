@@ -120,11 +120,14 @@ namespace Wiesend.DataTypes
         /// When true, it looks up the heirarchy chain for the inherited custom attributes
         /// </param>
         /// <returns>Array of attributes</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public static T[] Attributes<T>([NotNull] this ICustomAttributeProvider Provider, bool Inherit = true) where T : Attribute
         {
             if (Provider == null) throw new ArgumentNullException(nameof(Provider));
+#if NET45
             return Provider.IsDefined(typeof(T), Inherit) ? Provider.GetCustomAttributes(typeof(T), Inherit).ToArray(x => (T)x) : new T[0];
+#else
+            return Provider.IsDefined(typeof(T), Inherit) ? Provider.GetCustomAttributes(typeof(T), Inherit).ToArray(x => (T)x) : Array.Empty<T>();
+#endif
         }
 
         /// <summary>
@@ -137,22 +140,20 @@ namespace Wiesend.DataTypes
         /// <returns>The returned value of the method</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0270:Use coalesce expression", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public static ReturnType Call<ReturnType>([NotNull] this object Object, [NotNull] string MethodName, params object[] InputVariables)
         {
             if (Object == null) throw new ArgumentNullException(nameof(Object));
             if (string.IsNullOrEmpty(MethodName)) throw new ArgumentNullException(nameof(MethodName));
-            if (InputVariables == null)
-                InputVariables = new object[0];
+#if NET45
+            InputVariables ??= new object[0];
+#else
+            InputVariables ??= Array.Empty<object>();
+#endif
             var ObjectType = Object.GetType();
             Type[] MethodInputTypes = new Type[InputVariables.Length];
             for (int x = 0; x < InputVariables.Length; ++x)
                 MethodInputTypes[x] = InputVariables[x].GetType();
-            var Method = ObjectType.GetMethod(MethodName, MethodInputTypes);
-            if (Method == null)
-                throw new InvalidOperationException("Could not find method " + MethodName + " with the appropriate input variables.");
+            var Method = ObjectType.GetMethod(MethodName, MethodInputTypes) ?? throw new InvalidOperationException("Could not find method " + MethodName + " with the appropriate input variables.");
             return (ReturnType)Method.Invoke(Object, InputVariables);
         }
 
@@ -165,24 +166,22 @@ namespace Wiesend.DataTypes
         /// <typeparam name="ReturnType">Return type expected</typeparam>
         /// <typeparam name="GenericType1">Generic method type 1</typeparam>
         /// <returns>The returned value of the method</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0270:Use coalesce expression", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public static ReturnType Call<GenericType1, ReturnType>([NotNull] this object Object, [NotNull] string MethodName, params object[] InputVariables)
         {
             if (Object == null) throw new ArgumentNullException(nameof(Object));
             if (string.IsNullOrEmpty(MethodName)) throw new ArgumentNullException(nameof(MethodName));
-            if (InputVariables == null)
-                InputVariables = new object[0];
+#if NET45
+            InputVariables ??= new object[0];
+#else
+            InputVariables ??= Array.Empty<object>();
+#endif
             var ObjectType = Object.GetType();
             Type[] MethodInputTypes = new Type[InputVariables.Length];
             for (int x = 0; x < InputVariables.Length; ++x)
                 MethodInputTypes[x] = InputVariables[x].GetType();
-            var Method = ObjectType.GetMethod(MethodName, MethodInputTypes);
-            if (Method == null)
-                throw new InvalidOperationException("Could not find method " + MethodName + " with the appropriate input variables.");
+            var Method = ObjectType.GetMethod(MethodName, MethodInputTypes) ?? throw new InvalidOperationException("Could not find method " + MethodName + " with the appropriate input variables.");
             Method = Method.MakeGenericMethod(typeof(GenericType1));
             return Object.Call<ReturnType>(Method, InputVariables);
         }
@@ -197,24 +196,22 @@ namespace Wiesend.DataTypes
         /// <typeparam name="GenericType1">Generic method type 1</typeparam>
         /// <typeparam name="GenericType2">Generic method type 2</typeparam>
         /// <returns>The returned value of the method</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0270:Use coalesce expression", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public static ReturnType Call<GenericType1, GenericType2, ReturnType>([NotNull] this object Object, [NotNull] string MethodName, params object[] InputVariables)
         {
             if (Object == null) throw new ArgumentNullException(nameof(Object));
             if (string.IsNullOrEmpty(MethodName)) throw new ArgumentNullException(nameof(MethodName));
-            if (InputVariables == null)
-                InputVariables = new object[0];
+#if NET45
+            InputVariables ??= new object[0];
+#else
+            InputVariables ??= Array.Empty<object>();
+#endif
             var ObjectType = Object.GetType();
             Type[] MethodInputTypes = new Type[InputVariables.Length];
             for (int x = 0; x < InputVariables.Length; ++x)
                 MethodInputTypes[x] = InputVariables[x].GetType();
-            var Method = ObjectType.GetMethod(MethodName, MethodInputTypes);
-            if (Method == null)
-                throw new InvalidOperationException("Could not find method " + MethodName + " with the appropriate input variables.");
+            var Method = ObjectType.GetMethod(MethodName, MethodInputTypes) ?? throw new InvalidOperationException("Could not find method " + MethodName + " with the appropriate input variables.");
             Method = Method.MakeGenericMethod(typeof(GenericType1), typeof(GenericType2));
             return Object.Call<ReturnType>(Method, InputVariables);
         }
@@ -230,24 +227,22 @@ namespace Wiesend.DataTypes
         /// <typeparam name="GenericType2">Generic method type 2</typeparam>
         /// <typeparam name="GenericType3">Generic method type 3</typeparam>
         /// <returns>The returned value of the method</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0270:Use coalesce expression", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public static ReturnType Call<GenericType1, GenericType2, GenericType3, ReturnType>([NotNull] this object Object, [NotNull] string MethodName, params object[] InputVariables)
         {
             if (Object == null) throw new ArgumentNullException(nameof(Object));
             if (string.IsNullOrEmpty(MethodName)) throw new ArgumentNullException(nameof(MethodName));
-            if (InputVariables == null)
-                InputVariables = new object[0];
+#if NET45
+            InputVariables ??= new object[0];
+#else
+            InputVariables ??= Array.Empty<object>();
+#endif
             var ObjectType = Object.GetType();
             Type[] MethodInputTypes = new Type[InputVariables.Length];
             for (int x = 0; x < InputVariables.Length; ++x)
                 MethodInputTypes[x] = InputVariables[x].GetType();
-            var Method = ObjectType.GetMethod(MethodName, MethodInputTypes);
-            if (Method == null)
-                throw new InvalidOperationException("Could not find method " + MethodName + " with the appropriate input variables.");
+            var Method = ObjectType.GetMethod(MethodName, MethodInputTypes) ?? throw new InvalidOperationException("Could not find method " + MethodName + " with the appropriate input variables.");
             Method = Method.MakeGenericMethod(typeof(GenericType1), typeof(GenericType2), typeof(GenericType3));
             return Object.Call<ReturnType>(Method, InputVariables);
         }
@@ -260,16 +255,17 @@ namespace Wiesend.DataTypes
         /// <param name="InputVariables">(Optional)input variables for the method</param>
         /// <typeparam name="ReturnType">Return type expected</typeparam>
         /// <returns>The returned value of the method</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1825:Avoid zero-length array allocations", Justification = "<Pending>")]
         public static ReturnType Call<ReturnType>([NotNull] this object Object, [NotNull] MethodInfo Method, params object[] InputVariables)
         {
             if (Object == null) throw new ArgumentNullException(nameof(Object));
             if (Method == null) throw new ArgumentNullException(nameof(Method));
-            if (InputVariables == null)
-                InputVariables = new object[0];
+#if NET45
+            InputVariables ??= new object[0];
+#else
+            InputVariables ??= Array.Empty<object>();
+#endif
             return (ReturnType)Method.Invoke(Object, InputVariables);
         }
 
@@ -608,8 +604,6 @@ namespace Wiesend.DataTypes
         /// <returns>Returns the property's value</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0056:Use index operator", Justification = "<Pending>")]
         public static object Property([NotNull] this object Object, [NotNull] string Property)
         {
             if (Object == null) throw new ArgumentNullException(nameof(Object));
@@ -617,7 +611,7 @@ namespace Wiesend.DataTypes
             var Properties = Property.Split(new string[] { "." }, StringSplitOptions.None);
             object TempObject = Object;
             var TempObjectType = TempObject.GetType();
-            PropertyInfo DestinationProperty = null;
+            PropertyInfo DestinationProperty;
             for (int x = 0; x < Properties.Length - 1; ++x)
             {
                 DestinationProperty = TempObjectType.GetProperty(Properties[x]);
@@ -660,8 +654,6 @@ namespace Wiesend.DataTypes
         /// <param name="Format">Allows for formatting if the destination is a string</param>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1720:Identifier contains type name", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0056:Use index operator", Justification = "<Pending>")]
         public static object Property([NotNull] this object Object, [NotNull] string Property, [NotNull] object Value, string Format = "")
         {
             if (Object == null) throw new ArgumentNullException(nameof(Object));
@@ -670,7 +662,7 @@ namespace Wiesend.DataTypes
             var Properties = Property.Split(new string[] { "." }, StringSplitOptions.None);
             object TempObject = Object;
             var TempObjectType = TempObject.GetType();
-            PropertyInfo DestinationProperty = null;
+            PropertyInfo DestinationProperty;
             for (int x = 0; x < Properties.Length - 1; ++x)
             {
                 DestinationProperty = TempObjectType.GetProperty(Properties[x]);
@@ -749,11 +741,9 @@ namespace Wiesend.DataTypes
         /// </summary>
         /// <param name="Expression">LINQ expression</param>
         /// <returns>The name of the property</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0019:Use pattern matching", Justification = "<Pending>")]
         public static string PropertyName(this Expression Expression)
         {
-            MemberExpression TempExpression = Expression as MemberExpression;
-            if (TempExpression == null)
+            if (Expression is not MemberExpression TempExpression)
                 return "";
             return TempExpression.Expression.PropertyName() + TempExpression.Member.Name + ".";
         }
@@ -767,7 +757,6 @@ namespace Wiesend.DataTypes
         /// <returns>A lambda expression that calls a specific property's setter function</returns>
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Naming", "CA1715:Identifiers should have correct prefix", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2201:Do not raise reserved exception types", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0056:Use index operator", Justification = "<Pending>")]
         public static Expression<Action<ClassType, DataType>> PropertySetter<ClassType, DataType>([NotNull] this LambdaExpression Property)//Expression<Func<ClassType, DataType>> Property)
         {
             if (Property == null) throw new ArgumentNullException(nameof(Property));
@@ -853,16 +842,14 @@ namespace Wiesend.DataTypes
         /// which then has a Prop2 on it, which in turn has a Prop3 on it.)
         /// </param>
         /// <returns>The type of the property specified or null if it can not be reached.</returns>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0059:Unnecessary assignment of a value", Justification = "<Pending>")]
         public static Type PropertyType(this Type ObjectType, string PropertyPath)
         {
             if (ObjectType == null || string.IsNullOrEmpty(PropertyPath))
                 return null;
             var SourceProperties = PropertyPath.Split(new string[] { "." }, StringSplitOptions.None);
-            PropertyInfo PropertyInfo = null;
             for (int x = 0; x < SourceProperties.Length; ++x)
             {
-                PropertyInfo = ObjectType.GetProperty(SourceProperties[x]);
+                PropertyInfo PropertyInfo = ObjectType.GetProperty(SourceProperties[x]);
                 ObjectType = PropertyInfo.PropertyType;
             }
             return ObjectType;

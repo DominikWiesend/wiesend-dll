@@ -72,11 +72,6 @@
 #endregion of MIT License [Dominik Wiesend] 
 #endregion of Licenses [MIT Licenses]
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Wiesend.IO.FileSystem.BaseClasses;
 
 namespace Wiesend.IO.FileSystem.Default

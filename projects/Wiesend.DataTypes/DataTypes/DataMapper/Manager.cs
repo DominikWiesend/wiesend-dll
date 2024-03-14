@@ -90,14 +90,12 @@ namespace Wiesend.DataTypes.DataMapper
         /// </summary>
         /// <param name="DataMappers">The data mappers.</param>
         /// <param name="MapperModules">The mapper modules.</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0074:Use compound assignment", Justification = "<Pending>")]
         public Manager([NotNull] IEnumerable<IDataMapper> DataMappers, [NotNull] IEnumerable<IMapperModule> MapperModules)
         {
             if (DataMappers == null) throw new ArgumentNullException(nameof(DataMappers));
             if (MapperModules == null) throw new ArgumentNullException(nameof(MapperModules));
             DataMapper = DataMappers.FirstOrDefault(x => !x.GetType().Namespace.StartsWith("WIESEND", StringComparison.OrdinalIgnoreCase));
-            if (DataMapper == null)
-                DataMapper = DataMappers.FirstOrDefault(x => x.GetType().Namespace.StartsWith("WIESEND", StringComparison.OrdinalIgnoreCase));
+            DataMapper ??= DataMappers.FirstOrDefault(x => x.GetType().Namespace.StartsWith("WIESEND", StringComparison.OrdinalIgnoreCase));
             MapperModules.ForEach(x => x.Map(this));
         }
 

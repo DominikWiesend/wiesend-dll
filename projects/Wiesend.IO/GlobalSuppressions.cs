@@ -2,29 +2,5 @@
 // attributes that are applied to this project.
 // Project-level suppressions either have no target or are given
 // a specific target and scoped to a namespace, type, member, etc.
-
 using System.Diagnostics.CodeAnalysis;
-[assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IO.Encryption.BaseClasses.HasherBase.Hash(System.Byte[],System.String)~System.Byte[]")]
-[assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IO.Encryption.BaseClasses.SymmetricBase.Decrypt(System.Byte[],System.Security.Cryptography.DeriveBytes,System.String,System.String,System.Int32)~System.Byte[]")]
-[assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IO.Encryption.BaseClasses.SymmetricBase.Encrypt(System.Byte[],System.Security.Cryptography.DeriveBytes,System.String,System.String,System.Int32)~System.Byte[]")]
-[assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IO.EncryptionExtensions.Decrypt(System.Byte[],System.Byte[])~System.Byte[]")]
-[assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IO.EncryptionExtensions.Decrypt(System.Byte[],System.Security.Cryptography.DeriveBytes,System.String,System.String,System.Int32)~System.Byte[]")]
-[assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IO.EncryptionExtensions.Encrypt(System.Byte[],System.Byte[])~System.Byte[]")]
-[assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IO.EncryptionExtensions.Encrypt(System.Byte[],System.Security.Cryptography.DeriveBytes,System.String,System.String,System.Int32)~System.Byte[]")]
-[assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IO.EncryptionExtensions.Hash(System.Byte[],System.String)~System.Byte[]")]
-[assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IO.FileFormats.Excel.Parse(System.String,System.String)")]
-[assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IO.FileSystem.Default.WebFile.ReadBinary~System.Byte[]")]
-[assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IO.FileSystem.Interfaces.Contracts.IFileContract.ReadBinary~System.Byte[]")]
-[assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IO.FileSystem.Interfaces.Contracts.IFileContract.Write(System.Byte[],System.IO.FileMode)~System.Byte[]")]
-[assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IO.FileFormats.VCard.HCard~System.String")]
-[assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IO.FileInfo.op_Implicit(Wiesend.IO.FileInfo)~System.Byte[]")]
-[assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IO.FileInfo.ReadBinary~System.Byte[]")]
-[assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IO.FileSystem.BaseClasses.FileBase`2.op_Implicit(Wiesend.IO.FileSystem.BaseClasses.FileBase`2)~System.Byte[]")]
-[assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IO.FileSystem.Default.LocalFile.ReadBinary~System.Byte[]")]
-[assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IO.FileSystem.Default.LocalFile.Write(System.Byte[],System.IO.FileMode)~System.Byte[]")]
-[assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IO.FileSystem.Default.ResourceDirectory.EnumerateFiles(System.String,System.IO.SearchOption)~System.Collections.Generic.IEnumerable{Wiesend.IO.FileSystem.Interfaces.IFile}")]
-[assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IO.FileSystem.Default.ResourceFile.ReadBinary~System.Byte[]")]
-[assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IO.FileSystem.Default.ResourceFile.Write(System.Byte[],System.IO.FileMode)~System.Byte[]")]
-[assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>", Scope = "member", Target = "~P:Wiesend.IO.FileFormats.VCard.FullName")]
-[assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IO.FileSystem.Default.WebFile.Write(System.String,System.IO.FileMode,System.Text.Encoding)~System.String")]
-[assembly: SuppressMessage("CodeQuality", "IDE0079:Remove unnecessary suppression", Justification = "<Pending>", Scope = "member", Target = "~M:Wiesend.IO.FileSystem.Default.WebDirectory.Create")]
+

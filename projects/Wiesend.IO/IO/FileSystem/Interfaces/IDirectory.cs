@@ -82,7 +82,6 @@ namespace Wiesend.IO.FileSystem.Interfaces
     /// <summary>
     /// Represents a directory
     /// </summary>
-    //[ContractClass(typeof(IDirectoryContract))]
     public interface IDirectory : IComparable<IDirectory>, IEnumerable<IFile>, IComparable, IEquatable<IDirectory>, ICloneable
     {
         /// <summary>

@@ -101,23 +101,19 @@ namespace Wiesend.DataTypes.Conversion.Converters
         /// </summary>
         protected override TypeConverter InternalConverter { get { return new EnumConverter(typeof(DbType)); } }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0083:Use pattern matching", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         private static object DbTypeToSqlDbType(object value)
         {
-            if (!(value is DbType))
+            if (value is not DbType)
                 return SqlDbType.Int;
             var TempValue = (DbType)value;
-            var Parameter = new SqlParameter();
-            Parameter.DbType = TempValue;
+            var Parameter = new SqlParameter { DbType = TempValue };
             return Parameter.SqlDbType;
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0083:Use pattern matching", Justification = "<Pending>")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0066:Convert switch statement to expression", Justification = "<Pending>")]
         private static object DbTypeToType(object value)
         {
-            if (!(value is DbType))
+            if (value is not DbType)
                 return typeof(int);
             var TempValue = (DbType)value;
             switch (TempValue)
@@ -165,15 +161,12 @@ namespace Wiesend.DataTypes.Conversion.Converters
             return typeof(int);
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0083:Use pattern matching", Justification = "<Pending>")]
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0017:Simplify object initialization", Justification = "<Pending>")]
         private static object SqlDbTypeToDbType(object sqlDbType)
         {
-            if (!(sqlDbType is SqlDbType))
+            if (sqlDbType is not SqlDbType)
                 return DbType.Int32;
             var Temp = (SqlDbType)sqlDbType;
-            var Parameter = new SqlParameter();
-            Parameter.SqlDbType = Temp;
+            var Parameter = new SqlParameter { SqlDbType = Temp };
             return Parameter.DbType;
         }
 

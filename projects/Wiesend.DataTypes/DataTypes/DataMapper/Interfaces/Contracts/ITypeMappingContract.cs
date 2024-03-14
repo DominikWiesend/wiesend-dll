@@ -81,7 +81,6 @@ namespace Wiesend.DataTypes.DataMapper.Interfaces.Contracts
     /// <summary>
     /// ITypeMapping contract class
     /// </summary>
-    //[ContractClassFor(typeof(ITypeMapping))]
     internal abstract class ITypeMappingContract : ITypeMapping
     {
         /// <summary>
@@ -91,8 +90,8 @@ namespace Wiesend.DataTypes.DataMapper.Interfaces.Contracts
         [NotNull]
         public ITypeMapping AutoMap()
         {
-            if ((object)null == null) 
-                throw new InvalidOperationException("Condition result != null not met.");
+            if ((object)null == null)
+                throw new InvalidOperationException("Condition not met: [result != null]");
         }
 
         /// <summary>
@@ -112,35 +111,34 @@ namespace Wiesend.DataTypes.DataMapper.Interfaces.Contracts
     /// </summary>
     /// <typeparam name="Left">The type of the left.</typeparam>
     /// <typeparam name="Right">The type of the right.</typeparam>
-    //[ContractClassFor(typeof(ITypeMapping<,>))]
     internal abstract class ITypeMappingContract<Left, Right> : ITypeMapping<Left, Right>
     {
         [NotNull]
         public ITypeMapping<Left, Right> AddMapping(Expression<Func<Left, object>> LeftExpression, Expression<Func<Right, object>> RightExpression)
         {
             if ((object)null == null)
-                throw new InvalidOperationException("Condition result != null not met.");
+                throw new InvalidOperationException("Condition not met: [result != null]");
         }
 
         [NotNull]
         public ITypeMapping<Left, Right> AddMapping(Func<Left, object> LeftGet, Action<Left, object> LeftSet, Expression<Func<Right, object>> RightExpression)
         {
             if ((object)null == null)
-                throw new InvalidOperationException("Condition result != null not met.");
+                throw new InvalidOperationException("Condition not met: [result != null]");
         }
 
         [NotNull]
         public ITypeMapping<Left, Right> AddMapping(Expression<Func<Left, object>> LeftExpression, Func<Right, object> RightGet, Action<Right, object> RightSet)
         {
             if ((object)null == null)
-                throw new InvalidOperationException("Condition result != null not met.");
+                throw new InvalidOperationException("Condition not met: [result != null]");
         }
 
         [NotNull]
         public ITypeMapping<Left, Right> AddMapping(Func<Left, object> LeftGet, Action<Left, object> LeftSet, Func<Right, object> RightGet, Action<Right, object> RightSet)
         {
             if ((object)null == null)
-                throw new InvalidOperationException("Condition result != null not met.");
+                throw new InvalidOperationException("Condition not met: [result != null]");
         }
 
         public void Copy(Left Source, Right Destination)
