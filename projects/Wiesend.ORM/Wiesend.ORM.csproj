@@ -48,12 +48,12 @@
   <!-- ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝  -->
   <PropertyGroup>
     <ProjectBuildType       Condition="'$(ProjectBuildType)'       == ''">Dynamic Link Library</ProjectBuildType>
-    <GitHubRepositoryName   Condition="'$(GitHubRepositoryName)'   == ''">wiesend-dll</GitHubRepositoryName>
-    <GitHubRepositoryRoot   Condition="'$(GitHubRepositoryRoot)'   == ''">https://github.com/DominikWiesend</GitHubRepositoryRoot>
-    <GitHubRepositoryType   Condition="'$(GitHubRepositoryType)'   == ''">GitHub Repository</GitHubRepositoryType>
+    <GitRepositoryName      Condition="'$(GitRepositoryName)'      == ''">wiesend-dll</GitRepositoryName>
+    <GitRepositoryRoot      Condition="'$(GitRepositoryRoot)'      == ''">https://github.com/DominikWiesend</GitRepositoryRoot>
+    <GitRepositoryType      Condition="'$(GitRepositoryType)'      == ''">GitHub Repository</GitRepositoryType>
     <NugetPackageTags       Condition="'$(NugetPackageTags)'       == ''">wiesend;lib;library;dll;orm</NugetPackageTags>
     <NugetPackageName       Condition="'$(NugetPackageName)'       == ''">Wiesend.ORM</NugetPackageName>
-    <NugetPackageVersion    Condition="'$(NugetPackageVersion)'    == ''">5.0.3.0</NugetPackageVersion>
+    <NugetPackageVersion    Condition="'$(NugetPackageVersion)'    == ''">5.0.4.0</NugetPackageVersion>
     <NugetPackageExtensions Condition="'$(NugetPackageExtensions)' == ''">.pdb</NugetPackageExtensions>
   </PropertyGroup>
 
@@ -101,8 +101,8 @@
   <!-- ║ [PropertyGroup] □■□ |xx| □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ □■□ |xx| □■□ [PropertyGroup] ║  -->
   <!-- ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝  -->
   <PropertyGroup>
-    <RepositoryType>$(GitHubRepositoryType)</RepositoryType>
-    <RepositoryUrl>$(GitHubRepositoryRoot)/$(GitHubRepositoryName)</RepositoryUrl>
+    <RepositoryType>$(GitRepositoryType)</RepositoryType>
+    <RepositoryUrl>$(GitRepositoryRoot)/$(GitRepositoryName)</RepositoryUrl>
   </PropertyGroup>
 
   <!-- ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗  -->
@@ -115,7 +115,7 @@
     <PackageId>$(AssemblyName)</PackageId>
     <PackageTags>$(NugetPackageTags)</PackageTags>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <PackageProjectUrl>$(GitHubRoot)/$(GitHubRepositoryName)/</PackageProjectUrl>
+    <PackageProjectUrl>$(GitRepositoryRoot)/$(GitRepositoryName)/</PackageProjectUrl>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Version>$(NugetPackageVersion)</Version>
@@ -216,15 +216,11 @@
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data.Entity.Design" />
     <Reference Include="System.DirectoryServices" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression.FileSystem" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
-    <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
@@ -236,8 +232,6 @@
   <!-- ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝  -->
   <ItemGroup Condition="'$(TargetFramework)' == 'net45' OR '$(TargetFramework)' == 'net48'">
     <PackageReference Include="JetBrains.Annotations" Version="2023.3.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="1.3.2" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="1.3.2" PrivateAssets="All" />
     <PackageReference Include="System.Collections.Immutable" Version="1.3.0" PrivateAssets="All" />
     <PackageReference Include="System.Reflection.Metadata" Version="1.3.0" PrivateAssets="All" />
   </ItemGroup>
